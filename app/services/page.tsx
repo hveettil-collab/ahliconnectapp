@@ -83,9 +83,9 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('insurance') || t.includes('motor') || t.includes('car insurance') || t.includes('shory') || t.includes('vehicle') || t.includes('plate')) {
     return {
-      content: `I can help you get car insurance through **Shory.com** — IHC's own digital insurance platform!\n\nHere's how it works:\n\n1. Enter your **car plate number** below\n2. Shory AI instantly fetches your vehicle details\n3. Get **3 competitive quotes** in under 60 seconds\n4. Purchase & get your policy card digitally\n\nIHC employees get an exclusive **15% corporate discount** on all motor insurance plans.\n\n**Ready? Just type your car plate number** (e.g. "Abu Dhabi 12345") and I'll start the quote process.`,
+      content: `I can help you get car insurance through **Shory** — IHC's own digital insurance platform, right here in the app!\n\nHere's how it works:\n\n1. Enter your **car plate number**\n2. Shory instantly fetches your vehicle details\n3. Pick from **3 plans** — Third Party, Comprehensive, or Flexi\n4. Pay securely & get your **digital policy card** instantly\n\nIHC employees get an exclusive **15% corporate discount** on all plans. Let's get you insured!`,
       cards: [
-        { type: 'action', icon: Shield, title: 'Get Motor Insurance Quote', subtitle: 'Shory.com · Enter plate number to start', color: '#7C3AED', link: 'https://shory.com' },
+        { type: 'action', icon: Shield, title: 'Get Motor Insurance', subtitle: 'Enter plate number · 2 min process', color: '#7C3AED', link: '/automations/insurance' },
         { type: 'info', icon: CreditCard, title: 'IHC Corporate Discount', subtitle: '15% off all Shory motor plans', color: '#40C4AA' },
         { type: 'info', icon: FileText, title: 'Current Policy', subtitle: 'No active motor policy found', color: '#FFBD4C' },
       ]
