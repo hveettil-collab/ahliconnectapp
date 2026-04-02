@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
@@ -1269,7 +1269,7 @@ const SUGGESTIONS = [
    MAIN PAGE — Dark premium AI interface
    ═══════════════════════════════════════════ */
 
-export default function ServicesPage() {
+function ServicesPageContent() {
   const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -1629,5 +1629,13 @@ export default function ServicesPage() {
         </div>
       </div>
     </AppShell>
+  );
+}
+
+export default function ServicesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F8F9FB] flex items-center justify-center"><Loader2 className="animate-spin text-[#9D63F6]" size={32} /></div>}>
+      <ServicesPageContent />
+    </Suspense>
   );
 }
