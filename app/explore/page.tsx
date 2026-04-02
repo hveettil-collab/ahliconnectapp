@@ -684,6 +684,38 @@ export default function ExplorePage() {
           </div>
         </section>
 
+        {/* ═══ COMMUNITIES — horizontal preview ═══ */}
+        <section>
+          <SectionHeader title="Communities" count={7} href="/community" />
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
+            {[
+              { name: 'IHC Group', members: '20K', color: '#1B3A6B', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop', unread: 12 },
+              { name: 'Shory', members: '2.8K', color: '#0D9488', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&h=200&fit=crop', unread: 5 },
+              { name: 'Palms Sports', members: '4.5K', color: '#EA580C', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=200&fit=crop', unread: 3 },
+              { name: 'Aldar', members: '5.2K', color: '#C8973A', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=200&fit=crop', unread: 0 },
+              { name: 'PureHealth', members: '8.9K', color: '#059669', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=300&h=200&fit=crop', unread: 0 },
+            ].map((c, i) => (
+              <Link key={c.name} href="/community"
+                className={`card-rise card-rise-${i} shrink-0 w-[140px] rounded-[16px] overflow-hidden border border-[#DFE1E6] active:scale-[0.97] transition-all`}>
+                <div className="relative h-[80px]">
+                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {c.unread > 0 && (
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#DF1C41] flex items-center justify-center">
+                      <span className="text-[8px] font-bold text-white">{c.unread}</span>
+                    </div>
+                  )}
+                  <p className="absolute bottom-2 left-2.5 text-[11px] font-bold text-white">{c.name}</p>
+                </div>
+                <div className="px-2.5 py-2 flex items-center justify-between">
+                  <span className="text-[9px] text-[#A4ABB8] flex items-center gap-1"><Users size={9} /> {c.members}</span>
+                  <span className="text-[9px] font-semibold" style={{ color: c.color }}>View</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
         {/* ═══ BUSINESS — bento grid ═══ */}
         <section>
           <SectionHeader title="Business" href="/services" />
@@ -745,7 +777,7 @@ export default function ExplorePage() {
 
         {/* ═══ PEOPLE ═══ */}
         <section>
-          <SectionHeader title="People" href="/profile" />
+          <SectionHeader title="People" href="/community" />
           <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
             {COLLEAGUES.map(col => (
               <Link key={col.id} href="/profile" className="shrink-0 flex flex-col items-center gap-1.5 w-16">

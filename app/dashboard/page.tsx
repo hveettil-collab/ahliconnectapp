@@ -493,6 +493,43 @@ export default function DashboardPage() {
           </div>
         </Link>
 
+        {/* ── Community Quick Widget ── */}
+        <Link href="/community" className="no-underline block">
+          <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-[14px] flex items-center justify-center" style={{ background: '#9D63F6' + '12' }}>
+                    <Users size={18} style={{ color: '#9D63F6' }} />
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-bold text-[#15161E]">My Communities</p>
+                    <p className="text-[10px] text-[#A4ABB8]">3 active · 20 new posts today</p>
+                  </div>
+                </div>
+                <ChevronRight size={16} className="text-[#A4ABB8]" />
+              </div>
+              <div className="flex gap-2">
+                {[
+                  { name: 'IHC Group', color: '#1B3A6B', unread: 12, image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=80&h=80&fit=crop' },
+                  { name: 'Shory', color: '#0D9488', unread: 5, image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=80&h=80&fit=crop' },
+                  { name: 'Palms Sports', color: '#EA580C', unread: 3, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=80&h=80&fit=crop' },
+                ].map(c => (
+                  <div key={c.name} className="flex-1 flex items-center gap-2 px-2.5 py-2 rounded-[12px] border border-[#DFE1E6]">
+                    <div className="w-7 h-7 rounded-[8px] overflow-hidden shrink-0">
+                      <img src={c.image} alt="" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-bold text-[#15161E] truncate">{c.name}</p>
+                      {c.unread > 0 && <p className="text-[8px] font-semibold" style={{ color: '#DF1C41' }}>{c.unread} new</p>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Link>
+
         {/* ── IHC Stock Trading Card — Live ── */}
         <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
           <div className="px-4 pt-4 pb-3">
