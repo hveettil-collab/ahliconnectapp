@@ -255,29 +255,26 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary\nCertificate',
-              image: '/illust-salary.svg',
+              image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop',
               stat: '<30s',
               statLabel: 'avg. time',
               accent: '#9D63F6',
-              accentBg: '#F7F1FF',
               href: '/automations/salary-certificate',
             },
             {
               title: 'Smart\nLeave',
-              image: '/illust-leave.svg',
+              image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop',
               stat: '1-tap',
               statLabel: 'approval',
               accent: '#40C4AA',
-              accentBg: '#E7FEF8',
               href: '/automations/leave-request',
             },
             {
               title: 'Expense\nClaim',
-              image: '/illust-expense.svg',
+              image: 'https://images.unsplash.com/photo-1554672723-d42a16e533db?w=400&h=300&fit=crop',
               stat: '98%',
               statLabel: 'accuracy',
               accent: '#FFBD4C',
-              accentBg: '#FFF6E0',
               href: '/automations/expense-claim',
             },
           ].map((card, i) => (
@@ -288,21 +285,24 @@ export default function DashboardPage() {
                 transform: mounted ? 'translateY(0)' : 'translateY(16px)',
                 transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
               }}>
-              {/* Illustration */}
-              <div className="w-full overflow-hidden" style={{ height: '90px', background: card.accentBg }}>
+              {/* Real photo with gradient overlay */}
+              <div className="relative w-full overflow-hidden" style={{ height: '100px' }}>
                 <img
                   src={card.image}
                   alt={card.title.replace('\n', ' ')}
                   className="w-full h-full object-cover"
                 />
-              </div>
-              {/* Card content */}
-              <div className="px-2.5 py-2.5">
-                <p className="text-[11px] font-bold text-[#15161E] leading-tight whitespace-pre-line">{card.title}</p>
-                <div className="mt-2">
-                  <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
-                  <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
+                <div className="absolute inset-0" style={{
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)',
+                }} />
+                <div className="absolute bottom-2 left-2.5 right-2">
+                  <p className="text-[11px] font-bold text-white leading-tight whitespace-pre-line drop-shadow-sm">{card.title}</p>
                 </div>
+              </div>
+              {/* Stat */}
+              <div className="px-2.5 py-2 bg-white">
+                <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
+                <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
               </div>
             </Link>
           ))}
