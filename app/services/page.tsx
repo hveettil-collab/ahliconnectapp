@@ -1662,50 +1662,70 @@ function ServicesPageContent() {
 
       {/* Inline CSS for all animations */}
       <style>{`
-        @keyframes star-pulse {
-          0%, 100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.15); opacity: 0.85; }
+        /* ── Frosted Glass Orb Animations ── */
+        @keyframes orb-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
-        @keyframes orbit-spin {
+        @keyframes orb-gradient-rotate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes orb-highlight-shift {
+          0%, 100% { transform: translate(-20%, -30%) scale(1); opacity: 0.7; }
+          33% { transform: translate(-10%, -25%) scale(1.1); opacity: 0.9; }
+          66% { transform: translate(-30%, -20%) scale(0.95); opacity: 0.75; }
+        }
+        @keyframes orb-inner-pulse {
+          0%, 100% { transform: scale(1); opacity: 0.5; }
+          50% { transform: scale(1.08); opacity: 0.7; }
+        }
+        @keyframes orb-glow-breathe {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.55; transform: scale(1.12); }
+        }
+        @keyframes orb-shimmer {
+          0% { transform: rotate(0deg) translateX(50px) rotate(0deg); opacity: 0; }
+          20% { opacity: 0.6; }
+          50% { opacity: 0.3; }
+          80% { opacity: 0.6; }
+          100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); opacity: 0; }
+        }
+        @keyframes orb-ring-spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        @keyframes orbit-spin-reverse {
+        @keyframes orb-ring-spin-reverse {
           from { transform: rotate(360deg); }
           to { transform: rotate(0deg); }
         }
-        @keyframes float-dot-1 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.6; }
-          50% { transform: translate(8px, -12px); opacity: 1; }
+        @keyframes orb-particle-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+          50% { transform: translate(12px, -18px) scale(1.3); opacity: 0.8; }
         }
-        @keyframes float-dot-2 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.4; }
-          50% { transform: translate(-10px, 8px); opacity: 0.8; }
+        @keyframes orb-particle-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+          50% { transform: translate(-15px, 10px) scale(1.2); opacity: 0.7; }
         }
-        @keyframes float-dot-3 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.5; }
-          50% { transform: translate(6px, 10px); opacity: 0.9; }
-        }
-        @keyframes glow-breathe {
-          0%, 100% { opacity: 0.15; transform: scale(1); }
-          50% { opacity: 0.35; transform: scale(1.1); }
-        }
-        @keyframes zigzag-float {
-          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-          50% { transform: translateY(-6px) rotate(5deg); opacity: 1; }
+        @keyframes orb-particle-3 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+          50% { transform: translate(8px, 14px) scale(0.8); opacity: 0.9; }
         }
         @keyframes card-appear {
           from { opacity: 0; transform: translateY(12px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .ai-star { animation: star-pulse 3s ease-in-out infinite; }
-        .ai-orbit { animation: orbit-spin 12s linear infinite; }
-        .ai-orbit-reverse { animation: orbit-spin-reverse 16s linear infinite; }
-        .ai-dot-1 { animation: float-dot-1 4s ease-in-out infinite; }
-        .ai-dot-2 { animation: float-dot-2 5s ease-in-out infinite; }
-        .ai-dot-3 { animation: float-dot-3 3.5s ease-in-out infinite; }
-        .ai-glow-breathe { animation: glow-breathe 4s ease-in-out infinite; }
-        .ai-zigzag { animation: zigzag-float 3s ease-in-out infinite; }
+        .orb-float { animation: orb-float 5s ease-in-out infinite; }
+        .orb-gradient-rotate { animation: orb-gradient-rotate 8s linear infinite; }
+        .orb-highlight { animation: orb-highlight-shift 7s ease-in-out infinite; }
+        .orb-inner-pulse { animation: orb-inner-pulse 4s ease-in-out infinite; }
+        .orb-glow { animation: orb-glow-breathe 4s ease-in-out infinite; }
+        .orb-shimmer { animation: orb-shimmer 10s linear infinite; }
+        .orb-ring { animation: orb-ring-spin 20s linear infinite; }
+        .orb-ring-reverse { animation: orb-ring-spin-reverse 15s linear infinite; }
+        .orb-p1 { animation: orb-particle-1 4.5s ease-in-out infinite; }
+        .orb-p2 { animation: orb-particle-2 5.5s ease-in-out infinite; }
+        .orb-p3 { animation: orb-particle-3 3.8s ease-in-out infinite; }
         .suggestion-card { animation: card-appear 0.5s ease-out both; }
         .suggestion-card:nth-child(2) { animation-delay: 0.1s; }
         .suggestion-card:nth-child(3) { animation-delay: 0.2s; }
@@ -1723,37 +1743,143 @@ function ServicesPageContent() {
       {/* Main Content Area */}
       <div className="flex flex-col max-w-3xl mx-auto w-full px-4 md:px-6">
 
-        {/* ── Animated star visual ── */}
-        <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '280px' }}>
-          <div className="absolute ai-glow-breathe" style={{ width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 70%)' }} />
-          <div className="absolute ai-orbit" style={{ width: 180, height: 180, borderRadius: '50%', border: '1px solid rgba(157,99,246,0.1)' }} />
-          <div className="absolute ai-orbit-reverse" style={{ width: 130, height: 130, borderRadius: '50%', border: '1px solid rgba(157,99,246,0.12)' }}>
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#9D63F6]/40" />
+        {/* ── Animated Frosted Glass Orb ── */}
+        <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '300px' }}>
+
+          {/* Ambient glow behind orb */}
+          <div className="absolute orb-glow" style={{
+            width: 260, height: 260, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(157,99,246,0.18) 0%, rgba(157,99,246,0.05) 45%, transparent 70%)',
+          }} />
+
+          {/* Subtle orbit rings */}
+          <div className="absolute orb-ring" style={{
+            width: 220, height: 220, borderRadius: '50%',
+            border: '1px solid rgba(157,99,246,0.08)',
+          }}>
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#B182F8]/50" />
           </div>
-          <div className="ai-star relative z-10">
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-              <path d="M32 4 L36 28 L60 32 L36 36 L32 60 L28 36 L4 32 L28 28 Z" fill="#9D63F6" />
-              <path d="M32 4 L36 28 L60 32 L36 36 L32 60 L28 36 L4 32 L28 28 Z" fill="url(#star-grad-light)" fillOpacity="0.3" />
+          <div className="absolute orb-ring-reverse" style={{
+            width: 260, height: 260, borderRadius: '50%',
+            border: '1px solid rgba(157,99,246,0.05)',
+          }}>
+            <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-1 h-1 rounded-full bg-[#FFBD4C]/40" />
+          </div>
+
+          {/* Floating particles */}
+          <div className="absolute orb-p1" style={{ top: '15%', left: '25%' }}>
+            <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(157,99,246,0.35)' }} />
+          </div>
+          <div className="absolute orb-p2" style={{ top: '25%', right: '22%' }}>
+            <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(177,130,248,0.4)' }} />
+          </div>
+          <div className="absolute orb-p3" style={{ bottom: '20%', left: '22%' }}>
+            <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(255,189,76,0.4)' }} />
+          </div>
+
+          {/* ── THE ORB ── */}
+          <div className="orb-float relative z-10" style={{ width: 160, height: 160 }}>
+            {/* SVG for the orb with filters */}
+            <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0 }}>
               <defs>
-                <radialGradient id="star-grad-light" cx="50%" cy="50%"><stop offset="0%" stopColor="#B182F8" /><stop offset="100%" stopColor="#9D63F6" /></radialGradient>
+                {/* Main gradient — purple sphere */}
+                <radialGradient id="orb-main" cx="0.4" cy="0.35" r="0.65" fx="0.35" fy="0.3">
+                  <stop offset="0%" stopColor="#EEEAFF" />
+                  <stop offset="25%" stopColor="#D4C4FF" />
+                  <stop offset="50%" stopColor="#B182F8" />
+                  <stop offset="75%" stopColor="#9D63F6" />
+                  <stop offset="100%" stopColor="#7B4FD4" />
+                </radialGradient>
+
+                {/* Top-left highlight — glossy reflection */}
+                <radialGradient id="orb-highlight" cx="0.35" cy="0.28" r="0.4" fx="0.3" fy="0.25">
+                  <stop offset="0%" stopColor="white" stopOpacity="0.85" />
+                  <stop offset="40%" stopColor="white" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+
+                {/* Secondary highlight — right edge */}
+                <radialGradient id="orb-rim" cx="0.72" cy="0.6" r="0.35">
+                  <stop offset="0%" stopColor="white" stopOpacity="0.3" />
+                  <stop offset="100%" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+
+                {/* Inner depth shadow */}
+                <radialGradient id="orb-depth" cx="0.5" cy="0.7" r="0.5">
+                  <stop offset="0%" stopColor="#6B3FC7" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#6B3FC7" stopOpacity="0" />
+                </radialGradient>
+
+                {/* Noise texture filter */}
+                <filter id="orb-noise" x="0" y="0" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" result="noise" />
+                  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+                  <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="noisy" />
+                  <feComposite in="noisy" in2="SourceGraphic" operator="in" />
+                </filter>
+
+                {/* Soft glow filter */}
+                <filter id="orb-soft-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="2" />
+                </filter>
+
+                {/* Drop shadow */}
+                <filter id="orb-shadow" x="-30%" y="-20%" width="160%" height="160%">
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="12" />
+                  <feOffset dx="0" dy="8" />
+                  <feColorMatrix values="0 0 0 0 0.388 0 0 0 0 0.247 0 0 0 0 0.765 0 0 0 0.2 0" />
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
               </defs>
+
+              <g filter="url(#orb-shadow)">
+                {/* Base sphere */}
+                <circle cx="80" cy="80" r="72" fill="url(#orb-main)" />
+
+                {/* Noise overlay for frosted glass texture */}
+                <circle cx="80" cy="80" r="72" fill="url(#orb-main)" filter="url(#orb-noise)" opacity="0.6" />
+
+                {/* Depth shadow at bottom */}
+                <circle cx="80" cy="80" r="72" fill="url(#orb-depth)" />
+
+                {/* Main glossy highlight — top left */}
+                <circle cx="80" cy="80" r="72" fill="url(#orb-highlight)" />
+
+                {/* Rim light — right edge */}
+                <circle cx="80" cy="80" r="72" fill="url(#orb-rim)" />
+
+                {/* Small bright specular highlight */}
+                <ellipse cx="58" cy="48" rx="18" ry="12" fill="white" opacity="0.2" filter="url(#orb-soft-glow)" />
+              </g>
             </svg>
-          </div>
-          <div className="absolute ai-dot-1" style={{ top: '22%', left: '32%' }}>
-            <div className="w-2.5 h-2.5 rounded-full bg-[#9D63F6]/50" />
-          </div>
-          <div className="absolute ai-dot-2" style={{ top: '30%', right: '28%' }}>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M8 1 L9 7 L15 8 L9 9 L8 15 L7 9 L1 8 L7 7 Z" fill="#9D63F6" fillOpacity="0.4" />
-            </svg>
-          </div>
-          <div className="absolute ai-dot-3" style={{ bottom: '28%', left: '28%' }}>
-            <div className="w-1.5 h-1.5 rounded-full bg-[#9D63F6]/30" />
-          </div>
-          <div className="absolute ai-zigzag" style={{ bottom: '22%', right: '26%' }}>
-            <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
-              <path d="M2 14 L8 4 L14 12 L20 4 L26 14" stroke="#FFBD4C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+
+            {/* Animated gradient overlay that rotates inside the orb */}
+            <div className="absolute inset-0 orb-gradient-rotate" style={{
+              width: 160, height: 160, borderRadius: '50%',
+              background: 'conic-gradient(from 0deg, rgba(157,99,246,0) 0%, rgba(177,130,248,0.15) 25%, rgba(255,255,255,0.1) 50%, rgba(157,99,246,0) 75%, rgba(107,63,199,0.1) 100%)',
+              mixBlendMode: 'overlay',
+              clipPath: 'circle(45% at 50% 50%)',
+            }} />
+
+            {/* Animated highlight that drifts */}
+            <div className="absolute orb-highlight" style={{
+              width: 60, height: 60, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%)',
+              top: '15%', left: '20%',
+              filter: 'blur(8px)',
+            }} />
+
+            {/* Shimmer particle orbiting inside */}
+            <div className="absolute orb-shimmer" style={{
+              width: 6, height: 6, borderRadius: '50%',
+              background: 'rgba(255,255,255,0.7)',
+              top: '50%', left: '50%',
+              marginTop: -3, marginLeft: -3,
+              filter: 'blur(1px)',
+            }} />
           </div>
         </div>
 
