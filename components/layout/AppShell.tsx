@@ -48,8 +48,17 @@ export default function AppShell({ children, title, subtitle, hideTopBar }: AppS
           className="absolute rounded-[40px] overflow-hidden"
           style={{ top: 12, left: 12, right: 12, bottom: 12 }}
         >
+          {/* Status bar */}
+          <div className="relative z-50 flex items-center justify-between px-6 bg-[#F4EFE8]" style={{ height: 44, paddingTop: 12 }}>
+            <span className="text-xs font-semibold text-[#1A1A2E]">9:41</span>
+            <div className="flex items-center gap-1.5">
+              <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="0.5" fill="#1A1A2E"/><rect x="4.5" y="2.5" width="3" height="8.5" rx="0.5" fill="#1A1A2E"/><rect x="9" y="1" width="3" height="10" rx="0.5" fill="#1A1A2E"/><rect x="13" y="0" width="3" height="11" rx="0.5" fill="#1A1A2E"/></svg>
+              <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M7.5 2.5C9.43 2.5 11.18 3.32 12.42 4.63L13.84 3.21C12.27 1.56 10.01 0.5 7.5 0.5C4.99 0.5 2.73 1.56 1.16 3.21L2.58 4.63C3.82 3.32 5.57 2.5 7.5 2.5ZM7.5 5.5C8.62 5.5 9.64 5.94 10.41 6.65L11.83 5.23C10.7 4.17 9.18 3.5 7.5 3.5C5.82 3.5 4.3 4.17 3.17 5.23L4.59 6.65C5.36 5.94 6.38 5.5 7.5 5.5ZM7.5 8.5C6.95 8.5 6.45 8.72 6.09 9.09L7.5 10.5L8.91 9.09C8.55 8.72 8.05 8.5 7.5 8.5Z" fill="#1A1A2E"/></svg>
+              <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0" y="1" width="22" height="10" rx="2" stroke="#1A1A2E" strokeWidth="1"/><rect x="1.5" y="2.5" width="17" height="7" rx="1" fill="#1A1A2E"/><rect x="23" y="4" width="2" height="4" rx="0.5" fill="#1A1A2E"/></svg>
+            </div>
+          </div>
           {/* App content — relative container so BottomNav absolute works */}
-          <div className="relative w-full h-full bg-[#F4EFE8]">
+          <div className="relative w-full h-full bg-[#F4EFE8]" style={{ height: 'calc(100% - 44px)' }}>
             <div className="absolute inset-0 overflow-y-auto">
               <div className="min-h-full pb-24">
                 {!hideTopBar && <TopBar title={title} subtitle={subtitle} onMenuToggle={() => setSidebarOpen(true)} />}
