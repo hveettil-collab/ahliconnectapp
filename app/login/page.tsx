@@ -44,13 +44,13 @@ function LoginForm() {
   const user = COMPANIES.find(() => true); // just for display mock
 
   return (
-    <div className="min-h-screen bg-[#F4EFE8] flex items-center justify-center p-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F4EFE8' }}>
       <div className="w-full max-w-md">
         <Link href="/landing" className="inline-flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-[#1A1A2E] transition-colors mb-6">
           <ArrowLeft size={15} /> Back
         </Link>
 
-        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-8">
+        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 md:p-8">
 
           {/* IDLE / FORM */}
           {stage === 'idle' && (

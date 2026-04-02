@@ -251,7 +251,7 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
           </div>
         </div>
         <div className="p-5 space-y-5">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { icon: Clock, label: 'Time', value: event.time.split('–')[0] },
               { icon: Users, label: 'Capacity', value: `${spotsPercent}% Full` },
@@ -523,7 +523,7 @@ export default function ExplorePage() {
 
         {/* ═══ QUICK ACTIONS — icon grid ═══ */}
         <section>
-          <div className="grid grid-cols-6 gap-1">
+          <div className="grid grid-cols-3 gap-2">
             {QUICK_ACTIONS.map((action, i) => {
               const AIcon = action.icon;
               return (
@@ -642,7 +642,7 @@ export default function ExplorePage() {
         {/* ═══ OUR COMPANIES ═══ */}
         <section>
           <SectionHeader title="Our Companies" href="/about" />
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {PARTNERS.map(p => (
               <div key={p.name} className="flex flex-col items-center gap-2 py-3 rounded-[16px] border border-[#E8E2D9]" style={{ background: 'rgba(255,255,255,0.85)' }}>
                 <img src={p.logo} alt={p.name} className="w-11 h-11 rounded-[12px]" />

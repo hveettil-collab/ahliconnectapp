@@ -23,9 +23,9 @@ export default function ProfilePage() {
 
   return (
     <AppShell title="My Profile" subtitle={user.employeeId}>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-4">
         {/* Left: Profile card */}
-        <div className="space-y-4 lg:col-span-1">
+        <div className="space-y-4">
           {/* Main card */}
           <div className="bg-white rounded-[20px] border border-[#E8E2D9] overflow-hidden">
             <div className="h-20 bg-gradient-to-br from-[#1B3A6B] to-[#2C5282]" />
@@ -97,7 +97,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Right: Activity */}
-        <div className="space-y-4 lg:col-span-2">
+        <div className="space-y-4">
           {/* Saved Offers */}
           <div className="bg-white rounded-[20px] border border-[#E8E2D9] p-5">
             <div className="flex items-center gap-2 mb-4">

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Bell, Search, MessageCircle, Menu } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { useViewMode } from '@/context/ViewModeContext';
+import { useNotifications } from '@/context/NotificationContext';
 import Avatar from '@/components/ui/Avatar';
 import { COMPANIES } from '@/lib/mockData';
 import Link from 'next/link';
@@ -16,17 +16,17 @@ interface TopBarProps {
 
 export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
   const { user } = useAuth();
-  const { isMobilePreview } = useViewMode();
+  const { unreadCount, togglePanel } = useNotifications();
   const company = COMPANIES.find(c => c.id === user?.companyId);
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <>
       <header className="h-14 md:h-16 bg-white border-b border-[#E8E2D9] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
-        {/* Hamburger - mobile only (or mobile preview) */}
+        {/* Hamburger - mobile only */}
         <button
           onClick={onMenuToggle}
-          className={isMobilePreview ? "p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0" : "md:hidden p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0"}
+          className="md:hidden p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0"
           aria-label="Open menu"
         >
           <Menu size={20} strokeWidth={1.8} />
@@ -61,9 +61,16 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
           <Link href="/chat" className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors">
             <MessageCircle size={17} strokeWidth={1.8} />
           </Link>
-          <button className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors">
+          <button
+            onClick={togglePanel}
+            className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors"
+          >
             <Bell size={17} strokeWidth={1.8} />
-            <span className="absolute top-1 right-1 md:top-1.5 md:right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white" />
+            {unreadCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 min-w-[16px] h-[16px] bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
+                <span className="text-[8px] font-bold text-white">{unreadCount}</span>
+              </span>
+            )}
           </button>
           {user && (
             <Link href="/profile" className="ml-0.5 md:ml-1">

@@ -52,13 +52,13 @@ export default function VerifyPage() {
   const email = pendingEmail || 'your work email';
 
   return (
-    <div className="min-h-screen bg-[#F4EFE8] flex items-center justify-center p-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F4EFE8' }}>
       <div className="w-full max-w-md">
         <Link href="/signup" className="inline-flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-[#1A1A2E] transition-colors mb-6">
           <ArrowLeft size={15} /> Back
         </Link>
 
-        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-8">
+        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 md:p-8">
 
           {/* INPUT STAGE */}
           {stage === 'input' && (
@@ -72,7 +72,7 @@ export default function VerifyPage() {
               </p>
               <p className="text-sm font-semibold text-[#1A1A2E] mb-8">{email}</p>
 
-              <div className="flex gap-2.5 justify-center mb-6" onPaste={handlePaste}>
+              <div className="flex gap-1.5 justify-center mb-6" onPaste={handlePaste}>
                 {otp.map((digit, i) => (
                   <input
                     key={i}
@@ -83,7 +83,7 @@ export default function VerifyPage() {
                     value={digit}
                     onChange={e => handleChange(i, e.target.value)}
                     onKeyDown={e => handleKey(i, e)}
-                    className="otp-input"
+                    className="w-10 h-10 text-center text-lg font-semibold border border-[#E8E2D9] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#1B3A6B] focus:border-transparent"
                   />
                 ))}
               </div>

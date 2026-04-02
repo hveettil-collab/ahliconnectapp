@@ -65,46 +65,46 @@ export default function AutomationsHub() {
         {/* ═══════════════════════════════════
            HERO — ROI Impact Dashboard
            ═══════════════════════════════════ */}
-        <div className="rounded-[22px] p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 50%, #1B3A6B 100%)', boxShadow: '0 8px 32px rgba(27,58,107,0.2)' }}>
+        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 50%, #1B3A6B 100%)', boxShadow: '0 8px 32px rgba(27,58,107,0.2)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 80% 30%, rgba(200,151,58,0.15) 0%, transparent 50%)' }} />
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 20% 80%, rgba(5,150,105,0.1) 0%, transparent 40%)' }} />
           <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: 'rgba(200,151,58,0.2)', border: '1px solid rgba(200,151,58,0.3)' }}>
-                <Zap size={16} className="text-[#C8973A]" />
+                <Zap size={15} className="text-[#C8973A]" />
               </div>
               <div>
-                <h2 className="text-[16px] font-bold">Automation Impact</h2>
-                <p className="text-[11px] text-blue-200/60">Real-time ROI across all automations</p>
+                <h2 className="text-[15px] font-bold">Automation Impact</h2>
+                <p className="text-[10px] text-blue-200/60">Real-time ROI across all automations</p>
               </div>
             </div>
 
             {/* Big numbers */}
-            <div className="grid grid-cols-3 gap-4 mb-5">
+            <div className="grid grid-cols-3 gap-3 mb-4">
               <div className="counter-up d1">
-                <p className="text-[28px] font-extrabold tracking-tight">{TOTAL_WEEKLY_HOURS_SAVED}</p>
-                <p className="text-[10px] text-blue-200/60 font-medium uppercase tracking-wider">hrs/week saved</p>
+                <p className="text-[22px] font-extrabold tracking-tight">{TOTAL_WEEKLY_HOURS_SAVED}</p>
+                <p className="text-[9px] text-blue-200/60 font-medium uppercase tracking-wider">hrs/wk</p>
               </div>
               <div className="counter-up d2">
-                <p className="text-[28px] font-extrabold tracking-tight">{AVG_ERROR_REDUCTION}%</p>
-                <p className="text-[10px] text-blue-200/60 font-medium uppercase tracking-wider">error reduction</p>
+                <p className="text-[22px] font-extrabold tracking-tight">{AVG_ERROR_REDUCTION}%</p>
+                <p className="text-[9px] text-blue-200/60 font-medium uppercase tracking-wider">errors</p>
               </div>
               <div className="counter-up d3">
-                <p className="text-[28px] font-extrabold tracking-tight">{(TOTAL_ANNUAL_HOURS_SAVED / 1000).toFixed(1)}K</p>
-                <p className="text-[10px] text-blue-200/60 font-medium uppercase tracking-wider">hrs/year saved</p>
+                <p className="text-[22px] font-extrabold tracking-tight">{(TOTAL_ANNUAL_HOURS_SAVED / 1000).toFixed(1)}K</p>
+                <p className="text-[9px] text-blue-200/60 font-medium uppercase tracking-wider">hrs/yr</p>
               </div>
             </div>
 
             {/* Per-automation bars */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               {ROI_METRICS.map((m, i) => (
                 <div key={m.automationId} className="counter-up" style={{ animationDelay: `${0.15 + i * 0.05}s` }}>
-                  <div className="flex items-end gap-1 h-12 mb-1.5">
-                    <div className="flex-1 rounded-t-[4px]" style={{ background: 'rgba(200,151,58,0.5)', height: `${(m.weeklyHoursSaved / 140) * 100}%`, transition: 'height 0.6s ease-out' }} />
-                    <div className="flex-1 rounded-t-[4px]" style={{ background: 'rgba(255,255,255,0.2)', height: `${(m.runsPerWeek / 300) * 100}%`, transition: 'height 0.6s ease-out' }} />
+                  <div className="flex items-end gap-0.5 h-10 mb-1">
+                    <div className="flex-1 rounded-t-[3px]" style={{ background: 'rgba(200,151,58,0.5)', height: `${(m.weeklyHoursSaved / 140) * 100}%`, transition: 'height 0.6s ease-out' }} />
+                    <div className="flex-1 rounded-t-[3px]" style={{ background: 'rgba(255,255,255,0.2)', height: `${(m.runsPerWeek / 300) * 100}%`, transition: 'height 0.6s ease-out' }} />
                   </div>
-                  <p className="text-[10px] text-blue-200/50 font-medium truncate">{m.label}</p>
-                  <p className="text-[12px] font-bold">{m.weeklyHoursSaved}h/wk</p>
+                  <p className="text-[9px] text-blue-200/50 font-medium truncate">{m.label}</p>
+                  <p className="text-[11px] font-bold">{m.weeklyHoursSaved}h</p>
                 </div>
               ))}
             </div>
@@ -206,25 +206,25 @@ export default function AutomationsHub() {
             <p className="text-[14px] font-bold text-[#1A1A2E]">ROI Breakdown</p>
           </div>
           <div className="rounded-[18px] bg-white border border-[#E8E2D9] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-            <div className="grid grid-cols-4 gap-0 text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider bg-[#F4EFE8] px-4 py-2.5 border-b border-[#E8E2D9]">
-              <span>Automation</span>
-              <span className="text-center">Before</span>
-              <span className="text-center">After</span>
-              <span className="text-right">Saved/wk</span>
+            <div className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider bg-[#F4EFE8] px-3 py-2 border-b border-[#E8E2D9] grid grid-cols-4 gap-2">
+              <span className="col-span-1">Automation</span>
+              <span className="text-center text-[9px]">Before</span>
+              <span className="text-center text-[9px]">After</span>
+              <span className="text-right text-[9px]">Saved</span>
             </div>
             {ROI_METRICS.map(m => (
-              <div key={m.automationId} className="grid grid-cols-4 gap-0 px-4 py-3 border-b border-[#F4EFE8] last:border-0 items-center">
-                <span className="text-[12px] font-semibold text-[#1A1A2E]">{m.label}</span>
-                <span className="text-[11px] text-red-500 text-center font-medium">{m.beforeTime}</span>
-                <span className="text-[11px] text-[#059669] text-center font-bold">{m.afterTime}</span>
-                <span className="text-[12px] font-bold text-[#1B3A6B] text-right">{m.weeklyHoursSaved}h</span>
+              <div key={m.automationId} className="px-3 py-2.5 border-b border-[#F4EFE8] last:border-0 grid grid-cols-4 gap-2 items-center text-[11px]">
+                <span className="font-semibold text-[#1A1A2E] text-[11px]">{m.label}</span>
+                <span className="text-red-500 text-center font-medium text-[10px]">{m.beforeTime}</span>
+                <span className="text-[#059669] text-center font-bold text-[10px]">{m.afterTime}</span>
+                <span className="font-bold text-[#1B3A6B] text-right text-[11px]">{m.weeklyHoursSaved}h</span>
               </div>
             ))}
-            <div className="grid grid-cols-4 gap-0 px-4 py-3 bg-[#1B3A6B] text-white">
-              <span className="text-[12px] font-bold">Total Impact</span>
-              <span className="text-[11px] text-center text-blue-200/70">~45 days</span>
-              <span className="text-[11px] text-center text-[#C8973A] font-bold">&lt; 5 min</span>
-              <span className="text-[13px] font-extrabold text-right">{TOTAL_WEEKLY_HOURS_SAVED}h</span>
+            <div className="px-3 py-2.5 bg-[#1B3A6B] text-white grid grid-cols-4 gap-2">
+              <span className="text-[11px] font-bold">Total</span>
+              <span className="text-[9px] text-center text-blue-200/70">~45d</span>
+              <span className="text-[9px] text-center text-[#C8973A] font-bold">&lt;5m</span>
+              <span className="text-[12px] font-extrabold text-right">{TOTAL_WEEKLY_HOURS_SAVED}h</span>
             </div>
           </div>
         </section>
@@ -278,7 +278,7 @@ export default function AutomationsHub() {
             <Building2 size={15} className="text-[#C8973A]" />
             <p className="text-[14px] font-bold text-[#1A1A2E]">Connected Integrations</p>
           </div>
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-1 gap-2">
             {[
               { name: 'SAP SuccessFactors', status: 'Connected', desc: 'Employee data, leave, payroll' },
               { name: 'Google Drive', status: 'Connected', desc: 'Document storage & sync' },
@@ -287,7 +287,7 @@ export default function AutomationsHub() {
               { name: 'Claude AI', status: 'Connected', desc: 'Vision, NLP, extraction' },
               { name: 'Google Calendar', status: 'Connected', desc: 'Leave & events sync' },
             ].map(int => (
-              <div key={int.name} className="rounded-[14px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
+              <div key={int.name} className="rounded-[14px] bg-white border border-[#E8E2D9] p-2.5" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2 h-2 rounded-full bg-[#059669]" style={{ animation: 'pulse-green 2s ease-in-out infinite' }} />
                   <p className="text-[11px] font-bold text-[#1A1A2E]">{int.name}</p>
@@ -299,11 +299,11 @@ export default function AutomationsHub() {
         </section>
 
         {/* Bottom CTA — cross-department */}
-        <div className="rounded-[18px] bg-[#F4EFE8] border border-[#E8E2D9] p-4 text-center">
-          <p className="text-[11px] text-[#9CA3AF] font-medium">
+        <div className="rounded-[16px] bg-[#F4EFE8] border border-[#E8E2D9] p-3 text-center">
+          <p className="text-[10px] text-[#9CA3AF] font-medium">
             Available to <strong className="text-[#1B3A6B]">45,000+</strong> employees across <strong className="text-[#1B3A6B]">30+</strong> IHC subsidiaries
           </p>
-          <p className="text-[10px] text-[#9CA3AF] mt-1">Estimated annual savings: <strong className="text-[#C8973A]">AED 2.4M</strong> in operational costs</p>
+          <p className="text-[9px] text-[#9CA3AF] mt-1">Annual savings: <strong className="text-[#C8973A]">AED 2.4M</strong></p>
         </div>
       </div>
     </AppShell>

@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import { Home, Megaphone, Tag, ShoppingBag, Sparkles, MessageCircle, User, LogOut, ChevronRight, X, Activity, Info, Compass, Gift, Zap } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuth } from '@/context/AuthContext';
-import { useViewMode } from '@/context/ViewModeContext';
 import Avatar from '@/components/ui/Avatar';
 import Logo from '@/components/ui/Logo';
 import { COMPANIES } from '@/lib/mockData';
@@ -31,7 +30,6 @@ interface SidebarProps {
 export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const { isMobilePreview } = useViewMode();
   const company = COMPANIES.find(c => c.id === user?.companyId);
 
   const sidebarContent = (
@@ -107,21 +105,19 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Desktop sidebar - hidden in mobile preview */}
-      {!isMobilePreview && (
-        <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E8E2D9] flex-col z-30 shadow-[1px_0_0_rgba(0,0,0,0.04)]">
-          {sidebarContent}
-        </aside>
-      )}
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E8E2D9] flex-col z-30 shadow-[1px_0_0_rgba(0,0,0,0.04)]">
+        {sidebarContent}
+      </aside>
 
       {/* Mobile sidebar overlay */}
       {mobileOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/40 z-40"
+            className="md:hidden fixed inset-0 bg-black/40 z-40"
             onClick={onClose}
           />
-          <aside className="fixed left-0 top-0 h-full w-72 bg-white flex flex-col z-50 shadow-xl animate-slide-in-left">
+          <aside className="md:hidden fixed left-0 top-0 h-full w-72 bg-white flex flex-col z-50 shadow-xl animate-slide-in-left">
             {sidebarContent}
           </aside>
         </>

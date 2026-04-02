@@ -232,10 +232,10 @@ export default function ServicesPage() {
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
 
-  /* ── Chat mode — light message thread ── */
+  /* ── Chat mode — full-screen layout ── */
   if (messages.length > 0) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'linear-gradient(180deg, #F4EFE8 0%, #EDE8E0 40%, #E8EFF8 100%)' }}>
+      <div className="fixed inset-0 flex flex-col bg-[#F4EFE8]">
         <style>{`
           @keyframes typing-bounce {
             0%, 60%, 100% { transform: translateY(0); }
@@ -245,7 +245,7 @@ export default function ServicesPage() {
 
         {/* Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 shrink-0" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E8E2D9' }}>
-          <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-[#F4EFE8] transition-all">
+          <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-white/60 transition-all md:hover:bg-white/80">
             <ArrowLeft size={20} />
           </button>
           <div className="flex items-center gap-2.5 flex-1">
@@ -259,8 +259,8 @@ export default function ServicesPage() {
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+        {/* Messages Container */}
+        <div className="flex-1 overflow-y-auto px-3 md:px-6 lg:px-8 py-4 space-y-3 max-w-4xl mx-auto w-full">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'ai' && (
@@ -268,7 +268,7 @@ export default function ServicesPage() {
                   <Sparkles size={12} className="text-white" />
                 </div>
               )}
-              <div className="max-w-[82%]">
+              <div className="max-w-md md:max-w-lg lg:max-w-2xl">
                 {msg.typing ? (
                   <div className="bg-white border border-[#E8E2D9] rounded-[16px] rounded-bl-[4px] px-4 py-3 shadow-sm">
                     <div className="flex gap-1.5">
@@ -293,14 +293,14 @@ export default function ServicesPage() {
                     </div>
 
                     {msg.cards && msg.cards.length > 0 && (
-                      <div className="mt-2 space-y-1.5">
+                      <div className="mt-2 space-y-2 flex flex-col">
                         {msg.cards.map((card, ci) => {
                           const IconComp = card.icon;
                           return (
                             <button
                               key={ci}
                               onClick={() => { if (card.link) router.push(card.link); }}
-                              className="w-full flex items-center gap-3 bg-white border border-[#E8E2D9] rounded-[14px] p-3 text-left hover:shadow-md active:scale-[0.98] transition-all"
+                              className="w-full flex items-center gap-3 bg-white border border-[#E8E2D9] rounded-[14px] p-3 text-left hover:shadow-md md:hover:shadow-lg active:scale-[0.98] transition-all"
                             >
                               {card.image ? (
                                 <img src={card.image} alt={card.title} className="w-10 h-10 rounded-[10px] object-cover shrink-0" />
@@ -330,13 +330,13 @@ export default function ServicesPage() {
 
         {/* Quick chips */}
         {messages.length > 0 && messages[messages.length - 1]?.role === 'ai' && !messages[messages.length - 1]?.typing && (
-          <div className="px-4 pb-2">
+          <div className="px-3 md:px-6 lg:px-8 pb-2 shrink-0 max-w-4xl mx-auto w-full">
             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
               {['Flights ✈️', 'Benefits 💰', 'Gaming 🎮', 'Offers 🎁', 'Rides 🚗'].map(chip => (
                 <button
                   key={chip}
                   onClick={() => handleSend(chip.split(' ')[0])}
-                  className="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-[#F4EFE8] text-[#1B3A6B] border border-[#E8E2D9] transition-all active:scale-95 hover:bg-[#E8E2D9]"
+                  className="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-[#1B3A6B] border border-[#E8E2D9] transition-all active:scale-95 hover:shadow-md md:hover:bg-white/90"
                 >
                   {chip}
                 </button>
@@ -345,9 +345,9 @@ export default function ServicesPage() {
           </div>
         )}
 
-        {/* Input */}
-        <div className="shrink-0 px-4 py-3" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid #E8E2D9' }}>
-          <div className="flex items-center gap-2.5 rounded-[16px] px-4 py-1 bg-white border border-[#E8E2D9]">
+        {/* Input — fixed at bottom */}
+        <div className="fixed bottom-0 left-0 right-0 px-3 md:px-6 lg:px-8 py-3 shrink-0" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid #E8E2D9' }}>
+          <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#E8E2D9] max-w-4xl mx-auto">
             <input
               type="text"
               value={inputValue}
@@ -362,7 +362,7 @@ export default function ServicesPage() {
             {inputValue.trim() ? (
               <button
                 onClick={() => handleSend()}
-                className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
+                className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md md:hover:shadow-lg"
               >
                 <Send size={14} />
               </button>
@@ -373,13 +373,16 @@ export default function ServicesPage() {
             )}
           </div>
         </div>
+
+        {/* Spacer for fixed input */}
+        <div className="h-20" />
       </div>
     );
   }
 
-  /* ── Welcome state — warm gradient premium landing ── */
+  /* ── Welcome state — full-screen centered layout ── */
   return (
-    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'linear-gradient(180deg, #F4EFE8 0%, #EDE8E0 40%, #E8EFF8 100%)' }}>
+    <div className="min-h-screen flex flex-col bg-[#F4EFE8]">
 
       {/* Inline CSS for all animations */}
       <style>{`
@@ -435,17 +438,17 @@ export default function ServicesPage() {
 
       {/* Header */}
       <div className="flex items-center justify-center px-4 py-4 shrink-0 relative" style={{ background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(232,226,217,0.6)' }}>
-        <Link href="/dashboard" className="absolute left-4 p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-white/60 transition-all">
+        <Link href="/dashboard" className="absolute left-4 p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-white/60 md:hover:bg-white/80 transition-all">
           <ArrowLeft size={20} />
         </Link>
         <p className="text-[15px] font-bold text-[#1A1A2E]">Ahli AI</p>
       </div>
 
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto">
+      {/* Main Content Area — centered and scrollable */}
+      <div className="flex-1 flex flex-col overflow-y-auto max-w-3xl mx-auto w-full px-4 md:px-6 lg:px-8">
 
         {/* ── Animated star visual ── */}
-        <div className="relative flex items-center justify-center pt-6 pb-8" style={{ height: '280px' }}>
+        <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '280px' }}>
 
           {/* Large soft glow behind star */}
           <div className="absolute ai-glow-breathe" style={{
@@ -500,25 +503,25 @@ export default function ServicesPage() {
         </div>
 
         {/* ── Greeting text ── */}
-        <div className="px-6 pb-6">
-          <h1 className="text-[26px] font-bold text-[#1A1A2E] leading-snug mb-1">
+        <div className="pb-6 text-center md:text-left">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1A1A2E] leading-snug mb-2">
             I am here to simplify your work.
           </h1>
-          <p className="text-[17px] text-[#9CA3AF] font-medium">
+          <p className="text-base md:text-lg text-[#9CA3AF] font-medium">
             How can I help you?
           </p>
         </div>
 
-        {/* ── Suggestion cards — 2-column grid ── */}
-        <div className="px-5 pb-8">
-          <div className="grid grid-cols-2 gap-3">
+        {/* ── Suggestion cards — responsive grid ── */}
+        <div className="pb-20 md:pb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {SUGGESTIONS.map((s, i) => {
               const SIcon = s.icon;
               return (
                 <button
                   key={i}
                   onClick={() => handleSend(s.prompt)}
-                  className="suggestion-card text-left rounded-[18px] p-4 border border-[#E8E2D9]/60 active:scale-[0.97] transition-all hover:shadow-md"
+                  className="suggestion-card text-left rounded-[18px] p-4 border border-[#E8E2D9]/60 active:scale-[0.97] transition-all hover:shadow-md md:hover:shadow-lg"
                   style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
                 >
                   <div
@@ -537,8 +540,8 @@ export default function ServicesPage() {
       </div>
 
       {/* ── Input bar — fixed at bottom ── */}
-      <div className="shrink-0 px-4 py-3" style={{ background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid rgba(232,226,217,0.6)' }}>
-        <div className="flex items-center gap-2.5 rounded-[16px] px-4 py-1 bg-white border border-[#E8E2D9]">
+      <div className="fixed bottom-0 left-0 right-0 px-3 md:px-6 lg:px-8 py-3" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid rgba(232,226,217,0.6)' }}>
+        <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#E8E2D9] max-w-3xl mx-auto">
           <input
             type="text"
             value={inputValue}
@@ -553,7 +556,7 @@ export default function ServicesPage() {
           {inputValue.trim() ? (
             <button
               onClick={() => handleSend()}
-              className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
+              className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md md:hover:shadow-lg"
             >
               <Send size={14} />
             </button>

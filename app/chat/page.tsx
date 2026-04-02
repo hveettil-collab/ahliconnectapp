@@ -40,10 +40,10 @@ export default function ChatPage() {
 
   return (
     <AppShell title="Chat" subtitle="Connect with colleagues across IHC">
-      <div className="flex flex-col lg:flex-row gap-4 h-[calc(100vh-8rem)]">
+      <div className="flex flex-col gap-4 h-[calc(100vh-8rem)]">
 
         {/* Contact list - visible on desktop always, on mobile only when chat not shown */}
-        <div className={`${showChat ? 'hidden lg:flex' : 'flex'} w-full lg:w-80 bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
+        <div className={`${showChat ? 'hidden' : 'flex'} w-full bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
           <div className="p-4 border-b border-[#F4EFE8]">
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
@@ -74,7 +74,7 @@ export default function ChatPage() {
         </div>
 
         {/* Chat area - visible on desktop always, on mobile only when chat shown */}
-        <div className={`${showChat ? 'flex lg:flex' : 'hidden'} flex-1 bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
+        <div className={`${showChat ? 'flex' : 'hidden'} flex-1 bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F4EFE8]">
             {/* Back button - mobile only */}
@@ -104,7 +104,7 @@ export default function ChatPage() {
               <div key={msg.id} className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'} gap-2`}>
                 {msg.from === 'other' && <Avatar initials={activeColleague.avatar} color="#6B7280" size="sm" image={activeColleague.image} />}
                 <div>
-                  <div className={`px-3.5 py-2.5 rounded-[14px] text-sm max-w-[260px] leading-relaxed ${
+                  <div className={`px-3.5 py-2.5 rounded-[14px] text-sm max-w-xs leading-relaxed ${
                     msg.from === 'me'
                       ? 'bg-[#1B3A6B] text-white rounded-br-sm'
                       : 'bg-[#F4EFE8] text-[#1A1A2E] rounded-bl-sm'

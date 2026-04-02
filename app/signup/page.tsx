@@ -49,24 +49,24 @@ export default function SignupPage() {
   const strengthColor = ['', '#EF4444', '#F59E0B', '#3B82F6', '#10B981'];
 
   return (
-    <div className="min-h-screen bg-[#F4EFE8] flex items-center justify-center p-4">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F4EFE8' }}>
       <div className="w-full max-w-md">
         {/* Back */}
         <Link href="/landing" className="inline-flex items-center gap-1.5 text-sm text-[#9CA3AF] hover:text-[#1A1A2E] transition-colors mb-6">
           <ArrowLeft size={15} /> Back
         </Link>
 
-        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-8">
+        <div className="bg-white rounded-[24px] border border-[#E8E2D9] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 md:p-8">
           {/* Logo */}
-          <div className="mb-8">
-            <div className="mb-5 flex justify-center">
-              <Image src="/logo-login.svg" alt="Ahli Connect" width={172} height={46} priority />
+          <div className="mb-6">
+            <div className="mb-4 flex justify-center">
+              <Image src="/logo-login.svg" alt="Ahli Connect" width={140} height={37} priority />
             </div>
             <p className="text-base font-bold text-[#1A1A2E]">Create Account</p>
             <p className="text-xs text-[#9CA3AF]">Ahli Connect · IHC Group</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Company select */}
             <div>
               <label className="block text-sm font-medium text-[#374151] mb-1.5">Your Company *</label>
@@ -160,13 +160,13 @@ export default function SignupPage() {
             </button>
           </form>
 
-          <p className="text-center text-xs text-[#9CA3AF] mt-6">
+          <p className="text-center text-xs text-[#9CA3AF] mt-5">
             Already have an account?{' '}
             <Link href="/login" className="text-[#1B3A6B] font-medium hover:underline">Sign in</Link>
           </p>
         </div>
 
-        <p className="text-center text-xs text-[#9CA3AF] mt-4">
+        <p className="text-center text-xs text-[#9CA3AF]">
           For authorised IHC Group employees only
         </p>
       </div>

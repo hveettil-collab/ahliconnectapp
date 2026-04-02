@@ -16,6 +16,7 @@ import {
 import Link from 'next/link';
 import Avatar from '@/components/ui/Avatar';
 import { useStockPrice } from '@/hooks/useStockPrice';
+import { useNotifications } from '@/context/NotificationContext';
 
 /* ──── Helpers ──── */
 
@@ -63,6 +64,7 @@ export default function DashboardPage() {
   const time = useLiveTime();
   const [heroIdx, setHeroIdx] = useState(0);
   const { stock, loading: stockLoading, refetch: refetchStock } = useStockPrice();
+  const { unreadCount, togglePanel } = useNotifications();
 
   // Merge live stock data with fallback to MARKET_DATA
   const sd = stock ?? {
@@ -94,7 +96,7 @@ export default function DashboardPage() {
           IMMERSIVE HERO CAROUSEL
           Full-bleed, editorial, premium feel
           ══════════════════════════════════════════ */}
-      <div className="relative mx-1.5 mt-1 rounded-[32px] overflow-hidden" style={{ height: 'clamp(212px, 32vh, 292px)' }}>
+      <div className="relative mx-1.5 mt-1 rounded-[32px] overflow-hidden" style={{ height: 'clamp(212px, 32vh, 260px)' }}>
 
         {/* ── Carousel images with crossfade ── */}
         {HERO_SLIDES.map((slide, i) => (
@@ -141,28 +143,30 @@ export default function DashboardPage() {
           <img
             src={user.image}
             alt={user.name}
-            className="w-[52px] h-[52px] rounded-full object-cover shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
+            className="w-[48px] h-[48px] rounded-full object-cover shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
             style={{ border: '2.5px solid rgba(255,255,255,0.25)' }}
           />
 
           {/* Action buttons */}
           <div className="flex flex-col gap-3">
             {/* Notification bell */}
-            <div className="relative">
+            <button onClick={togglePanel} className="relative">
               <div
-                className="w-[50px] h-[50px] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+                className="w-[44px] h-[44px] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
                 style={{
                   background: 'rgba(244, 239, 232, 0.92)',
                   backdropFilter: 'blur(12px)',
                   WebkitBackdropFilter: 'blur(12px)',
                 }}
               >
-                <Bell size={20} className="text-[#1A1A2E]" />
+                <Bell size={18} className="text-[#1A1A2E]" />
               </div>
-              <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#EF4444] flex items-center justify-center px-1 shadow-md">
-                <span className="text-[9px] font-bold text-white">325</span>
-              </div>
-            </div>
+              {unreadCount > 0 && (
+                <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#EF4444] flex items-center justify-center px-1 shadow-md">
+                  <span className="text-[9px] font-bold text-white">{unreadCount}</span>
+                </div>
+              )}
+            </button>
           </div>
         </div>
 
@@ -176,7 +180,7 @@ export default function DashboardPage() {
           </p>
           <h1
             className="text-white leading-[1.08] tracking-tight mb-3"
-            style={{ fontSize: 'clamp(32px, 7vw, 44px)', fontWeight: 700 }}
+            style={{ fontSize: 'clamp(24px, 6vw, 28px)', fontWeight: 700 }}
           >
             Unwind &<br />Indulge
           </h1>
@@ -210,7 +214,7 @@ export default function DashboardPage() {
 
       {/* ── Quick-access bento grid — below hero ── */}
       <div className="px-4 pt-3 pb-1">
-        <div className="grid grid-cols-3 gap-2" style={{ gridTemplateRows: 'auto auto' }}>
+        <div className="grid grid-cols-2 gap-2" style={{ gridTemplateRows: 'auto auto' }}>
           {/* Row 1, Col 1 */}
           <Link href="/services" className="bg-white rounded-[18px] border border-[#E8E2D9] p-3.5 flex flex-col items-start justify-between min-h-[88px] hover:shadow-md transition-all active:scale-[0.97]">
             <Sparkles size={22} className="text-[#1A1A2E]" strokeWidth={1.5} />
@@ -221,8 +225,8 @@ export default function DashboardPage() {
             <Gift size={22} className="text-[#1A1A2E]" strokeWidth={1.5} />
             <p className="text-[11px] font-semibold text-[#1A1A2E]">Benefits</p>
           </Link>
-          {/* Row 1+2, Col 3 — tall dark event card */}
-          <Link href="/explore" className="bg-[#1A1A2E] rounded-[18px] p-3.5 flex flex-col items-start justify-between row-span-2 hover:shadow-lg transition-all active:scale-[0.97]">
+          {/* Event card — moved below other items for mobile */}
+          <Link href="/explore" className="bg-[#1A1A2E] rounded-[18px] p-3.5 flex flex-col items-start justify-between col-span-2 hover:shadow-lg transition-all active:scale-[0.97]">
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
               <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
@@ -274,7 +278,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { icon: GraduationCap, color: '#C8973A', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr' },
               { icon: Plane, color: '#0D9488', bg: '#D1FAE5', title: 'Flights', value: 'Return home' },
@@ -328,7 +332,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollSnapType: 'x mandatory' }}>
             {relevantOffers.map(offer => (
-              <div key={offer.id} className="shrink-0 w-56 bg-white rounded-[16px] border border-[#E8E2D9] overflow-hidden" style={{ scrollSnapAlign: 'start' }}>
+              <div key={offer.id} className="shrink-0 w-48 bg-white rounded-[16px] border border-[#E8E2D9] overflow-hidden" style={{ scrollSnapAlign: 'start' }}>
                 <div className="relative h-24">
                   <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -351,7 +355,7 @@ export default function DashboardPage() {
             <Zap size={15} className="text-[#EA580C]" strokeWidth={2} />
             <h3 className="text-sm font-bold text-[#1A1A2E]">Perks & Wellness</h3>
           </div>
-          <div className="grid grid-cols-5 gap-1.5">
+          <div className="grid grid-cols-3 gap-1.5">
             {[
               { emoji: '🏋️', label: 'Palms Sports', value: 'AED 150/mo', color: '#EA580C' },
               { emoji: '🏥', label: 'Health', value: 'Free Annual', color: '#059669' },

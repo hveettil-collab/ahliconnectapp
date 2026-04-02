@@ -40,7 +40,7 @@ export default function OffersPage() {
         {cat === 'All' && (
           <>
             <h3 className="text-sm font-bold text-[#1A1A2E]">Featured Offers</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+            <div className="grid grid-cols-1 gap-4 mb-2">
               {filtered.filter(o => o.featured).map(offer => (
                 <div key={offer.id} className="rounded-[20px] overflow-hidden border border-[#E8E2D9] bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer">
                   <img src={offer.image} alt={offer.title} className="w-full h-40 object-cover" />
@@ -73,7 +73,7 @@ export default function OffersPage() {
           </>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-3">
           {(cat === 'All' ? filtered.filter(o => !o.featured) : filtered).map(offer => (
             <div key={offer.id} className="bg-white rounded-[20px] border border-[#E8E2D9] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
               <img src={offer.image} alt={offer.title} className="w-full h-32 object-cover" />
