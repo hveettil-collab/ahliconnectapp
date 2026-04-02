@@ -26,7 +26,7 @@ export default function OffersPage() {
               key={c}
               onClick={() => setCat(c)}
               className={`px-4 py-2 rounded-[12px] text-sm font-medium transition-all ${
-                cat === c ? 'bg-[#1B3A6B] text-white' : 'bg-white border border-[#E8E2D9] text-[#6B7280] hover:bg-[#F4EFE8]'
+                cat === c ? 'bg-[#9D63F6] text-white' : 'bg-white border border-[#DFE1E6] text-[#666D80] hover:bg-[#F8F9FB]'
               }`}
             >
               {c}
@@ -34,30 +34,30 @@ export default function OffersPage() {
           ))}
         </div>
 
-        <p className="text-sm text-[#9CA3AF]">{filtered.length} offer{filtered.length !== 1 ? 's' : ''} available</p>
+        <p className="text-sm text-[#A4ABB8]">{filtered.length} offer{filtered.length !== 1 ? 's' : ''} available</p>
 
         {/* Featured */}
         {cat === 'All' && (
           <>
-            <h3 className="text-sm font-bold text-[#1A1A2E]">Featured Offers</h3>
+            <h3 className="text-sm font-bold text-[#15161E]">Featured Offers</h3>
             <div className="grid grid-cols-1 gap-4 mb-2">
               {filtered.filter(o => o.featured).map(offer => (
-                <div key={offer.id} className="rounded-[20px] overflow-hidden border border-[#E8E2D9] bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer">
+                <div key={offer.id} className="rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all cursor-pointer">
                   <img src={offer.image} alt={offer.title} className="w-full h-40 object-cover" />
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="w-12 h-12 rounded-[14px] flex items-center justify-center text-white font-bold text-sm shrink-0" style={{ background: offer.color }}>
                         {offer.company.slice(0, 2).toUpperCase()}
                       </div>
-                      <span className="text-xs font-semibold text-[#1B3A6B] bg-[#E8EFF8] px-2.5 py-1 rounded-full shrink-0">
+                      <span className="text-xs font-semibold text-[#9D63F6] bg-[#F7F1FF] px-2.5 py-1 rounded-full shrink-0">
                         Employee Only
                       </span>
                     </div>
-                    <h3 className="text-base font-bold text-[#1A1A2E] mb-1">{offer.title}</h3>
-                    <p className="text-sm text-[#6B7280] mb-3 line-clamp-2">{offer.description}</p>
+                    <h3 className="text-base font-bold text-[#15161E] mb-1">{offer.title}</h3>
+                    <p className="text-sm text-[#666D80] mb-3 line-clamp-2">{offer.description}</p>
                     <div className="flex items-center justify-between">
                       <span className="text-base font-bold" style={{ color: offer.color }}>{offer.value}</span>
-                      <div className="flex items-center gap-1 text-xs text-[#9CA3AF]">
+                      <div className="flex items-center gap-1 text-xs text-[#A4ABB8]">
                         <Clock size={11} /> {offer.expires}
                       </div>
                     </div>
@@ -69,13 +69,13 @@ export default function OffersPage() {
                 </div>
               ))}
             </div>
-            <h3 className="text-sm font-bold text-[#1A1A2E] mt-4">All Offers</h3>
+            <h3 className="text-sm font-bold text-[#15161E] mt-4">All Offers</h3>
           </>
         )}
 
         <div className="grid grid-cols-1 gap-3">
           {(cat === 'All' ? filtered.filter(o => !o.featured) : filtered).map(offer => (
-            <div key={offer.id} className="bg-white rounded-[20px] border border-[#E8E2D9] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+            <div key={offer.id} className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
               <img src={offer.image} alt={offer.title} className="w-full h-32 object-cover" />
               <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
@@ -83,15 +83,15 @@ export default function OffersPage() {
                   {offer.company.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs text-[#9CA3AF]">{offer.company}</p>
+                  <p className="text-xs text-[#A4ABB8]">{offer.company}</p>
                   <p className="text-xs font-semibold" style={{ color: offer.color }}>{offer.category}</p>
                 </div>
               </div>
-              <h3 className="text-sm font-bold text-[#1A1A2E] mb-1">{offer.title}</h3>
-              <p className="text-xs text-[#6B7280] mb-3 line-clamp-2">{offer.description}</p>
+              <h3 className="text-sm font-bold text-[#15161E] mb-1">{offer.title}</h3>
+              <p className="text-xs text-[#666D80] mb-3 line-clamp-2">{offer.description}</p>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold" style={{ color: offer.color }}>{offer.value}</span>
-                <span className="text-xs font-semibold text-[#1B3A6B] bg-[#E8EFF8] px-2 py-0.5 rounded-full">Claim →</span>
+                <span className="text-xs font-semibold text-[#9D63F6] bg-[#F7F1FF] px-2 py-0.5 rounded-full">Claim →</span>
               </div>
               </div>
             </div>

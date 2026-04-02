@@ -35,13 +35,13 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const sidebarContent = (
     <>
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-[#F4EFE8] flex items-center justify-between">
-        <Logo size="md" subtextColor="#9CA3AF" />
+      <div className="px-6 py-5 border-b border-[#F8F9FB] flex items-center justify-between">
+        <Logo size="md" subtextColor="#A4ABB8" />
         {/* Close button - mobile only */}
         {onClose && (
           <button
             onClick={onClose}
-            className="md:hidden p-2 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors"
+            className="md:hidden p-2 rounded-[10px] text-[#666D80] hover:bg-[#F8F9FB] transition-colors"
           >
             <X size={18} />
           </button>
@@ -50,12 +50,12 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       {/* User summary */}
       {user && (
-        <div className="px-4 py-4 border-b border-[#F4EFE8]">
-          <div className="flex items-center gap-3 bg-[#F9F6F1] rounded-[14px] p-3">
-            <Avatar initials={user.avatar} image={user.image} color={company?.color || '#1B3A6B'} size="md" />
+        <div className="px-4 py-4 border-b border-[#F8F9FB]">
+          <div className="flex items-center gap-3 bg-[#F8F9FB] rounded-[14px] p-3">
+            <Avatar initials={user.avatar} image={user.image} color={company?.color || '#9D63F6'} size="md" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[#1A1A2E] truncate">{user.name}</p>
-              <p className="text-xs text-[#9CA3AF] truncate">{user.company}</p>
+              <p className="text-sm font-semibold text-[#15161E] truncate">{user.name}</p>
+              <p className="text-xs text-[#A4ABB8] truncate">{user.company}</p>
             </div>
             <div className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
           </div>
@@ -64,7 +64,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
-        <p className="text-[10px] font-semibold text-[#9CA3AF] uppercase tracking-widest px-3 mb-3">Navigation</p>
+        <p className="text-[10px] font-semibold text-[#A4ABB8] uppercase tracking-widest px-3 mb-3">Navigation</p>
         <ul className="space-y-1">
           {NAV.map(({ label, href, icon: Icon }) => {
             const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
@@ -76,11 +76,11 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                   className={clsx(
                     'flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium transition-all duration-150 group',
                     active
-                      ? 'bg-[#1B3A6B] text-white shadow-sm'
-                      : 'text-[#6B7280] hover:bg-[#F4EFE8] hover:text-[#1A1A2E]'
+                      ? 'bg-[#9D63F6] text-white shadow-sm'
+                      : 'text-[#666D80] hover:bg-[#F8F9FB] hover:text-[#15161E]'
                   )}
                 >
-                  <Icon size={17} className={clsx(active ? 'text-white' : 'text-[#9CA3AF] group-hover:text-[#1A1A2E]')} strokeWidth={active ? 2.2 : 1.8} />
+                  <Icon size={17} className={clsx(active ? 'text-white' : 'text-[#A4ABB8] group-hover:text-[#15161E]')} strokeWidth={active ? 2.2 : 1.8} />
                   <span className="flex-1">{label}</span>
                   {active && <ChevronRight size={14} className="text-white/60" />}
                 </Link>
@@ -91,10 +91,10 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       </nav>
 
       {/* Logout */}
-      <div className="px-3 py-4 border-t border-[#F4EFE8]">
+      <div className="px-3 py-4 border-t border-[#F8F9FB]">
         <button
           onClick={() => { logout(); onClose?.(); }}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium text-[#9CA3AF] hover:bg-red-50 hover:text-red-500 transition-all duration-150 w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium text-[#A4ABB8] hover:bg-red-50 hover:text-red-500 transition-all duration-150 w-full"
         >
           <LogOut size={17} strokeWidth={1.8} />
           Sign Out
@@ -106,7 +106,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-[#E8E2D9] flex-col z-30 shadow-[1px_0_0_rgba(0,0,0,0.04)]">
+      <aside className="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white border-r border-[#DFE1E6] flex-col z-30 shadow-[1px_0_0_rgba(0,0,0,0.04)]">
         {sidebarContent}
       </aside>
 

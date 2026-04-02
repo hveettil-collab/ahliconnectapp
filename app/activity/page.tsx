@@ -174,7 +174,7 @@ const generateMockActivity = (): ActivityEntry[] => {
 };
 
 const CATEGORY_CONFIG = {
-  login: { label: 'Login', color: '#1B3A6B', icon: LogIn, bg: '#E8EFF8' },
+  login: { label: 'Login', color: '#9D63F6', icon: LogIn, bg: '#F7F1FF' },
   service: { label: 'Services', color: '#059669', icon: FileText, bg: '#D1FAE5' },
   marketplace: { label: 'Marketplace', color: '#D97706', icon: ShoppingCart, bg: '#FEF3C7' },
   chat: { label: 'Chat', color: '#7C3AED', icon: MessageSquare, bg: '#EDE9FE' },
@@ -253,7 +253,7 @@ export default function ActivityPage() {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #1B3A6B;
+      background: #9D63F6;
       color: white;
       padding: 12px 20px;
       border-radius: 8px;
@@ -271,13 +271,13 @@ export default function ActivityPage() {
         {/* Header with export button */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-[#9CA3AF] font-medium">
+            <p className="text-sm text-[#A4ABB8] font-medium">
               {filtered.length} activity {filtered.length !== 1 ? 'entries' : 'entry'} available
             </p>
           </div>
           <button
             onClick={handleExportLog}
-            className="flex items-center gap-2 px-4 py-2.5 bg-[#1B3A6B] text-white rounded-[12px] text-sm font-semibold hover:bg-[#152a52] transition-all active:scale-[0.98]"
+            className="flex items-center gap-2 px-4 py-2.5 bg-[#9D63F6] text-white rounded-[12px] text-sm font-semibold hover:bg-[#152a52] transition-all active:scale-[0.98]"
           >
             <Download size={16} />
             Export Log
@@ -292,8 +292,8 @@ export default function ActivityPage() {
               onClick={() => setSelectedCategory(opt.value)}
               className={`px-4 py-2 rounded-[12px] text-sm font-medium transition-all ${
                 selectedCategory === opt.value
-                  ? 'bg-[#1B3A6B] text-white'
-                  : 'bg-white border border-[#E8E2D9] text-[#6B7280] hover:bg-[#F4EFE8]'
+                  ? 'bg-[#9D63F6] text-white'
+                  : 'bg-white border border-[#DFE1E6] text-[#666D80] hover:bg-[#F8F9FB]'
               }`}
             >
               {opt.label}
@@ -305,13 +305,13 @@ export default function ActivityPage() {
         <div className="space-y-6">
           {dateGroups.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-[#9CA3AF]">No activities found</p>
+              <p className="text-[#A4ABB8]">No activities found</p>
             </div>
           ) : (
             dateGroups.map(dateGroup => (
               <div key={dateGroup}>
                 {/* Date separator */}
-                <h3 className="text-xs font-bold text-[#1A1A2E] uppercase tracking-wider mb-3 px-1">
+                <h3 className="text-xs font-bold text-[#15161E] uppercase tracking-wider mb-3 px-1">
                   {dateGroup}
                 </h3>
 
@@ -324,7 +324,7 @@ export default function ActivityPage() {
                     return (
                       <div
                         key={activity.id}
-                        className="bg-white rounded-[18px] border border-[#E8E2D9] p-4 hover:shadow-md transition-all"
+                        className="bg-white rounded-[18px] border border-[#DFE1E6] p-4 hover:shadow-md transition-all"
                       >
                         <div className="flex items-start gap-4">
                           {/* Icon container */}
@@ -341,7 +341,7 @@ export default function ActivityPage() {
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2 mb-1">
-                              <p className="text-sm font-semibold text-[#1A1A2E]">
+                              <p className="text-sm font-semibold text-[#15161E]">
                                 {activity.action}
                               </p>
                               <span
@@ -354,11 +354,11 @@ export default function ActivityPage() {
 
                             <div className="flex items-center gap-4">
                               {activity.details && (
-                                <p className="text-xs text-[#9CA3AF]">
+                                <p className="text-xs text-[#A4ABB8]">
                                   {activity.details}
                                 </p>
                               )}
-                              <p className="text-xs text-[#9CA3AF] font-medium">
+                              <p className="text-xs text-[#A4ABB8] font-medium">
                                 {getRelativeTime(activity.timestamp)}
                               </p>
                             </div>

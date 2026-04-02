@@ -23,11 +23,11 @@ const STEP_STYLES = `
 `;
 
 const LEAVE_TYPES = [
-  { id: 'annual', label: 'Annual Leave', icon: Sun, balance: 22, color: '#1B3A6B' },
+  { id: 'annual', label: 'Annual Leave', icon: Sun, balance: 22, color: '#9D63F6' },
   { id: 'sick', label: 'Sick Leave', icon: Stethoscope, balance: 10, color: '#DC2626' },
   { id: 'emergency', label: 'Emergency', icon: AlertTriangle, balance: 5, color: '#EA580C' },
   { id: 'parental', label: 'Parental', icon: Baby, balance: 45, color: '#7C3AED' },
-  { id: 'travel', label: 'Travel Leave', icon: Plane, balance: 3, color: '#0D9488' },
+  { id: 'travel', label: 'Travel Leave', icon: Plane, balance: 3, color: '#40C4AA' },
 ];
 
 const MANAGERS = [
@@ -186,31 +186,31 @@ export default function LeaveRequestPage() {
     };
 
     return (
-      <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+      <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
         <div className="flex items-center justify-between mb-2">
-          <button onClick={() => setCalMonth(m => m > 0 ? m - 1 : 11)} className="w-7 h-7 rounded-full flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] text-[12px]">←</button>
-          <p className="text-[13px] font-bold text-[#1A1A2E]">{MONTH_NAMES[calMonth]} {calYear}</p>
-          <button onClick={() => setCalMonth(m => m < 11 ? m + 1 : 0)} className="w-7 h-7 rounded-full flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] text-[12px]">→</button>
+          <button onClick={() => setCalMonth(m => m > 0 ? m - 1 : 11)} className="w-7 h-7 rounded-full flex items-center justify-center text-[#666D80] hover:bg-[#F8F9FB] text-[12px]">←</button>
+          <p className="text-[13px] font-bold text-[#15161E]">{MONTH_NAMES[calMonth]} {calYear}</p>
+          <button onClick={() => setCalMonth(m => m < 11 ? m + 1 : 0)} className="w-7 h-7 rounded-full flex items-center justify-center text-[#666D80] hover:bg-[#F8F9FB] text-[12px]">→</button>
         </div>
         <div className="grid grid-cols-7 gap-0.5 text-center">
           {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d => (
-            <p key={d} className="text-[9px] font-bold text-[#9CA3AF] py-0.5">{d}</p>
+            <p key={d} className="text-[9px] font-bold text-[#A4ABB8] py-0.5">{d}</p>
           ))}
           {cells.map((day, i) => day === null ? <div key={`e${i}`} /> : (
             <button key={day} onClick={() => handleDayClick(day)}
               className="w-8 h-8 rounded-full text-[11px] font-semibold transition-all flex items-center justify-center mx-auto"
               style={{
-                background: isStart(day) || isEnd(day) ? '#1B3A6B' : isInRange(day) ? '#E8EFF8' : 'transparent',
-                color: isStart(day) || isEnd(day) ? '#fff' : isInRange(day) ? '#1B3A6B' : day < new Date().getDate() && calMonth === new Date().getMonth() ? '#D1D5DB' : '#1A1A2E',
+                background: isStart(day) || isEnd(day) ? '#9D63F6' : isInRange(day) ? '#F7F1FF' : 'transparent',
+                color: isStart(day) || isEnd(day) ? '#fff' : isInRange(day) ? '#9D63F6' : day < new Date().getDate() && calMonth === new Date().getMonth() ? '#D1D5DB' : '#15161E',
               }}>
               {day}
             </button>
           ))}
         </div>
         {requestedDays > 0 && (
-          <div className="mt-2 flex items-center justify-between px-2 py-1.5 rounded-[10px] bg-[#F4EFE8] text-[11px]">
-            <span className="text-[#6B7280]">Selected: <strong className="text-[#1B3A6B]">{requestedDays}d</strong></span>
-            <span className="text-[#6B7280]">After: <strong className={remainingAfter >= 0 ? 'text-[#059669]' : 'text-red-600'}>{remainingAfter}d</strong></span>
+          <div className="mt-2 flex items-center justify-between px-2 py-1.5 rounded-[10px] bg-[#F8F9FB] text-[11px]">
+            <span className="text-[#666D80]">Selected: <strong className="text-[#9D63F6]">{requestedDays}d</strong></span>
+            <span className="text-[#666D80]">After: <strong className={remainingAfter >= 0 ? 'text-[#059669]' : 'text-red-600'}>{remainingAfter}d</strong></span>
           </div>
         )}
       </div>
@@ -222,12 +222,12 @@ export default function LeaveRequestPage() {
       <style>{STEP_STYLES}</style>
       <div className="space-y-5 max-w-lg mx-auto">
 
-        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#6B7280] font-medium hover:text-[#1B3A6B] transition-colors">
+        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#666D80] font-medium hover:text-[#9D63F6] transition-colors">
           <ArrowLeft size={15} /> Back to Automations
         </Link>
 
         {/* Header */}
-        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 60%, #1B3A6B 100%)' }}>
+        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #2D5AA0 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 85% 20%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-2.5">
@@ -251,8 +251,8 @@ export default function LeaveRequestPage() {
         {phase === 'form' && (
           <div className="space-y-4 fade-up">
             {/* Leave type */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Leave Type</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Leave Type</p>
               <div className="space-y-2">
                 {LEAVE_TYPES.map(t => {
                   const TIcon = t.icon;
@@ -260,13 +260,13 @@ export default function LeaveRequestPage() {
                   return (
                     <button key={t.id} onClick={() => setLeaveType(t.id)}
                       className="w-full flex items-center gap-3 p-3 rounded-[14px] transition-all active:scale-[0.98] text-left"
-                      style={{ background: active ? `${t.color}10` : 'transparent', border: active ? `2px solid ${t.color}` : '1px solid #E8E2D9' }}>
+                      style={{ background: active ? `${t.color}10` : 'transparent', border: active ? `2px solid ${t.color}` : '1px solid #DFE1E6' }}>
                       <div className="w-9 h-9 rounded-[10px] flex items-center justify-center" style={{ background: `${t.color}15` }}>
                         <TIcon size={17} style={{ color: t.color }} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-[13px] font-semibold text-[#1A1A2E]">{t.label}</p>
-                        <p className="text-[11px] text-[#9CA3AF]">Balance: {t.balance} days</p>
+                        <p className="text-[13px] font-semibold text-[#15161E]">{t.label}</p>
+                        <p className="text-[11px] text-[#A4ABB8]">Balance: {t.balance} days</p>
                       </div>
                       {active && <CheckCircle2 size={18} style={{ color: t.color }} />}
                     </button>
@@ -279,10 +279,10 @@ export default function LeaveRequestPage() {
             {renderCalendar()}
 
             {/* Reason */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Reason (optional)</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Reason (optional)</p>
               <textarea value={reason} onChange={e => setReason(e.target.value)} placeholder="Brief reason..."
-                className="w-full bg-[#F4EFE8] border border-[#E8E2D9] rounded-[10px] px-2.5 py-2 text-[12px] outline-none focus:border-[#1B3A6B] resize-none h-16 placeholder:text-[#B8B3A9]" />
+                className="w-full bg-[#F8F9FB] border border-[#DFE1E6] rounded-[10px] px-2.5 py-2 text-[12px] outline-none focus:border-[#9D63F6] resize-none h-16 placeholder:text-[#A4ABB8]" />
             </div>
 
             {/* Before/After */}
@@ -291,19 +291,19 @@ export default function LeaveRequestPage() {
               <div className="space-y-3">
                 <div>
                   <p className="font-bold text-red-600 mb-1 text-[11px]">Before (Manual)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Email manager</p>
-                  <p className="text-[11px] text-[#6B7280]">• Manager checks calendar</p>
-                  <p className="text-[11px] text-[#6B7280]">• Forward to HR</p>
-                  <p className="text-[11px] text-[#6B7280]">• HR checks balance</p>
-                  <p className="text-[11px] text-[#6B7280]">• Reply chain approval</p>
+                  <p className="text-[11px] text-[#666D80]">• Email manager</p>
+                  <p className="text-[11px] text-[#666D80]">• Manager checks calendar</p>
+                  <p className="text-[11px] text-[#666D80]">• Forward to HR</p>
+                  <p className="text-[11px] text-[#666D80]">• HR checks balance</p>
+                  <p className="text-[11px] text-[#666D80]">• Reply chain approval</p>
                   <p className="font-bold text-red-600 mt-2 text-[11px]">⏱ 2-3 days</p>
                 </div>
                 <div>
                   <p className="font-bold text-[#059669] mb-1 text-[11px]">After (Automated)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Pick dates on calendar</p>
-                  <p className="text-[11px] text-[#6B7280]">• Auto-balance + conflicts</p>
-                  <p className="text-[11px] text-[#6B7280]">• One-tap approval</p>
-                  <p className="text-[11px] text-[#6B7280]">• Auto-sync everything</p>
+                  <p className="text-[11px] text-[#666D80]">• Pick dates on calendar</p>
+                  <p className="text-[11px] text-[#666D80]">• Auto-balance + conflicts</p>
+                  <p className="text-[11px] text-[#666D80]">• One-tap approval</p>
+                  <p className="text-[11px] text-[#666D80]">• Auto-sync everything</p>
                   <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 2 min</p>
                 </div>
               </div>
@@ -312,7 +312,7 @@ export default function LeaveRequestPage() {
             {/* Submit */}
             <button onClick={runAutomation} disabled={requestedDays <= 0 || remainingAfter < 0}
               className="w-full py-4 rounded-[16px] text-[15px] font-bold text-white active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-40"
-              style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
+              style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
               <Zap size={18} /> Submit Leave Request
             </button>
           </div>
@@ -321,24 +321,24 @@ export default function LeaveRequestPage() {
         {/* ═══ PROCESSING ═══ */}
         {phase === 'processing' && (
           <div className="space-y-4 fade-up">
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[13px] font-bold text-[#1A1A2E] mb-3">Approval Pipeline</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[13px] font-bold text-[#15161E] mb-3">Approval Pipeline</p>
               <div className="space-y-3">
                 {steps.map(step => (
                   <div key={step.id} className="flex items-start gap-3">
                     <div className="mt-0.5">
                       {step.status === 'completed' && <CheckCircle2 size={18} className="text-[#059669] step-check" />}
-                      {step.status === 'running' && <Loader2 size={18} className="text-[#1B3A6B] animate-spin" />}
-                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#E8E2D9]" />}
+                      {step.status === 'running' && <Loader2 size={18} className="text-[#9D63F6] animate-spin" />}
+                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#DFE1E6]" />}
                     </div>
                     <div className="flex-1">
-                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#1B3A6B]' : 'text-[#9CA3AF]'}`}>
+                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#9D63F6]' : 'text-[#A4ABB8]'}`}>
                         {step.name}
                       </p>
-                      {step.detail && step.status === 'completed' && <p className="text-[11px] text-[#9CA3AF] mt-0.5">{step.detail}</p>}
+                      {step.detail && step.status === 'completed' && <p className="text-[11px] text-[#A4ABB8] mt-0.5">{step.detail}</p>}
                       {step.status === 'running' && (
-                        <div className="mt-1.5 h-1 rounded-full bg-[#E8E2D9] overflow-hidden">
-                          <div className="h-full rounded-full bg-[#1B3A6B]" style={{ animation: `progress-fill ${step.id === 'approval' ? '3s' : '1s'} ease-out forwards` }} />
+                        <div className="mt-1.5 h-1 rounded-full bg-[#DFE1E6] overflow-hidden">
+                          <div className="h-full rounded-full bg-[#9D63F6]" style={{ animation: `progress-fill ${step.id === 'approval' ? '3s' : '1s'} ease-out forwards` }} />
                         </div>
                       )}
                     </div>
@@ -360,22 +360,22 @@ export default function LeaveRequestPage() {
               <p className="text-[12px] text-[#047857] mt-1">
                 {selectedType.label}: {startDate} to {endDate} ({requestedDays}d)
               </p>
-              <p className="text-[11px] text-[#6B7280] mt-1">Approved by {approver.name}</p>
+              <p className="text-[11px] text-[#666D80] mt-1">Approved by {approver.name}</p>
             </div>
 
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Pipeline Summary</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Pipeline Summary</p>
               {steps.map(step => (
                 <div key={step.id} className="flex items-center gap-2.5 text-[12px] py-1">
                   <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
                   <span className="text-[#4B5563] flex-1">{step.name}</span>
-                  <span className="text-[#9CA3AF] text-[10px]">{step.detail}</span>
+                  <span className="text-[#A4ABB8] text-[10px]">{step.detail}</span>
                 </div>
               ))}
             </div>
 
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Integrations Triggered</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Integrations Triggered</p>
               {['SAP SuccessFactors — Balance deducted, calendar updated', 'Slack — Team notified of absence', 'Email — Confirmation sent to employee'].map(i => (
                 <div key={i} className="flex items-center gap-2.5 text-[12px] py-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
@@ -385,7 +385,7 @@ export default function LeaveRequestPage() {
             </div>
 
             <button onClick={() => { setPhase('form'); setSteps([]); setStartDate(''); setEndDate(''); setReason(''); }}
-              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#6B7280] bg-[#F4EFE8] border border-[#E8E2D9] active:scale-[0.97] transition-all">
+              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#666D80] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-[0.97] transition-all">
               Submit Another Request
             </button>
           </div>
@@ -397,7 +397,7 @@ export default function LeaveRequestPage() {
               <AlertCircle size={28} className="text-red-500 mx-auto mb-2" />
               <h3 className="text-[15px] font-bold text-red-700">Request Failed</h3>
             </div>
-            <button onClick={() => { setPhase('form'); setSteps([]); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#1B3A6B]">Try Again</button>
+            <button onClick={() => { setPhase('form'); setSteps([]); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6]">Try Again</button>
           </div>
         )}
       </div>

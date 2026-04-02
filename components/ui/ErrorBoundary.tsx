@@ -43,11 +43,11 @@ export default class ErrorBoundary extends Component<Props, State> {
             <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle size={28} className="text-red-500" />
             </div>
-            <h3 className="text-lg font-bold text-[#1A1A2E] mb-2">Something went wrong</h3>
-            <p className="text-sm text-[#9CA3AF] mb-4">
+            <h3 className="text-lg font-bold text-[#15161E] mb-2">Something went wrong</h3>
+            <p className="text-sm text-[#A4ABB8] mb-4">
               An unexpected error occurred. Our team has been notified.
             </p>
-            <p className="text-xs text-[#9CA3AF] bg-[#F4EFE8] rounded-[12px] p-3 mb-4 font-mono text-left break-all">
+            <p className="text-xs text-[#A4ABB8] bg-[#F8F9FB] rounded-[12px] p-3 mb-4 font-mono text-left break-all">
               {this.state.error?.message || 'Unknown error'}
             </p>
             <button
@@ -55,7 +55,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 this.setState({ hasError: false, error: null });
                 window.location.reload();
               }}
-              className="inline-flex items-center gap-2 bg-[#1B3A6B] text-white font-semibold px-5 py-2.5 rounded-[12px] text-sm hover:bg-[#152E56] transition-all"
+              className="inline-flex items-center gap-2 bg-[#9D63F6] text-white font-semibold px-5 py-2.5 rounded-[12px] text-sm hover:bg-[#8A44F4] transition-all"
             >
               <RefreshCw size={14} /> Try Again
             </button>

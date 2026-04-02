@@ -61,7 +61,7 @@ const FEATURES = [
     icon: Shield,
     label: 'Verified Access',
     desc: 'Secure, verified employee identity ensures a trusted environment.',
-    color: '#0D9488',
+    color: '#40C4AA',
     bgColor: 'rgba(13, 148, 136, 0.1)',
   },
 ];

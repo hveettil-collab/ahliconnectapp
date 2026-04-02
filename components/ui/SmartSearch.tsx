@@ -327,32 +327,32 @@ export default function SmartSearch({
         className="fixed left-1/2 top-1/2 w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 transform rounded-[20px] bg-white shadow-2xl"
       >
         {/* Header - Search Input */}
-        <div className="border-b border-[#E8E2D9] p-6">
+        <div className="border-b border-[#DFE1E6] p-6">
           <form onSubmit={handleSearch}>
             <div className="relative flex items-center">
-              <Search size={20} className="absolute left-3 text-[#9CA3AF]" />
+              <Search size={20} className="absolute left-3 text-[#A4ABB8]" />
               <input
                 ref={searchInputRef}
                 type="text"
                 placeholder="Search announcements, offers, people, services..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full bg-transparent py-3 pl-10 pr-10 text-[#1A1A2E] placeholder-[#9CA3AF] outline-none"
+                className="w-full bg-transparent py-3 pl-10 pr-10 text-[#15161E] placeholder-[#A4ABB8] outline-none"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  className="absolute right-3 text-[#9CA3AF] hover:text-[#1A1A2E] transition-colors"
+                  className="absolute right-3 text-[#A4ABB8] hover:text-[#15161E] transition-colors"
                 >
                   <X size={18} />
                 </button>
               )}
             </div>
           </form>
-          <div className="mt-3 flex items-center justify-between text-xs text-[#9CA3AF]">
+          <div className="mt-3 flex items-center justify-between text-xs text-[#A4ABB8]">
             <span>Search across all data</span>
-            <kbd className="rounded bg-[#F4EFE8] px-2 py-1 font-mono">⌘K</kbd>
+            <kbd className="rounded bg-[#F8F9FB] px-2 py-1 font-mono">⌘K</kbd>
           </div>
         </div>
 
@@ -362,7 +362,7 @@ export default function SmartSearch({
             <div className="p-6 space-y-6">
               {/* AI Suggestion Card */}
               {aiSuggestion && (
-                <div className="relative overflow-hidden rounded-[14px] bg-gradient-to-br from-[#1B3A6B] to-[#2d5a8c] p-5 text-white">
+                <div className="relative overflow-hidden rounded-[14px] bg-gradient-to-br from-[#9D63F6] to-[#8A44F4] p-5 text-white">
                   <div className="absolute top-0 right-0 h-32 w-32 bg-gradient-to-bl from-[#FFA500]/20 to-transparent rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                   <div className="relative">
                     <div className="flex items-start justify-between mb-3">
@@ -390,34 +390,34 @@ export default function SmartSearch({
                     if (items.length === 0) return null;
                     return (
                       <div key={category}>
-                        <h3 className="mb-2 text-xs font-semibold uppercase text-[#9CA3AF]">
+                        <h3 className="mb-2 text-xs font-semibold uppercase text-[#A4ABB8]">
                           {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS]}
                         </h3>
                         <div className="space-y-2">
                           {items.map((item) => (
                             <div
                               key={item.id}
-                              className={`${CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS]} group cursor-pointer rounded-[14px] border border-[#E8E2D9] p-4 transition-all duration-200 hover:border-[#1B3A6B] hover:shadow-md`}
+                              className={`${CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS]} group cursor-pointer rounded-[14px] border border-[#DFE1E6] p-4 transition-all duration-200 hover:border-[#9D63F6] hover:shadow-md`}
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-[#1B3A6B]">
+                                    <span className="text-[#9D63F6]">
                                       {CATEGORY_ICONS[category as keyof typeof CATEGORY_ICONS]}
                                     </span>
-                                    <h4 className="font-semibold text-[#1A1A2E] truncate group-hover:text-[#1B3A6B] transition-colors">
+                                    <h4 className="font-semibold text-[#15161E] truncate group-hover:text-[#9D63F6] transition-colors">
                                       {item.title}
                                     </h4>
                                   </div>
                                   {item.description && (
-                                    <p className="text-sm text-[#9CA3AF] line-clamp-2">
+                                    <p className="text-sm text-[#A4ABB8] line-clamp-2">
                                       {item.description}
                                     </p>
                                   )}
                                 </div>
                                 <ArrowRight
                                   size={18}
-                                  className="text-[#9CA3AF] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                                  className="text-[#A4ABB8] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                                 />
                               </div>
                             </div>
@@ -432,9 +432,9 @@ export default function SmartSearch({
               {/* No Results */}
               {!hasResults && query.trim() && (
                 <div className="py-12 text-center">
-                  <Search size={40} className="mx-auto mb-4 text-[#E8E2D9]" />
-                  <p className="text-[#9CA3AF]">No results found for "{query}"</p>
-                  <p className="text-sm text-[#9CA3AF] mt-2">
+                  <Search size={40} className="mx-auto mb-4 text-[#DFE1E6]" />
+                  <p className="text-[#A4ABB8]">No results found for "{query}"</p>
+                  <p className="text-sm text-[#A4ABB8] mt-2">
                     Try searching for announcements, offers, people, or services
                   </p>
                 </div>
@@ -445,7 +445,7 @@ export default function SmartSearch({
               {/* Recent Searches */}
               {recentSearches.length > 0 && (
                 <div>
-                  <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase text-[#9CA3AF]">
+                  <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase text-[#A4ABB8]">
                     <Clock size={14} />
                     Recent Searches
                   </h3>
@@ -454,11 +454,11 @@ export default function SmartSearch({
                       <button
                         key={idx}
                         onClick={() => handleRecentClick(search)}
-                        className="w-full text-left rounded-[14px] border border-[#E8E2D9] bg-[#F4EFE8] px-4 py-3 text-[#1A1A2E] transition-all duration-200 hover:border-[#1B3A6B] hover:bg-white"
+                        className="w-full text-left rounded-[14px] border border-[#DFE1E6] bg-[#F8F9FB] px-4 py-3 text-[#15161E] transition-all duration-200 hover:border-[#9D63F6] hover:bg-white"
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-sm">{search}</span>
-                          <ArrowRight size={14} className="text-[#9CA3AF]" />
+                          <ArrowRight size={14} className="text-[#A4ABB8]" />
                         </div>
                       </button>
                     ))}
@@ -468,63 +468,63 @@ export default function SmartSearch({
 
               {/* Suggestions */}
               <div>
-                <h3 className="mb-3 text-xs font-semibold uppercase text-[#9CA3AF]">
+                <h3 className="mb-3 text-xs font-semibold uppercase text-[#A4ABB8]">
                   What you can search
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-blue-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-blue-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <FileText size={16} className="text-blue-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         Announcements
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">Company updates & news</p>
+                    <p className="text-xs text-[#A4ABB8]">Company updates & news</p>
                   </div>
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-purple-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-purple-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Tag size={16} className="text-purple-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         Offers
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">Partner benefits & deals</p>
+                    <p className="text-xs text-[#A4ABB8]">Partner benefits & deals</p>
                   </div>
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-amber-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-amber-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <ShoppingBag size={16} className="text-amber-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         Marketplace
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">Items for sale</p>
+                    <p className="text-xs text-[#A4ABB8]">Items for sale</p>
                   </div>
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-green-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-green-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Wrench size={16} className="text-green-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         Services
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">HR & employee tools</p>
+                    <p className="text-xs text-[#A4ABB8]">HR & employee tools</p>
                   </div>
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-pink-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-pink-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Users size={16} className="text-pink-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         People
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">Find colleagues</p>
+                    <p className="text-xs text-[#A4ABB8]">Find colleagues</p>
                   </div>
-                  <div className="rounded-[14px] border border-[#E8E2D9] bg-yellow-50 p-4">
+                  <div className="rounded-[14px] border border-[#DFE1E6] bg-yellow-50 p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <Sparkles size={16} className="text-yellow-600" />
-                      <span className="text-xs font-semibold text-[#1A1A2E]">
+                      <span className="text-xs font-semibold text-[#15161E]">
                         AI Assistant
                       </span>
                     </div>
-                    <p className="text-xs text-[#9CA3AF]">Smart suggestions</p>
+                    <p className="text-xs text-[#A4ABB8]">Smart suggestions</p>
                   </div>
                 </div>
               </div>

@@ -43,16 +43,16 @@ export default function ChatPage() {
       <div className="flex flex-col gap-4 h-[calc(100vh-8rem)]">
 
         {/* Contact list - visible on desktop always, on mobile only when chat not shown */}
-        <div className={`${showChat ? 'hidden' : 'flex'} w-full bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
-          <div className="p-4 border-b border-[#F4EFE8]">
+        <div className={`${showChat ? 'hidden' : 'flex'} w-full bg-white rounded-[20px] border border-[#DFE1E6] flex-col overflow-hidden`}>
+          <div className="p-4 border-b border-[#F8F9FB]">
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A4ABB8]" />
               <input
                 type="text"
                 placeholder="Search colleagues..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full bg-[#F9F6F1] border border-[#E8E2D9] rounded-[10px] pl-8 pr-3 py-2 text-xs outline-none focus:border-[#1B3A6B]"
+                className="w-full bg-[#F8F9FB] border border-[#DFE1E6] rounded-[10px] pl-8 pr-3 py-2 text-xs outline-none focus:border-[#9D63F6]"
               />
             </div>
           </div>
@@ -61,12 +61,12 @@ export default function ChatPage() {
               <button
                 key={col.id}
                 onClick={() => selectColleague(col)}
-                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F9F6F1] transition-colors text-left ${activeColleague.id === col.id ? 'bg-[#F4EFE8]' : ''}`}
+                className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-[#F8F9FB] transition-colors text-left ${activeColleague.id === col.id ? 'bg-[#F8F9FB]' : ''}`}
               >
-                <Avatar initials={col.avatar} color="#6B7280" size="md" online={col.online} image={col.image} />
+                <Avatar initials={col.avatar} color="#666D80" size="md" online={col.online} image={col.image} />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#1A1A2E] truncate">{col.name}</p>
-                  <p className="text-xs text-[#9CA3AF] truncate">{col.lastMessage}</p>
+                  <p className="text-sm font-semibold text-[#15161E] truncate">{col.name}</p>
+                  <p className="text-xs text-[#A4ABB8] truncate">{col.lastMessage}</p>
                 </div>
               </button>
             ))}
@@ -74,24 +74,24 @@ export default function ChatPage() {
         </div>
 
         {/* Chat area - visible on desktop always, on mobile only when chat shown */}
-        <div className={`${showChat ? 'flex' : 'hidden'} flex-1 bg-white rounded-[20px] border border-[#E8E2D9] flex-col overflow-hidden`}>
+        <div className={`${showChat ? 'flex' : 'hidden'} flex-1 bg-white rounded-[20px] border border-[#DFE1E6] flex-col overflow-hidden`}>
           {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F4EFE8]">
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F8F9FB]">
             {/* Back button - mobile only */}
             <button
               onClick={() => setShowChat(false)}
-              className="p-1.5 -ml-1 rounded-lg text-[#6B7280] hover:bg-[#F4EFE8] transition-colors"
+              className="p-1.5 -ml-1 rounded-lg text-[#666D80] hover:bg-[#F8F9FB] transition-colors"
             >
               <ArrowLeft size={18} />
             </button>
-            <Avatar initials={activeColleague.avatar} color="#6B7280" size="md" online={activeColleague.online} image={activeColleague.image} />
+            <Avatar initials={activeColleague.avatar} color="#666D80" size="md" online={activeColleague.online} image={activeColleague.image} />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-[#1A1A2E] truncate">{activeColleague.name}</p>
-              <p className="text-xs text-[#9CA3AF] truncate">{activeColleague.title} · {activeColleague.company}</p>
+              <p className="text-sm font-bold text-[#15161E] truncate">{activeColleague.name}</p>
+              <p className="text-xs text-[#A4ABB8] truncate">{activeColleague.title} · {activeColleague.company}</p>
             </div>
             <div className="hidden gap-1">
               {[Phone, Video, MoreHorizontal].map((Icon, i) => (
-                <button key={i} className="w-9 h-9 rounded-[10px] flex items-center justify-center text-[#9CA3AF] hover:bg-[#F4EFE8] transition-colors">
+                <button key={i} className="w-9 h-9 rounded-[10px] flex items-center justify-center text-[#A4ABB8] hover:bg-[#F8F9FB] transition-colors">
                   <Icon size={16} strokeWidth={1.8} />
                 </button>
               ))}
@@ -102,33 +102,33 @@ export default function ChatPage() {
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {messages.map(msg => (
               <div key={msg.id} className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'} gap-2`}>
-                {msg.from === 'other' && <Avatar initials={activeColleague.avatar} color="#6B7280" size="sm" image={activeColleague.image} />}
+                {msg.from === 'other' && <Avatar initials={activeColleague.avatar} color="#666D80" size="sm" image={activeColleague.image} />}
                 <div>
                   <div className={`px-3.5 py-2.5 rounded-[14px] text-sm max-w-xs leading-relaxed ${
                     msg.from === 'me'
-                      ? 'bg-[#1B3A6B] text-white rounded-br-sm'
-                      : 'bg-[#F4EFE8] text-[#1A1A2E] rounded-bl-sm'
+                      ? 'bg-[#9D63F6] text-white rounded-br-sm'
+                      : 'bg-[#F8F9FB] text-[#15161E] rounded-bl-sm'
                   }`}>
                     {msg.text}
                   </div>
-                  <p className={`text-[10px] text-[#9CA3AF] mt-1 ${msg.from === 'me' ? 'text-right' : ''}`}>{msg.time}</p>
+                  <p className={`text-[10px] text-[#A4ABB8] mt-1 ${msg.from === 'me' ? 'text-right' : ''}`}>{msg.time}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Input */}
-          <div className="px-3 py-3 border-t border-[#F4EFE8] flex gap-2">
+          <div className="px-3 py-3 border-t border-[#F8F9FB] flex gap-2">
             <input
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
               placeholder={`Message ${activeColleague.name.split(' ')[0]}...`}
-              className="flex-1 bg-[#F9F6F1] border border-[#E8E2D9] rounded-[12px] px-3 py-2.5 text-sm outline-none focus:border-[#1B3A6B] focus:ring-2 focus:ring-[#1B3A6B]/10"
+              className="flex-1 bg-[#F8F9FB] border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-sm outline-none focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10"
             />
             <button
               onClick={send}
-              className="w-10 h-10 bg-[#1B3A6B] text-white rounded-[12px] flex items-center justify-center hover:bg-[#152E56] transition-colors shrink-0"
+              className="w-10 h-10 bg-[#9D63F6] text-white rounded-[12px] flex items-center justify-center hover:bg-[#8A44F4] transition-colors shrink-0"
             >
               <Send size={15} />
             </button>

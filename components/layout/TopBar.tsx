@@ -22,11 +22,11 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
 
   return (
     <>
-      <header className="h-14 md:h-16 bg-white border-b border-[#E8E2D9] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
+      <header className="h-14 md:h-16 bg-white border-b border-[#DFE1E6] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
         {/* Hamburger - mobile only */}
         <button
           onClick={onMenuToggle}
-          className="md:hidden p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0"
+          className="md:hidden p-2 -ml-1 rounded-[10px] text-[#666D80] hover:bg-[#F8F9FB] transition-colors shrink-0"
           aria-label="Open menu"
         >
           <Menu size={20} strokeWidth={1.8} />
@@ -34,36 +34,36 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
 
         {/* Title */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-sm md:text-base font-bold text-[#1A1A2E] leading-tight truncate">{title}</h1>
-          {subtitle && <p className="text-[10px] md:text-xs text-[#9CA3AF] leading-tight mt-0.5 truncate">{subtitle}</p>}
+          <h1 className="text-sm md:text-base font-bold text-[#15161E] leading-tight truncate">{title}</h1>
+          {subtitle && <p className="text-[10px] md:text-xs text-[#A4ABB8] leading-tight mt-0.5 truncate">{subtitle}</p>}
         </div>
 
         {/* Search - triggers AI Smart Search */}
         <button
           onClick={() => setSearchOpen(true)}
-          className="hidden md:flex items-center bg-[#F9F6F1] rounded-[12px] px-3.5 py-2 gap-2.5 w-56 hover:bg-[#F4EFE8] transition-colors cursor-pointer"
+          className="hidden md:flex items-center bg-[#F8F9FB] rounded-[12px] px-3.5 py-2 gap-2.5 w-56 hover:bg-[#F8F9FB] transition-colors cursor-pointer"
         >
-          <Search size={15} className="text-[#9CA3AF] shrink-0" strokeWidth={1.8} />
-          <span className="text-sm text-[#9CA3AF] flex-1 text-left">AI Search...</span>
-          <kbd className="text-[10px] text-[#9CA3AF] bg-white border border-[#E8E2D9] rounded px-1.5 py-0.5 font-mono">⌘K</kbd>
+          <Search size={15} className="text-[#A4ABB8] shrink-0" strokeWidth={1.8} />
+          <span className="text-sm text-[#A4ABB8] flex-1 text-left">AI Search...</span>
+          <kbd className="text-[10px] text-[#A4ABB8] bg-white border border-[#DFE1E6] rounded px-1.5 py-0.5 font-mono">⌘K</kbd>
         </button>
 
         {/* Mobile search button */}
         <button
           onClick={() => setSearchOpen(true)}
-          className="md:hidden w-8 h-8 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors"
+          className="md:hidden w-8 h-8 rounded-[10px] flex items-center justify-center text-[#666D80] hover:bg-[#F8F9FB] transition-colors"
         >
           <Search size={17} strokeWidth={1.8} />
         </button>
 
         {/* Actions */}
         <div className="flex items-center gap-0.5 md:gap-1">
-          <Link href="/chat" className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors">
+          <Link href="/chat" className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#666D80] hover:bg-[#F8F9FB] transition-colors">
             <MessageCircle size={17} strokeWidth={1.8} />
           </Link>
           <button
             onClick={togglePanel}
-            className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#6B7280] hover:bg-[#F4EFE8] transition-colors"
+            className="relative w-8 h-8 md:w-9 md:h-9 rounded-[10px] flex items-center justify-center text-[#666D80] hover:bg-[#F8F9FB] transition-colors"
           >
             <Bell size={17} strokeWidth={1.8} />
             {unreadCount > 0 && (
@@ -74,7 +74,7 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
           </button>
           {user && (
             <Link href="/profile" className="ml-0.5 md:ml-1">
-              <Avatar initials={user.avatar} image={user.image} color={company?.color || '#1B3A6B'} size="sm" />
+              <Avatar initials={user.avatar} image={user.image} color={company?.color || '#9D63F6'} size="sm" />
             </Link>
           )}
         </div>

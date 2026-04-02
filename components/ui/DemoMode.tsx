@@ -105,7 +105,7 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-4 py-3 rounded-[20px] bg-[#1B3A6B] hover:bg-[#152850] text-white shadow-lg transition-all duration-200 hover:shadow-xl"
+        className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-4 py-3 rounded-[20px] bg-[#9D63F6] hover:bg-[#7C3DDD] text-white shadow-lg transition-all duration-200 hover:shadow-xl"
         aria-label="Start demo mode"
       >
         <Play className="w-5 h-5" />
@@ -152,9 +152,9 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
         }}
       >
         <div
-          className="rounded-[20px] p-6 shadow-2xl border border-[#E8E2D9]"
+          className="rounded-[20px] p-6 shadow-2xl border border-[#DFE1E6]"
           style={{
-            backgroundColor: '#F4EFE8',
+            backgroundColor: '#F8F9FB',
             boxShadow:
               '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 30px rgba(200, 151, 58, 0.4)',
           }}
@@ -163,23 +163,23 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
           <div className="flex items-start justify-between mb-4">
             <div
               className="p-3 rounded-[12px] flex-shrink-0"
-              style={{ backgroundColor: '#1B3A6B' }}
+              style={{ backgroundColor: '#9D63F6' }}
             >
               <div className="text-white">{step.icon}</div>
             </div>
             <button
               onClick={handleSkip}
-              className="p-1 hover:bg-[#E8E2D9] rounded-lg transition-colors"
+              className="p-1 hover:bg-[#DFE1E6] rounded-lg transition-colors"
               aria-label="Close demo"
             >
-              <X className="w-5 h-5 text-[#1A1A2E]" />
+              <X className="w-5 h-5 text-[#15161E]" />
             </button>
           </div>
 
           {/* Step Counter */}
           <div
             className="text-xs font-semibold mb-2"
-            style={{ color: '#C8973A' }}
+            style={{ color: '#FFBD4C' }}
           >
             {`${currentStep + 1} of ${DEMO_STEPS.length}`}
           </div>
@@ -187,13 +187,13 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
           {/* Title */}
           <h3
             className="text-lg font-bold mb-2"
-            style={{ color: '#1B3A6B' }}
+            style={{ color: '#9D63F6' }}
           >
             {step.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm mb-6 leading-relaxed" style={{ color: '#1A1A2E' }}>
+          <p className="text-sm mb-6 leading-relaxed" style={{ color: '#15161E' }}>
             {step.description}
           </p>
 
@@ -205,7 +205,7 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
                 className="h-1 rounded-full transition-all duration-300"
                 style={{
                   flex: 1,
-                  backgroundColor: index <= currentStep ? '#C8973A' : '#E8E2D9',
+                  backgroundColor: index <= currentStep ? '#FFBD4C' : '#DFE1E6',
                 }}
               />
             ))}
@@ -218,8 +218,8 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
               disabled={currentStep === 0}
               className="flex items-center justify-center gap-2 px-3 py-2 rounded-[12px] text-sm font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed hover:disabled:bg-transparent"
               style={{
-                backgroundColor: currentStep === 0 ? 'transparent' : '#E8E2D9',
-                color: '#1A1A2E',
+                backgroundColor: currentStep === 0 ? 'transparent' : '#DFE1E6',
+                color: '#15161E',
               }}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -230,7 +230,7 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
               onClick={handleSkip}
               className="px-3 py-2 rounded-[12px] text-sm font-medium transition-all duration-200"
               style={{
-                backgroundColor: '#9CA3AF',
+                backgroundColor: '#A4ABB8',
                 color: 'white',
               }}
             >
@@ -240,7 +240,7 @@ export default function DemoMode({ visible: initialVisible = false }: DemoModePr
             <button
               onClick={currentStep === DEMO_STEPS.length - 1 ? handleSkip : handleNext}
               className="flex items-center justify-center gap-2 px-3 py-2 rounded-[12px] text-sm font-medium text-white transition-all duration-200"
-              style={{ backgroundColor: '#1B3A6B' }}
+              style={{ backgroundColor: '#9D63F6' }}
             >
               <span>
                 {currentStep === DEMO_STEPS.length - 1 ? 'Finish' : 'Next'}

@@ -161,12 +161,12 @@ export default function ExpenseClaimPage() {
       <style>{STEP_STYLES}</style>
       <div className="space-y-5 max-w-lg mx-auto">
 
-        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#6B7280] font-medium hover:text-[#1B3A6B] transition-colors">
+        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#666D80] font-medium hover:text-[#9D63F6] transition-colors">
           <ArrowLeft size={15} /> Back to Automations
         </Link>
 
         {/* Header */}
-        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 60%, #1B3A6B 100%)' }}>
+        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #6D4AAC 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 85% 20%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-2.5">
@@ -190,25 +190,25 @@ export default function ExpenseClaimPage() {
         {phase === 'upload' && (
           <div className="space-y-4 fade-up">
             {/* Upload area */}
-            <div className="rounded-[16px] border-2 border-dashed border-[#C8973A] bg-[#FEF9F0] p-5 text-center">
-              <Camera size={32} className="text-[#C8973A] mx-auto mb-2" />
+            <div className="rounded-[16px] border-2 border-dashed border-[#FFBD4C] bg-[#FEF9F0] p-5 text-center">
+              <Camera size={32} className="text-[#FFBD4C] mx-auto mb-2" />
               <p className="text-[13px] font-bold text-[#92702D]">Snap or Upload Receipt</p>
-              <p className="text-[11px] text-[#B8962E] mt-1">AI extracts details automatically</p>
+              <p className="text-[11px] text-[#FFBD4C] mt-1">AI extracts details automatically</p>
             </div>
 
             {/* Sample receipts for demo */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2 flex items-center gap-1">
-                <Sparkles size={10} className="text-[#C8973A]" /> Demo Receipts
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2 flex items-center gap-1">
+                <Sparkles size={10} className="text-[#FFBD4C]" /> Demo Receipts
               </p>
               <div className="grid grid-cols-1 gap-2">
                 {SAMPLE_RECEIPTS.map(r => (
                   <button key={r.id} onClick={() => simulateAIScan(r)}
-                    className="flex items-center gap-3 p-3 rounded-[14px] bg-[#F4EFE8] border border-[#E8E2D9] text-left active:scale-[0.97] transition-all hover:border-[#C8973A]">
+                    className="flex items-center gap-3 p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6] text-left active:scale-[0.97] transition-all hover:border-[#FFBD4C]">
                     <span className="text-3xl shrink-0">{r.thumbnail}</span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-semibold text-[#1A1A2E]">{r.label}</p>
-                      <p className="text-[11px] text-[#9CA3AF]">AED {r.extracted.amount}</p>
+                      <p className="text-[12px] font-semibold text-[#15161E]">{r.label}</p>
+                      <p className="text-[11px] text-[#A4ABB8]">AED {r.extracted.amount}</p>
                     </div>
                   </button>
                 ))}
@@ -221,20 +221,20 @@ export default function ExpenseClaimPage() {
               <div className="space-y-3">
                 <div>
                   <p className="font-bold text-red-600 mb-1 text-[11px]">Before (Manual)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Collect receipts</p>
-                  <p className="text-[11px] text-[#6B7280]">• Open Excel, type</p>
-                  <p className="text-[11px] text-[#6B7280]">• Look up category</p>
-                  <p className="text-[11px] text-[#6B7280]">• Scan & email</p>
-                  <p className="text-[11px] text-[#6B7280]">• Finance re-enters</p>
+                  <p className="text-[11px] text-[#666D80]">• Collect receipts</p>
+                  <p className="text-[11px] text-[#666D80]">• Open Excel, type</p>
+                  <p className="text-[11px] text-[#666D80]">• Look up category</p>
+                  <p className="text-[11px] text-[#666D80]">• Scan & email</p>
+                  <p className="text-[11px] text-[#666D80]">• Finance re-enters</p>
                   <p className="font-bold text-red-600 mt-2 text-[11px]">⏱ 30 min</p>
                 </div>
                 <div>
                   <p className="font-bold text-[#059669] mb-1 text-[11px]">After (AI-Powered)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Snap receipt</p>
-                  <p className="text-[11px] text-[#6B7280]">• AI extracts</p>
-                  <p className="text-[11px] text-[#6B7280]">• Auto-categorise</p>
-                  <p className="text-[11px] text-[#6B7280]">• Policy check ✓</p>
-                  <p className="text-[11px] text-[#6B7280]">• One-tap submit</p>
+                  <p className="text-[11px] text-[#666D80]">• Snap receipt</p>
+                  <p className="text-[11px] text-[#666D80]">• AI extracts</p>
+                  <p className="text-[11px] text-[#666D80]">• Auto-categorise</p>
+                  <p className="text-[11px] text-[#666D80]">• Policy check ✓</p>
+                  <p className="text-[11px] text-[#666D80]">• One-tap submit</p>
                   <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 2 min</p>
                 </div>
               </div>
@@ -245,18 +245,18 @@ export default function ExpenseClaimPage() {
         {/* ═══ SCANNING PHASE — AI Vision ═══ */}
         {phase === 'scanning' && selectedReceipt && (
           <div className="space-y-4 fade-up">
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-5 text-center relative overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-5 text-center relative overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
               <div className="ai-scan absolute inset-0 pointer-events-none" />
               <div className="relative z-10">
                 <div className="text-5xl mb-3">{selectedReceipt.thumbnail}</div>
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <Sparkles size={15} className="text-[#C8973A] animate-pulse" />
-                  <p className="text-[13px] font-bold text-[#1B3A6B]">Claude AI Analyzing...</p>
+                  <Sparkles size={15} className="text-[#FFBD4C] animate-pulse" />
+                  <p className="text-[13px] font-bold text-[#9D63F6]">Claude AI Analyzing...</p>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-[#E8E2D9] overflow-hidden mb-2">
-                  <div className="h-full rounded-full transition-all duration-100" style={{ width: `${scanProgress}%`, background: 'linear-gradient(90deg, #1B3A6B, #C8973A)' }} />
+                <div className="w-full h-1.5 rounded-full bg-[#DFE1E6] overflow-hidden mb-2">
+                  <div className="h-full rounded-full transition-all duration-100" style={{ width: `${scanProgress}%`, background: 'linear-gradient(90deg, #9D63F6, #FFBD4C)' }} />
                 </div>
-                <p className="text-[10px] text-[#9CA3AF]">
+                <p className="text-[10px] text-[#A4ABB8]">
                   {scanProgress < 30 ? 'Detecting...' : scanProgress < 60 ? 'Extracting...' : scanProgress < 90 ? 'Categorizing...' : 'Verifying...'}
                 </p>
               </div>
@@ -276,45 +276,45 @@ export default function ExpenseClaimPage() {
             </div>
 
             {/* Extracted data card */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3 space-y-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Extracted Data</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3 space-y-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider">Extracted Data</p>
 
               <div className="space-y-2.5">
                 <div className="flex items-start gap-2">
-                  <Building2 size={14} className="text-[#C8973A] mt-0.5 shrink-0" />
+                  <Building2 size={14} className="text-[#FFBD4C] mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] text-[#9CA3AF]">Vendor</p>
-                    <p className="text-[12px] font-semibold text-[#1A1A2E] truncate">{selectedReceipt.extracted.vendor}</p>
+                    <p className="text-[10px] text-[#A4ABB8]">Vendor</p>
+                    <p className="text-[12px] font-semibold text-[#15161E] truncate">{selectedReceipt.extracted.vendor}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <DollarSign size={14} className="text-[#C8973A] mt-0.5 shrink-0" />
+                  <DollarSign size={14} className="text-[#FFBD4C] mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-[10px] text-[#9CA3AF]">Amount</p>
-                    <p className="text-[12px] font-semibold text-[#1A1A2E]">{selectedReceipt.extracted.currency} {selectedReceipt.extracted.amount}</p>
+                    <p className="text-[10px] text-[#A4ABB8]">Amount</p>
+                    <p className="text-[12px] font-semibold text-[#15161E]">{selectedReceipt.extracted.currency} {selectedReceipt.extracted.amount}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Calendar size={14} className="text-[#C8973A] mt-0.5 shrink-0" />
+                  <Calendar size={14} className="text-[#FFBD4C] mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-[10px] text-[#9CA3AF]">Date</p>
-                    <p className="text-[12px] font-semibold text-[#1A1A2E]">{selectedReceipt.extracted.date}</p>
+                    <p className="text-[10px] text-[#A4ABB8]">Date</p>
+                    <p className="text-[12px] font-semibold text-[#15161E]">{selectedReceipt.extracted.date}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Tag size={14} className="text-[#C8973A] mt-0.5 shrink-0" />
+                  <Tag size={14} className="text-[#FFBD4C] mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] text-[#9CA3AF]">Category</p>
-                    <p className="text-[12px] font-semibold text-[#1A1A2E] truncate">{selectedReceipt.extracted.category}</p>
+                    <p className="text-[10px] text-[#A4ABB8]">Category</p>
+                    <p className="text-[12px] font-semibold text-[#15161E] truncate">{selectedReceipt.extracted.category}</p>
                   </div>
                 </div>
               </div>
 
               {/* Line items */}
               <div>
-                <p className="text-[9px] text-[#9CA3AF] font-bold uppercase tracking-wider mb-1.5">Line Items</p>
+                <p className="text-[9px] text-[#A4ABB8] font-bold uppercase tracking-wider mb-1.5">Line Items</p>
                 {selectedReceipt.extracted.items.map((item, i) => (
-                  <div key={i} className="flex items-center gap-1.5 py-1 text-[11px] text-[#4B5563] border-b border-[#F4EFE8] last:border-0">
+                  <div key={i} className="flex items-center gap-1.5 py-1 text-[11px] text-[#4B5563] border-b border-[#F8F9FB] last:border-0">
                     <CheckCircle2 size={11} className="text-[#059669] shrink-0" />
                     <span className="truncate">{item}</span>
                   </div>
@@ -344,12 +344,12 @@ export default function ExpenseClaimPage() {
             {/* Actions */}
             <div className="flex gap-2">
               <button onClick={() => { setPhase('upload'); setSelectedReceipt(null); }}
-                className="flex-1 py-3 rounded-[14px] text-[13px] font-bold text-[#6B7280] bg-white border border-[#E8E2D9] active:scale-[0.97] transition-all">
+                className="flex-1 py-3 rounded-[14px] text-[13px] font-bold text-[#666D80] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all">
                 Re-scan
               </button>
               <button onClick={submitClaim}
                 className="flex-[1.4] py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all flex items-center justify-center gap-1.5"
-                style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
+                style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #6D4AAC 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
                 <Zap size={15} /> Submit Claim
               </button>
             </div>
@@ -359,24 +359,24 @@ export default function ExpenseClaimPage() {
         {/* ═══ PROCESSING ═══ */}
         {phase === 'processing' && (
           <div className="space-y-4 fade-up">
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[13px] font-bold text-[#1A1A2E] mb-3">Processing Pipeline</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[13px] font-bold text-[#15161E] mb-3">Processing Pipeline</p>
               <div className="space-y-3">
                 {steps.map(step => (
                   <div key={step.id} className="flex items-start gap-3">
                     <div className="mt-0.5">
                       {step.status === 'completed' && <CheckCircle2 size={18} className="text-[#059669] step-check" />}
-                      {step.status === 'running' && <Loader2 size={18} className="text-[#1B3A6B] animate-spin" />}
-                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#E8E2D9]" />}
+                      {step.status === 'running' && <Loader2 size={18} className="text-[#9D63F6] animate-spin" />}
+                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#DFE1E6]" />}
                     </div>
                     <div className="flex-1">
-                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#1B3A6B]' : 'text-[#9CA3AF]'}`}>
+                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#9D63F6]' : 'text-[#A4ABB8]'}`}>
                         {step.name}
                       </p>
-                      {step.detail && step.status === 'completed' && <p className="text-[11px] text-[#9CA3AF] mt-0.5">{step.detail}</p>}
+                      {step.detail && step.status === 'completed' && <p className="text-[11px] text-[#A4ABB8] mt-0.5">{step.detail}</p>}
                       {step.status === 'running' && (
-                        <div className="mt-1.5 h-1 rounded-full bg-[#E8E2D9] overflow-hidden">
-                          <div className="h-full rounded-full bg-[#1B3A6B]" style={{ animation: 'progress-fill 1s ease-out forwards' }} />
+                        <div className="mt-1.5 h-1 rounded-full bg-[#DFE1E6] overflow-hidden">
+                          <div className="h-full rounded-full bg-[#9D63F6]" style={{ animation: 'progress-fill 1s ease-out forwards' }} />
                         </div>
                       )}
                     </div>
@@ -396,22 +396,22 @@ export default function ExpenseClaimPage() {
               </div>
               <h3 className="text-[16px] font-bold text-[#065F46]">Expense Submitted</h3>
               <p className="text-[12px] text-[#047857] mt-1 truncate">{selectedReceipt.extracted.vendor}</p>
-              <p className="text-[11px] text-[#6B7280] mt-1">AED {selectedReceipt.extracted.amount} • 1-2 days</p>
+              <p className="text-[11px] text-[#666D80] mt-1">AED {selectedReceipt.extracted.amount} • 1-2 days</p>
             </div>
 
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Pipeline Summary</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Pipeline Summary</p>
               {steps.map(step => (
                 <div key={step.id} className="flex items-center gap-2.5 text-[12px] py-1">
                   <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
                   <span className="text-[#4B5563] flex-1">{step.name}</span>
-                  <span className="text-[#9CA3AF] text-[10px] max-w-[45%] truncate text-right">{step.detail}</span>
+                  <span className="text-[#A4ABB8] text-[10px] max-w-[45%] truncate text-right">{step.detail}</span>
                 </div>
               ))}
             </div>
 
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Integrations</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Integrations</p>
               {['Claude AI (Vision) — Receipt data extracted at 98.5% confidence', 'SAP SuccessFactors — Expense entry created', 'Slack — #finance-claims notified', 'Email — Confirmation sent'].map(i => (
                 <div key={i} className="flex items-center gap-2.5 text-[12px] py-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
@@ -421,7 +421,7 @@ export default function ExpenseClaimPage() {
             </div>
 
             <button onClick={() => { setPhase('upload'); setSelectedReceipt(null); setSteps([]); }}
-              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#6B7280] bg-[#F4EFE8] border border-[#E8E2D9] active:scale-[0.97] transition-all flex items-center justify-center gap-1.5">
+              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#666D80] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-[0.97] transition-all flex items-center justify-center gap-1.5">
               <RefreshCw size={13} /> Submit Another
             </button>
           </div>
@@ -433,7 +433,7 @@ export default function ExpenseClaimPage() {
               <AlertCircle size={28} className="text-red-500 mx-auto mb-2" />
               <h3 className="text-[15px] font-bold text-red-700">Submission Failed</h3>
             </div>
-            <button onClick={() => { setPhase('upload'); setSteps([]); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#1B3A6B]">Try Again</button>
+            <button onClick={() => { setPhase('upload'); setSteps([]); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6]">Try Again</button>
           </div>
         )}
       </div>

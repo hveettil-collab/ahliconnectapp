@@ -16,10 +16,10 @@ export default function Button({
   const base = 'inline-flex items-center justify-center font-medium transition-all duration-200 cursor-pointer select-none';
 
   const variants = {
-    primary: 'bg-[#1B3A6B] text-white hover:bg-[#152E56] active:scale-[0.98]',
-    secondary: 'bg-[#E8EFF8] text-[#1B3A6B] hover:bg-[#D5E4F5] active:scale-[0.98]',
-    ghost: 'bg-transparent text-[#6B7280] hover:bg-[#F4EFE8] active:scale-[0.98]',
-    outline: 'bg-white border border-[#E8E2D9] text-[#1A1A2E] hover:bg-[#F9F6F1] active:scale-[0.98]',
+    primary: 'bg-[#9D63F6] text-white hover:bg-[#8A44F4] active:scale-[0.98]',
+    secondary: 'bg-[#F7F1FF] text-[#9D63F6] hover:bg-[#EDE5F9] active:scale-[0.98]',
+    ghost: 'bg-transparent text-[#666D80] hover:bg-[#F8F9FB] active:scale-[0.98]',
+    outline: 'bg-white border border-[#DFE1E6] text-[#15161E] hover:bg-[#F8F9FB] active:scale-[0.98]',
   };
 
   const sizes = {

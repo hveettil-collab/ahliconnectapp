@@ -23,10 +23,10 @@ export default function BottomNav() {
       <style>{`
         @keyframes ai-orb-glow {
           0%, 100% {
-            box-shadow: 0 6px 18px 0 rgba(27, 58, 107, 0.25);
+            box-shadow: 0 6px 18px 0 rgba(157, 99, 246, 0.25);
           }
           50% {
-            box-shadow: 0 8px 24px 0 rgba(200, 151, 58, 0.35), 0 0 12px 2px rgba(200, 151, 58, 0.15);
+            box-shadow: 0 8px 24px 0 rgba(255, 189, 76, 0.35), 0 0 12px 2px rgba(255, 189, 76, 0.15);
           }
         }
         @keyframes ai-icon-rock {
@@ -65,7 +65,7 @@ export default function BottomNav() {
                 <div
                   className="ai-orb-glow w-[52px] h-[52px] rounded-full flex items-center justify-center"
                   style={{
-                    background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 50%, #C8973A 100%)',
+                    background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
                   }}
                 >
                   <Sparkles size={22} className="text-white ai-icon-rock" strokeWidth={2} />
@@ -81,14 +81,14 @@ export default function BottomNav() {
               href={href}
               className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200"
               style={{
-                background: active ? '#F4EFE8' : 'transparent',
+                background: active ? '#F8F9FB' : 'transparent',
               }}
             >
               <Icon
                 size={22}
                 strokeWidth={active ? 2.2 : 1.6}
                 style={{
-                  color: active ? '#1B3A6B' : '#9CA3AF',
+                  color: active ? '#9D63F6' : '#A4ABB8',
                 }}
               />
             </Link>

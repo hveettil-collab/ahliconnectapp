@@ -176,12 +176,12 @@ export default function SalaryCertificatePage() {
       <div className="space-y-5 max-w-lg mx-auto">
 
         {/* Back link */}
-        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#6B7280] font-medium hover:text-[#1B3A6B] transition-colors">
+        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#666D80] font-medium hover:text-[#9D63F6] transition-colors">
           <ArrowLeft size={15} /> Back to Automations
         </Link>
 
         {/* Header card */}
-        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 60%, #1B3A6B 100%)' }}>
+        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #2D5AA0 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 85% 20%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-2.5">
@@ -205,8 +205,8 @@ export default function SalaryCertificatePage() {
         {phase === 'form' && (
           <div className="space-y-4 fade-up">
             {/* Employee info (auto-filled from auth) */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3 space-y-2" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider">Employee Details</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3 space-y-2" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider">Employee Details</p>
               <div className="space-y-2">
                 {[
                   ['Name', user?.name ?? '—'],
@@ -217,16 +217,16 @@ export default function SalaryCertificatePage() {
                   ['Join Date', salary.joinDate],
                 ].map(([label, val]) => (
                   <div key={label} className="flex justify-between items-center">
-                    <p className="text-[10px] text-[#9CA3AF] font-medium">{label}</p>
-                    <p className="text-[12px] font-semibold text-[#1A1A2E]">{val}</p>
+                    <p className="text-[10px] text-[#A4ABB8] font-medium">{label}</p>
+                    <p className="text-[12px] font-semibold text-[#15161E]">{val}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Salary preview */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Salary Breakdown</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Salary Breakdown</p>
               <div className="space-y-2">
                 {[
                   ['Basic Salary', salary.basic],
@@ -235,28 +235,28 @@ export default function SalaryCertificatePage() {
                   ['Other Allowances', salary.other],
                 ].map(([label, amount]) => (
                   <div key={String(label)} className="flex justify-between text-[13px]">
-                    <span className="text-[#6B7280]">{label}</span>
-                    <span className="font-semibold text-[#1A1A2E]">AED {(amount as number).toLocaleString()}</span>
+                    <span className="text-[#666D80]">{label}</span>
+                    <span className="font-semibold text-[#15161E]">AED {(amount as number).toLocaleString()}</span>
                   </div>
                 ))}
-                <div className="border-t border-[#E8E2D9] pt-2 flex justify-between">
-                  <span className="text-[14px] font-bold text-[#1B3A6B]">Total Monthly</span>
-                  <span className="text-[14px] font-bold text-[#1B3A6B]">AED {total.toLocaleString()}</span>
+                <div className="border-t border-[#DFE1E6] pt-2 flex justify-between">
+                  <span className="text-[14px] font-bold text-[#9D63F6]">Total Monthly</span>
+                  <span className="text-[14px] font-bold text-[#9D63F6]">AED {total.toLocaleString()}</span>
                 </div>
               </div>
             </div>
 
             {/* Purpose selector */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Purpose</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Purpose</p>
               <div className="flex flex-wrap gap-2">
                 {PURPOSES.map(p => (
                   <button key={p} onClick={() => setPurpose(p)}
                     className="px-3.5 py-2 rounded-full text-[12px] font-semibold transition-all active:scale-95"
                     style={{
-                      background: purpose === p ? '#1B3A6B' : 'transparent',
-                      color: purpose === p ? '#fff' : '#6B7280',
-                      border: purpose === p ? 'none' : '1px solid #E8E2D9',
+                      background: purpose === p ? '#9D63F6' : 'transparent',
+                      color: purpose === p ? '#fff' : '#666D80',
+                      border: purpose === p ? 'none' : '1px solid #DFE1E6',
                     }}>
                     {p}
                   </button>
@@ -265,16 +265,16 @@ export default function SalaryCertificatePage() {
             </div>
 
             {/* Language */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Language</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Language</p>
               <div className="flex gap-2">
                 {[{ key: 'en' as const, label: 'English' }, { key: 'ar' as const, label: 'العربية' }].map(l => (
                   <button key={l.key} onClick={() => setLanguage(l.key)}
                     className="flex-1 py-2.5 rounded-[14px] text-[13px] font-semibold transition-all active:scale-95"
                     style={{
-                      background: language === l.key ? '#1B3A6B' : 'transparent',
-                      color: language === l.key ? '#fff' : '#6B7280',
-                      border: language === l.key ? 'none' : '1px solid #E8E2D9',
+                      background: language === l.key ? '#9D63F6' : 'transparent',
+                      color: language === l.key ? '#fff' : '#666D80',
+                      border: language === l.key ? 'none' : '1px solid #DFE1E6',
                     }}>
                     {l.label}
                   </button>
@@ -290,18 +290,18 @@ export default function SalaryCertificatePage() {
               <div className="space-y-3">
                 <div>
                   <p className="font-bold text-red-600 mb-1 text-[11px]">Before (Manual)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Email HR requesting cert</p>
-                  <p className="text-[11px] text-[#6B7280]">• HR verifies in SuccessFactors</p>
-                  <p className="text-[11px] text-[#6B7280]">• HR creates Word doc</p>
-                  <p className="text-[11px] text-[#6B7280]">• Print, stamp, sign</p>
+                  <p className="text-[11px] text-[#666D80]">• Email HR requesting cert</p>
+                  <p className="text-[11px] text-[#666D80]">• HR verifies in SuccessFactors</p>
+                  <p className="text-[11px] text-[#666D80]">• HR creates Word doc</p>
+                  <p className="text-[11px] text-[#666D80]">• Print, stamp, sign</p>
                   <p className="font-bold text-red-600 mt-2 text-[11px]">⏱ 3-5 days</p>
                 </div>
                 <div>
                   <p className="font-bold text-[#059669] mb-1 text-[11px]">After (Automated)</p>
-                  <p className="text-[11px] text-[#6B7280]">• Select purpose</p>
-                  <p className="text-[11px] text-[#6B7280]">• Click "Generate"</p>
-                  <p className="text-[11px] text-[#6B7280]">• Auto-pull + PDF + sign</p>
-                  <p className="text-[11px] text-[#6B7280]">• Download instantly</p>
+                  <p className="text-[11px] text-[#666D80]">• Select purpose</p>
+                  <p className="text-[11px] text-[#666D80]">• Click "Generate"</p>
+                  <p className="text-[11px] text-[#666D80]">• Auto-pull + PDF + sign</p>
+                  <p className="text-[11px] text-[#666D80]">• Download instantly</p>
                   <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 30 sec</p>
                 </div>
               </div>
@@ -310,7 +310,7 @@ export default function SalaryCertificatePage() {
             {/* Generate button */}
             <button onClick={runAutomation}
               className="w-full py-4 rounded-[16px] text-[15px] font-bold text-white active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-              style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
+              style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
               <Zap size={18} /> Generate Certificate
             </button>
           </div>
@@ -319,27 +319,27 @@ export default function SalaryCertificatePage() {
         {/* ═══ PROCESSING PHASE — Live pipeline ═══ */}
         {phase === 'processing' && (
           <div className="space-y-4 fade-up">
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[13px] font-bold text-[#1A1A2E] mb-3">Automation Pipeline</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3.5" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[13px] font-bold text-[#15161E] mb-3">Automation Pipeline</p>
               <div className="space-y-3">
                 {steps.map((step, i) => (
                   <div key={step.id} className="flex items-start gap-3">
                     <div className="mt-0.5">
                       {step.status === 'completed' && <CheckCircle2 size={18} className="text-[#059669] step-check" />}
-                      {step.status === 'running' && <Loader2 size={18} className="text-[#1B3A6B] animate-spin" />}
-                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#E8E2D9]" />}
+                      {step.status === 'running' && <Loader2 size={18} className="text-[#9D63F6] animate-spin" />}
+                      {step.status === 'pending' && <div className="w-[18px] h-[18px] rounded-full border-2 border-[#DFE1E6]" />}
                       {step.status === 'failed' && <AlertCircle size={18} className="text-red-500" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#1B3A6B]' : 'text-[#9CA3AF]'}`}>
+                      <p className={`text-[13px] font-semibold ${step.status === 'completed' ? 'text-[#059669]' : step.status === 'running' ? 'text-[#9D63F6]' : 'text-[#A4ABB8]'}`}>
                         {step.name}
                       </p>
                       {step.detail && step.status === 'completed' && (
-                        <p className="text-[11px] text-[#9CA3AF] mt-0.5">{step.detail}</p>
+                        <p className="text-[11px] text-[#A4ABB8] mt-0.5">{step.detail}</p>
                       )}
                       {step.status === 'running' && (
-                        <div className="mt-1.5 h-1 rounded-full bg-[#E8E2D9] overflow-hidden">
-                          <div className="h-full rounded-full bg-[#1B3A6B]" style={{ animation: 'progress-fill 1.5s ease-out forwards' }} />
+                        <div className="mt-1.5 h-1 rounded-full bg-[#DFE1E6] overflow-hidden">
+                          <div className="h-full rounded-full bg-[#9D63F6]" style={{ animation: 'progress-fill 1.5s ease-out forwards' }} />
                         </div>
                       )}
                     </div>
@@ -363,22 +363,22 @@ export default function SalaryCertificatePage() {
             </div>
 
             {/* Pipeline summary */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Automation Log</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Automation Log</p>
               <div className="space-y-2">
                 {steps.map(step => (
                   <div key={step.id} className="flex items-center gap-2.5 text-[12px]">
                     <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
                     <span className="text-[#4B5563] flex-1">{step.name}</span>
-                    <span className="text-[#9CA3AF] text-[10px]">{step.detail}</span>
+                    <span className="text-[#A4ABB8] text-[10px]">{step.detail}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Integration log */}
-            <div className="rounded-[16px] bg-white border border-[#E8E2D9] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">Integrations Triggered</p>
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Integrations Triggered</p>
               <div className="space-y-2">
                 {['SAP SuccessFactors — Employee data synced', 'Google Drive — Document uploaded', 'Slack — #hr-documents notified', 'Email — Confirmation sent'].map(i => (
                   <div key={i} className="flex items-center gap-2.5 text-[12px]">
@@ -392,7 +392,7 @@ export default function SalaryCertificatePage() {
             {/* Action buttons */}
             <div className="flex gap-2">
               <button onClick={previewCertificate}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-[#1A1A2E] bg-white border border-[#E8E2D9] active:scale-[0.97] transition-all shadow-sm">
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
                 <Eye size={16} /> Preview
               </button>
               <button onClick={downloadCertificate}
@@ -404,7 +404,7 @@ export default function SalaryCertificatePage() {
 
             {/* Generate another */}
             <button onClick={() => { setPhase('form'); setSteps([]); setCertificateHtml(''); }}
-              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#6B7280] bg-[#F4EFE8] border border-[#E8E2D9] active:scale-[0.97] transition-all flex items-center justify-center gap-1.5">
+              className="w-full py-2.5 rounded-[12px] text-[12px] font-semibold text-[#666D80] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-[0.97] transition-all flex items-center justify-center gap-1.5">
               <RefreshCw size={13} /> Generate Another
             </button>
           </div>
@@ -419,7 +419,7 @@ export default function SalaryCertificatePage() {
               <p className="text-[12px] text-red-600 mt-1">An error occurred. Please try again.</p>
             </div>
             <button onClick={() => { setPhase('form'); setSteps([]); }}
-              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#1B3A6B] active:scale-[0.98] transition-all">
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.98] transition-all">
               Try Again
             </button>
           </div>

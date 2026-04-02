@@ -154,19 +154,19 @@ const AI_SUGGESTIONS = [
 function urgencyStyle(urgency?: string) {
   switch (urgency) {
     case 'Hot':    return { bg: 'linear-gradient(135deg, #EF4444, #F97316)', text: '#fff' };
-    case 'New':    return { bg: 'linear-gradient(135deg, #1B3A6B, #2D5AA0)', text: '#fff' };
+    case 'New':    return { bg: 'linear-gradient(135deg, #9D63F6, #B182F8)', text: '#fff' };
     case 'Urgent': return { bg: 'linear-gradient(135deg, #DC2626, #B91C1C)', text: '#fff' };
-    default:       return { bg: '#F4EFE8', text: '#6B7280' };
+    default:       return { bg: '#F8F9FB', text: '#666D80' };
   }
 }
 
 function conditionColor(c: string) {
   switch (c) {
     case 'Excellent': return { bg: '#059669', text: '#fff' };
-    case 'Like New':  return { bg: '#0D9488', text: '#fff' };
-    case 'Good':      return { bg: '#C8973A', text: '#fff' };
-    case 'New':       return { bg: '#1B3A6B', text: '#fff' };
-    default:          return { bg: '#9CA3AF', text: '#fff' };
+    case 'Like New':  return { bg: '#40C4AA', text: '#fff' };
+    case 'Good':      return { bg: '#FFBD4C', text: '#fff' };
+    case 'New':       return { bg: '#9D63F6', text: '#fff' };
+    default:          return { bg: '#A4ABB8', text: '#fff' };
   }
 }
 
@@ -220,15 +220,15 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
 
       {/* ── Frosted glass header ── */}
       <div className="flex items-center gap-3 px-4 py-3 shrink-0 z-20" style={{ background: 'rgba(250,250,248,0.88)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(232,226,217,0.6)' }}>
-        <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#E8E2D9] text-[#6B7280] active:scale-95 transition-all">
+        <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] text-[#666D80] active:scale-95 transition-all">
           <ArrowLeft size={18} />
         </button>
-        <h3 className="text-[14px] font-bold text-[#1A1A2E] flex-1 truncate">{listing.title}</h3>
-        <button onClick={() => setSaved(!saved)} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#E8E2D9] active:scale-95 transition-all">
-          <Heart size={16} className={saved ? 'text-red-500 fill-red-500' : 'text-[#9CA3AF]'} />
+        <h3 className="text-[14px] font-bold text-[#15161E] flex-1 truncate">{listing.title}</h3>
+        <button onClick={() => setSaved(!saved)} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] active:scale-95 transition-all">
+          <Heart size={16} className={saved ? 'text-red-500 fill-red-500' : 'text-[#A4ABB8]'} />
         </button>
-        <button className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#E8E2D9] active:scale-95 transition-all">
-          <Share2 size={16} className="text-[#9CA3AF]" />
+        <button className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] active:scale-95 transition-all">
+          <Share2 size={16} className="text-[#A4ABB8]" />
         </button>
       </div>
 
@@ -275,16 +275,16 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           {listing.aiTags.length > 0 && (
             <div className="flex gap-1.5 flex-wrap">
               {listing.aiTags.map((tag, i) => (
-                <span key={tag} className="tag-pop flex items-center gap-1 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-[#F4EFE8] to-[#EDE8E0] text-[#1B3A6B] border border-[#E8E2D9]" style={{ animationDelay: `${i * 0.06}s` }}>
-                  <Sparkles size={10} className="text-[#C8973A]" /> {tag}
+                <span key={tag} className="tag-pop flex items-center gap-1 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-gradient-to-r from-[#F8F9FB] to-[#EDE8E0] text-[#9D63F6] border border-[#DFE1E6]" style={{ animationDelay: `${i * 0.06}s` }}>
+                  <Sparkles size={10} className="text-[#FFBD4C]" /> {tag}
                 </span>
               ))}
             </div>
           )}
 
           {/* ── Social proof strip ── */}
-          <div className="flex items-center gap-4 text-[11px] text-[#9CA3AF]">
-            <span className="flex items-center gap-1"><Star size={12} className="text-[#C8973A] fill-[#C8973A]" /> <strong className="text-[#1A1A2E]">{listing.rating}</strong> ({listing.reviews})</span>
+          <div className="flex items-center gap-4 text-[11px] text-[#A4ABB8]">
+            <span className="flex items-center gap-1"><Star size={12} className="text-[#FFBD4C] fill-[#FFBD4C]" /> <strong className="text-[#15161E]">{listing.rating}</strong> ({listing.reviews})</span>
             <span className="flex items-center gap-1"><Eye size={11} /> {listing.views} views</span>
             <span className="flex items-center gap-1"><Heart size={11} /> {listing.saves} saved</span>
             <span className="flex items-center gap-1"><Clock size={11} /> {listing.posted}</span>
@@ -293,16 +293,16 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           {/* ── Spec pills — dimensional ── */}
           <div className="flex flex-wrap gap-2">
             {Object.entries(listing.specs).map(([key, val]) => (
-              <div key={key} className="px-3.5 py-2 rounded-2xl bg-white border border-[#E8E2D9] shadow-sm">
-                <p className="text-[9px] text-[#9CA3AF] font-medium uppercase tracking-wider">{key}</p>
-                <p className="text-[13px] font-bold text-[#1A1A2E] -mt-0.5">{val}</p>
+              <div key={key} className="px-3.5 py-2 rounded-2xl bg-white border border-[#DFE1E6] shadow-sm">
+                <p className="text-[9px] text-[#A4ABB8] font-medium uppercase tracking-wider">{key}</p>
+                <p className="text-[13px] font-bold text-[#15161E] -mt-0.5">{val}</p>
               </div>
             ))}
           </div>
 
           {/* ── Description card ── */}
-          <div className="rounded-[20px] bg-white border border-[#E8E2D9] p-5 shadow-sm">
-            <p className="text-[11px] font-bold text-[#9CA3AF] uppercase tracking-wider mb-2">About this listing</p>
+          <div className="rounded-[20px] bg-white border border-[#DFE1E6] p-5 shadow-sm">
+            <p className="text-[11px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">About this listing</p>
             <p className="text-[14px] text-[#4B5563] leading-relaxed">{listing.description}</p>
             {listing.negotiable && (
               <div className="mt-3 flex items-center gap-1.5 text-[12px] font-semibold text-[#059669]">
@@ -313,7 +313,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
 
           {/* ── Seller card — dimensional glassmorphism ── */}
           <div className="rounded-[22px] overflow-hidden relative" style={{ boxShadow: '0 8px 32px rgba(27,58,107,0.12)' }}>
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 60%, #1B3A6B 100%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 60%, #9D63F6 100%)' }} />
             <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 80% 20%, rgba(200,151,58,0.15) 0%, transparent 50%)' }} />
             <div className="relative z-10 p-5">
               <div className="flex items-center gap-3.5">
@@ -357,15 +357,15 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
       {/* ── Chat overlay ── */}
       {showChat && (
         <div className="absolute inset-0 z-30 bg-[#FAFAF8] flex flex-col slide-up">
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#E8E2D9] bg-white shrink-0">
-            <button onClick={() => setShowChat(false)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#F4EFE8] text-[#6B7280]">
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#DFE1E6] bg-white shrink-0">
+            <button onClick={() => setShowChat(false)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#F8F9FB] text-[#666D80]">
               <ArrowLeft size={18} />
             </button>
-            <div className="w-10 h-10 rounded-[14px] bg-[#1B3A6B] flex items-center justify-center text-xs font-bold text-white">
+            <div className="w-10 h-10 rounded-[14px] bg-[#9D63F6] flex items-center justify-center text-xs font-bold text-white">
               {listing.seller.slice(0, 2)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-bold text-[#1A1A2E]">{listing.seller}</p>
+              <p className="text-[14px] font-bold text-[#15161E]">{listing.seller}</p>
               <div className="flex items-center gap-1">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
                 <p className="text-[10px] text-green-600 font-medium">Online now</p>
@@ -373,22 +373,22 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
             </div>
           </div>
           {/* Listing context bar */}
-          <div className="flex items-center gap-3 px-4 py-2.5 bg-white border-b border-[#E8E2D9]">
+          <div className="flex items-center gap-3 px-4 py-2.5 bg-white border-b border-[#DFE1E6]">
             <img src={listing.image} alt="" className="w-11 h-11 rounded-[12px] object-cover" />
             <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-semibold text-[#1A1A2E] truncate">{listing.title}</p>
-              <p className="text-[13px] font-bold text-[#1B3A6B]">{listing.price}</p>
+              <p className="text-[12px] font-semibold text-[#15161E] truncate">{listing.title}</p>
+              <p className="text-[13px] font-bold text-[#9D63F6]">{listing.price}</p>
             </div>
           </div>
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ background: 'linear-gradient(180deg, #F9F6F1 0%, #FAFAF8 100%)' }}>
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3" style={{ background: 'linear-gradient(180deg, #F8F9FB 0%, #FAFAF8 100%)' }}>
             {messages.map(msg => (
               <div key={msg.id} className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[78%] px-4 py-3 ${msg.from === 'me'
-                  ? 'bg-[#1B3A6B] text-white rounded-[18px] rounded-br-[6px]'
-                  : 'bg-white border border-[#E8E2D9] text-[#1A1A2E] rounded-[18px] rounded-bl-[6px] shadow-sm'}`}>
+                  ? 'bg-[#9D63F6] text-white rounded-[18px] rounded-br-[6px]'
+                  : 'bg-white border border-[#DFE1E6] text-[#15161E] rounded-[18px] rounded-bl-[6px] shadow-sm'}`}>
                   <p className="text-[13px] leading-relaxed">{msg.text}</p>
-                  <p className={`text-[9px] mt-1.5 ${msg.from === 'me' ? 'text-white/40' : 'text-[#9CA3AF]'}`}>{msg.time}</p>
+                  <p className={`text-[9px] mt-1.5 ${msg.from === 'me' ? 'text-white/40' : 'text-[#A4ABB8]'}`}>{msg.time}</p>
                 </div>
               </div>
             ))}
@@ -397,16 +397,16 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           {/* Quick replies */}
           <div className="px-4 pt-2 flex gap-1.5 overflow-x-auto bg-white">
             {['Is this still available?', 'Can you do a lower price?', 'Where can we meet?'].map(q => (
-              <button key={q} onClick={() => { setChatInput(q); }} className="shrink-0 text-[11px] font-medium px-3 py-1.5 rounded-full bg-[#F4EFE8] border border-[#E8E2D9] text-[#6B7280] active:scale-95 transition-all">
+              <button key={q} onClick={() => { setChatInput(q); }} className="shrink-0 text-[11px] font-medium px-3 py-1.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] text-[#666D80] active:scale-95 transition-all">
                 {q}
               </button>
             ))}
           </div>
-          <div className="shrink-0 border-t border-[#E8E2D9] bg-white px-4 py-3 flex items-center gap-2.5">
+          <div className="shrink-0 border-t border-[#DFE1E6] bg-white px-4 py-3 flex items-center gap-2.5">
             <input type="text" placeholder="Type a message..." value={chatInput} onChange={e => setChatInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && sendMessage()}
-              className="flex-1 bg-[#F4EFE8] border border-[#E8E2D9] rounded-full px-4 py-2.5 text-[14px] outline-none focus:border-[#1B3A6B] placeholder:text-[#9CA3AF] transition-colors" />
-            <button onClick={sendMessage} className="w-11 h-11 flex items-center justify-center bg-[#1B3A6B] text-white rounded-full active:scale-[0.92] transition-all" style={{ boxShadow: '0 4px 12px rgba(27,58,107,0.3)' }}>
+              className="flex-1 bg-[#F8F9FB] border border-[#DFE1E6] rounded-full px-4 py-2.5 text-[14px] outline-none focus:border-[#9D63F6] placeholder:text-[#A4ABB8] transition-colors" />
+            <button onClick={sendMessage} className="w-11 h-11 flex items-center justify-center bg-[#9D63F6] text-white rounded-full active:scale-[0.92] transition-all" style={{ boxShadow: '0 4px 12px rgba(27,58,107,0.3)' }}>
               <Send size={16} />
             </button>
           </div>
@@ -418,21 +418,21 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
         <div className="absolute inset-0 z-30 flex items-end" onClick={() => setShowOffer(false)}>
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative w-full bg-white rounded-t-[28px] px-4 py-5 space-y-5 slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="w-10 h-1 rounded-full bg-[#E8E2D9] mx-auto" />
-            <h3 className="text-[17px] font-bold text-[#1A1A2E]">Make an Offer</h3>
-            <div className="flex items-center gap-3 p-3 rounded-[16px] bg-[#F4EFE8]">
+            <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <h3 className="text-[17px] font-bold text-[#15161E]">Make an Offer</h3>
+            <div className="flex items-center gap-3 p-3 rounded-[16px] bg-[#F8F9FB]">
               <img src={listing.image} alt="" className="w-12 h-12 rounded-[12px] object-cover shrink-0" />
               <div className="min-w-0">
-                <p className="text-[12px] font-semibold text-[#1A1A2E] truncate">{listing.title}</p>
-                <p className="text-[13px] font-bold text-[#1B3A6B]">Listed at {listing.price}</p>
+                <p className="text-[12px] font-semibold text-[#15161E] truncate">{listing.title}</p>
+                <p className="text-[13px] font-bold text-[#9D63F6]">Listed at {listing.price}</p>
               </div>
             </div>
             <div>
-              <label className="text-[11px] font-semibold text-[#6B7280] uppercase tracking-wider">Your Offer (AED)</label>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Your Offer (AED)</label>
               <input type="text" value={offerAmount} onChange={e => setOfferAmount(e.target.value)} placeholder="Enter amount"
-                className="w-full mt-2 bg-white border-2 border-[#E8E2D9] rounded-[16px] px-4 py-3 text-[16px] font-bold text-[#1A1A2E] outline-none focus:border-[#1B3A6B] transition-colors" />
+                className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[16px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
             </div>
-            <button className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white bg-[#1B3A6B] active:scale-[0.98] transition-all" style={{ boxShadow: '0 4px 16px rgba(27,58,107,0.25)' }}>
+            <button className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white bg-[#9D63F6] active:scale-[0.98] transition-all" style={{ boxShadow: '0 4px 16px rgba(27,58,107,0.25)' }}>
               Send Offer
             </button>
           </div>
@@ -444,12 +444,12 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
         <div className="shrink-0 px-4 py-3 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
           <div className="flex gap-2.5">
             <button onClick={() => setShowChat(true)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[13px] font-bold text-[#1A1A2E] bg-white border border-[#E8E2D9] active:scale-[0.97] transition-all shadow-sm">
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[13px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
               <MessageCircle size={15} /> Chat
             </button>
             <button onClick={() => setShowOffer(true)}
               className="flex-[1.3] flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
+              style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
               <Tag size={15} /> Make Offer
             </button>
           </div>
@@ -503,25 +503,25 @@ export default function MarketplacePage() {
            ═══════════════════════════════════ */}
         <div className="spatial-rise">
           <div className="relative">
-            <div className="flex items-center gap-2 bg-white rounded-[20px] border border-[#E8E2D9] px-3 py-1 shadow-sm" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.06)' }}>
-              <Search size={16} className="text-[#9CA3AF] shrink-0" />
+            <div className="flex items-center gap-2 bg-white rounded-[20px] border border-[#DFE1E6] px-3 py-1 shadow-sm" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.06)' }}>
+              <Search size={16} className="text-[#A4ABB8] shrink-0" />
               <input ref={searchRef} type="text" placeholder="Search listings..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 onFocus={() => setShowAISuggestions(true)}
                 onBlur={() => setTimeout(() => setShowAISuggestions(false), 200)}
-                className="flex-1 bg-transparent py-3 text-[13px] outline-none placeholder:text-[#B8B3A9] text-[#1A1A2E]" />
+                className="flex-1 bg-transparent py-3 text-[13px] outline-none placeholder:text-[#A4ABB8] text-[#15161E]" />
               {search ? (
-                <button onClick={() => setSearch('')} className="p-1 rounded-full hover:bg-[#F4EFE8] transition-colors shrink-0">
-                  <X size={14} className="text-[#9CA3AF]" />
+                <button onClick={() => setSearch('')} className="p-1 rounded-full hover:bg-[#F8F9FB] transition-colors shrink-0">
+                  <X size={14} className="text-[#A4ABB8]" />
                 </button>
               ) : (
                 <div className="flex items-center gap-0.5">
-                  <button className="p-1.5 rounded-full hover:bg-[#F4EFE8] transition-colors shrink-0">
-                    <Mic size={14} className="text-[#9CA3AF]" />
+                  <button className="p-1.5 rounded-full hover:bg-[#F8F9FB] transition-colors shrink-0">
+                    <Mic size={14} className="text-[#A4ABB8]" />
                   </button>
-                  <button className="p-1.5 rounded-full hover:bg-[#F4EFE8] transition-colors shrink-0">
-                    <Scan size={14} className="text-[#9CA3AF]" />
+                  <button className="p-1.5 rounded-full hover:bg-[#F8F9FB] transition-colors shrink-0">
+                    <Scan size={14} className="text-[#A4ABB8]" />
                   </button>
                 </div>
               )}
@@ -529,18 +529,18 @@ export default function MarketplacePage() {
 
             {/* AI suggestion dropdown */}
             {showAISuggestions && !search && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[18px] border border-[#E8E2D9] shadow-lg overflow-hidden z-20" style={{ boxShadow: '0 8px 32px rgba(27,58,107,0.1)' }}>
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-[18px] border border-[#DFE1E6] shadow-lg overflow-hidden z-20" style={{ boxShadow: '0 8px 32px rgba(27,58,107,0.1)' }}>
                 <div className="px-4 pt-3 pb-2">
-                  <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider flex items-center gap-1.5">
-                    <Sparkles size={10} className="text-[#C8973A]" /> AI Suggestions
+                  <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles size={10} className="text-[#FFBD4C]" /> AI Suggestions
                   </p>
                 </div>
                 {AI_SUGGESTIONS.map((s, i) => (
                   <button key={s}
                     onMouseDown={() => { setSearch(s); setShowAISuggestions(false); }}
-                    className="w-full text-left px-4 py-2.5 text-[13px] text-[#4B5563] hover:bg-[#F4EFE8] transition-colors flex items-center gap-2.5 float-in"
+                    className="w-full text-left px-4 py-2.5 text-[13px] text-[#4B5563] hover:bg-[#F8F9FB] transition-colors flex items-center gap-2.5 float-in"
                     style={{ animationDelay: `${i * 0.04}s` }}>
-                    <Search size={13} className="text-[#C8973A]" />
+                    <Search size={13} className="text-[#FFBD4C]" />
                     {s}
                   </button>
                 ))}
@@ -553,7 +553,7 @@ export default function MarketplacePage() {
            SELL CTA — gradient banner
            ═══════════════════════════════════ */}
         <button className="spatial-rise d1 w-full flex items-center gap-2.5 p-3 rounded-[18px] active:scale-[0.98] transition-all overflow-hidden relative"
-          style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 60%, #1B3A6B 100%)' }}>
+          style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 90% 50%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10 w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
             <Camera size={18} className="text-white" />
@@ -577,9 +577,9 @@ export default function MarketplacePage() {
                 <button key={c.label} onClick={() => setCat(c.label)}
                   className="shrink-0 flex items-center gap-1 px-3.5 py-2 rounded-full text-[11px] font-semibold transition-all active:scale-95"
                   style={{
-                    background: isActive ? '#1B3A6B' : 'rgba(255,255,255,0.9)',
+                    background: isActive ? '#9D63F6' : 'rgba(255,255,255,0.9)',
                     color: isActive ? '#FFFFFF' : '#666D80',
-                    border: isActive ? 'none' : '1px solid #E8E2D9',
+                    border: isActive ? 'none' : '1px solid #DFE1E6',
                     boxShadow: isActive ? '0 2px 8px rgba(27,58,107,0.25)' : 'none',
                   }}>
                   <CIcon size={13} strokeWidth={isActive ? 2.2 : 1.6} />
@@ -591,10 +591,10 @@ export default function MarketplacePage() {
 
           {/* Sort bar */}
           <div className="flex items-center justify-between mt-2.5">
-            <p className="text-[11px] text-[#9CA3AF]">
-              <span className="font-bold text-[#1A1A2E]">{filtered.length}</span> listings
+            <p className="text-[11px] text-[#A4ABB8]">
+              <span className="font-bold text-[#15161E]">{filtered.length}</span> listings
             </p>
-            <button onClick={() => setShowSort(!showSort)} className="flex items-center gap-1 text-[11px] font-semibold text-[#6B7280] active:scale-95 transition-all">
+            <button onClick={() => setShowSort(!showSort)} className="flex items-center gap-1 text-[11px] font-semibold text-[#666D80] active:scale-95 transition-all">
               <ArrowUpDown size={12} /> {sort}
               <ChevronDown size={11} className={`transition-transform ${showSort ? 'rotate-180' : ''}`} />
             </button>
@@ -602,16 +602,16 @@ export default function MarketplacePage() {
 
           {/* Sort dropdown */}
           {showSort && (
-            <div className="mt-2 bg-white rounded-[16px] border border-[#E8E2D9] shadow-lg overflow-hidden" style={{ boxShadow: '0 4px 20px rgba(27,58,107,0.08)' }}>
+            <div className="mt-2 bg-white rounded-[16px] border border-[#DFE1E6] shadow-lg overflow-hidden" style={{ boxShadow: '0 4px 20px rgba(27,58,107,0.08)' }}>
               {SORT_OPTIONS.map((s, i) => {
                 const SIcon = s.icon;
                 return (
                   <button key={s.label} onClick={() => { setSort(s.label); setShowSort(false); }}
-                    className={`w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-medium transition-colors float-in ${sort === s.label ? 'bg-[#F4EFE8] text-[#1B3A6B] font-bold' : 'text-[#4B5563] hover:bg-[#FAFAF8]'}`}
+                    className={`w-full flex items-center gap-2.5 px-4 py-3 text-[13px] font-medium transition-colors float-in ${sort === s.label ? 'bg-[#F8F9FB] text-[#9D63F6] font-bold' : 'text-[#4B5563] hover:bg-[#FAFAF8]'}`}
                     style={{ animationDelay: `${i * 0.03}s` }}>
-                    <SIcon size={14} className={sort === s.label ? 'text-[#C8973A]' : 'text-[#9CA3AF]'} />
+                    <SIcon size={14} className={sort === s.label ? 'text-[#FFBD4C]' : 'text-[#A4ABB8]'} />
                     {s.label}
-                    {sort === s.label && <div className="ml-auto w-2 h-2 rounded-full bg-[#C8973A]" />}
+                    {sort === s.label && <div className="ml-auto w-2 h-2 rounded-full bg-[#FFBD4C]" />}
                   </button>
                 );
               })}
@@ -625,16 +625,16 @@ export default function MarketplacePage() {
         {featured.length > 0 && (
           <section className="spatial-rise d3">
             <div className="flex items-center gap-2 mb-2.5">
-              <div className="w-5 h-5 rounded-[6px] flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #C8973A, #E0B85C)' }}>
+              <div className="w-5 h-5 rounded-[6px] flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FFBD4C, #E0B85C)' }}>
                 <Flame size={11} className="text-white" />
               </div>
-              <p className="text-[13px] font-bold text-[#1A1A2E]">Featured</p>
-              <div className="flex-1 h-px bg-gradient-to-r from-[#E8E2D9] to-transparent ml-2" />
+              <p className="text-[13px] font-bold text-[#15161E]">Featured</p>
+              <div className="flex-1 h-px bg-gradient-to-r from-[#DFE1E6] to-transparent ml-2" />
             </div>
             <div className="space-y-3">
               {featured.map((listing, i) => (
                 <button key={listing.id} onClick={() => setSelectedListing(listing)}
-                  className={`depth-card d${i + 1} w-full rounded-[22px] overflow-hidden text-left active:scale-[0.98] transition-all bg-white border border-[#E8E2D9]`}
+                  className={`depth-card d${i + 1} w-full rounded-[22px] overflow-hidden text-left active:scale-[0.98] transition-all bg-white border border-[#DFE1E6]`}
                   style={{ boxShadow: '0 4px 24px rgba(27,58,107,0.08)' }}>
                   {/* Image section */}
                   <div className="relative h-[160px] overflow-hidden">
@@ -646,7 +646,7 @@ export default function MarketplacePage() {
                       <span className="text-[10px] font-bold text-white px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.2)' }}>
                         {listing.category}
                       </span>
-                      <span className="text-[10px] font-bold text-white px-3 py-1.5 rounded-full flex items-center gap-1" style={{ background: 'linear-gradient(135deg, #C8973A, #E0B85C)' }}>
+                      <span className="text-[10px] font-bold text-white px-3 py-1.5 rounded-full flex items-center gap-1" style={{ background: 'linear-gradient(135deg, #FFBD4C, #E0B85C)' }}>
                         <Award size={9} /> Featured
                       </span>
                     </div>
@@ -670,29 +670,29 @@ export default function MarketplacePage() {
                     {/* AI Tags */}
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {listing.aiTags.map(tag => (
-                        <span key={tag} className="text-[10px] font-semibold text-[#1B3A6B] bg-[#EDE8FF]/40 border border-[#E8E2D9] px-2.5 py-1 rounded-full flex items-center gap-1">
-                          <Sparkles size={8} className="text-[#C8973A]" /> {tag}
+                        <span key={tag} className="text-[10px] font-semibold text-[#9D63F6] bg-[#EDE8FF]/40 border border-[#DFE1E6] px-2.5 py-1 rounded-full flex items-center gap-1">
+                          <Sparkles size={8} className="text-[#FFBD4C]" /> {tag}
                         </span>
                       ))}
                       {Object.entries(listing.specs).slice(0, 2).map(([k, v]) => (
-                        <span key={k} className="text-[10px] text-[#6B7280] bg-[#F4EFE8] px-2.5 py-1 rounded-full font-medium">{v}</span>
+                        <span key={k} className="text-[10px] text-[#666D80] bg-[#F8F9FB] px-2.5 py-1 rounded-full font-medium">{v}</span>
                       ))}
                     </div>
 
                     {/* Seller + social proof */}
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-[12px] bg-[#1B3A6B] flex items-center justify-center text-[11px] font-bold text-white">
+                      <div className="w-9 h-9 rounded-[12px] bg-[#9D63F6] flex items-center justify-center text-[11px] font-bold text-white">
                         {listing.seller.slice(0, 2)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <p className="text-[13px] font-semibold text-[#1A1A2E]">{listing.seller}</p>
+                          <p className="text-[13px] font-semibold text-[#15161E]">{listing.seller}</p>
                           {listing.verified && <BadgeCheck size={13} className="text-[#059669]" />}
                         </div>
-                        <p className="text-[10px] text-[#9CA3AF]">{listing.sellerCompany}</p>
+                        <p className="text-[10px] text-[#A4ABB8]">{listing.sellerCompany}</p>
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] text-[#9CA3AF]">
-                        <span className="flex items-center gap-1"><Star size={10} className="text-[#C8973A] fill-[#C8973A]" /> {listing.rating}</span>
+                      <div className="flex items-center gap-3 text-[10px] text-[#A4ABB8]">
+                        <span className="flex items-center gap-1"><Star size={10} className="text-[#FFBD4C] fill-[#FFBD4C]" /> {listing.rating}</span>
                         <span className="flex items-center gap-1"><Eye size={10} /> {listing.views}</span>
                       </div>
                     </div>
@@ -710,12 +710,12 @@ export default function MarketplacePage() {
           <section className="spatial-rise d4">
             <div className="flex items-center justify-between mb-2.5">
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 rounded-[6px] bg-[#F4EFE8] flex items-center justify-center">
-                  <Package size={11} className="text-[#6B7280]" />
+                <div className="w-5 h-5 rounded-[6px] bg-[#F8F9FB] flex items-center justify-center">
+                  <Package size={11} className="text-[#666D80]" />
                 </div>
-                <p className="text-[13px] font-bold text-[#1A1A2E]">All Listings</p>
+                <p className="text-[13px] font-bold text-[#15161E]">All Listings</p>
               </div>
-              <p className="text-[10px] text-[#9CA3AF]">{rest.length} items</p>
+              <p className="text-[10px] text-[#A4ABB8]">{rest.length} items</p>
             </div>
 
             <div className="grid grid-cols-1 gap-2.5">
@@ -723,7 +723,7 @@ export default function MarketplacePage() {
                 const cc2 = conditionColor(listing.condition);
                 return (
                   <button key={listing.id} onClick={() => setSelectedListing(listing)}
-                    className={`depth-card d${(i % 6) + 1} rounded-[18px] overflow-hidden text-left active:scale-[0.96] transition-all bg-white border border-[#E8E2D9]`}
+                    className={`depth-card d${(i % 6) + 1} rounded-[18px] overflow-hidden text-left active:scale-[0.96] transition-all bg-white border border-[#DFE1E6]`}
                     style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
                     <div className="relative">
                       <img src={listing.image} alt={listing.title}
@@ -749,33 +749,33 @@ export default function MarketplacePage() {
                       {/* Save button */}
                       <button className="absolute bottom-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
                         onClick={e => e.stopPropagation()}>
-                        <Heart size={13} className="text-[#9CA3AF]" />
+                        <Heart size={13} className="text-[#A4ABB8]" />
                       </button>
                     </div>
                     <div className="p-3">
-                      <p className="text-[12px] font-bold text-[#1A1A2E] line-clamp-2 leading-snug mb-1.5">{listing.title}</p>
-                      <p className="text-[15px] font-extrabold text-[#1B3A6B] mb-2">{listing.price}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] line-clamp-2 leading-snug mb-1.5">{listing.title}</p>
+                      <p className="text-[15px] font-extrabold text-[#9D63F6] mb-2">{listing.price}</p>
 
                       {/* AI tag (first only) */}
                       {listing.aiTags.length > 0 && (
                         <div className="mb-2">
-                          <span className="text-[9px] font-semibold text-[#C8973A] bg-[#FEF9F0] border border-[#F5E6C8] px-2 py-0.5 rounded-full inline-flex items-center gap-0.5">
+                          <span className="text-[9px] font-semibold text-[#FFBD4C] bg-[#FEF9F0] border border-[#F5E6C8] px-2 py-0.5 rounded-full inline-flex items-center gap-0.5">
                             <Sparkles size={7} /> {listing.aiTags[0]}
                           </span>
                         </div>
                       )}
 
                       {/* Seller + rating */}
-                      <div className="flex items-center justify-between pt-2.5 border-t border-[#F4EFE8]">
+                      <div className="flex items-center justify-between pt-2.5 border-t border-[#F8F9FB]">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <div className="w-5 h-5 rounded-[6px] bg-[#F4EFE8] flex items-center justify-center text-[8px] font-bold text-[#6B7280] shrink-0">
+                          <div className="w-5 h-5 rounded-[6px] bg-[#F8F9FB] flex items-center justify-center text-[8px] font-bold text-[#666D80] shrink-0">
                             {listing.seller.slice(0, 2)}
                           </div>
-                          <p className="text-[10px] text-[#9CA3AF] truncate">{listing.seller}</p>
+                          <p className="text-[10px] text-[#A4ABB8] truncate">{listing.seller}</p>
                           {listing.verified && <BadgeCheck size={10} className="text-[#059669] shrink-0" />}
                         </div>
-                        <div className="flex items-center gap-0.5 text-[10px] text-[#9CA3AF] shrink-0">
-                          <Star size={9} className="text-[#C8973A] fill-[#C8973A]" /> {listing.rating}
+                        <div className="flex items-center gap-0.5 text-[10px] text-[#A4ABB8] shrink-0">
+                          <Star size={9} className="text-[#FFBD4C] fill-[#FFBD4C]" /> {listing.rating}
                         </div>
                       </div>
                     </div>
@@ -791,12 +791,12 @@ export default function MarketplacePage() {
            ═══════════════════════════════════ */}
         {filtered.length === 0 && (
           <div className="spatial-rise text-center py-16">
-            <div className="w-16 h-16 rounded-full bg-[#F4EFE8] flex items-center justify-center mx-auto mb-4">
-              <Search size={24} className="text-[#9CA3AF]" />
+            <div className="w-16 h-16 rounded-full bg-[#F8F9FB] flex items-center justify-center mx-auto mb-4">
+              <Search size={24} className="text-[#A4ABB8]" />
             </div>
-            <p className="text-[16px] font-bold text-[#1A1A2E] mb-1">No listings found</p>
-            <p className="text-[13px] text-[#9CA3AF]">Try a different search or category</p>
-            <button onClick={() => { setSearch(''); setCat('All'); }} className="mt-4 px-5 py-2.5 rounded-full text-[13px] font-semibold text-[#1B3A6B] bg-[#F4EFE8] border border-[#E8E2D9] active:scale-95 transition-all">
+            <p className="text-[16px] font-bold text-[#15161E] mb-1">No listings found</p>
+            <p className="text-[13px] text-[#A4ABB8]">Try a different search or category</p>
+            <button onClick={() => { setSearch(''); setCat('All'); }} className="mt-4 px-5 py-2.5 rounded-full text-[13px] font-semibold text-[#9D63F6] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
               Clear Filters
             </button>
           </div>

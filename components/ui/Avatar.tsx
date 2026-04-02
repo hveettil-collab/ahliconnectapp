@@ -11,7 +11,7 @@ interface AvatarProps {
 const SIZES = { sm: 'w-8 h-8 text-xs', md: 'w-10 h-10 text-sm', lg: 'w-12 h-12 text-base', xl: 'w-16 h-16 text-xl' };
 const DOT_SIZES = { sm: 'w-2 h-2', md: 'w-2.5 h-2.5', lg: 'w-3 h-3', xl: 'w-3.5 h-3.5' };
 
-export default function Avatar({ initials, color = '#1B3A6B', size = 'md', online, image }: AvatarProps) {
+export default function Avatar({ initials, color = '#9D63F6', size = 'md', online, image }: AvatarProps) {
   return (
     <div className="relative inline-flex shrink-0">
       {image ? (

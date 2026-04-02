@@ -103,19 +103,19 @@ interface BentoItem {
 }
 
 const BENTO_LIFESTYLE: BentoItem[] = [
-  { icon: UtensilsCrossed, label: 'Dining', desc: '25% off at 40+ restaurants', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#C8973A' },
+  { icon: UtensilsCrossed, label: 'Dining', desc: '25% off at 40+ restaurants', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#FFBD4C' },
   { icon: Heart, label: 'Healthcare', desc: 'Daman Enhanced coverage', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#DC2626' },
-  { icon: Dumbbell, label: 'Fitness', desc: 'Palms Sports — AED 150/mo', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#0D9488' },
-  { icon: Palmtree, label: 'Leisure', desc: 'Yas Island 40% off', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#1B3A6B' },
+  { icon: Dumbbell, label: 'Fitness', desc: 'Palms Sports — AED 150/mo', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA' },
+  { icon: Palmtree, label: 'Leisure', desc: 'Yas Island 40% off', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6' },
   { icon: Coffee, label: 'Café', desc: 'Daily coffee perks', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#92400E' },
   { icon: Calendar, label: 'Events', desc: '5 upcoming this month', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop', href: '/explore', size: 'small', accent: '#7C3AED' },
 ];
 
 const BENTO_BUSINESS: BentoItem[] = [
-  { icon: GraduationCap, label: 'IHC Academy', desc: 'Courses & certifications', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#1B3A6B' },
-  { icon: Globe, label: 'IHC Portals', desc: 'All group platforms', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#0D9488' },
-  { icon: FileText, label: 'HR Services', desc: 'Certificates & requests', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#C8973A' },
-  { icon: Building2, label: 'Directory', desc: '45,000+ employees', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#1B3A6B' },
+  { icon: GraduationCap, label: 'IHC Academy', desc: 'Courses & certifications', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#9D63F6' },
+  { icon: Globe, label: 'IHC Portals', desc: 'All group platforms', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA' },
+  { icon: FileText, label: 'HR Services', desc: 'Certificates & requests', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#FFBD4C' },
+  { icon: Building2, label: 'Directory', desc: '45,000+ employees', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6' },
   { icon: Briefcase, label: 'Business Centres', desc: 'Meeting rooms & co-work', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#059669' },
 ];
 
@@ -124,9 +124,9 @@ const BENTO_BUSINESS: BentoItem[] = [
    ═══════════════════════════════════════════ */
 
 const QUICK_ACTIONS = [
-  { icon: Plane, label: 'Flights', color: '#1B3A6B', href: '/services' },
-  { icon: Car, label: 'Rides', color: '#0D9488', href: '/services' },
-  { icon: ShoppingBag, label: 'Marketplace', color: '#C8973A', href: '/marketplace' },
+  { icon: Plane, label: 'Flights', color: '#9D63F6', href: '/services' },
+  { icon: Car, label: 'Rides', color: '#40C4AA', href: '/services' },
+  { icon: ShoppingBag, label: 'Marketplace', color: '#FFBD4C', href: '/marketplace' },
   { icon: Gamepad2, label: 'Gaming', color: '#DC2626', href: '/services' },
   { icon: Shield, label: 'Insurance', color: '#7C3AED', href: '/services' },
   { icon: Receipt, label: 'Payslip', color: '#059669', href: '/services' },
@@ -176,7 +176,7 @@ const EVENTS: CompanyEvent[] = [
     description: 'Hands-on workshop on using AI tools at work.',
     longDescription: 'Learn how to leverage AI and automation tools to streamline your daily work. Covers prompt engineering, workflow automation, and building custom GPT assistants.',
     date: 'May 5, 2026', time: '10:00 AM – 3:00 PM', location: 'Virtual (MS Teams)',
-    category: 'Training', color: '#1B3A6B', icon: GraduationCap,
+    category: 'Training', color: '#9D63F6', icon: GraduationCap,
     image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop',
     spots: 200, spotsLeft: 64, organizer: 'Faris Al Nuaimi', organizerCompany: 'Shory',
     tags: ['AI', 'Virtual', 'Certificate'], agenda: [
@@ -204,11 +204,11 @@ const EVENTS: CompanyEvent[] = [
    ═══════════════════════════════════════════ */
 
 const PARTNERS = [
-  { name: 'Aldar', logo: '/logos/aldar.svg', color: '#C8973A' },
+  { name: 'Aldar', logo: '/logos/aldar.svg', color: '#FFBD4C' },
   { name: 'PureHealth', logo: '/logos/purehealth.svg', color: '#059669' },
   { name: 'Palms Sports', logo: '/logos/palms-sports.svg', color: '#EA580C' },
   { name: 'Shory', logo: '/logos/shory.svg', color: '#6B21A8' },
-  { name: 'Multiply', logo: '/logos/multiply.svg', color: '#C8973A' },
+  { name: 'Multiply', logo: '/logos/multiply.svg', color: '#FFBD4C' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -257,10 +257,10 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
               { icon: Users, label: 'Capacity', value: `${spotsPercent}% Full` },
               { icon: Building2, label: 'By', value: event.organizerCompany },
             ].map(({ icon: IC, label, value }) => (
-              <div key={label} className="bg-[#F9F6F1] rounded-[14px] p-3 text-center border border-[#E8E2D9]">
-                <IC size={15} className="mx-auto text-[#6B7280] mb-1" />
-                <p className="text-[10px] text-[#9CA3AF]">{label}</p>
-                <p className="text-[11px] font-bold text-[#1A1A2E] truncate">{value}</p>
+              <div key={label} className="bg-[#F8F9FB] rounded-[14px] p-3 text-center border border-[#DFE1E6]">
+                <IC size={15} className="mx-auto text-[#666D80] mb-1" />
+                <p className="text-[10px] text-[#A4ABB8]">{label}</p>
+                <p className="text-[11px] font-bold text-[#15161E] truncate">{value}</p>
               </div>
             ))}
           </div>
@@ -270,41 +270,41 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
                 style={{ color: event.color, borderColor: event.color + '30', background: event.color + '08' }}>{tag}</span>
             ))}
           </div>
-          <div className="bg-white rounded-[14px] border border-[#E8E2D9] p-4">
-            <h3 className="text-xs font-bold text-[#1A1A2E] mb-1.5">About this event</h3>
-            <p className="text-xs text-[#6B7280] leading-relaxed">{event.longDescription}</p>
+          <div className="bg-white rounded-[14px] border border-[#DFE1E6] p-4">
+            <h3 className="text-xs font-bold text-[#15161E] mb-1.5">About this event</h3>
+            <p className="text-xs text-[#666D80] leading-relaxed">{event.longDescription}</p>
           </div>
-          <div className="bg-[#F9F6F1] rounded-[16px] border border-[#E8E2D9] p-4">
-            <h3 className="text-xs font-bold text-[#1A1A2E] mb-3">Agenda</h3>
+          <div className="bg-[#F8F9FB] rounded-[16px] border border-[#DFE1E6] p-4">
+            <h3 className="text-xs font-bold text-[#15161E] mb-3">Agenda</h3>
             <div className="space-y-2.5">
               {event.agenda.map((item, i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: event.color }} />
                   <div className="flex-1">
                     <p className="text-[10px] font-bold" style={{ color: event.color }}>{item.time}</p>
-                    <p className="text-xs text-[#1A1A2E]">{item.item}</p>
+                    <p className="text-xs text-[#15161E]">{item.item}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           {showInvite && (
-            <div className="bg-[#F9F6F1] rounded-[16px] border border-[#E8E2D9] p-4">
-              <h3 className="text-xs font-bold text-[#1A1A2E] mb-2.5">Invite Colleagues</h3>
+            <div className="bg-[#F8F9FB] rounded-[16px] border border-[#DFE1E6] p-4">
+              <h3 className="text-xs font-bold text-[#15161E] mb-2.5">Invite Colleagues</h3>
               <div className="relative mb-3">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A4ABB8]" />
                 <input type="text" placeholder="Search colleagues..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs bg-white border border-[#E8E2D9] rounded-[10px] outline-none focus:border-[#1B3A6B]" />
+                  className="w-full pl-9 pr-3 py-2 text-xs bg-white border border-[#DFE1E6] rounded-[10px] outline-none focus:border-[#9D63F6]" />
               </div>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {filteredColleagues.map(col => {
                   const sent = inviteSent.includes(col.id);
                   return (
-                    <div key={col.id} className="flex items-center gap-2.5 bg-white rounded-[10px] px-3 py-2 border border-[#E8E2D9]">
-                      <Avatar initials={col.avatar} color="#6B7280" size="sm" image={col.image} />
+                    <div key={col.id} className="flex items-center gap-2.5 bg-white rounded-[10px] px-3 py-2 border border-[#DFE1E6]">
+                      <Avatar initials={col.avatar} color="#666D80" size="sm" image={col.image} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-[#1A1A2E] truncate">{col.name}</p>
-                        <p className="text-[10px] text-[#9CA3AF]">{col.company}</p>
+                        <p className="text-xs font-semibold text-[#15161E] truncate">{col.name}</p>
+                        <p className="text-[10px] text-[#A4ABB8]">{col.company}</p>
                       </div>
                       <button onClick={() => handleInvite(col.id)} disabled={sent}
                         className={`text-[10px] font-semibold px-2.5 py-1 rounded-full transition-all ${sent ? 'bg-green-50 text-green-600 border border-green-200' : 'text-white border border-transparent'}`}
@@ -331,10 +331,10 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
                 </div>
               </div>
             )}
-            <button onClick={() => setShowInvite(!showInvite)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold border border-[#E8E2D9] text-[#1A1A2E] bg-white flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
+            <button onClick={() => setShowInvite(!showInvite)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold border border-[#DFE1E6] text-[#15161E] bg-white flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
               <UserPlus size={14} /> {showInvite ? 'Hide Invites' : 'Invite Colleagues'}
             </button>
-            <button className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#9CA3AF] flex items-center justify-center gap-2">
+            <button className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8] flex items-center justify-center gap-2">
               <Share2 size={14} /> Share Event Link
             </button>
           </div>
@@ -396,14 +396,14 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
       {/* Small cards — 3-up or fill remaining */}
       {smalls.map((item, i) => (
         <Link key={item.label} href={item.href}
-          className={`card-rise card-rise-${i + 3} rounded-[16px] overflow-hidden p-3.5 flex items-center gap-3 border border-[#E8E2D9] active:scale-[0.97] transition-all ${smalls.length === 3 && i === 2 ? 'col-span-2' : ''}`}
+          className={`card-rise card-rise-${i + 3} rounded-[16px] overflow-hidden p-3.5 flex items-center gap-3 border border-[#DFE1E6] active:scale-[0.97] transition-all ${smalls.length === 3 && i === 2 ? 'col-span-2' : ''}`}
           style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
           <div className="w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: item.accent + '12' }}>
             <item.icon size={18} style={{ color: item.accent }} strokeWidth={1.8} />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-bold text-[#1A1A2E]">{item.label}</p>
-            <p className="text-[10px] text-[#9CA3AF] truncate">{item.desc}</p>
+            <p className="text-[13px] font-bold text-[#15161E]">{item.label}</p>
+            <p className="text-[10px] text-[#A4ABB8] truncate">{item.desc}</p>
           </div>
           <ChevronRight size={14} className="text-[#D1D5DB] shrink-0" />
         </Link>
@@ -420,13 +420,13 @@ function SectionHeader({ title, count, href }: { title: string; count?: number; 
   return (
     <div className="flex items-center justify-between mb-3">
       <div className="flex items-center gap-2.5">
-        <h2 className="text-[17px] font-bold text-[#1A1A2E]">{title}</h2>
+        <h2 className="text-[17px] font-bold text-[#15161E]">{title}</h2>
         {count !== undefined && (
-          <span className="text-[10px] font-bold bg-[#1B3A6B] text-white px-2 py-0.5 rounded-full">{count}</span>
+          <span className="text-[10px] font-bold bg-[#9D63F6] text-white px-2 py-0.5 rounded-full">{count}</span>
         )}
       </div>
       {href && (
-        <Link href={href} className="text-[11px] font-semibold text-[#1B3A6B] flex items-center gap-1">
+        <Link href={href} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
           See all <ChevronRight size={12} />
         </Link>
       )}
@@ -465,9 +465,9 @@ export default function ExplorePage() {
                 onClick={() => setActiveFilter(chip.label)}
                 className="shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-semibold transition-all active:scale-95"
                 style={{
-                  background: isActive ? '#1B3A6B' : 'rgba(255,255,255,0.85)',
+                  background: isActive ? '#9D63F6' : 'rgba(255,255,255,0.85)',
                   color: isActive ? '#FFFFFF' : '#666D80',
-                  border: isActive ? 'none' : '1px solid #E8E2D9',
+                  border: isActive ? 'none' : '1px solid #DFE1E6',
                   backdropFilter: 'blur(6px)',
                   WebkitBackdropFilter: 'blur(6px)',
                 }}
@@ -499,7 +499,7 @@ export default function ExplorePage() {
               <h3 className="text-[18px] font-bold text-white leading-snug mb-1">{hero.title}</h3>
               <p className="text-[12px] text-white/75 mb-3 leading-relaxed">{hero.subtitle}</p>
               <div className="flex items-center justify-between">
-                <button className="px-5 py-2.5 rounded-full text-[12px] font-bold text-[#1A1A2E] bg-white active:scale-95 transition-transform">
+                <button className="px-5 py-2.5 rounded-full text-[12px] font-bold text-[#15161E] bg-white active:scale-95 transition-transform">
                   {hero.cta}
                 </button>
                 <span className="text-[10px] text-white/50 font-medium">{hero.spots}</span>
@@ -555,7 +555,7 @@ export default function ExplorePage() {
                 <button
                   key={event.id}
                   onClick={() => setSelectedEvent(event)}
-                  className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#E8E2D9] active:scale-[0.98] transition-all`}
+                  className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] active:scale-[0.98] transition-all`}
                   style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
                 >
                   {/* Thumbnail */}
@@ -580,8 +580,8 @@ export default function ExplorePage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-[13px] font-bold text-[#1A1A2E] leading-snug truncate">{event.title}</p>
-                    <div className="flex items-center gap-3 mt-1 text-[10px] text-[#9CA3AF]">
+                    <p className="text-[13px] font-bold text-[#15161E] leading-snug truncate">{event.title}</p>
+                    <div className="flex items-center gap-3 mt-1 text-[10px] text-[#A4ABB8]">
                       <span className="flex items-center gap-1"><Calendar size={10} /> {event.date.split(',')[0]}</span>
                       <span className="flex items-center gap-1"><MapPin size={10} /> {event.location.split(',')[0]}</span>
                     </div>
@@ -644,9 +644,9 @@ export default function ExplorePage() {
           <SectionHeader title="Our Companies" href="/about" />
           <div className="grid grid-cols-2 gap-2">
             {PARTNERS.map(p => (
-              <div key={p.name} className="flex flex-col items-center gap-2 py-3 rounded-[16px] border border-[#E8E2D9]" style={{ background: 'rgba(255,255,255,0.85)' }}>
+              <div key={p.name} className="flex flex-col items-center gap-2 py-3 rounded-[16px] border border-[#DFE1E6]" style={{ background: 'rgba(255,255,255,0.85)' }}>
                 <img src={p.logo} alt={p.name} className="w-11 h-11 rounded-[12px]" />
-                <p className="text-[9px] font-bold text-[#1A1A2E] text-center leading-tight">{p.name}</p>
+                <p className="text-[9px] font-bold text-[#15161E] text-center leading-tight">{p.name}</p>
               </div>
             ))}
           </div>
@@ -659,11 +659,11 @@ export default function ExplorePage() {
             {COLLEAGUES.map(col => (
               <Link key={col.id} href="/profile" className="shrink-0 flex flex-col items-center gap-1.5 w-16">
                 <div className="relative">
-                  <Avatar initials={col.avatar} color="#6B7280" size="lg" image={col.image} />
+                  <Avatar initials={col.avatar} color="#666D80" size="lg" image={col.image} />
                   {col.online && <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />}
                 </div>
-                <p className="text-[10px] font-semibold text-[#1A1A2E] text-center leading-tight truncate w-full">{col.name.split(' ')[0]}</p>
-                <p className="text-[9px] text-[#9CA3AF] truncate w-full text-center">{col.company.split(' ')[0]}</p>
+                <p className="text-[10px] font-semibold text-[#15161E] text-center leading-tight truncate w-full">{col.name.split(' ')[0]}</p>
+                <p className="text-[9px] text-[#A4ABB8] truncate w-full text-center">{col.company.split(' ')[0]}</p>
               </Link>
             ))}
           </div>

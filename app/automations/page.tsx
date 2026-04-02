@@ -37,9 +37,9 @@ function formatDuration(ms: number): string {
 
 function statusColor(s: string) {
   if (s === 'completed' || s === 'approved') return { bg: '#F0FDF4', text: '#059669', border: '#BBF7D0' };
-  if (s === 'running') return { bg: '#EFF6FF', text: '#1B3A6B', border: '#BFDBFE' };
+  if (s === 'running') return { bg: '#EFF6FF', text: '#9D63F6', border: '#BFDBFE' };
   if (s === 'failed' || s === 'rejected') return { bg: '#FEF2F2', text: '#DC2626', border: '#FECACA' };
-  return { bg: '#F4EFE8', text: '#6B7280', border: '#E8E2D9' };
+  return { bg: '#F8F9FB', text: '#666D80', border: '#DFE1E6' };
 }
 
 export default function AutomationsHub() {
@@ -65,13 +65,13 @@ export default function AutomationsHub() {
         {/* ═══════════════════════════════════
            HERO — ROI Impact Dashboard
            ═══════════════════════════════════ */}
-        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1B3A6B 0%, #2D5AA0 50%, #1B3A6B 100%)', boxShadow: '0 8px 32px rgba(27,58,107,0.2)' }}>
+        <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #9D63F6 100%)', boxShadow: '0 8px 32px rgba(27,58,107,0.2)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 80% 30%, rgba(200,151,58,0.15) 0%, transparent 50%)' }} />
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 20% 80%, rgba(5,150,105,0.1) 0%, transparent 40%)' }} />
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: 'rgba(200,151,58,0.2)', border: '1px solid rgba(200,151,58,0.3)' }}>
-                <Zap size={15} className="text-[#C8973A]" />
+                <Zap size={15} className="text-[#FFBD4C]" />
               </div>
               <div>
                 <h2 className="text-[15px] font-bold">Automation Impact</h2>
@@ -116,9 +116,9 @@ export default function AutomationsHub() {
            ═══════════════════════════════════ */}
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Layers size={15} className="text-[#C8973A]" />
-            <p className="text-[14px] font-bold text-[#1A1A2E]">Automations</p>
-            <div className="flex-1 h-px bg-gradient-to-r from-[#E8E2D9] to-transparent ml-2" />
+            <Layers size={15} className="text-[#FFBD4C]" />
+            <p className="text-[14px] font-bold text-[#15161E]">Automations</p>
+            <div className="flex-1 h-px bg-gradient-to-r from-[#DFE1E6] to-transparent ml-2" />
           </div>
 
           <div className="space-y-3">
@@ -128,29 +128,29 @@ export default function AutomationsHub() {
               return (
                 <div key={def.id} className="fade-up" style={{ animationDelay: `${i * 0.05}s` }}>
                   <Link href={def.href}
-                    className="block rounded-[18px] bg-white border border-[#E8E2D9] p-4 active:scale-[0.98] transition-all"
+                    className="block rounded-[18px] bg-white border border-[#DFE1E6] p-4 active:scale-[0.98] transition-all"
                     style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
                     <div className="flex items-start gap-3.5">
-                      <div className="w-12 h-12 rounded-[14px] flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #1B3A6B, #2D5AA0)' }}>
+                      <div className="w-12 h-12 rounded-[14px] flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #9D63F6, #B182F8)' }}>
                         <IconComp size={20} className="text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <h3 className="text-[14px] font-bold text-[#1A1A2E]">{def.title}</h3>
+                          <h3 className="text-[14px] font-bold text-[#15161E]">{def.title}</h3>
                           <span className="text-[9px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] px-2 py-0.5 rounded-full uppercase">{def.status}</span>
                         </div>
-                        <p className="text-[12px] text-[#6B7280] mt-0.5 line-clamp-2">{def.description}</p>
+                        <p className="text-[12px] text-[#666D80] mt-0.5 line-clamp-2">{def.description}</p>
 
                         {/* Metrics strip */}
                         {metric && (
                           <div className="flex items-center gap-3 mt-2.5">
-                            <span className="text-[10px] text-[#9CA3AF] flex items-center gap-1">
+                            <span className="text-[10px] text-[#A4ABB8] flex items-center gap-1">
                               <Clock size={10} /> {metric.afterTime}
                             </span>
-                            <span className="text-[10px] text-[#9CA3AF] flex items-center gap-1">
+                            <span className="text-[10px] text-[#A4ABB8] flex items-center gap-1">
                               <TrendingUp size={10} /> {metric.weeklyHoursSaved}h/wk saved
                             </span>
-                            <span className="text-[10px] text-[#9CA3AF] flex items-center gap-1">
+                            <span className="text-[10px] text-[#A4ABB8] flex items-center gap-1">
                               <Shield size={10} /> {metric.errorReductionPct}% fewer errors
                             </span>
                           </div>
@@ -159,17 +159,17 @@ export default function AutomationsHub() {
                         {/* Integration badges */}
                         <div className="flex gap-1.5 mt-2.5 flex-wrap">
                           {def.integrations.map(int => (
-                            <span key={int} className="text-[9px] font-medium text-[#6B7280] bg-[#F4EFE8] border border-[#E8E2D9] px-2 py-0.5 rounded-full">{int}</span>
+                            <span key={int} className="text-[9px] font-medium text-[#666D80] bg-[#F8F9FB] border border-[#DFE1E6] px-2 py-0.5 rounded-full">{int}</span>
                           ))}
                         </div>
                       </div>
-                      <ChevronRight size={18} className="text-[#C8973A] shrink-0 mt-1" />
+                      <ChevronRight size={18} className="text-[#FFBD4C] shrink-0 mt-1" />
                     </div>
                   </Link>
 
                   {/* Before/After toggle */}
                   <button onClick={() => setShowBeforeAfter(showBeforeAfter === def.id ? null : def.id)}
-                    className="w-full mt-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-semibold text-[#C8973A] hover:text-[#92702D] transition-colors">
+                    className="w-full mt-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-semibold text-[#FFBD4C] hover:text-[#92702D] transition-colors">
                     <BarChart3 size={12} /> {showBeforeAfter === def.id ? 'Hide' : 'View'} Before vs After
                   </button>
 
@@ -179,13 +179,13 @@ export default function AutomationsHub() {
                         <div>
                           <p className="text-[11px] font-bold text-red-600 mb-2 flex items-center gap-1"><ArrowDown size={10} /> Before (Manual)</p>
                           {def.beforeProcess.map((s, j) => (
-                            <p key={j} className="text-[11px] text-[#6B7280] leading-relaxed">• {s}</p>
+                            <p key={j} className="text-[11px] text-[#666D80] leading-relaxed">• {s}</p>
                           ))}
                         </div>
                         <div>
                           <p className="text-[11px] font-bold text-[#059669] mb-2 flex items-center gap-1"><ArrowUp size={10} /> After (Automated)</p>
                           {def.afterProcess.map((s, j) => (
-                            <p key={j} className="text-[11px] text-[#6B7280] leading-relaxed">• {s}</p>
+                            <p key={j} className="text-[11px] text-[#666D80] leading-relaxed">• {s}</p>
                           ))}
                         </div>
                       </div>
@@ -202,28 +202,28 @@ export default function AutomationsHub() {
            ═══════════════════════════════════ */}
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Target size={15} className="text-[#C8973A]" />
-            <p className="text-[14px] font-bold text-[#1A1A2E]">ROI Breakdown</p>
+            <Target size={15} className="text-[#FFBD4C]" />
+            <p className="text-[14px] font-bold text-[#15161E]">ROI Breakdown</p>
           </div>
-          <div className="rounded-[18px] bg-white border border-[#E8E2D9] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-            <div className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-wider bg-[#F4EFE8] px-3 py-2 border-b border-[#E8E2D9] grid grid-cols-4 gap-2">
+          <div className="rounded-[18px] bg-white border border-[#DFE1E6] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+            <div className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider bg-[#F8F9FB] px-3 py-2 border-b border-[#DFE1E6] grid grid-cols-4 gap-2">
               <span className="col-span-1">Automation</span>
               <span className="text-center text-[9px]">Before</span>
               <span className="text-center text-[9px]">After</span>
               <span className="text-right text-[9px]">Saved</span>
             </div>
             {ROI_METRICS.map(m => (
-              <div key={m.automationId} className="px-3 py-2.5 border-b border-[#F4EFE8] last:border-0 grid grid-cols-4 gap-2 items-center text-[11px]">
-                <span className="font-semibold text-[#1A1A2E] text-[11px]">{m.label}</span>
+              <div key={m.automationId} className="px-3 py-2.5 border-b border-[#F8F9FB] last:border-0 grid grid-cols-4 gap-2 items-center text-[11px]">
+                <span className="font-semibold text-[#15161E] text-[11px]">{m.label}</span>
                 <span className="text-red-500 text-center font-medium text-[10px]">{m.beforeTime}</span>
                 <span className="text-[#059669] text-center font-bold text-[10px]">{m.afterTime}</span>
-                <span className="font-bold text-[#1B3A6B] text-right text-[11px]">{m.weeklyHoursSaved}h</span>
+                <span className="font-bold text-[#9D63F6] text-right text-[11px]">{m.weeklyHoursSaved}h</span>
               </div>
             ))}
-            <div className="px-3 py-2.5 bg-[#1B3A6B] text-white grid grid-cols-4 gap-2">
+            <div className="px-3 py-2.5 bg-[#9D63F6] text-white grid grid-cols-4 gap-2">
               <span className="text-[11px] font-bold">Total</span>
               <span className="text-[9px] text-center text-blue-200/70">~45d</span>
-              <span className="text-[9px] text-center text-[#C8973A] font-bold">&lt;5m</span>
+              <span className="text-[9px] text-center text-[#FFBD4C] font-bold">&lt;5m</span>
               <span className="text-[12px] font-extrabold text-right">{TOTAL_WEEKLY_HOURS_SAVED}h</span>
             </div>
           </div>
@@ -234,35 +234,35 @@ export default function AutomationsHub() {
            ═══════════════════════════════════ */}
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Activity size={15} className="text-[#C8973A]" />
-            <p className="text-[14px] font-bold text-[#1A1A2E]">Recent Runs</p>
-            <p className="text-[11px] text-[#9CA3AF] ml-auto">{totalRuns} total • {successRuns} successful</p>
+            <Activity size={15} className="text-[#FFBD4C]" />
+            <p className="text-[14px] font-bold text-[#15161E]">Recent Runs</p>
+            <p className="text-[11px] text-[#A4ABB8] ml-auto">{totalRuns} total • {successRuns} successful</p>
           </div>
           <div className="space-y-2">
             {logs.slice(0, 6).map(log => {
               const sc = statusColor(log.status);
               return (
-                <div key={log.id} className="rounded-[14px] bg-white border border-[#E8E2D9] px-4 py-3 flex items-center gap-3" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
+                <div key={log.id} className="rounded-[14px] bg-white border border-[#DFE1E6] px-4 py-3 flex items-center gap-3" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
                   <div className="w-9 h-9 rounded-[10px] flex items-center justify-center shrink-0" style={{ background: sc.bg, border: `1px solid ${sc.border}` }}>
                     {(log.status === 'completed' || log.status === 'approved') && <CheckCircle2 size={16} style={{ color: sc.text }} />}
                     {log.status === 'running' && <Timer size={16} style={{ color: sc.text }} />}
                     {log.status === 'failed' && <AlertCircle size={16} style={{ color: sc.text }} />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[12px] font-semibold text-[#1A1A2E] truncate">{log.title}</p>
-                    <p className="text-[10px] text-[#9CA3AF]">{log.triggeredBy} • {log.company}</p>
+                    <p className="text-[12px] font-semibold text-[#15161E] truncate">{log.title}</p>
+                    <p className="text-[10px] text-[#A4ABB8]">{log.triggeredBy} • {log.company}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: sc.bg, color: sc.text, border: `1px solid ${sc.border}` }}>
                       {log.status}
                     </span>
-                    {log.durationMs && <p className="text-[9px] text-[#9CA3AF] mt-1">{formatDuration(log.durationMs)}</p>}
+                    {log.durationMs && <p className="text-[9px] text-[#A4ABB8] mt-1">{formatDuration(log.durationMs)}</p>}
                   </div>
                 </div>
               );
             })}
             {logs.length === 0 && (
-              <div className="text-center py-8 text-[#9CA3AF]">
+              <div className="text-center py-8 text-[#A4ABB8]">
                 <Play size={24} className="mx-auto mb-2 opacity-40" />
                 <p className="text-[13px]">No automation runs yet. Try one above!</p>
               </div>
@@ -275,8 +275,8 @@ export default function AutomationsHub() {
            ═══════════════════════════════════ */}
         <section>
           <div className="flex items-center gap-2 mb-3">
-            <Building2 size={15} className="text-[#C8973A]" />
-            <p className="text-[14px] font-bold text-[#1A1A2E]">Connected Integrations</p>
+            <Building2 size={15} className="text-[#FFBD4C]" />
+            <p className="text-[14px] font-bold text-[#15161E]">Connected Integrations</p>
           </div>
           <div className="grid grid-cols-1 gap-2">
             {[
@@ -287,23 +287,23 @@ export default function AutomationsHub() {
               { name: 'Claude AI', status: 'Connected', desc: 'Vision, NLP, extraction' },
               { name: 'Google Calendar', status: 'Connected', desc: 'Leave & events sync' },
             ].map(int => (
-              <div key={int.name} className="rounded-[14px] bg-white border border-[#E8E2D9] p-2.5" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
+              <div key={int.name} className="rounded-[14px] bg-white border border-[#DFE1E6] p-2.5" style={{ boxShadow: '0 1px 4px rgba(27,58,107,0.03)' }}>
                 <div className="flex items-center gap-1.5 mb-1">
                   <div className="w-2 h-2 rounded-full bg-[#059669]" style={{ animation: 'pulse-green 2s ease-in-out infinite' }} />
-                  <p className="text-[11px] font-bold text-[#1A1A2E]">{int.name}</p>
+                  <p className="text-[11px] font-bold text-[#15161E]">{int.name}</p>
                 </div>
-                <p className="text-[10px] text-[#9CA3AF]">{int.desc}</p>
+                <p className="text-[10px] text-[#A4ABB8]">{int.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Bottom CTA — cross-department */}
-        <div className="rounded-[16px] bg-[#F4EFE8] border border-[#E8E2D9] p-3 text-center">
-          <p className="text-[10px] text-[#9CA3AF] font-medium">
-            Available to <strong className="text-[#1B3A6B]">45,000+</strong> employees across <strong className="text-[#1B3A6B]">30+</strong> IHC subsidiaries
+        <div className="rounded-[16px] bg-[#F8F9FB] border border-[#DFE1E6] p-3 text-center">
+          <p className="text-[10px] text-[#A4ABB8] font-medium">
+            Available to <strong className="text-[#9D63F6]">45,000+</strong> employees across <strong className="text-[#9D63F6]">30+</strong> IHC subsidiaries
           </p>
-          <p className="text-[9px] text-[#9CA3AF] mt-1">Annual savings: <strong className="text-[#C8973A]">AED 2.4M</strong></p>
+          <p className="text-[9px] text-[#A4ABB8] mt-1">Annual savings: <strong className="text-[#FFBD4C]">AED 2.4M</strong></p>
         </div>
       </div>
     </AppShell>

@@ -30,22 +30,22 @@ export default function AnnouncementsPage() {
   });
 
   const colors: Record<string, string> = {
-    Financial: '#1B3A6B', HR: '#7C3AED', Events: '#0D9488',
-    Compliance: '#DC2626', Offers: '#C8973A', Property: '#B8962E',
-    Wellness: '#059669', Rewards: '#EA580C',
+    Financial: '#9D63F6', HR: '#7C3AED', Events: '#40C4AA',
+    Compliance: '#DC2626', Offers: '#FFBD4C', Property: '#FFBD4C',
+    Wellness: '#40C4AA', Rewards: '#EA580C',
   };
 
   return (
     <AppShell title="Announcements" subtitle="Group & company updates">
       <div className="space-y-5">
         {/* Tabs */}
-        <div className="flex gap-2 bg-white rounded-[14px] border border-[#E8E2D9] p-1.5 w-fit">
+        <div className="flex gap-2 bg-white rounded-[14px] border border-[#DFE1E6] p-1.5 w-fit">
           {TABS.map(({ label, value, icon: Icon }) => (
             <button
               key={value}
               onClick={() => setTab(value)}
               className={`flex items-center gap-2 px-4 py-2 rounded-[10px] text-sm font-medium transition-all ${
-                tab === value ? 'bg-[#1B3A6B] text-white shadow-sm' : 'text-[#6B7280] hover:bg-[#F4EFE8]'
+                tab === value ? 'bg-[#9D63F6] text-white shadow-sm' : 'text-[#666D80] hover:bg-[#F8F9FB]'
               }`}
             >
               <Icon size={14} strokeWidth={tab === value ? 2.2 : 1.8} />
@@ -55,14 +55,14 @@ export default function AnnouncementsPage() {
         </div>
 
         {/* Count */}
-        <p className="text-sm text-[#9CA3AF]">{filtered.length} announcement{filtered.length !== 1 ? 's' : ''}</p>
+        <p className="text-sm text-[#A4ABB8]">{filtered.length} announcement{filtered.length !== 1 ? 's' : ''}</p>
 
         {/* Cards */}
         <div className="space-y-3">
           {filtered.map(ann => {
-            const color = colors[ann.category] || '#1B3A6B';
+            const color = colors[ann.category] || '#9D63F6';
             return (
-              <div key={ann.id} className="bg-white rounded-[20px] border border-[#E8E2D9] overflow-hidden hover:shadow-md transition-all cursor-pointer">
+              <div key={ann.id} className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden hover:shadow-md transition-all cursor-pointer">
                 {ann.image && (
                   <img src={ann.image} alt={ann.title} className="w-full h-40 object-cover" />
                 )}
@@ -76,12 +76,12 @@ export default function AnnouncementsPage() {
                       <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full" style={{ background: color + '15', color }}>
                         {ann.tag}
                       </span>
-                      <span className="text-xs text-[#9CA3AF] bg-[#F4EFE8] px-2 py-0.5 rounded-full">{ann.category}</span>
+                      <span className="text-xs text-[#A4ABB8] bg-[#F8F9FB] px-2 py-0.5 rounded-full">{ann.category}</span>
                       {ann.urgent && <span className="text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">Urgent</span>}
                     </div>
-                    <h3 className="text-base font-bold text-[#1A1A2E] mb-1.5">{ann.title}</h3>
-                    <p className="text-sm text-[#6B7280] leading-relaxed">{ann.summary}</p>
-                    <p className="text-xs text-[#9CA3AF] mt-3">{ann.date}</p>
+                    <h3 className="text-base font-bold text-[#15161E] mb-1.5">{ann.title}</h3>
+                    <p className="text-sm text-[#666D80] leading-relaxed">{ann.summary}</p>
+                    <p className="text-xs text-[#A4ABB8] mt-3">{ann.date}</p>
                   </div>
                 </div>
               </div>

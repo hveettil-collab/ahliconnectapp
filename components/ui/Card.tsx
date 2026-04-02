@@ -15,7 +15,7 @@ export default function Card({ children, className, padding = 'md', hover, onCli
     <div
       onClick={onClick}
       className={clsx(
-        'bg-white rounded-[20px] border border-[#E8E2D9]',
+        'bg-white rounded-[20px] border border-[#DFE1E6]',
         'shadow-[0_1px_3px_rgba(0,0,0,0.06),0_1px_2px_rgba(0,0,0,0.04)]',
         paddings[padding],
         hover && 'cursor-pointer transition-all duration-200 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:-translate-y-0.5',
