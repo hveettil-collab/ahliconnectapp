@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
@@ -81,12 +81,23 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('benefit') || t.includes('insurance') || t.includes('medical') || t.includes('health') || t.includes('wellness')) {
+  if (t.includes('insurance') || t.includes('motor') || t.includes('car insurance') || t.includes('shory') || t.includes('vehicle') || t.includes('plate')) {
+    return {
+      content: `I can help you get car insurance through **Shory.com** — IHC's own digital insurance platform!\n\nHere's how it works:\n\n1. Enter your **car plate number** below\n2. Shory AI instantly fetches your vehicle details\n3. Get **3 competitive quotes** in under 60 seconds\n4. Purchase & get your policy card digitally\n\nIHC employees get an exclusive **15% corporate discount** on all motor insurance plans.\n\n**Ready? Just type your car plate number** (e.g. "Abu Dhabi 12345") and I'll start the quote process.`,
+      cards: [
+        { type: 'action', icon: Shield, title: 'Get Motor Insurance Quote', subtitle: 'Shory.com · Enter plate number to start', color: '#7C3AED', link: 'https://shory.com' },
+        { type: 'info', icon: CreditCard, title: 'IHC Corporate Discount', subtitle: '15% off all Shory motor plans', color: '#40C4AA' },
+        { type: 'info', icon: FileText, title: 'Current Policy', subtitle: 'No active motor policy found', color: '#FFBD4C' },
+      ]
+    };
+  }
+
+  if (t.includes('benefit') || t.includes('medical') || t.includes('health') || t.includes('wellness')) {
     return {
       content: `Your benefits summary, ${userName}:\n\n• **Medical** — Daman Enhanced (family)\n• **Life Insurance** — 24x monthly salary\n• **Gym** — AED 150/month at Palms Sports\n• **Education** — AED 20,000/year\n\nTotal value: ~**AED 85,000/year**!`,
       cards: [
         { type: 'info', icon: Heart, title: 'Medical Coverage', subtitle: 'Daman Enhanced · Family plan', color: '#DC2626' },
-        { type: 'info', icon: Shield, title: 'Life Insurance', subtitle: '24× salary · Group coverage', color: '#9D63F6' },
+        { type: 'info', icon: Shield, title: 'Life Insurance', subtitle: '24x salary · Group coverage', color: '#9D63F6' },
         { type: 'offer', icon: Gift, title: 'All 12 Benefits', subtitle: 'View complete package', color: '#FFBD4C' },
       ]
     };
@@ -205,8 +216,10 @@ const SUGGESTIONS = [
 export default function ServicesPage() {
   const { user } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [autoPromptSent, setAutoPromptSent] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const userName = user?.name?.split(' ')[0] || 'there';
@@ -229,6 +242,15 @@ export default function ServicesPage() {
       { role: 'ai', content: response.content, cards: response.cards },
     ]);
   };
+
+  /* Auto-trigger prompt from URL query param (e.g. ?prompt=Book+a+flight) */
+  useEffect(() => {
+    const prompt = searchParams.get('prompt');
+    if (prompt && !autoPromptSent && user) {
+      setAutoPromptSent(true);
+      handleSend(prompt);
+    }
+  }, [searchParams, user, autoPromptSent]);
 
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);

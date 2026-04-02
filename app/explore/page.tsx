@@ -124,12 +124,12 @@ const BENTO_BUSINESS: BentoItem[] = [
    ═══════════════════════════════════════════ */
 
 const QUICK_ACTIONS = [
-  { icon: Plane, label: 'Flights', color: '#9D63F6', href: '/services' },
-  { icon: Car, label: 'Rides', color: '#40C4AA', href: '/services' },
-  { icon: ShoppingBag, label: 'Marketplace', color: '#FFBD4C', href: '/marketplace' },
-  { icon: Gamepad2, label: 'Gaming', color: '#DC2626', href: '/services' },
-  { icon: Shield, label: 'Insurance', color: '#7C3AED', href: '/services' },
-  { icon: Receipt, label: 'Payslip', color: '#059669', href: '/services' },
+  { icon: Plane, label: 'Flights', color: '#9D63F6', href: '/services?prompt=I+want+to+book+a+flight' },
+  { icon: Car, label: 'Rides', color: '#40C4AA', href: '/services?prompt=I+need+to+book+a+ride' },
+  { icon: ShoppingBag, label: 'Marketplace', color: '#FFBD4C', href: '/services?prompt=Show+me+the+marketplace' },
+  { icon: Gamepad2, label: 'Gaming', color: '#DC2626', href: '/services?prompt=Show+me+gaming+tournaments' },
+  { icon: Shield, label: 'Insurance', color: '#7C3AED', href: '/services?prompt=I+want+to+get+car+insurance+through+Shory' },
+  { icon: Receipt, label: 'Payslip', color: '#059669', href: '/services?prompt=Show+me+my+payslip' },
 ];
 
 /* ═══════════════════════════════════════════
