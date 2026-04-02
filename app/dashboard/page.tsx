@@ -255,7 +255,7 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary\nCertificate',
-              image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop',
+              image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=300&fit=crop',
               stat: '<30s',
               statLabel: 'avg. time',
               accent: '#9D63F6',
@@ -263,7 +263,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart\nLeave',
-              image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop',
+              image: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=300&fit=crop',
               stat: '1-tap',
               statLabel: 'approval',
               accent: '#40C4AA',
@@ -271,7 +271,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Expense\nClaim',
-              image: 'https://images.unsplash.com/photo-1554672723-d42a16e533db?w=400&h=300&fit=crop',
+              image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
               stat: '98%',
               statLabel: 'accuracy',
               accent: '#FFBD4C',
