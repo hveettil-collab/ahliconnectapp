@@ -1,10 +1,202 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
-import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw } from 'lucide-react';
+import Link from 'next/link';
+import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
+
+/* ═══════════════════════════════════════════
+   COUNTDOWN HOOK
+   ═══════════════════════════════════════════ */
+
+function useCountdown(targetDate: Date) {
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft(targetDate));
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(getTimeLeft(targetDate));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return timeLeft;
+}
+
+function getTimeLeft(target: Date) {
+  const now = new Date();
+  const diff = target.getTime() - now.getTime();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return { days, hours, minutes, seconds, expired: false };
+}
+
+/* ═══════════════════════════════════════════
+   MY ASSETS SECTION
+   ═══════════════════════════════════════════ */
+
+function MyAssetsSection() {
+  // Insurance expiry: 47 days from now
+  const insuranceExpiry = new Date();
+  insuranceExpiry.setDate(insuranceExpiry.getDate() + 47);
+  const countdown = useCountdown(insuranceExpiry);
+  const isUrgent = countdown.days <= 30;
+
+  const CAR_DATA = {
+    make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White',
+    plate: 'Abu Dhabi · 12345', vin: 'JTMHY7AJ5N5...', regExpiry: 'Dec 2026',
+  };
+
+  const HOME_DATA = {
+    type: 'Apartment', building: 'Saadiyat Beach Residences', unit: 'Tower B · Unit 1804',
+    area: 'Saadiyat Island, Abu Dhabi', size: '2 BR · 1,450 sq ft', parking: '2 spots',
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* ── Car Details ── */}
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #15161E 0%, #2D1B69 100%)' }}>
+          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
+            <Car size={18} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[14px] font-bold text-white">My Vehicle</p>
+            <p className="text-[11px] text-white/50">{CAR_DATA.plate}</p>
+          </div>
+          <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-[#40C4AA]/20 text-[#40C4AA]">Registered</span>
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              { label: 'Make / Model', value: `${CAR_DATA.make} ${CAR_DATA.model}` },
+              { label: 'Year', value: CAR_DATA.year },
+              { label: 'Color', value: CAR_DATA.color },
+              { label: 'Plate', value: CAR_DATA.plate },
+              { label: 'VIN', value: CAR_DATA.vin },
+              { label: 'Reg. Expiry', value: CAR_DATA.regExpiry },
+            ].map(item => (
+              <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Home Details ── */}
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
+          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+            <Home size={18} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[14px] font-bold text-white">My Home</p>
+            <p className="text-[11px] text-white/60">{HOME_DATA.area}</p>
+          </div>
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 gap-2.5">
+            {[
+              { label: 'Property Type', value: HOME_DATA.type },
+              { label: 'Building', value: HOME_DATA.building },
+              { label: 'Unit', value: HOME_DATA.unit },
+              { label: 'Area', value: HOME_DATA.area.split(',')[0] },
+              { label: 'Size', value: HOME_DATA.size },
+              { label: 'Parking', value: HOME_DATA.parking },
+            ].map(item => (
+              <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Insurance with Countdown ── */}
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="p-4 flex items-center gap-3" style={{ background: isUrgent ? 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' : 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
+          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+            <Shield size={18} className="text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="text-[14px] font-bold text-white">Motor Insurance</p>
+            <p className="text-[11px] text-white/60">Shory · Comprehensive Plan</p>
+          </div>
+          <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-white/15 text-white">Active</span>
+        </div>
+
+        <div className="p-4 space-y-4">
+          {/* Policy info */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Policy Number</p>
+              <p className="text-[14px] font-bold text-[#15161E]">SHR-2025-78432</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Coverage</p>
+              <p className="text-[14px] font-bold text-[#7C3AED]">Comprehensive</p>
+            </div>
+          </div>
+
+          {/* Active Countdown */}
+          <div className="rounded-[16px] p-4 relative overflow-hidden" style={{ background: isUrgent ? 'linear-gradient(135deg, #FEF2F2, #FFF1F2)' : 'linear-gradient(135deg, #F5F0FF, #EDE8FF)' }}>
+            <div className="flex items-center gap-2 mb-3">
+              {isUrgent ? <AlertTriangle size={14} className="text-[#DC2626]" /> : <Clock size={14} className="text-[#7C3AED]" />}
+              <p className="text-[12px] font-bold" style={{ color: isUrgent ? '#DC2626' : '#7C3AED' }}>
+                {isUrgent ? 'Expiring Soon!' : 'Policy Expires In'}
+              </p>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { value: String(countdown.days).padStart(2, '0'), label: 'Days' },
+                { value: String(countdown.hours).padStart(2, '0'), label: 'Hours' },
+                { value: String(countdown.minutes).padStart(2, '0'), label: 'Min' },
+                { value: String(countdown.seconds).padStart(2, '0'), label: 'Sec' },
+              ].map(unit => (
+                <div key={unit.label} className="text-center">
+                  <div className="rounded-[12px] py-2.5 font-mono" style={{ background: isUrgent ? '#DC262610' : '#7C3AED10' }}>
+                    <p className="text-[22px] font-extrabold tabular-nums" style={{ color: isUrgent ? '#DC2626' : '#7C3AED' }}>{unit.value}</p>
+                  </div>
+                  <p className="text-[9px] text-[#A4ABB8] font-semibold mt-1 uppercase">{unit.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-[#666D80] mt-3 text-center">
+              Expires on {insuranceExpiry.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </p>
+          </div>
+
+          {/* Quick details */}
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+              <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Vehicle</p>
+              <p className="text-[12px] font-bold text-[#15161E]">Toyota Land Cruiser</p>
+            </div>
+            <div className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+              <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Premium</p>
+              <p className="text-[12px] font-bold text-[#15161E]">AED 1,274/yr</p>
+            </div>
+          </div>
+
+          {/* Renew CTA */}
+          <Link href="/services?prompt=I+need+to+renew+my+motor+insurance"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+            style={{ background: isUrgent ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: isUrgent ? '0 4px 16px rgba(220,38,38,0.3)' : '0 4px 16px rgba(124,58,237,0.3)' }}>
+            <Shield size={15} /> {isUrgent ? 'Renew Now' : 'Manage Policy'}
+            <ChevronRight size={14} />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();
@@ -292,7 +484,12 @@ export default function ProfilePage() {
                     { icon: QrCode, label: 'QR Code', color: '#15161E', bg: '#F8F9FB' },
                     { icon: Share2, label: 'More', color: '#FFBD4C', bg: '#FFF6E0' },
                   ].map(({ icon: Icon, label, color, bg }) => (
-                    <button key={label} className="flex flex-col items-center gap-2 py-3 rounded-[14px] hover:bg-[#F8F9FB] transition-colors active:scale-[0.95]">
+                    <button key={label} onClick={() => {
+                      if (label === 'Email') { window.location.href = `mailto:?subject=Business Card - ${user?.name || 'IHC Employee'}&body=View my digital business card at Ahli Connect`; setShowShareSheet(false); }
+                      else if (label === 'Copy Link') { navigator.clipboard.writeText(`https://ahliconnect.ihcgroup.ae/card/${user?.employeeId || '10234'}`); setShowShareSheet(false); }
+                      else if (label === 'QR Code') { setShowShareSheet(false); setCardFlipped(true); }
+                      else { if (navigator.share) navigator.share({ title: `${user?.name} - Business Card`, url: `https://ahliconnect.ihcgroup.ae/card/${user?.employeeId || '10234'}` }); setShowShareSheet(false); }
+                    }} className="flex flex-col items-center gap-2 py-3 rounded-[14px] hover:bg-[#F8F9FB] transition-colors active:scale-[0.95]">
                       <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: bg }}>
                         <Icon size={20} style={{ color }} strokeWidth={1.8} />
                       </div>
@@ -309,6 +506,11 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
+
+          {/* ═══════════════════════════════════════
+              MY ASSETS — Car, Home & Insurance
+              ═══════════════════════════════════════ */}
+          <MyAssetsSection />
 
           {/* Settings */}
           <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">

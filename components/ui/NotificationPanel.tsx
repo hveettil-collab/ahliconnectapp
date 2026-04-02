@@ -22,7 +22,7 @@ function NotificationItem({ n, onRead, onClear }: { n: Notification; onRead: () 
         className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
         style={{ background: `${n.color}15` }}
       >
-        {(() => { const Icon = ICON_MAP[n.icon] || Bell; return <Icon size={18} className="shrink-0" style={{ color: n.color }} />; })()}
+        {(() => { const Icon = ICON_MAP[n.icon] || Bell; return <span style={{ color: n.color }}><Icon size={18} className="shrink-0" /></span>; })()}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">

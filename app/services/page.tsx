@@ -13,11 +13,14 @@ import {
   Palmtree, ShoppingBag, UtensilsCrossed, Ticket, Globe,
   HelpCircle, TrendingUp, Briefcase, DollarSign, Monitor,
   BookOpen, Receipt, Star, Zap, Trophy, ArrowLeft, Mic,
-  Paperclip,
+  Paperclip, ChevronRight, Search, MapPinned, Navigation,
+  CircleDot, Package, Utensils, Coffee, ShoppingCart,
+  BadgeCheck, Download, Wallet, X, Check, Loader2,
+  Camera, Eye, Share2,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
-   AI RESPONSE ENGINE
+   TYPES
    ═══════════════════════════════════════════ */
 
 interface ChatMessage {
@@ -25,6 +28,7 @@ interface ChatMessage {
   content: string;
   cards?: ActionCard[];
   typing?: boolean;
+  flowType?: 'insurance' | 'rides' | 'food' | 'flights' | 'sell' | 'vacation' | 'gaming';
 }
 
 interface ActionCard {
@@ -35,60 +39,1121 @@ interface ActionCard {
   color: string;
   image?: string;
   link?: string;
+  action?: string;
 }
 
-function generateAIResponse(text: string, userName: string, companyId: string): { content: string; cards?: ActionCard[] } {
+/* ═══════════════════════════════════════════
+   INLINE FLOW: INSURANCE (Shory)
+   ═══════════════════════════════════════════ */
+
+function InsuranceFlow() {
+  const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete'>('plate');
+  const [emirate, setEmirate] = useState('Abu Dhabi');
+  const [plateNum, setPlateNum] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState('');
+  const [cardNum, setCardNum] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
+
+  const EMIRATES = ['Abu Dhabi', 'Dubai', 'Sharjah', 'Ajman'];
+  const VEHICLE = { make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White', vin: 'JTMHY7AJ5N...' };
+  const PLANS = [
+    { id: 'tp', name: 'Third Party', price: 799, discounted: 679, features: ['Basic liability', 'Legal requirement', 'Third party damage'] },
+    { id: 'comp', name: 'Comprehensive', price: 1499, discounted: 1274, features: ['Full coverage', 'Own damage', 'Theft & fire', 'Roadside assist'], popular: true },
+    { id: 'flexi', name: 'Flexi', price: 2199, discounted: 1869, features: ['Agency repair', 'Replacement car', 'Zero depreciation', 'GCC coverage'] },
+  ];
+
+  useEffect(() => {
+    if (phase === 'fetching') {
+      const t = setTimeout(() => setPhase('vehicle'), 2000);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'processing') {
+      const t = setTimeout(() => setPhase('complete'), 2500);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  const chosen = PLANS.find(p => p.id === selectedPlan);
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      {/* Header */}
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+          <Shield size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">Shory Motor Insurance</p>
+          <p className="text-[11px] text-white/70">Powered by Shory · IHC 15% discount</p>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {/* Phase: Plate Entry */}
+        {phase === 'plate' && (
+          <div className="space-y-4">
+            <p className="text-[13px] text-[#4B5563]">Enter your vehicle plate number to get started</p>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Emirate</label>
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {EMIRATES.map(e => (
+                  <button key={e} onClick={() => setEmirate(e)}
+                    className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: emirate === e ? '#7C3AED' : '#F8F9FB', color: emirate === e ? '#fff' : '#666D80', border: emirate === e ? 'none' : '1px solid #DFE1E6' }}>
+                    {e}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Plate Number</label>
+              <input type="text" value={plateNum} onChange={e => setPlateNum(e.target.value)} placeholder="e.g. 12345"
+                className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors text-center tracking-[0.3em]" />
+            </div>
+            <button onClick={() => { if (plateNum.trim()) setPhase('fetching'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: plateNum.trim() ? 'linear-gradient(135deg, #7C3AED, #9D63F6)' : '#DFE1E6', boxShadow: plateNum.trim() ? '0 4px 16px rgba(124,58,237,0.3)' : 'none' }}>
+              <Search size={14} className="inline mr-1.5" />Look Up Vehicle
+            </button>
+          </div>
+        )}
+
+        {/* Phase: Fetching */}
+        {phase === 'fetching' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#7C3AED] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Looking up vehicle...</p>
+            <p className="text-[12px] text-[#A4ABB8]">{emirate} · Plate {plateNum}</p>
+          </div>
+        )}
+
+        {/* Phase: Vehicle Found */}
+        {phase === 'vehicle' && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[#059669]">
+              <CheckCircle2 size={16} /> <p className="text-[13px] font-semibold">Vehicle Found</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {Object.entries(VEHICLE).map(([k, v]) => (
+                <div key={k} className="px-3 py-2 rounded-[12px] bg-[#F8F9FB]">
+                  <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider">{k}</p>
+                  <p className="text-[13px] font-bold text-[#15161E]">{v}</p>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setPhase('plans')}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+              View Insurance Plans
+            </button>
+          </div>
+        )}
+
+        {/* Phase: Plan Selection */}
+        {phase === 'plans' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Choose your insurance plan</p>
+            {PLANS.map(plan => (
+              <button key={plan.id} onClick={() => setSelectedPlan(plan.id)}
+                className="w-full text-left p-3.5 rounded-[16px] border-2 transition-all active:scale-[0.98]"
+                style={{ borderColor: selectedPlan === plan.id ? '#7C3AED' : '#DFE1E6', background: selectedPlan === plan.id ? '#F5F0FF' : '#fff' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[14px] font-bold text-[#15161E]">{plan.name}</p>
+                    {plan.popular && <span className="text-[9px] font-bold text-white px-2 py-0.5 rounded-full bg-[#7C3AED]">Popular</span>}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-[#A4ABB8] line-through">AED {plan.price}</p>
+                    <p className="text-[16px] font-extrabold text-[#7C3AED]">AED {plan.discounted}</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {plan.features.map(f => (
+                    <span key={f} className="text-[10px] text-[#666D80] bg-[#F8F9FB] px-2 py-0.5 rounded-full">{f}</span>
+                  ))}
+                </div>
+              </button>
+            ))}
+            {selectedPlan && (
+              <button onClick={() => setPhase('payment')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                Continue to Payment
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Phase: Payment */}
+        {phase === 'payment' && chosen && (
+          <div className="space-y-4">
+            <div className="p-3 rounded-[14px] bg-[#F8F9FB] flex items-center justify-between">
+              <div>
+                <p className="text-[11px] text-[#A4ABB8]">{chosen.name} Plan</p>
+                <p className="text-[18px] font-extrabold text-[#7C3AED]">AED {chosen.discounted}</p>
+              </div>
+              <span className="text-[10px] font-bold text-[#059669] bg-[#F0FDF4] px-2 py-1 rounded-full">15% IHC discount</span>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Card Number</label>
+                <input type="text" value={cardNum} onChange={e => setCardNum(e.target.value)} placeholder="4242 4242 4242 4242"
+                  className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+              </div>
+              <div className="flex gap-3">
+                <div className="flex-1">
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Expiry</label>
+                  <input type="text" value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="MM/YY"
+                    className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+                </div>
+                <div className="w-24">
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">CVV</label>
+                  <input type="text" value={cvv} onChange={e => setCvv(e.target.value)} placeholder="123"
+                    className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+                </div>
+              </div>
+            </div>
+            <button onClick={() => setPhase('processing')}
+              className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+              Pay AED {chosen.discounted}
+            </button>
+          </div>
+        )}
+
+        {/* Phase: Processing */}
+        {phase === 'processing' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#7C3AED] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Processing payment...</p>
+            <p className="text-[12px] text-[#A4ABB8]">Generating your digital policy</p>
+          </div>
+        )}
+
+        {/* Phase: Complete */}
+        {phase === 'complete' && chosen && (
+          <div className="space-y-4">
+            <div className="text-center py-2">
+              <div className="w-14 h-14 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 size={28} className="text-[#059669]" />
+              </div>
+              <p className="text-[16px] font-bold text-[#15161E]">You&apos;re Insured!</p>
+              <p className="text-[12px] text-[#A4ABB8]">Policy activated instantly</p>
+            </div>
+            {/* Digital Policy Card */}
+            <div className="rounded-[18px] p-5 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4C1D95 100%)' }}>
+              <div className="absolute top-0 right-0 w-32 h-32 rounded-full" style={{ background: 'radial-gradient(circle, rgba(157,99,246,0.2) 0%, transparent 70%)' }} />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Shield size={16} className="text-[#FFBD4C]" />
+                  <span className="text-[12px] font-bold">SHORY</span>
+                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-bold">ACTIVE</span>
+              </div>
+              <p className="text-[13px] font-bold">{chosen.name} Plan</p>
+              <p className="text-[11px] text-white/60 mt-0.5">Policy #SHR-2026-{Math.floor(Math.random() * 90000 + 10000)}</p>
+              <div className="flex gap-4 mt-3 text-[10px] text-white/50">
+                <div><p>Vehicle</p><p className="text-white font-semibold">Toyota Land Cruiser 2023</p></div>
+                <div><p>Valid Until</p><p className="text-white font-semibold">Apr 2027</p></div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#7C3AED] bg-[#F5F0FF] border border-[#E9DEFF] active:scale-95 transition-all">
+                <Download size={13} className="inline mr-1" />PDF
+              </button>
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+                <Wallet size={13} className="inline mr-1" />Add to Wallet
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: RIDES (Careem)
+   ═══════════════════════════════════════════ */
+
+function RidesFlow() {
+  const [phase, setPhase] = useState<'pickup' | 'searching' | 'options' | 'confirmed' | 'arriving'>('pickup');
+  const [pickup, setPickup] = useState('');
+  const [dropoff, setDropoff] = useState('');
+  const [selectedRide, setSelectedRide] = useState('');
+
+  const RIDES = [
+    { id: 'economy', name: 'Economy', time: '4 min', price: 'AED 18', icon: '🚗', desc: 'Affordable rides' },
+    { id: 'comfort', name: 'Comfort', time: '3 min', price: 'AED 28', icon: '🚙', desc: 'Extra legroom & AC' },
+    { id: 'business', name: 'Business', time: '6 min', price: 'AED 45', icon: '🖤', desc: 'Premium sedans', popular: true },
+  ];
+
+  useEffect(() => {
+    if (phase === 'searching') {
+      const t = setTimeout(() => setPhase('options'), 1800);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'confirmed') {
+      const t = setTimeout(() => setPhase('arriving'), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+          <Car size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">Book a Ride</p>
+          <p className="text-[11px] text-white/70">Powered by Careem · IHC 30% discount</p>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {phase === 'pickup' && (
+          <div className="space-y-3">
+            <div className="flex gap-2 items-stretch">
+              <div className="flex flex-col items-center py-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#40C4AA]" />
+                <div className="flex-1 w-px bg-[#DFE1E6] my-1" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#DC2626]" />
+              </div>
+              <div className="flex-1 space-y-2">
+                <input type="text" value={pickup} onChange={e => setPickup(e.target.value)} placeholder="Pickup location"
+                  className="w-full border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
+                <input type="text" value={dropoff} onChange={e => setDropoff(e.target.value)} placeholder="Where to?"
+                  className="w-full border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              {['IHC HQ, Abu Dhabi', 'Al Maryah Island', 'Abu Dhabi Airport'].map(s => (
+                <button key={s} onClick={() => !pickup ? setPickup(s) : setDropoff(s)}
+                  className="text-[10px] font-medium px-2.5 py-1.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] text-[#666D80] active:scale-95 transition-all">
+                  <MapPin size={9} className="inline mr-0.5" />{s.split(',')[0]}
+                </button>
+              ))}
+            </div>
+            <button onClick={() => { if (pickup && dropoff) setPhase('searching'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: (pickup && dropoff) ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: (pickup && dropoff) ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
+              Find Rides
+            </button>
+          </div>
+        )}
+
+        {phase === 'searching' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#40C4AA] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Finding nearby drivers...</p>
+            <p className="text-[12px] text-[#A4ABB8]">{pickup} → {dropoff}</p>
+          </div>
+        )}
+
+        {phase === 'options' && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-[#059669] mb-1">
+              <CheckCircle2 size={14} /> <p className="text-[12px] font-semibold">3 ride types available</p>
+            </div>
+            {RIDES.map(ride => (
+              <button key={ride.id} onClick={() => setSelectedRide(ride.id)}
+                className="w-full text-left flex items-center gap-3 p-3 rounded-[14px] border-2 transition-all active:scale-[0.98]"
+                style={{ borderColor: selectedRide === ride.id ? '#40C4AA' : '#DFE1E6', background: selectedRide === ride.id ? '#F0FDF4' : '#fff' }}>
+                <span className="text-[22px]">{ride.icon}</span>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[14px] font-bold text-[#15161E]">{ride.name}</p>
+                    {ride.popular && <span className="text-[8px] font-bold text-white px-1.5 py-0.5 rounded-full bg-[#40C4AA]">Best Value</span>}
+                  </div>
+                  <p className="text-[11px] text-[#A4ABB8]">{ride.desc} · {ride.time} away</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[15px] font-extrabold text-[#15161E]">{ride.price}</p>
+                  <p className="text-[9px] text-[#059669] font-semibold">30% off</p>
+                </div>
+              </button>
+            ))}
+            {selectedRide && (
+              <button onClick={() => setPhase('confirmed')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+                Confirm Ride · {RIDES.find(r => r.id === selectedRide)?.price}
+              </button>
+            )}
+          </div>
+        )}
+
+        {phase === 'confirmed' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#40C4AA] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Connecting with driver...</p>
+          </div>
+        )}
+
+        {phase === 'arriving' && (
+          <div className="space-y-4">
+            <div className="text-center py-2">
+              <div className="w-14 h-14 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 size={28} className="text-[#059669]" />
+              </div>
+              <p className="text-[16px] font-bold text-[#15161E]">Ride Confirmed!</p>
+            </div>
+            <div className="rounded-[16px] p-4 bg-[#F8F9FB] border border-[#DFE1E6] space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-full bg-[#40C4AA] flex items-center justify-center text-white text-[14px] font-bold">AK</div>
+                <div className="flex-1">
+                  <p className="text-[14px] font-bold text-[#15161E]">Ahmed K.</p>
+                  <div className="flex items-center gap-1"><Star size={10} className="text-[#FFBD4C] fill-[#FFBD4C]" /><span className="text-[11px] text-[#666D80]">4.9 · Toyota Camry · White</span></div>
+                </div>
+                <p className="text-[13px] font-bold text-[#40C4AA]">3 min</p>
+              </div>
+              <div className="flex items-center gap-2 text-[12px] text-[#666D80]">
+                <MapPin size={12} className="text-[#40C4AA]" /> Plate: AUH 54321
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] active:scale-95 transition-all">
+                <MapPinned size={13} className="inline mr-1" />Track
+              </button>
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+                <Send size={13} className="inline mr-1" />Message
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: FOOD (Noon)
+   ═══════════════════════════════════════════ */
+
+function FoodFlow() {
+  const [phase, setPhase] = useState<'browse' | 'menu' | 'cart' | 'ordering' | 'confirmed'>('browse');
+  const [selectedRestaurant, setSelectedRestaurant] = useState<typeof RESTAURANTS[0] | null>(null);
+  const [cart, setCart] = useState<{ name: string; price: number; qty: number }[]>([]);
+
+  const RESTAURANTS = [
+    { id: 'r1', name: 'Shawarma House', cuisine: 'Arabic', rating: 4.8, time: '20-30 min', image: '🥙', discount: '25% IHC', items: [
+      { name: 'Chicken Shawarma Plate', price: 32 }, { name: 'Mixed Grill', price: 55 }, { name: 'Falafel Wrap', price: 22 }, { name: 'Hummus & Bread', price: 18 },
+    ]},
+    { id: 'r2', name: 'Sushi Lab', cuisine: 'Japanese', rating: 4.7, time: '25-35 min', image: '🍱', discount: '20% IHC', items: [
+      { name: 'Salmon Sashimi Set', price: 65 }, { name: 'Dragon Roll (8pc)', price: 48 }, { name: 'Chicken Teriyaki Don', price: 38 }, { name: 'Miso Soup', price: 12 },
+    ]},
+    { id: 'r3', name: 'Burger Studio', cuisine: 'American', rating: 4.6, time: '15-25 min', image: '🍔', discount: '30% IHC', items: [
+      { name: 'Classic Smash Burger', price: 35 }, { name: 'Truffle Fries', price: 18 }, { name: 'BBQ Chicken Burger', price: 42 }, { name: 'Milkshake', price: 22 },
+    ]},
+  ];
+
+  const cartTotal = cart.reduce((s, c) => s + c.price * c.qty, 0);
+
+  const addToCart = (name: string, price: number) => {
+    setCart(prev => {
+      const existing = prev.find(c => c.name === name);
+      if (existing) return prev.map(c => c.name === name ? { ...c, qty: c.qty + 1 } : c);
+      return [...prev, { name, price, qty: 1 }];
+    });
+  };
+
+  useEffect(() => {
+    if (phase === 'ordering') {
+      const t = setTimeout(() => setPhase('confirmed'), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #FFBD4C 0%, #F59E0B 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
+          <UtensilsCrossed size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">Order Food</p>
+          <p className="text-[11px] text-white/70">Powered by Noon Food · IHC discounts</p>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {phase === 'browse' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Popular restaurants near IHC HQ</p>
+            {RESTAURANTS.map(r => (
+              <button key={r.id} onClick={() => { setSelectedRestaurant(r); setPhase('menu'); }}
+                className="w-full text-left flex items-center gap-3 p-3 rounded-[14px] border border-[#DFE1E6] hover:shadow-sm active:scale-[0.98] transition-all">
+                <span className="text-[28px]">{r.image}</span>
+                <div className="flex-1">
+                  <p className="text-[14px] font-bold text-[#15161E]">{r.name}</p>
+                  <p className="text-[11px] text-[#A4ABB8]">{r.cuisine} · {r.time}</p>
+                </div>
+                <div className="text-right">
+                  <div className="flex items-center gap-0.5"><Star size={10} className="text-[#FFBD4C] fill-[#FFBD4C]" /><span className="text-[12px] font-bold">{r.rating}</span></div>
+                  <span className="text-[9px] font-bold text-[#F59E0B] bg-[#FEF9F0] px-1.5 py-0.5 rounded-full">{r.discount}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {phase === 'menu' && selectedRestaurant && (
+          <div className="space-y-3">
+            <button onClick={() => { setPhase('browse'); setSelectedRestaurant(null); setCart([]); }}
+              className="text-[12px] text-[#9D63F6] font-semibold flex items-center gap-1">
+              <ArrowLeft size={13} /> Back to restaurants
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-[24px]">{selectedRestaurant.image}</span>
+              <div>
+                <p className="text-[15px] font-bold text-[#15161E]">{selectedRestaurant.name}</p>
+                <p className="text-[11px] text-[#A4ABB8]">{selectedRestaurant.time} · {selectedRestaurant.discount}</p>
+              </div>
+            </div>
+            {selectedRestaurant.items.map(item => {
+              const inCart = cart.find(c => c.name === item.name);
+              return (
+                <div key={item.name} className="flex items-center justify-between p-3 rounded-[12px] bg-[#F8F9FB]">
+                  <div>
+                    <p className="text-[13px] font-semibold text-[#15161E]">{item.name}</p>
+                    <p className="text-[13px] font-bold text-[#F59E0B]">AED {item.price}</p>
+                  </div>
+                  <button onClick={() => addToCart(item.name, item.price)}
+                    className="px-3 py-1.5 rounded-[10px] text-[11px] font-bold active:scale-95 transition-all"
+                    style={{ background: inCart ? '#F59E0B' : '#FEF9F0', color: inCart ? '#fff' : '#F59E0B', border: inCart ? 'none' : '1px solid #FDE68A' }}>
+                    {inCart ? `${inCart.qty} added` : 'Add'}
+                  </button>
+                </div>
+              );
+            })}
+            {cart.length > 0 && (
+              <button onClick={() => setPhase('cart')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all flex items-center justify-center gap-2"
+                style={{ background: 'linear-gradient(135deg, #FFBD4C, #F59E0B)', boxShadow: '0 4px 16px rgba(245,158,11,0.3)' }}>
+                <ShoppingCart size={15} /> View Cart · AED {cartTotal}
+              </button>
+            )}
+          </div>
+        )}
+
+        {phase === 'cart' && selectedRestaurant && (
+          <div className="space-y-3">
+            <p className="text-[14px] font-bold text-[#15161E]">Your Order</p>
+            {cart.map(item => (
+              <div key={item.name} className="flex items-center justify-between text-[13px]">
+                <span className="text-[#4B5563]">{item.qty}x {item.name}</span>
+                <span className="font-bold text-[#15161E]">AED {item.price * item.qty}</span>
+              </div>
+            ))}
+            <div className="border-t border-[#DFE1E6] pt-2 flex justify-between text-[14px]">
+              <span className="text-[#666D80]">Delivery Fee</span>
+              <span className="font-bold text-[#059669]">FREE (IHC)</span>
+            </div>
+            <div className="flex justify-between text-[16px] font-extrabold">
+              <span>Total</span>
+              <span className="text-[#F59E0B]">AED {cartTotal}</span>
+            </div>
+            <button onClick={() => setPhase('ordering')}
+              className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #FFBD4C, #F59E0B)', boxShadow: '0 4px 16px rgba(245,158,11,0.3)' }}>
+              Place Order · AED {cartTotal}
+            </button>
+          </div>
+        )}
+
+        {phase === 'ordering' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#F59E0B] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Placing your order...</p>
+          </div>
+        )}
+
+        {phase === 'confirmed' && selectedRestaurant && (
+          <div className="space-y-4">
+            <div className="text-center py-2">
+              <div className="w-14 h-14 rounded-full bg-[#FEF9F0] flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 size={28} className="text-[#F59E0B]" />
+              </div>
+              <p className="text-[16px] font-bold text-[#15161E]">Order Placed!</p>
+              <p className="text-[12px] text-[#A4ABB8]">Order #{Math.floor(Math.random() * 9000 + 1000)}</p>
+            </div>
+            <div className="rounded-[16px] p-4 bg-[#F8F9FB] border border-[#DFE1E6]">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-[24px]">{selectedRestaurant.image}</span>
+                <div>
+                  <p className="text-[14px] font-bold text-[#15161E]">{selectedRestaurant.name}</p>
+                  <p className="text-[11px] text-[#059669] font-semibold">Estimated: {selectedRestaurant.time}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-[12px] text-[#A4ABB8]">
+                <MapPin size={12} /> Delivering to IHC HQ, Abu Dhabi
+              </div>
+            </div>
+            <button className="w-full py-2.5 rounded-[12px] text-[12px] font-bold text-[#F59E0B] bg-[#FEF9F0] border border-[#FDE68A] active:scale-95 transition-all">
+              <Navigation size={13} className="inline mr-1" />Track Order
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: FLIGHTS
+   ═══════════════════════════════════════════ */
+
+function FlightsFlow() {
+  const [phase, setPhase] = useState<'search' | 'searching' | 'results' | 'booking' | 'confirmed'>('search');
+  const [from, setFrom] = useState('Abu Dhabi (AUH)');
+  const [to, setTo] = useState('');
+  const [date, setDate] = useState('');
+  const [passengers, setPassengers] = useState('1');
+  const [selectedFlight, setSelectedFlight] = useState('');
+
+  const DESTINATIONS = ['London (LHR)', 'Mumbai (BOM)', 'Cairo (CAI)', 'Bangkok (BKK)', 'Istanbul (IST)'];
+  const FLIGHTS = [
+    { id: 'f1', airline: 'Etihad', depart: '08:30', arrive: '13:45', duration: '7h 15m', price: 2100, discount: 15, stops: 'Direct' },
+    { id: 'f2', airline: 'Emirates', depart: '14:20', arrive: '19:50', duration: '7h 30m', price: 2350, discount: 10, stops: 'Direct' },
+    { id: 'f3', airline: 'Etihad', depart: '22:00', arrive: '03:30+1', duration: '7h 30m', price: 1850, discount: 15, stops: 'Direct', cheapest: true },
+  ];
+
+  useEffect(() => {
+    if (phase === 'searching') {
+      const t = setTimeout(() => setPhase('results'), 2000);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'booking') {
+      const t = setTimeout(() => setPhase('confirmed'), 2500);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+          <Plane size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">Book a Flight</p>
+          <p className="text-[11px] text-white/70">IHC employee rates · Up to 15% off</p>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {phase === 'search' && (
+          <div className="space-y-3">
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">From</label>
+              <input type="text" value={from} onChange={e => setFrom(e.target.value)}
+                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] font-semibold text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors bg-[#F8F9FB]" />
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">To</label>
+              <input type="text" value={to} onChange={e => setTo(e.target.value)} placeholder="Select destination"
+                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
+              <div className="flex gap-1.5 mt-2 flex-wrap">
+                {DESTINATIONS.map(d => (
+                  <button key={d} onClick={() => setTo(d)}
+                    className="text-[10px] font-medium px-2.5 py-1.5 rounded-full active:scale-95 transition-all"
+                    style={{ background: to === d ? '#9D63F6' : '#F8F9FB', color: to === d ? '#fff' : '#666D80', border: to === d ? 'none' : '1px solid #DFE1E6' }}>
+                    {d.split(' ')[0]}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Date</label>
+                <input type="date" value={date} onChange={e => setDate(e.target.value)}
+                  className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
+              </div>
+              <div className="w-20">
+                <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Pax</label>
+                <select value={passengers} onChange={e => setPassengers(e.target.value)}
+                  className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors bg-white">
+                  {[1, 2, 3, 4].map(n => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </div>
+            </div>
+            <button onClick={() => { if (to && date) setPhase('searching'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: (to && date) ? 'linear-gradient(135deg, #9D63F6, #7C3AED)' : '#DFE1E6', boxShadow: (to && date) ? '0 4px 16px rgba(157,99,246,0.3)' : 'none' }}>
+              <Search size={14} className="inline mr-1.5" />Search Flights
+            </button>
+          </div>
+        )}
+
+        {phase === 'searching' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#9D63F6] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Searching flights...</p>
+            <p className="text-[12px] text-[#A4ABB8]">{from} → {to}</p>
+          </div>
+        )}
+
+        {phase === 'results' && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-[12px] text-[#666D80]">{from.split('(')[0]}→ {to.split('(')[0]}</p>
+              <p className="text-[11px] text-[#A4ABB8]">{FLIGHTS.length} flights found</p>
+            </div>
+            {FLIGHTS.map(flight => (
+              <button key={flight.id} onClick={() => setSelectedFlight(flight.id)}
+                className="w-full text-left p-3.5 rounded-[14px] border-2 transition-all active:scale-[0.98]"
+                style={{ borderColor: selectedFlight === flight.id ? '#9D63F6' : '#DFE1E6', background: selectedFlight === flight.id ? '#F5F0FF' : '#fff' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[13px] font-bold text-[#15161E]">{flight.airline}</p>
+                    {flight.cheapest && <span className="text-[8px] font-bold text-white px-1.5 py-0.5 rounded-full bg-[#40C4AA]">Cheapest</span>}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[15px] font-extrabold text-[#9D63F6]">AED {Math.round(flight.price * (1 - flight.discount / 100))}</p>
+                    <p className="text-[9px] text-[#A4ABB8] line-through">AED {flight.price}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-center">
+                    <p className="text-[14px] font-bold text-[#15161E]">{flight.depart}</p>
+                    <p className="text-[9px] text-[#A4ABB8]">{from.match(/\((\w+)\)/)?.[1]}</p>
+                  </div>
+                  <div className="flex-1 flex items-center gap-1">
+                    <div className="flex-1 h-px bg-[#DFE1E6]" />
+                    <div className="text-center px-2">
+                      <Plane size={10} className="text-[#A4ABB8] mx-auto" />
+                      <p className="text-[9px] text-[#A4ABB8]">{flight.duration}</p>
+                    </div>
+                    <div className="flex-1 h-px bg-[#DFE1E6]" />
+                  </div>
+                  <div className="text-center">
+                    <p className="text-[14px] font-bold text-[#15161E]">{flight.arrive}</p>
+                    <p className="text-[9px] text-[#A4ABB8]">{to.match(/\((\w+)\)/)?.[1]}</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-[#059669] font-semibold mt-1.5">{flight.stops} · {flight.discount}% IHC discount</p>
+              </button>
+            ))}
+            {selectedFlight && (
+              <button onClick={() => setPhase('booking')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
+                Book Flight · AED {Math.round((FLIGHTS.find(f => f.id === selectedFlight)?.price || 0) * (1 - (FLIGHTS.find(f => f.id === selectedFlight)?.discount || 0) / 100))}
+              </button>
+            )}
+          </div>
+        )}
+
+        {phase === 'booking' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#9D63F6] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Booking your flight...</p>
+            <p className="text-[12px] text-[#A4ABB8]">Confirming with airline</p>
+          </div>
+        )}
+
+        {phase === 'confirmed' && (
+          <div className="space-y-4">
+            <div className="text-center py-2">
+              <div className="w-14 h-14 rounded-full bg-[#F5F0FF] flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 size={28} className="text-[#9D63F6]" />
+              </div>
+              <p className="text-[16px] font-bold text-[#15161E]">Flight Booked!</p>
+              <p className="text-[12px] text-[#A4ABB8]">Booking Ref: IHC-{Math.random().toString(36).substring(2, 8).toUpperCase()}</p>
+            </div>
+            <div className="rounded-[16px] p-4 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E1B4B, #312E81)' }}>
+              <div className="flex items-center justify-between text-white mb-3">
+                <p className="text-[13px] font-bold">{FLIGHTS.find(f => f.id === selectedFlight)?.airline}</p>
+                <Plane size={16} className="text-[#FFBD4C]" />
+              </div>
+              <div className="flex items-center gap-3 text-white">
+                <div>
+                  <p className="text-[18px] font-extrabold">{from.match(/\((\w+)\)/)?.[1]}</p>
+                  <p className="text-[10px] text-white/50">{FLIGHTS.find(f => f.id === selectedFlight)?.depart}</p>
+                </div>
+                <div className="flex-1 flex items-center gap-1">
+                  <div className="flex-1 h-px bg-white/20" />
+                  <Plane size={12} className="text-white/40" />
+                  <div className="flex-1 h-px bg-white/20" />
+                </div>
+                <div className="text-right">
+                  <p className="text-[18px] font-extrabold">{to.match(/\((\w+)\)/)?.[1]}</p>
+                  <p className="text-[10px] text-white/50">{FLIGHTS.find(f => f.id === selectedFlight)?.arrive}</p>
+                </div>
+              </div>
+              <p className="text-[10px] text-white/40 mt-3">{date} · {passengers} passenger(s)</p>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#9D63F6] bg-[#F5F0FF] border border-[#E9DEFF] active:scale-95 transition-all">
+                <Download size={13} className="inline mr-1" />E-Ticket
+              </button>
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+                <Calendar size={13} className="inline mr-1" />Add to Calendar
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: SELL LISTING
+   ═══════════════════════════════════════════ */
+
+function SellFlow() {
+  const [phase, setPhase] = useState<'category' | 'details' | 'preview' | 'publishing' | 'live'>('category');
+  const [category, setCategory] = useState('');
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [condition, setCondition] = useState('');
+  const [description, setDescription] = useState('');
+
+  const CATEGORIES = [
+    { id: 'cars', label: 'Cars', icon: '🚗' },
+    { id: 'electronics', label: 'Electronics', icon: '📱' },
+    { id: 'furniture', label: 'Furniture', icon: '🛋️' },
+    { id: 'property', label: 'Property', icon: '🏠' },
+    { id: 'other', label: 'Other', icon: '📦' },
+  ];
+  const CONDITIONS = ['New', 'Like New', 'Excellent', 'Good'];
+
+  useEffect(() => {
+    if (phase === 'publishing') {
+      const t = setTimeout(() => setPhase('live'), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  // Auto-generate description when moving to preview
+  const generateDescription = () => {
+    const cat = CATEGORIES.find(c => c.id === category);
+    setDescription(`${condition} ${cat?.label || ''} for sale. ${title}. Selling at AED ${price}. Contact me through the app for more details. Quick sale preferred.`);
+    setPhase('preview');
+  };
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+          <ShoppingCart size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">Sell on Marketplace</p>
+          <p className="text-[11px] text-white/70">AI-powered listing · 45K+ employees</p>
+        </div>
+      </div>
+
+      <div className="p-4">
+        {phase === 'category' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">What are you selling?</p>
+            <div className="grid grid-cols-3 gap-2">
+              {CATEGORIES.map(cat => (
+                <button key={cat.id} onClick={() => setCategory(cat.id)}
+                  className="p-3 rounded-[14px] text-center transition-all active:scale-95"
+                  style={{ background: category === cat.id ? '#40C4AA' : '#F8F9FB', color: category === cat.id ? '#fff' : '#15161E', border: category === cat.id ? 'none' : '1px solid #DFE1E6' }}>
+                  <span className="text-[20px] block mb-1">{cat.icon}</span>
+                  <p className="text-[11px] font-bold">{cat.label}</p>
+                </button>
+              ))}
+            </div>
+            {category && (
+              <button onClick={() => setPhase('details')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+                Continue
+              </button>
+            )}
+          </div>
+        )}
+
+        {phase === 'details' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Tell us about your item</p>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Title</label>
+              <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. iPhone 15 Pro Max 256GB"
+                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Price (AED)</label>
+              <input type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="e.g. 3500"
+                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {CONDITIONS.map(c => (
+                  <button key={c} onClick={() => setCondition(c)}
+                    className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: condition === c ? '#40C4AA' : '#F8F9FB', color: condition === c ? '#fff' : '#666D80', border: condition === c ? 'none' : '1px solid #DFE1E6' }}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => { if (title && price && condition) generateDescription(); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: (title && price && condition) ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: (title && price && condition) ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
+              <Sparkles size={14} className="inline mr-1.5" />Generate Listing with AI
+            </button>
+          </div>
+        )}
+
+        {phase === 'preview' && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-[#059669] mb-1">
+              <Sparkles size={14} /> <p className="text-[12px] font-semibold">AI-generated listing preview</p>
+            </div>
+            <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6]">
+              <div className="w-full h-24 rounded-[10px] bg-[#DFE1E6] flex items-center justify-center text-[#A4ABB8] mb-3">
+                <Camera size={24} />
+              </div>
+              <p className="text-[15px] font-bold text-[#15161E]">{title}</p>
+              <p className="text-[17px] font-extrabold text-[#40C4AA] mt-1">AED {parseInt(price || '0').toLocaleString()}</p>
+              <div className="flex gap-2 mt-2">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#40C4AA] text-white">{condition}</span>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{CATEGORIES.find(c => c.id === category)?.label}</span>
+              </div>
+              <p className="text-[12px] text-[#666D80] mt-2 leading-relaxed">{description}</p>
+            </div>
+            <button onClick={() => setPhase('publishing')}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+              Publish Listing
+            </button>
+          </div>
+        )}
+
+        {phase === 'publishing' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#40C4AA] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Publishing your listing...</p>
+            <p className="text-[12px] text-[#A4ABB8]">Making it visible to 45,000+ employees</p>
+          </div>
+        )}
+
+        {phase === 'live' && (
+          <div className="space-y-4">
+            <div className="text-center py-2">
+              <div className="w-14 h-14 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 size={28} className="text-[#059669]" />
+              </div>
+              <p className="text-[16px] font-bold text-[#15161E]">Listed!</p>
+              <p className="text-[12px] text-[#A4ABB8]">Your item is now live on the marketplace</p>
+            </div>
+            <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6]">
+              <p className="text-[14px] font-bold text-[#15161E]">{title}</p>
+              <p className="text-[15px] font-extrabold text-[#40C4AA]">AED {parseInt(price || '0').toLocaleString()}</p>
+              <div className="flex items-center gap-2 mt-2 text-[11px] text-[#A4ABB8]">
+                <Eye size={11} /> <span>Visible to 45,000+ employees</span>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] active:scale-95 transition-all">
+                <Share2 size={13} className="inline mr-1" />Share
+              </button>
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+                <Package size={13} className="inline mr-1" />My Listings
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: VACATION BOOKING
+   ═══════════════════════════════════════════ */
+
+function VacationFlow() {
+  const [phase, setPhase] = useState<'browse' | 'booking' | 'confirmed'>('browse');
+  const [selected, setSelected] = useState('');
+
+  const TRIPS = [
+    { id: 'yas', name: 'Yas Island Staycation', location: 'Abu Dhabi', price: 'AED 850', originalPrice: 'AED 1,420', discount: '40% off', duration: '2 nights', image: '🏝️', rating: 4.8 },
+    { id: 'jebel', name: 'Jebel Akhdar Group Trip', location: 'Oman', price: 'AED 450', originalPrice: 'AED 750', discount: 'Group rate', duration: '3 days', image: '⛰️', rating: 4.9, spots: '8/12 filled' },
+    { id: 'maldives', name: 'Maldives All-Inclusive', location: 'Maldives', price: 'AED 3,200', originalPrice: 'AED 5,500', discount: 'IHC exclusive', duration: '5 nights', image: '🏖️', rating: 5.0 },
+  ];
+
+  useEffect(() => {
+    if (phase === 'booking') {
+      const t = setTimeout(() => setPhase('confirmed'), 2000);
+      return () => clearTimeout(t);
+    }
+  }, [phase]);
+
+  const chosen = TRIPS.find(t => t.id === selected);
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #FFBD4C 0%, #F59E0B 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)' }}>
+          <Palmtree size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">IHC Travel & Vacations</p>
+          <p className="text-[11px] text-white/70">Employee exclusive rates</p>
+        </div>
+      </div>
+      <div className="p-4">
+        {phase === 'browse' && (
+          <div className="space-y-3">
+            {TRIPS.map(trip => (
+              <button key={trip.id} onClick={() => setSelected(trip.id)}
+                className="w-full text-left flex items-center gap-3 p-3 rounded-[14px] border-2 transition-all active:scale-[0.98]"
+                style={{ borderColor: selected === trip.id ? '#F59E0B' : '#DFE1E6', background: selected === trip.id ? '#FEF9F0' : '#fff' }}>
+                <span className="text-[28px]">{trip.image}</span>
+                <div className="flex-1">
+                  <p className="text-[13px] font-bold text-[#15161E]">{trip.name}</p>
+                  <p className="text-[11px] text-[#A4ABB8]">{trip.location} · {trip.duration}</p>
+                  {trip.spots && <p className="text-[10px] text-[#DC2626] font-semibold mt-0.5">{trip.spots}</p>}
+                </div>
+                <div className="text-right">
+                  <p className="text-[9px] text-[#A4ABB8] line-through">{trip.originalPrice}</p>
+                  <p className="text-[15px] font-extrabold text-[#F59E0B]">{trip.price}</p>
+                  <p className="text-[9px] text-[#059669] font-semibold">{trip.discount}</p>
+                </div>
+              </button>
+            ))}
+            {selected && (
+              <button onClick={() => setPhase('booking')}
+                className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #FFBD4C, #F59E0B)', boxShadow: '0 4px 16px rgba(245,158,11,0.3)' }}>
+                Book Now · {chosen?.price}
+              </button>
+            )}
+          </div>
+        )}
+        {phase === 'booking' && (
+          <div className="py-8 text-center space-y-3">
+            <Loader2 size={32} className="text-[#F59E0B] mx-auto animate-spin" />
+            <p className="text-[14px] font-semibold text-[#15161E]">Booking your trip...</p>
+          </div>
+        )}
+        {phase === 'confirmed' && chosen && (
+          <div className="space-y-4 text-center">
+            <div className="w-14 h-14 rounded-full bg-[#FEF9F0] flex items-center justify-center mx-auto">
+              <CheckCircle2 size={28} className="text-[#F59E0B]" />
+            </div>
+            <p className="text-[16px] font-bold text-[#15161E]">Trip Booked!</p>
+            <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6] text-left">
+              <p className="text-[14px] font-bold text-[#15161E]">{chosen.name}</p>
+              <p className="text-[12px] text-[#666D80]">{chosen.location} · {chosen.duration}</p>
+              <p className="text-[15px] font-extrabold text-[#F59E0B] mt-1">{chosen.price}</p>
+              <p className="text-[10px] text-[#A4ABB8] mt-1">Booking #IHC-{Math.random().toString(36).substring(2, 8).toUpperCase()}</p>
+            </div>
+            <button className="w-full py-2.5 rounded-[12px] text-[12px] font-bold text-[#F59E0B] bg-[#FEF9F0] border border-[#FDE68A] active:scale-95 transition-all">
+              <Calendar size={13} className="inline mr-1" />Add to Calendar
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   INLINE FLOW: GAMING & TOURNAMENTS
+   ═══════════════════════════════════════════ */
+
+function GamingFlow() {
+  const [registered, setRegistered] = useState<Set<string>>(new Set());
+
+  const TOURNAMENTS = [
+    { id: 'fifa', name: 'FIFA Tournament', status: 'Round 2 Today', players: '32 players', prize: 'AED 5,000', icon: '⚽', color: '#DC2626', spots: 'In progress' },
+    { id: 'cod', name: 'Call of Duty League', status: 'Registration Open', players: '48/64 slots', prize: 'AED 3,000', icon: '🎯', color: '#9D63F6', spots: '16 spots left' },
+    { id: 'padel', name: 'Padel League', status: 'Sign up by Apr 5', players: '24 teams', prize: 'AED 2,000', icon: '🎾', color: '#40C4AA', spots: 'Open' },
+    { id: 'chess', name: 'Chess Championship', status: 'Starting Apr 10', players: '20/32 slots', prize: 'AED 1,500', icon: '♟️', color: '#15161E', spots: '12 spots left' },
+  ];
+
+  return (
+    <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' }}>
+        <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+          <Trophy size={18} className="text-white" />
+        </div>
+        <div>
+          <p className="text-[14px] font-bold text-white">IHC Gaming Hub</p>
+          <p className="text-[11px] text-white/70">Tournaments · Leagues · Activities</p>
+        </div>
+      </div>
+      <div className="p-4 space-y-3">
+        {TOURNAMENTS.map(t => (
+          <div key={t.id} className="p-3 rounded-[14px] border border-[#DFE1E6]">
+            <div className="flex items-center gap-3">
+              <span className="text-[24px]">{t.icon}</span>
+              <div className="flex-1">
+                <p className="text-[13px] font-bold text-[#15161E]">{t.name}</p>
+                <p className="text-[11px] text-[#A4ABB8]">{t.status} · {t.players}</p>
+                <p className="text-[10px] font-semibold mt-0.5" style={{ color: t.color }}>Prize: {t.prize}</p>
+              </div>
+              <button
+                onClick={() => setRegistered(prev => { const s = new Set(prev); s.has(t.id) ? s.delete(t.id) : s.add(t.id); return s; })}
+                className="px-3 py-1.5 rounded-[10px] text-[11px] font-bold transition-all active:scale-95"
+                style={{ background: registered.has(t.id) ? '#059669' : t.color, color: '#fff' }}>
+                {registered.has(t.id) ? 'Joined!' : t.id === 'fifa' ? 'View' : 'Join'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   AI RESPONSE ENGINE (updated with flow triggers)
+   ═══════════════════════════════════════════ */
+
+function generateAIResponse(text: string, userName: string, companyId: string): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType'] } {
   const t = text.toLowerCase();
 
-  if (t.includes('flight') || t.includes('fly') || t.includes('travel') || t.includes('airport') || t.includes('airline')) {
+  if (t.includes('flight') || t.includes('fly') || t.includes('travel') || t.includes('airport') || t.includes('airline') || t.includes('book a flight')) {
     return {
-      content: `Great, ${userName}! I found some employee-exclusive flight deals:\n\n• **Abu Dhabi to London** — from AED 2,100 return\n• **Abu Dhabi to Mumbai** — from AED 890 return\n• **Abu Dhabi to Cairo** — from AED 1,200 return\n\nIHC employees get up to **15% off** with Etihad and **10% off** with Emirates.`,
-      cards: [
-        { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates via Etihad & Emirates', color: '#40C4AA' },
-        { type: 'info', icon: Globe, title: 'Travel Policy', subtitle: 'Annual return flight benefit for you + family', color: '#9D63F6' },
-        { type: 'offer', icon: CreditCard, title: 'Airport Lounge Access', subtitle: 'Free entry with IHC corporate card', color: '#FFBD4C' },
-      ]
+      content: `Let me help you book a flight, ${userName}! IHC employees get up to **15% off** with Etihad and **10% off** with Emirates. Use the booking tool below:`,
+      flowType: 'flights',
     };
   }
 
-  if (t.includes('ride') || t.includes('taxi') || t.includes('cab') || t.includes('careem') || t.includes('uber') || t.includes('transport')) {
+  if (t.includes('ride') || t.includes('taxi') || t.includes('cab') || t.includes('careem') || t.includes('uber') || t.includes('transport') || t.includes('book a ride')) {
     return {
-      content: `I can help you get a ride! As an IHC employee:\n\n• **Careem Business** — Up to 30% off\n• **Airport Transfers** — AED 50 flat rate\n• **Office Shuttle** — Free daily routes\n• **EasyLease** — Monthly car lease from AED 1,299`,
-      cards: [
-        { type: 'booking', icon: Car, title: 'Book a Ride', subtitle: 'Careem Business — 30% off', color: '#9D63F6' },
-        { type: 'info', icon: MapPin, title: 'Shuttle Schedule', subtitle: '6 pickup points · Every 30 min', color: '#40C4AA' },
-      ]
+      content: `I'll get you a ride right away! As an IHC employee, you get **30% off** on Careem Business rides plus **free airport transfers**. Book below:`,
+      flowType: 'rides',
     };
   }
 
-  if (t.includes('vacation') || t.includes('holiday') || t.includes('trip') || t.includes('getaway') || t.includes('beach') || t.includes('resort')) {
+  if (t.includes('food') || t.includes('eat') || t.includes('lunch') || t.includes('dinner') || t.includes('order food') || t.includes('noon') || t.includes('hungry') || t.includes('restaurant')) {
     return {
-      content: `Time for a getaway! IHC vacation perks:\n\n• **Yas Island Staycation** — 40% off\n• **Jebel Akhdar Group Trip** — AED 450/person\n• **Maldives Package** — AED 3,200 all-inclusive`,
-      cards: [
-        { type: 'booking', icon: Palmtree, title: 'Book Yas Staycation', subtitle: '40% IHC employee discount', color: '#FFBD4C' },
-        { type: 'social', icon: Users, title: 'Join Group Trip', subtitle: 'Jebel Akhdar — 8/12 spots filled', color: '#40C4AA' },
-      ]
-    };
-  }
-
-  if (t.includes('game') || t.includes('gaming') || t.includes('fifa') || t.includes('tournament') || t.includes('play') || t.includes('league')) {
-    return {
-      content: `Here's what's happening in IHC Gaming!\n\n• **FIFA Tournament** — Round 2 starts today\n• **Padel League** — Sign up by Apr 5\n• **Call of Duty League** — 48/64 slots filled`,
-      cards: [
-        { type: 'social', icon: Trophy, title: 'FIFA Tournament', subtitle: 'Round 2 today — 32 players', color: '#DC2626' },
-        { type: 'social', icon: Gamepad2, title: 'COD League', subtitle: '48/64 slots — Register now', color: '#9D63F6' },
-      ]
+      content: `Let's get you some food! Noon Food has exclusive IHC discounts at top restaurants nearby, plus **free delivery** for IHC employees:`,
+      flowType: 'food',
     };
   }
 
   if (t.includes('insurance') || t.includes('motor') || t.includes('car insurance') || t.includes('shory') || t.includes('vehicle') || t.includes('plate')) {
     return {
-      content: `I can help you get car insurance through **Shory** — IHC's own digital insurance platform, right here in the app!\n\nHere's how it works:\n\n1. Enter your **car plate number**\n2. Shory instantly fetches your vehicle details\n3. Pick from **3 plans** — Third Party, Comprehensive, or Flexi\n4. Pay securely & get your **digital policy card** instantly\n\nIHC employees get an exclusive **15% corporate discount** on all plans. Let's get you insured!`,
-      cards: [
-        { type: 'action', icon: Shield, title: 'Get Motor Insurance', subtitle: 'Enter plate number · 2 min process', color: '#7C3AED', link: '/automations/insurance' },
-        { type: 'info', icon: CreditCard, title: 'IHC Corporate Discount', subtitle: '15% off all Shory motor plans', color: '#40C4AA' },
-        { type: 'info', icon: FileText, title: 'Current Policy', subtitle: 'No active motor policy found', color: '#FFBD4C' },
-      ]
+      content: `I can help you get car insurance through **Shory** — IHC's digital insurance platform. IHC employees get an exclusive **15% corporate discount** on all plans. Let's get started:`,
+      flowType: 'insurance',
+    };
+  }
+
+  if (t.includes('vacation') || t.includes('holiday') || t.includes('trip') || t.includes('getaway') || t.includes('beach') || t.includes('resort') || t.includes('staycation')) {
+    return {
+      content: `Time for a getaway, ${userName}! Here are IHC's exclusive travel deals. Book directly below:`,
+      flowType: 'vacation',
+    };
+  }
+
+  if (t.includes('game') || t.includes('gaming') || t.includes('fifa') || t.includes('tournament') || t.includes('play') || t.includes('league')) {
+    return {
+      content: `Here's what's happening in IHC Gaming! Register for tournaments and leagues below:`,
+      flowType: 'gaming',
     };
   }
 
@@ -96,9 +1161,9 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     return {
       content: `Your benefits summary, ${userName}:\n\n• **Medical** — Daman Enhanced (family)\n• **Life Insurance** — 24x monthly salary\n• **Gym** — AED 150/month at Palms Sports\n• **Education** — AED 20,000/year\n\nTotal value: ~**AED 85,000/year**!`,
       cards: [
-        { type: 'info', icon: Heart, title: 'Medical Coverage', subtitle: 'Daman Enhanced · Family plan', color: '#DC2626' },
-        { type: 'info', icon: Shield, title: 'Life Insurance', subtitle: '24x salary · Group coverage', color: '#9D63F6' },
-        { type: 'offer', icon: Gift, title: 'All 12 Benefits', subtitle: 'View complete package', color: '#FFBD4C' },
+        { type: 'info', icon: Heart, title: 'Medical Coverage', subtitle: 'Daman Enhanced · Family plan', color: '#DC2626', action: 'Tell me about my medical insurance details' },
+        { type: 'info', icon: Shield, title: 'Life Insurance', subtitle: '24x salary · Group coverage', color: '#9D63F6', action: 'Tell me about my life insurance coverage' },
+        { type: 'offer', icon: Gift, title: 'All 12 Benefits', subtitle: 'View complete package', color: '#FFBD4C', link: '/offers' },
       ]
     };
   }
@@ -108,57 +1173,61 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
       content: `Best employee offers right now:\n\n• **Aldar** — 15% off Yas Island residences\n• **Shory** — Motor insurance from AED 799/year\n• **PureHealth** — Health screening AED 299\n• **Ghitha** — 25% meal subsidy`,
       cards: OFFERS.slice(0, 3).map(offer => ({
         type: 'offer' as const, icon: Gift, title: offer.title,
-        subtitle: `${offer.company} · ${offer.value}`, color: offer.color || '#FFBD4C', image: offer.image,
+        subtitle: `${offer.company} · ${offer.value}`, color: offer.color || '#FFBD4C', image: offer.image, link: '/offers',
       })),
     };
   }
 
-  if (t.includes('sell') || t.includes('marketplace') || t.includes('buy') || t.includes('listing')) {
+  if (t.includes('sell') || t.includes('list something') || t.includes('create listing') || t.includes('sell something')) {
+    return {
+      content: `Let's list your item on the IHC Marketplace! AI will help you create a professional listing in seconds:`,
+      flowType: 'sell',
+    };
+  }
+
+  if (t.includes('marketplace') || t.includes('buy') || t.includes('listing') || t.includes('browse')) {
     return {
       content: `The IHC Marketplace connects 45,000+ employees!\n\n• **Active listings**: 234 items\n• **Trending**: Cars, electronics, furniture`,
       cards: [
-        { type: 'action', icon: ShoppingBag, title: 'Sell Something', subtitle: 'AI writes your listing from a photo', color: '#40C4AA' },
-        { type: 'action', icon: Star, title: 'Browse Marketplace', subtitle: '234 items from verified employees', color: '#FFBD4C' },
+        { type: 'action', icon: ShoppingBag, title: 'Open Marketplace', subtitle: '234 items from verified employees', color: '#FFBD4C', link: '/marketplace' },
+        { type: 'action', icon: Star, title: 'Sell Something', subtitle: 'AI writes your listing from a photo', color: '#40C4AA', action: 'I want to sell something on the marketplace' },
       ]
     };
   }
 
   if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('sick leave') || t.includes('time off')) {
     return {
-      content: `Your leave summary:\n\n• **Annual Leave**: **22 days** remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days/incident\n\n**NEW:** You can now submit leave requests instantly using our **Smart Leave Manager** automation — no more email chains!`,
+      content: `Your leave summary:\n\n• **Annual Leave**: **22 days** remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days/incident\n\n**NEW:** Submit leave requests instantly using the **Smart Leave Manager** automation!`,
       cards: [
         { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Automated — instant approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
-        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6' },
-        { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
+        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6', action: 'How many leave days do I have left this year' },
       ]
     };
   }
 
   if (t.includes('salary') || t.includes('payslip') || t.includes('certificate') || t.includes('pay')) {
     return {
-      content: `Salary options:\n\n• **March payslip** ready to download\n• **Salary certificates** — now **instant** with automation!\n• **Next salary credit**: April 28th\n\n**No more waiting 3-5 days!** Generate your salary certificate in under 30 seconds with digital verification.`,
+      content: `Salary options:\n\n• **March payslip** ready to download\n• **Salary certificates** — now instant with automation!\n• **Next salary credit**: April 28th`,
       cards: [
         { type: 'action', icon: Zap, title: 'Generate Salary Certificate', subtitle: 'Automated — ready in < 30 seconds', color: '#40C4AA', link: '/automations/salary-certificate' },
-        { type: 'info', icon: DollarSign, title: 'View Payslip', subtitle: 'March 2026', color: '#40C4AA' },
-        { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
+        { type: 'info', icon: DollarSign, title: 'View March Payslip', subtitle: 'Download PDF · March 2026', color: '#40C4AA', action: 'Show me my March 2026 payslip details' },
       ]
     };
   }
 
   if (t.includes('expense') || t.includes('receipt') || t.includes('reimburse') || t.includes('claim') || t.includes('reimbursement')) {
     return {
-      content: `Expense management:\n\n• **AI Expense Processor** — snap a receipt, AI does the rest!\n• **Pending claims**: 0\n• **Last reimbursement**: AED 420 (31 Mar)\n\nNo more manual Excel entry. Our AI extracts vendor, amount, date & category automatically and validates against company policy.`,
+      content: `Expense management:\n\n• **AI Expense Processor** — snap a receipt, AI does the rest!\n• **Pending claims**: 0\n• **Last reimbursement**: AED 420 (31 Mar)`,
       cards: [
         { type: 'action', icon: Zap, title: 'Submit Expense Claim', subtitle: 'AI-powered — receipt to reimbursement in 2 min', color: '#40C4AA', link: '/automations/expense-claim' },
-        { type: 'info', icon: Receipt, title: 'Expense History', subtitle: '3 claims this month · AED 1,142', color: '#9D63F6' },
-        { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
+        { type: 'info', icon: Receipt, title: 'Expense History', subtitle: '3 claims this month · AED 1,142', color: '#9D63F6', action: 'Show me my expense history for this month' },
       ]
     };
   }
 
   if (t.includes('automat') || t.includes('workflow') || t.includes('process')) {
     return {
-      content: `Here are the automations available to you:\n\n• **Salary Certificate** — Instant PDF with digital verification\n• **Smart Leave Manager** — Auto-balance, conflict check, approval pipeline\n• **AI Expense Processor** — Receipt scanning with policy compliance\n\nTogether these save **347 hours/week** across IHC with a **95% error reduction**.`,
+      content: `Here are the automations available to you:\n\n• **Salary Certificate** — Instant PDF with digital verification\n• **Smart Leave Manager** — Auto-balance, conflict check, approval pipeline\n• **AI Expense Processor** — Receipt scanning with policy compliance\n\nTogether these save **347 hours/week** across IHC.`,
       cards: [
         { type: 'action', icon: FileText, title: 'Salary Certificate', subtitle: 'Generate in < 30 seconds', color: '#9D63F6', link: '/automations/salary-certificate' },
         { type: 'action', icon: Calendar, title: 'Leave Request', subtitle: 'Automated approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
@@ -167,13 +1236,20 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  if (t.includes('renew') && t.includes('insurance')) {
+    return {
+      content: `I can help you renew your motor insurance through **Shory**. Your current policy is expiring soon. Let's get you renewed with the **15% IHC corporate discount**:`,
+      flowType: 'insurance',
+    };
+  }
+
   return {
-    content: `I'm your AI assistant for everything at IHC! I can help with:\n\n• Book flights with employee discounts\n• Book rides & check shuttle schedules\n• Plan vacations & join group trips\n• Join gaming tournaments & leagues\n• View benefits, offers & discounts\n\nJust ask me anything, ${userName}!`,
+    content: `I'm your AI assistant for everything at IHC! I can help with:\n\n• Book flights with employee discounts\n• Book rides via Careem\n• Order food from Noon\n• Get motor insurance via Shory\n• View benefits, offers & discounts\n\nJust ask me anything, ${userName}!`,
     cards: [
-      { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#40C4AA' },
-      { type: 'booking', icon: Palmtree, title: 'Plan a Vacation', subtitle: 'Group trips & staycations', color: '#FFBD4C' },
-      { type: 'social', icon: Gamepad2, title: 'Gaming & Activities', subtitle: 'Tournaments & leagues', color: '#DC2626' },
-      { type: 'offer', icon: Gift, title: 'My Benefits', subtitle: 'AED 85K+ in annual benefits', color: '#FFBD4C' },
+      { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#9D63F6', action: 'I want to book a flight' },
+      { type: 'booking', icon: Car, title: 'Book a Ride', subtitle: 'Careem · 30% IHC discount', color: '#40C4AA', action: 'I need to book a ride' },
+      { type: 'booking', icon: UtensilsCrossed, title: 'Order Food', subtitle: 'Noon Food · Free delivery', color: '#FFBD4C', action: 'I want to order food' },
+      { type: 'booking', icon: Shield, title: 'Motor Insurance', subtitle: 'Shory · 15% IHC discount', color: '#7C3AED', action: 'I need car insurance' },
     ]
   };
 }
@@ -183,30 +1259,10 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
    ═══════════════════════════════════════════ */
 
 const SUGGESTIONS = [
-  {
-    icon: Zap,
-    label: 'Automations',
-    prompt: 'Show me available automations',
-    color: '#40C4AA',
-  },
-  {
-    icon: FileText,
-    label: 'Salary Certificate',
-    prompt: 'I need a salary certificate for a bank loan',
-    color: '#9D63F6',
-  },
-  {
-    icon: Receipt,
-    label: 'Expense Claim',
-    prompt: 'I need to submit an expense receipt',
-    color: '#FFBD4C',
-  },
-  {
-    icon: Calendar,
-    label: 'Leave Request',
-    prompt: 'I want to apply for annual leave',
-    color: '#40C4AA',
-  },
+  { icon: Plane, label: 'Book Flight', prompt: 'I want to book a flight', color: '#9D63F6' },
+  { icon: Car, label: 'Book Ride', prompt: 'I need to book a ride', color: '#40C4AA' },
+  { icon: UtensilsCrossed, label: 'Order Food', prompt: 'I want to order food for lunch', color: '#FFBD4C' },
+  { icon: Shield, label: 'Insurance', prompt: 'I need motor insurance', color: '#7C3AED' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -219,7 +1275,7 @@ export default function ServicesPage() {
   const searchParams = useSearchParams();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
-  const [autoPromptSent, setAutoPromptSent] = useState(false);
+  const autoPromptSentRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const userName = user?.name?.split(' ')[0] || 'there';
@@ -239,18 +1295,18 @@ export default function ServicesPage() {
     const response = generateAIResponse(msg, userName, companyId);
     setMessages(prev => [
       ...prev.filter(m => !m.typing),
-      { role: 'ai', content: response.content, cards: response.cards },
+      { role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType },
     ]);
   };
 
   /* Auto-trigger prompt from URL query param (e.g. ?prompt=Book+a+flight) */
   useEffect(() => {
     const prompt = searchParams.get('prompt');
-    if (prompt && !autoPromptSent && user) {
-      setAutoPromptSent(true);
+    if (prompt && !autoPromptSentRef.current && user) {
+      autoPromptSentRef.current = true;
       handleSend(prompt);
     }
-  }, [searchParams, user, autoPromptSent]);
+  }, [searchParams, user]);
 
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
@@ -315,6 +1371,15 @@ export default function ServicesPage() {
                       )}
                     </div>
 
+                    {/* Inline Interactive Flows */}
+                    {msg.flowType === 'insurance' && <InsuranceFlow />}
+                    {msg.flowType === 'rides' && <RidesFlow />}
+                    {msg.flowType === 'food' && <FoodFlow />}
+                    {msg.flowType === 'flights' && <FlightsFlow />}
+                    {msg.flowType === 'sell' && <SellFlow />}
+                    {msg.flowType === 'vacation' && <VacationFlow />}
+                    {msg.flowType === 'gaming' && <GamingFlow />}
+
                     {msg.cards && msg.cards.length > 0 && (
                       <div className="mt-2 space-y-2 flex flex-col">
                         {msg.cards.map((card, ci) => {
@@ -322,7 +1387,10 @@ export default function ServicesPage() {
                           return (
                             <button
                               key={ci}
-                              onClick={() => { if (card.link) router.push(card.link); }}
+                              onClick={() => {
+                                if (card.link) router.push(card.link);
+                                else if (card.action) handleSend(card.action);
+                              }}
                               className="w-full flex items-center gap-3 bg-white border border-[#DFE1E6] rounded-[14px] p-3 text-left hover:shadow-md md:hover:shadow-lg active:scale-[0.98] transition-all"
                             >
                               {card.image ? (
@@ -355,10 +1423,10 @@ export default function ServicesPage() {
         {messages.length > 0 && messages[messages.length - 1]?.role === 'ai' && !messages[messages.length - 1]?.typing && (
           <div className="px-3 md:px-6 lg:px-8 pb-2 shrink-0 max-w-4xl mx-auto w-full">
             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-              {['Flights', 'Benefits', 'Gaming', 'Offers', 'Rides'].map(chip => (
+              {['Flights', 'Rides', 'Food', 'Insurance', 'Benefits', 'Gaming', 'Offers'].map(chip => (
                 <button
                   key={chip}
-                  onClick={() => handleSend(chip.split(' ')[0])}
+                  onClick={() => handleSend(chip)}
                   className="shrink-0 text-[11px] font-semibold px-3.5 py-1.5 rounded-full bg-white text-[#9D63F6] border border-[#DFE1E6] transition-all active:scale-95 hover:shadow-md md:hover:bg-white/90"
                 >
                   {chip}
@@ -379,9 +1447,6 @@ export default function ServicesPage() {
               placeholder="Message Ahli AI"
               className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-3 outline-none"
             />
-            <button className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
-              <Paperclip size={18} />
-            </button>
             {inputValue.trim() ? (
               <button
                 onClick={() => handleSend()}
@@ -390,7 +1455,7 @@ export default function ServicesPage() {
                 <Send size={14} />
               </button>
             ) : (
-              <button className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
+              <button onClick={() => handleSend('What can you help me with?')} className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
                 <Mic size={18} />
               </button>
             )}
@@ -469,28 +1534,11 @@ export default function ServicesPage() {
 
         {/* ── Animated star visual ── */}
         <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '280px' }}>
-
-          {/* Large soft glow behind star */}
-          <div className="absolute ai-glow-breathe" style={{
-            width: 200, height: 200, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 70%)',
-          }} />
-
-          {/* Outer orbit ring */}
-          <div className="absolute ai-orbit" style={{
-            width: 180, height: 180, borderRadius: '50%',
-            border: '1px solid rgba(157,99,246,0.1)',
-          }} />
-
-          {/* Inner orbit ring — reverse */}
-          <div className="absolute ai-orbit-reverse" style={{
-            width: 130, height: 130, borderRadius: '50%',
-            border: '1px solid rgba(157,99,246,0.12)',
-          }}>
+          <div className="absolute ai-glow-breathe" style={{ width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 70%)' }} />
+          <div className="absolute ai-orbit" style={{ width: 180, height: 180, borderRadius: '50%', border: '1px solid rgba(157,99,246,0.1)' }} />
+          <div className="absolute ai-orbit-reverse" style={{ width: 130, height: 130, borderRadius: '50%', border: '1px solid rgba(157,99,246,0.12)' }}>
             <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#9D63F6]/40" />
           </div>
-
-          {/* Central star */}
           <div className="ai-star relative z-10">
             <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
               <path d="M32 4 L36 28 L60 32 L36 36 L32 60 L28 36 L4 32 L28 28 Z" fill="#9D63F6" />
@@ -500,8 +1548,6 @@ export default function ServicesPage() {
               </defs>
             </svg>
           </div>
-
-          {/* Floating accent dots */}
           <div className="absolute ai-dot-1" style={{ top: '22%', left: '32%' }}>
             <div className="w-2.5 h-2.5 rounded-full bg-[#9D63F6]/50" />
           </div>
@@ -513,8 +1559,6 @@ export default function ServicesPage() {
           <div className="absolute ai-dot-3" style={{ bottom: '28%', left: '28%' }}>
             <div className="w-1.5 h-1.5 rounded-full bg-[#9D63F6]/30" />
           </div>
-
-          {/* Zigzag accent */}
           <div className="absolute ai-zigzag" style={{ bottom: '22%', right: '26%' }}>
             <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
               <path d="M2 14 L8 4 L14 12 L20 4 L26 14" stroke="#FFBD4C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -570,9 +1614,6 @@ export default function ServicesPage() {
             placeholder="Message Ahli AI"
             className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-3 outline-none"
           />
-          <button className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
-            <Paperclip size={18} />
-          </button>
           {inputValue.trim() ? (
             <button
               onClick={() => handleSend()}
@@ -581,7 +1622,7 @@ export default function ServicesPage() {
               <Send size={14} />
             </button>
           ) : (
-            <button className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
+            <button onClick={() => handleSend('What can you help me with?')} className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
               <Mic size={18} />
             </button>
           )}

@@ -11,9 +11,11 @@ import {
   Calendar, Bell, Sparkles, Sun,
   Compass, Heart, Shield, GraduationCap, Gift, Zap,
   Plane, Users, UtensilsCrossed,
-  Timer, Receipt, Award
+  Timer, Receipt, Award, X, ExternalLink,
+  CreditCard, Building2, Briefcase,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Avatar from '@/components/ui/Avatar';
 import { useStockPrice } from '@/hooks/useStockPrice';
 import { useNotifications } from '@/context/NotificationContext';
@@ -65,11 +67,17 @@ function useCountUp(target: number, duration = 1800, delay = 300) {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const greeting = useGreeting();
   const time = useLiveTime();
   const { stock, loading: stockLoading } = useStockPrice();
   const { unreadCount, togglePanel } = useNotifications();
   const [mounted, setMounted] = useState(false);
+  const [showBenefitDetail, setShowBenefitDetail] = useState<string | null>(null);
+  const [showStockAction, setShowStockAction] = useState<'buy' | 'sell' | null>(null);
+  const [stockShares, setStockShares] = useState('');
+  const [stockConfirmed, setStockConfirmed] = useState(false);
+  const [showEventDetail, setShowEventDetail] = useState<number | null>(null);
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
@@ -361,7 +369,7 @@ export default function DashboardPage() {
               See more
             </Link>
           </div>
-          <div className="bg-gradient-to-br from-[#FFBD4C]/10 to-[#FFBD4C]/5 rounded-[18px] border border-[#FFBD4C]/20 p-4 mb-2.5">
+          <button onClick={() => setShowBenefitDetail('medical')} className="w-full text-left bg-gradient-to-br from-[#FFBD4C]/10 to-[#FFBD4C]/5 rounded-[18px] border border-[#FFBD4C]/20 p-4 mb-2.5 active:scale-[0.98] transition-all">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-[14px] bg-red-50 flex items-center justify-center shrink-0">
                 <Heart size={22} className="text-red-500" strokeWidth={2} />
@@ -376,20 +384,20 @@ export default function DashboardPage() {
                 <p className="text-[9px] text-[#A4ABB8]">Total value/yr</p>
               </div>
             </div>
-          </div>
+          </button>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { icon: GraduationCap, color: '#FFBD4C', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr' },
-              { icon: Plane, color: '#40C4AA', bg: '#D1FAE5', title: 'Flights', value: 'Return home' },
-              { icon: Shield, color: '#7C3AED', bg: '#EDE9FE', title: 'Life Cover', value: '24x salary' },
-            ].map(({ icon: Icon, color, bg, title, value }) => (
-              <div key={title} className="rounded-[14px] p-3 bg-white border border-[#DFE1E6] text-center">
+              { icon: GraduationCap, color: '#FFBD4C', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr', detail: 'education' },
+              { icon: Plane, color: '#40C4AA', bg: '#D1FAE5', title: 'Flights', value: 'Return home', detail: 'flights' },
+              { icon: Shield, color: '#7C3AED', bg: '#EDE9FE', title: 'Life Cover', value: '24x salary', detail: 'life' },
+            ].map(({ icon: Icon, color, bg, title, value, detail }) => (
+              <button key={title} onClick={() => setShowBenefitDetail(detail)} className="rounded-[14px] p-3 bg-white border border-[#DFE1E6] text-center active:scale-[0.95] transition-all hover:shadow-sm">
                 <div className="w-9 h-9 rounded-[10px] flex items-center justify-center mx-auto mb-2" style={{ background: bg }}>
                   <Icon size={16} style={{ color }} strokeWidth={2} />
                 </div>
                 <p className="text-[11px] font-bold text-[#15161E]">{title}</p>
                 <p className="text-[10px] font-semibold mt-0.5" style={{ color }}>{value}</p>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -404,7 +412,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollSnapType: 'x mandatory' }}>
             {relevantOffers.map(offer => (
-              <div key={offer.id} className="shrink-0 w-48 bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden" style={{ scrollSnapAlign: 'start' }}>
+              <button key={offer.id} onClick={() => router.push('/offers')} className="shrink-0 w-48 bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden text-left active:scale-[0.97] transition-all hover:shadow-md" style={{ scrollSnapAlign: 'start' }}>
                 <div className="relative h-24">
                   <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -416,7 +424,7 @@ export default function DashboardPage() {
                   <p className="text-xs font-bold text-[#15161E] line-clamp-1 mb-1">{offer.title}</p>
                   <p className="text-[11px] font-bold" style={{ color: offer.color }}>{offer.value}</p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -514,10 +522,10 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2.5 px-4 pb-4 pt-1.5">
-            <button className="flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white bg-green-600 active:scale-[0.97] transition-all">
+            <button onClick={() => { setShowStockAction('buy'); setStockShares(''); setStockConfirmed(false); }} className="flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white bg-green-600 active:scale-[0.97] transition-all">
               <TrendingUp size={15} /> Buy
             </button>
-            <button className="flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white bg-red-500 active:scale-[0.97] transition-all">
+            <button onClick={() => { setShowStockAction('sell'); setStockShares(''); setStockConfirmed(false); }} className="flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white bg-red-500 active:scale-[0.97] transition-all">
               <TrendingDown size={15} /> Sell
             </button>
           </div>
@@ -537,33 +545,252 @@ export default function DashboardPage() {
           </div>
           <div className="space-y-2">
             {[
-              { time: '10:00 AM', title: 'Team Standup', tag: 'Meeting', tagColor: '#9D63F6' },
-              { time: '02:00 PM', title: 'Q2 Budget Review', tag: 'Finance', tagColor: '#FFBD4C' },
-              { time: '04:30 PM', title: 'Gaming Tournament — FIFA', tag: 'Social', tagColor: '#DC2626' },
+              { time: '10:00 AM', title: 'Team Standup', tag: 'Meeting', tagColor: '#9D63F6', location: 'Conference Room 3A', attendees: 'Ahmed, Maryam, Faris, +4 others', duration: '30 min' },
+              { time: '02:00 PM', title: 'Q2 Budget Review', tag: 'Finance', tagColor: '#FFBD4C', location: 'Board Room · Tower B', attendees: 'Finance Team', duration: '1 hour' },
+              { time: '04:30 PM', title: 'Gaming Tournament — FIFA', tag: 'Social', tagColor: '#DC2626', location: 'IHC Lounge · Ground Floor', attendees: '32 registered players', duration: '2 hours' },
             ].map((evt, i) => (
-              <div key={i} className="flex items-center gap-3 bg-[#F8F9FB] rounded-[12px] px-3 py-2.5 border border-[#DFE1E6]">
-                <div className="w-[48px] shrink-0">
-                  <p className="text-[11px] font-bold text-[#15161E] tabular-nums">{evt.time}</p>
+              <button key={i} onClick={() => setShowEventDetail(showEventDetail === i ? null : i)} className="w-full text-left">
+                <div className="flex items-center gap-3 bg-[#F8F9FB] rounded-[12px] px-3 py-2.5 border border-[#DFE1E6] active:scale-[0.98] transition-all">
+                  <div className="w-[48px] shrink-0">
+                    <p className="text-[11px] font-bold text-[#15161E] tabular-nums">{evt.time}</p>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-[#15161E] truncate">{evt.title}</p>
+                  </div>
+                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full shrink-0"
+                    style={{ background: evt.tagColor + '12', color: evt.tagColor }}>
+                    {evt.tag}
+                  </span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-[#15161E] truncate">{evt.title}</p>
-                </div>
-                <span className="text-[9px] font-semibold px-2 py-0.5 rounded-full shrink-0"
-                  style={{ background: evt.tagColor + '12', color: evt.tagColor }}>
-                  {evt.tag}
-                </span>
-              </div>
+                {showEventDetail === i && (
+                  <div className="mt-1 mb-1.5 px-3 py-2.5 rounded-[12px] bg-white border border-[#DFE1E6] space-y-1.5" style={{ animation: 'fadeSlideDown 0.2s ease-out' }}>
+                    <div className="flex items-center gap-2 text-[11px] text-[#666D80]">
+                      <Building2 size={11} className="text-[#A4ABB8]" /> {evt.location}
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-[#666D80]">
+                      <Users size={11} className="text-[#A4ABB8]" /> {evt.attendees}
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-[#666D80]">
+                      <Timer size={11} className="text-[#A4ABB8]" /> {evt.duration}
+                    </div>
+                  </div>
+                )}
+              </button>
             ))}
           </div>
         </div>
 
       </div>
 
+      {/* ═══════════════════════════════════════
+          BENEFIT DETAIL BOTTOM SHEET
+          ═══════════════════════════════════════ */}
+      {showBenefitDetail && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowBenefitDetail(null)}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
+            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
+            {showBenefitDetail === 'medical' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-red-50 flex items-center justify-center"><Heart size={22} className="text-red-500" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Medical Insurance</p>
+                    <p className="text-[12px] text-[#FFBD4C] font-semibold">Daman Enhanced · Family Plan</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Annual Value', value: 'AED 85,000' },
+                    { label: 'Provider', value: 'Daman Health' },
+                    { label: 'Coverage', value: 'Employee + Family' },
+                    { label: 'Network', value: 'Enhanced (All UAE)' },
+                    { label: 'Dental', value: 'Included' },
+                    { label: 'Optical', value: 'AED 1,500/yr' },
+                    { label: 'Maternity', value: 'Full coverage' },
+                    { label: 'Wellness', value: 'Annual checkup free' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+medical+insurance+benefits'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
+                </button>
+              </div>
+            )}
+            {showBenefitDetail === 'education' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#FEF3C7] flex items-center justify-center"><GraduationCap size={22} className="text-[#FFBD4C]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Education Allowance</p>
+                    <p className="text-[12px] text-[#FFBD4C] font-semibold">AED 20,000 per year</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Annual Limit', value: 'AED 20,000' },
+                    { label: 'Used This Year', value: 'AED 5,200' },
+                    { label: 'Remaining', value: 'AED 14,800' },
+                    { label: 'Covers', value: 'Tuition + books' },
+                    { label: 'Children', value: 'Up to 3 children' },
+                    { label: 'Age Limit', value: 'Up to 18 years' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full bg-[#F8F9FB] rounded-full h-2.5 overflow-hidden">
+                  <div className="h-full rounded-full bg-[#FFBD4C]" style={{ width: '26%' }} />
+                </div>
+                <p className="text-[11px] text-[#A4ABB8] text-center">26% used · AED 14,800 remaining</p>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=How+do+I+claim+my+education+allowance'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Claim via AI
+                </button>
+              </div>
+            )}
+            {showBenefitDetail === 'flights' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#D1FAE5] flex items-center justify-center"><Plane size={22} className="text-[#40C4AA]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Annual Flight Benefit</p>
+                    <p className="text-[12px] text-[#40C4AA] font-semibold">Return flight home for you + family</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Entitlement', value: 'Annual return' },
+                    { label: 'Class', value: 'Economy (upgradeable)' },
+                    { label: 'Coverage', value: 'Employee + family' },
+                    { label: 'This Year', value: 'Not yet used' },
+                    { label: 'Etihad Discount', value: '15% off' },
+                    { label: 'Emirates Discount', value: '10% off' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=I+want+to+book+a+flight'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#40C4AA] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(64,196,170,0.3)' }}>
+                  <Plane size={14} className="inline mr-1.5" />Book Flight with AI
+                </button>
+              </div>
+            )}
+            {showBenefitDetail === 'life' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#EDE9FE] flex items-center justify-center"><Shield size={22} className="text-[#7C3AED]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Life Insurance</p>
+                    <p className="text-[12px] text-[#7C3AED] font-semibold">24x monthly salary coverage</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Coverage', value: '24x salary' },
+                    { label: 'Provider', value: 'IHC Group Life' },
+                    { label: 'Type', value: 'Term life' },
+                    { label: 'Beneficiary', value: 'As per HR file' },
+                    { label: 'Accidental Death', value: '48x salary' },
+                    { label: 'Status', value: 'Active' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+life+insurance+coverage'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#7C3AED] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════
+          STOCK TRADE BOTTOM SHEET
+          ═══════════════════════════════════════ */}
+      {showStockAction && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowStockAction(null)}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
+            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
+            {!stockConfirmed ? (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: showStockAction === 'buy' ? '#05966915' : '#DC262615' }}>
+                    {showStockAction === 'buy' ? <TrendingUp size={18} className="text-green-600" /> : <TrendingDown size={18} className="text-red-500" />}
+                  </div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">{showStockAction === 'buy' ? 'Buy' : 'Sell'} IHC Shares</p>
+                    <p className="text-[12px] text-[#A4ABB8]">ADX · AED {sd.price.toFixed(2)} per share</p>
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Number of Shares</label>
+                  <input type="number" value={stockShares} onChange={e => setStockShares(e.target.value)} placeholder="e.g. 100"
+                    className="w-full mt-2 border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors text-center" />
+                </div>
+                {stockShares && parseInt(stockShares) > 0 && (
+                  <div className="p-3 rounded-[14px] bg-[#F8F9FB] space-y-2">
+                    <div className="flex justify-between text-[12px]">
+                      <span className="text-[#666D80]">{stockShares} shares × AED {sd.price.toFixed(2)}</span>
+                      <span className="font-bold text-[#15161E]">AED {(parseInt(stockShares) * sd.price).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                    <div className="flex justify-between text-[12px]">
+                      <span className="text-[#666D80]">Brokerage (0.15%)</span>
+                      <span className="font-bold text-[#15161E]">AED {(parseInt(stockShares) * sd.price * 0.0015).toFixed(2)}</span>
+                    </div>
+                    <div className="border-t border-[#DFE1E6] pt-2 flex justify-between text-[14px] font-extrabold">
+                      <span>Total</span>
+                      <span style={{ color: showStockAction === 'buy' ? '#059669' : '#DC2626' }}>AED {(parseInt(stockShares) * sd.price * 1.0015).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                  </div>
+                )}
+                <button
+                  onClick={() => { if (stockShares && parseInt(stockShares) > 0) setStockConfirmed(true); }}
+                  className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white active:scale-[0.97] transition-all"
+                  style={{ background: stockShares && parseInt(stockShares) > 0 ? (showStockAction === 'buy' ? '#059669' : '#DC2626') : '#DFE1E6', boxShadow: stockShares && parseInt(stockShares) > 0 ? '0 4px 16px rgba(0,0,0,0.15)' : 'none' }}>
+                  {showStockAction === 'buy' ? 'Buy' : 'Sell'} {stockShares || '0'} Shares
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4 text-center py-4">
+                <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto" style={{ background: showStockAction === 'buy' ? '#F0FDF4' : '#FEF2F2' }}>
+                  {showStockAction === 'buy' ? <TrendingUp size={30} className="text-green-600" /> : <TrendingDown size={30} className="text-red-500" />}
+                </div>
+                <p className="text-[18px] font-bold text-[#15161E]">Order Placed!</p>
+                <p className="text-[13px] text-[#666D80]">{showStockAction === 'buy' ? 'Buy' : 'Sell'} order for {stockShares} IHC shares at AED {sd.price.toFixed(2)}</p>
+                <p className="text-[11px] text-[#A4ABB8]">Order #ADX-{Math.floor(Math.random() * 900000 + 100000)} · Pending execution</p>
+                <button onClick={() => setShowStockAction(null)} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-[0.97] transition-all">
+                  Done
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Float animation keyframes */}
       <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
+        }
+        @keyframes slideUp {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        @keyframes fadeSlideDown {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </AppShell>

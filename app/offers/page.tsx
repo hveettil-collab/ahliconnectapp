@@ -10,6 +10,7 @@ const CATEGORIES = ['All', 'Property', 'Insurance', 'Healthcare', 'Mobility', 'W
 export default function OffersPage() {
   const { user } = useAuth();
   const [cat, setCat] = useState('All');
+  const [claimed, setClaimed] = useState<Set<string>>(new Set());
 
   const filtered = OFFERS.filter(o => {
     const matchCat = cat === 'All' || o.category === cat;
@@ -61,9 +62,11 @@ export default function OffersPage() {
                         <Clock size={11} /> {offer.expires}
                       </div>
                     </div>
-                    <button className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-[12px] text-sm font-semibold text-white transition-all active:scale-[0.98]"
-                      style={{ background: offer.color }}>
-                      Claim Offer <ArrowRight size={14} />
+                    <button
+                      onClick={() => setClaimed(prev => new Set(prev).add(offer.id))}
+                      className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-[12px] text-sm font-semibold text-white transition-all active:scale-[0.98]"
+                      style={{ background: claimed.has(offer.id) ? '#059669' : offer.color }}>
+                      {claimed.has(offer.id) ? 'Claimed!' : 'Claim Offer'} {!claimed.has(offer.id) && <ArrowRight size={14} />}
                     </button>
                   </div>
                 </div>
@@ -75,7 +78,7 @@ export default function OffersPage() {
 
         <div className="grid grid-cols-1 gap-3">
           {(cat === 'All' ? filtered.filter(o => !o.featured) : filtered).map(offer => (
-            <div key={offer.id} className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
+            <div key={offer.id} onClick={() => setClaimed(prev => new Set(prev).add(offer.id))} className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
               <img src={offer.image} alt={offer.title} className="w-full h-32 object-cover" />
               <div className="p-5">
               <div className="flex items-center gap-3 mb-3">
@@ -91,7 +94,7 @@ export default function OffersPage() {
               <p className="text-xs text-[#666D80] mb-3 line-clamp-2">{offer.description}</p>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-bold" style={{ color: offer.color }}>{offer.value}</span>
-                <span className="text-xs font-semibold text-[#9D63F6] bg-[#F7F1FF] px-2 py-0.5 rounded-full">Claim →</span>
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ color: claimed.has(offer.id) ? '#059669' : '#9D63F6', background: claimed.has(offer.id) ? '#F0FDF4' : '#F7F1FF' }}>{claimed.has(offer.id) ? 'Claimed!' : 'Claim →'}</span>
               </div>
               </div>
             </div>

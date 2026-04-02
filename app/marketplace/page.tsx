@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
 import { MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import { useAuth } from '@/context/AuthContext';
@@ -183,6 +184,9 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
   const [activeImageIdx] = useState(0);
   const [showOffer, setShowOffer] = useState(false);
   const [offerAmount, setOfferAmount] = useState('');
+  const [offerSent, setOfferSent] = useState(false);
+  const [showSellerProfile, setShowSellerProfile] = useState(false);
+  const [showCallSheet, setShowCallSheet] = useState(false);
   const [messages, setMessages] = useState<ChatMsg[]>([
     { id: '1', from: 'seller', text: `Hi! Thanks for your interest in the ${listing.title}. Feel free to ask me anything.`, time: '2:30 PM' },
   ]);
@@ -331,10 +335,10 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
                 )}
               </div>
               <div className="flex gap-2 mt-4">
-                <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[14px] text-[12px] font-bold text-white" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <button onClick={() => setShowCallSheet(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[14px] text-[12px] font-bold text-white active:scale-95 transition-all" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
                   <PhoneCall size={13} /> Call
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[14px] text-[12px] font-bold text-white" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
+                <button onClick={() => setShowSellerProfile(true)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[14px] text-[12px] font-bold text-white active:scale-95 transition-all" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
                   <Eye size={13} /> Profile
                 </button>
               </div>
@@ -432,15 +436,114 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
               <input type="text" value={offerAmount} onChange={e => setOfferAmount(e.target.value)} placeholder="Enter amount"
                 className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[16px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
             </div>
-            <button className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white bg-[#9D63F6] active:scale-[0.98] transition-all" style={{ boxShadow: '0 4px 16px rgba(27,58,107,0.25)' }}>
-              Send Offer
+            <button
+              onClick={() => {
+                if (!offerAmount.trim()) return;
+                setOfferSent(true);
+                setTimeout(() => { setShowOffer(false); setOfferSent(false); setOfferAmount(''); }, 2000);
+              }}
+              className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white bg-[#9D63F6] active:scale-[0.98] transition-all"
+              style={{ boxShadow: '0 4px 16px rgba(27,58,107,0.25)' }}>
+              {offerSent ? 'Offer Sent!' : 'Send Offer'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Seller Profile overlay ── */}
+      {showSellerProfile && (
+        <div className="absolute inset-0 z-30 flex items-end" onClick={() => setShowSellerProfile(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative w-full bg-white rounded-t-[28px] px-5 py-5 space-y-4 slide-up max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-[18px] bg-gradient-to-br from-[#9D63F6] to-[#B182F8] flex items-center justify-center text-[20px] font-bold text-white shadow-lg">
+                {listing.seller.slice(0, 2)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[17px] font-bold text-[#15161E]">{listing.seller}</p>
+                  {listing.verified && <BadgeCheck size={16} className="text-[#059669]" />}
+                </div>
+                <p className="text-[13px] text-[#666D80]">{listing.sellerCompany}</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <p className="text-[11px] text-green-600 font-medium">Active now</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <div className="flex-1 text-center py-3 rounded-[14px] bg-[#F8F9FB]">
+                <p className="text-[16px] font-bold text-[#15161E]">{listing.rating}</p>
+                <p className="text-[10px] text-[#A4ABB8]">Rating</p>
+              </div>
+              <div className="flex-1 text-center py-3 rounded-[14px] bg-[#F8F9FB]">
+                <p className="text-[16px] font-bold text-[#15161E]">{listing.reviews}</p>
+                <p className="text-[10px] text-[#A4ABB8]">Reviews</p>
+              </div>
+              <div className="flex-1 text-center py-3 rounded-[14px] bg-[#F8F9FB]">
+                <p className="text-[16px] font-bold text-[#15161E]">3</p>
+                <p className="text-[10px] text-[#A4ABB8]">Listings</p>
+              </div>
+            </div>
+            <div className="p-4 rounded-[16px] bg-[#F8F9FB] border border-[#DFE1E6]">
+              <p className="text-[11px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Member Since</p>
+              <p className="text-[13px] font-semibold text-[#15161E]">January 2024 · {listing.sellerCompany}</p>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => { setShowSellerProfile(false); setShowChat(true); }} className="flex-1 py-3 rounded-[16px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(27,58,107,0.25)' }}>
+                <MessageCircle size={14} className="inline mr-1.5" />Message
+              </button>
+              <button onClick={() => { setShowSellerProfile(false); setShowCallSheet(true); }} className="flex-1 py-3 rounded-[16px] text-[13px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all">
+                <PhoneCall size={14} className="inline mr-1.5" />Call
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Call Sheet ── */}
+      {showCallSheet && (
+        <div className="absolute inset-0 z-30 flex items-end" onClick={() => setShowCallSheet(false)}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative w-full bg-white rounded-t-[28px] px-5 py-5 space-y-4 slide-up" onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-[#9D63F6] to-[#B182F8] flex items-center justify-center text-[14px] font-bold text-white">
+                {listing.seller.slice(0, 2)}
+              </div>
+              <div>
+                <p className="text-[15px] font-bold text-[#15161E]">{listing.seller}</p>
+                <p className="text-[12px] text-[#666D80]">{listing.sellerCompany}</p>
+              </div>
+            </div>
+            <a href="tel:+97150123456" className="flex items-center gap-3 p-4 rounded-[16px] bg-[#F0FDF4] border border-[#BBF7D0] active:scale-[0.98] transition-all">
+              <div className="w-10 h-10 rounded-full bg-[#059669] flex items-center justify-center">
+                <PhoneCall size={16} className="text-white" />
+              </div>
+              <div>
+                <p className="text-[14px] font-bold text-[#065F46]">+971 50 123 4567</p>
+                <p className="text-[11px] text-[#047857]">Mobile · IHC Corporate Directory</p>
+              </div>
+            </a>
+            <a href="tel:+97126543210" className="flex items-center gap-3 p-4 rounded-[16px] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-[0.98] transition-all">
+              <div className="w-10 h-10 rounded-full bg-[#666D80] flex items-center justify-center">
+                <PhoneCall size={16} className="text-white" />
+              </div>
+              <div>
+                <p className="text-[14px] font-bold text-[#15161E]">+971 2 654 3210</p>
+                <p className="text-[11px] text-[#A4ABB8]">Office · {listing.sellerCompany}</p>
+              </div>
+            </a>
+            <button onClick={() => setShowCallSheet(false)} className="w-full py-3 rounded-[16px] text-[13px] font-bold text-[#666D80] bg-[#F8F9FB] active:scale-[0.97] transition-all">
+              Cancel
             </button>
           </div>
         </div>
       )}
 
       {/* ── Sticky bottom CTA — glassmorphism ── */}
-      {!showChat && !showOffer && (
+      {!showChat && !showOffer && !showSellerProfile && !showCallSheet && (
         <div className="shrink-0 px-4 py-3 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
           <div className="flex gap-2.5">
             <button onClick={() => setShowChat(true)}
@@ -464,6 +567,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
    ═══════════════════════════════════════════ */
 
 export default function MarketplacePage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [cat, setCat] = useState('All');
@@ -552,7 +656,7 @@ export default function MarketplacePage() {
         {/* ═══════════════════════════════════
            SELL CTA — gradient banner
            ═══════════════════════════════════ */}
-        <button className="spatial-rise d1 w-full flex items-center gap-2.5 p-3 rounded-[18px] active:scale-[0.98] transition-all overflow-hidden relative"
+        <button onClick={() => router.push('/services?prompt=I+want+to+sell+something+on+the+marketplace')} className="spatial-rise d1 w-full flex items-center gap-2.5 p-3 rounded-[18px] active:scale-[0.98] transition-all overflow-hidden relative"
           style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 90% 50%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10 w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
@@ -747,8 +851,8 @@ export default function MarketplacePage() {
                         </span>
                       )}
                       {/* Save button */}
-                      <button className="absolute bottom-2 right-2 w-7 h-7 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
-                        onClick={e => e.stopPropagation()}>
+                      <button className="absolute bottom-2 right-2 w-7 h-7 rounded-full flex items-center justify-center active:scale-90 transition-all" style={{ background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}
+                        onClick={e => { e.stopPropagation(); const heart = e.currentTarget.querySelector('svg'); if (heart) { heart.classList.toggle('text-red-500'); heart.classList.toggle('fill-red-500'); heart.classList.toggle('text-[#A4ABB8]'); } }}>
                         <Heart size={13} className="text-[#A4ABB8]" />
                       </button>
                     </div>

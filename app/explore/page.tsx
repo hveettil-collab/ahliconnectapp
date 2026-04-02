@@ -128,7 +128,7 @@ const QUICK_ACTIONS = [
   { icon: Car, label: 'Rides', color: '#40C4AA', href: '/services?prompt=I+need+to+book+a+ride' },
   { icon: ShoppingBag, label: 'Marketplace', color: '#FFBD4C', href: '/services?prompt=Show+me+the+marketplace' },
   { icon: Gamepad2, label: 'Gaming', color: '#DC2626', href: '/services?prompt=Show+me+gaming+tournaments' },
-  { icon: Shield, label: 'Insurance', color: '#7C3AED', href: '/automations/insurance' },
+  { icon: Shield, label: 'Insurance', color: '#7C3AED', href: '/services?prompt=I+need+motor+insurance' },
   { icon: Receipt, label: 'Payslip', color: '#059669', href: '/services?prompt=Show+me+my+payslip' },
 ];
 
