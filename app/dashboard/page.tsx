@@ -163,17 +163,6 @@ export default function DashboardPage() {
                 <span className="text-[9px] font-bold text-white">325</span>
               </div>
             </div>
-            {/* Star / bookmark */}
-            <div
-              className="w-[50px] h-[50px] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
-              style={{
-                background: 'rgba(244, 239, 232, 0.92)',
-                backdropFilter: 'blur(12px)',
-                WebkitBackdropFilter: 'blur(12px)',
-              }}
-            >
-              <Star size={20} className="text-[#1A1A2E]" />
-            </div>
           </div>
         </div>
 
