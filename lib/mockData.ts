@@ -70,7 +70,7 @@ export const COMPANY_ANNOUNCEMENTS: Record<string, typeof IHC_ANNOUNCEMENTS> = {
       title: 'Shory Motor Insurance — Employee Exclusive Rate',
       summary: 'All Shory employees qualify for 30% off comprehensive motor insurance this month.',
       date: '14 Oct 2024', urgent: false,
-      image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=600&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=300&fit=crop',
       category: 'Offers',
     },
     {
@@ -136,7 +136,7 @@ export const OFFERS = [
     description: 'Group employee rate on full comprehensive motor insurance. Instant approval, digital policy.',
     value: 'From AED 799/year', category: 'Insurance',
     color: '#0D9488', expires: 'Nov 30, 2024', featured: true,
-    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0afa?w=500&h=280&fit=crop',
+    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=500&h=280&fit=crop',
     relevantFor: ['ihc', 'aldar', 'shory', 'purehealth', 'easylease', 'ghitha', 'palms'],
   },
   {

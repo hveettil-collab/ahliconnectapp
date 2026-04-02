@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Megaphone, Tag, ShoppingBag, Sparkles, MessageCircle, User, LogOut, ChevronRight, X, Activity, Info, Compass, Gift, Zap } from 'lucide-react';
+import { Home, Megaphone, Tag, ShoppingBag, Sparkles, MessageCircle, User, LogOut, ChevronRight, X, Activity, Info, Compass, Gift, Zap, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '@/components/ui/Avatar';
@@ -11,6 +11,7 @@ import { COMPANIES } from '@/lib/mockData';
 const NAV = [
   { label: 'Home', href: '/dashboard', icon: Home },
   { label: 'AI Assistant', href: '/services', icon: Sparkles },
+  { label: 'Community', href: '/community', icon: Users, highlight: true },
   { label: 'Automations', href: '/automations', icon: Zap },
   { label: 'Benefits & Offers', href: '/offers', icon: Gift },
   { label: 'Explore', href: '/explore', icon: Compass },
@@ -66,7 +67,7 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
       <nav className="flex-1 px-3 py-4 overflow-y-auto">
         <p className="text-[10px] font-semibold text-[#A4ABB8] uppercase tracking-widest px-3 mb-3">Navigation</p>
         <ul className="space-y-1">
-          {NAV.map(({ label, href, icon: Icon }) => {
+          {NAV.map(({ label, href, icon: Icon, highlight }) => {
             const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
             return (
               <li key={href}>
@@ -77,11 +78,16 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
                     'flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium transition-all duration-150 group',
                     active
                       ? 'bg-[#9D63F6] text-white shadow-sm'
-                      : 'text-[#666D80] hover:bg-[#F8F9FB] hover:text-[#15161E]'
+                      : highlight && !active
+                        ? 'text-[#9D63F6] bg-[#F5F0FF] hover:bg-[#EDE5FF]'
+                        : 'text-[#666D80] hover:bg-[#F8F9FB] hover:text-[#15161E]'
                   )}
                 >
-                  <Icon size={17} className={clsx(active ? 'text-white' : 'text-[#A4ABB8] group-hover:text-[#15161E]')} strokeWidth={active ? 2.2 : 1.8} />
+                  <Icon size={17} className={clsx(active ? 'text-white' : highlight ? 'text-[#9D63F6]' : 'text-[#A4ABB8] group-hover:text-[#15161E]')} strokeWidth={active ? 2.2 : 1.8} />
                   <span className="flex-1">{label}</span>
+                  {highlight && !active && (
+                    <span className="text-[10px] font-bold bg-[#9D63F6] text-white px-1.5 py-0.5 rounded-full leading-none">NEW</span>
+                  )}
                   {active && <ChevronRight size={14} className="text-white/60" />}
                 </Link>
               </li>
