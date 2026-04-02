@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import AppShell from '@/components/layout/AppShell';
 import {
@@ -7,13 +7,11 @@ import {
   MARKET_DATA, COMPANIES, COLLEAGUES
 } from '@/lib/mockData';
 import {
-  ArrowRight, TrendingUp, TrendingDown, CheckCircle2,
-  Calendar, Clock, Bell, Sparkles, ChevronRight, Sun,
-  Compass, Heart, Shield, GraduationCap, Gift, Zap, Star,
-  Plane, Car, Gamepad2, Users, Globe, UtensilsCrossed,
-  CreditCard, MapPin, Palmtree, Menu, RefreshCw,
-  Dumbbell, Activity, Coffee, FileText, Timer, Brain,
-  Wallet, Receipt, Award, ArrowUpRight, Play
+  ArrowRight, TrendingUp, TrendingDown,
+  Calendar, Bell, Sparkles, Sun,
+  Compass, Heart, Shield, GraduationCap, Gift, Zap,
+  Plane, Users, UtensilsCrossed,
+  Timer, Receipt, Award
 } from 'lucide-react';
 import Link from 'next/link';
 import Avatar from '@/components/ui/Avatar';
@@ -52,7 +50,6 @@ function useCountUp(target: number, duration = 1800, delay = 300) {
       const animate = (now: number) => {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // Ease-out cubic
         const eased = 1 - Math.pow(1 - progress, 3);
         setValue(Math.round(eased * target));
         if (progress < 1) requestAnimationFrame(animate);
@@ -70,33 +67,25 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const greeting = useGreeting();
   const time = useLiveTime();
-  const { stock, loading: stockLoading, refetch: refetchStock } = useStockPrice();
+  const { stock, loading: stockLoading } = useStockPrice();
   const { unreadCount, togglePanel } = useNotifications();
   const [mounted, setMounted] = useState(false);
 
-  // Animated counters for USP stats
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
   const benefitsVal = useCountUp(85, 2000, 1000);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  // Merge live stock data with fallback
   const sd = stock ?? {
-    ...MARKET_DATA,
-    live: false,
-    updatedAt: '',
+    ...MARKET_DATA, live: false, updatedAt: '',
     prevClose: MARKET_DATA.price - MARKET_DATA.change,
   };
 
   if (!user) return null;
 
   const company = COMPANIES.find(c => c.id === user.companyId);
-  const companyAnns = COMPANY_ANNOUNCEMENTS[user.companyId] || [];
   const relevantOffers = OFFERS.filter(o => o.relevantFor.includes(user.companyId)).slice(0, 6);
-  const allAnns = [...IHC_ANNOUNCEMENTS, ...companyAnns].slice(0, 3);
   const onlineColleagues = COLLEAGUES.filter(c => c.online);
 
   return (
@@ -110,7 +99,6 @@ export default function DashboardPage() {
         <div className="absolute inset-0" style={{
           background: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 30%, #54B6ED 70%, #40C4AA 100%)',
         }}>
-          {/* Floating orbs for depth */}
           <div className="absolute w-[300px] h-[300px] rounded-full opacity-30" style={{
             background: 'radial-gradient(circle, #FFBD4C 0%, transparent 70%)',
             top: '-80px', right: '-60px',
@@ -128,12 +116,12 @@ export default function DashboardPage() {
           }} />
         </div>
 
-        {/* Noise texture overlay for premium feel */}
+        {/* Noise texture */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }} />
 
-        {/* Top bar — avatar + bell */}
+        {/* Top bar */}
         <div className="relative z-20 flex items-start justify-between px-5 pt-5">
           <div className="flex items-center gap-3">
             <img
@@ -186,7 +174,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* USP Stats Strip — Animated Counters */}
+        {/* USP Stats Strip */}
         <div className="relative z-20 flex items-center justify-between px-5 mt-5"
           style={{
             opacity: mounted ? 1 : 0,
@@ -197,7 +185,7 @@ export default function DashboardPage() {
             { value: `${hoursSaved}`, suffix: 'hrs', label: 'Saved weekly', icon: Timer },
             { value: `${employees}K`, suffix: '+', label: 'Employees', icon: Users },
             { value: `${benefitsVal}K`, suffix: '+', label: 'Benefits AED', icon: Award },
-          ].map(({ value, suffix, label, icon: Icon }, i) => (
+          ].map(({ value, suffix, label, icon: Icon }) => (
             <div key={label} className="flex-1 text-center">
               <div className="flex items-center justify-center gap-1 mb-0.5">
                 <Icon size={13} className="text-white/50" strokeWidth={2} />
@@ -206,12 +194,11 @@ export default function DashboardPage() {
                 </p>
               </div>
               <p className="text-white/40 text-[10px] font-medium">{label}</p>
-              {i < 2 && <div className="hidden" />}
             </div>
           ))}
         </div>
 
-        {/* AI Assistant — Floating CTA */}
+        {/* AI Assistant CTA */}
         <div className="relative z-20 px-5 mt-5 pb-5"
           style={{
             opacity: mounted ? 1 : 0,
@@ -226,7 +213,6 @@ export default function DashboardPage() {
               border: '1px solid rgba(255,255,255,0.15)',
             }}>
               <div className="flex items-center gap-3.5 px-4 py-3.5">
-                {/* Pulsing AI orb */}
                 <div className="relative w-[44px] h-[44px] shrink-0">
                   <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{
                     background: 'linear-gradient(135deg, #FFBD4C, #9D63F6)',
@@ -254,7 +240,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          SMART AUTOMATIONS — The hero USP cards
+          SMART AUTOMATIONS — Stacked image cards
           ═══════════════════════════════════════ */}
       <div className="px-4 -mt-1 pb-1">
         <div className="flex items-center justify-between mb-3">
@@ -265,60 +251,62 @@ export default function DashboardPage() {
           <span className="text-[10px] font-semibold text-[#9D63F6] bg-[#9D63F6]/8 px-2.5 py-1 rounded-full">AI-Powered</span>
         </div>
 
-        <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-4 px-4" style={{ scrollSnapType: 'x mandatory' }}>
+        <div className="space-y-3">
           {[
             {
               title: 'Salary Certificate',
-              subtitle: 'Generated in under 30 seconds',
-              icon: FileText,
-              gradient: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 100%)',
+              subtitle: 'AI-generated official documents in seconds. No HR queues, no waiting.',
+              image: '/illust-salary.svg',
               stat: '<30s',
               statLabel: 'avg. time',
+              accent: '#9D63F6',
               href: '/automations/salary-certificate',
             },
             {
               title: 'Smart Leave',
-              subtitle: 'AI suggests best dates for you',
-              icon: Calendar,
-              gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)',
+              subtitle: 'AI suggests optimal dates based on team calendar and workload.',
+              image: '/illust-leave.svg',
               stat: '1-tap',
               statLabel: 'approval',
+              accent: '#40C4AA',
               href: '/automations/leave-request',
             },
             {
               title: 'Expense Claim',
-              subtitle: 'Scan receipt, auto-categorize',
-              icon: Receipt,
-              gradient: 'linear-gradient(135deg, #FFBD4C 0%, #EA580C 100%)',
+              subtitle: 'Snap a receipt photo. AI reads, categorizes, and submits for you.',
+              image: '/illust-expense.svg',
               stat: '98%',
               statLabel: 'accuracy',
+              accent: '#FFBD4C',
               href: '/automations/expense-claim',
             },
           ].map((card, i) => (
             <Link key={card.title} href={card.href}
-              className="shrink-0 rounded-[20px] overflow-hidden active:scale-[0.97] transition-transform"
+              className="block rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.98]"
               style={{
-                width: 'clamp(200px, 52vw, 240px)',
-                scrollSnapAlign: 'start',
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.1}s`,
+                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.15}s`,
               }}>
-              <div className="relative p-4 pb-3" style={{ background: card.gradient }}>
-                {/* Decorative circles */}
-                <div className="absolute top-3 right-3 w-16 h-16 rounded-full opacity-10" style={{ background: 'white' }} />
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full opacity-5" style={{ background: 'white' }} />
-                <card.icon size={24} className="text-white mb-3" strokeWidth={1.8} />
-                <p className="text-white text-[14px] font-bold leading-tight">{card.title}</p>
-                <p className="text-white/60 text-[11px] mt-1 leading-snug">{card.subtitle}</p>
+              {/* Illustration */}
+              <div className="relative w-full overflow-hidden" style={{ height: '140px' }}>
+                <img
+                  src={card.image}
+                  alt={card.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div className="bg-white border border-[#DFE1E6] border-t-0 rounded-b-[20px] px-4 py-2.5 flex items-center justify-between">
-                <div>
-                  <p className="text-[18px] font-bold text-[#15161E] leading-none">{card.stat}</p>
-                  <p className="text-[10px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center">
-                  <ArrowRight size={14} className="text-[#15161E]" />
+              {/* Card content */}
+              <div className="px-4 py-3.5">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0 pr-3">
+                    <p className="text-[15px] font-bold text-[#15161E] leading-tight">{card.title}</p>
+                    <p className="text-[12px] text-[#666D80] mt-1 leading-relaxed">{card.subtitle}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[22px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
+                    <p className="text-[10px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -327,9 +315,9 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          QUICK ACCESS BENTO — Redesigned
+          QUICK ACCESS BENTO
           ═══════════════════════════════════════ */}
-      <div className="px-4 pt-3 pb-1">
+      <div className="px-4 pt-4 pb-1">
         <div className="grid grid-cols-4 gap-2">
           {[
             { icon: Gift, label: 'Benefits', href: '/offers', bg: '#F7F1FF', color: '#9D63F6' },
@@ -394,7 +382,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {[
               { icon: GraduationCap, color: '#FFBD4C', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr' },
               { icon: Plane, color: '#40C4AA', bg: '#D1FAE5', title: 'Flights', value: 'Return home' },
@@ -407,36 +395,6 @@ export default function DashboardPage() {
                 <p className="text-[11px] font-bold text-[#15161E]">{title}</p>
                 <p className="text-[10px] font-semibold mt-0.5" style={{ color }}>{value}</p>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Lifestyle & Travel ── */}
-        <div>
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="text-[15px] font-bold text-[#15161E]">Lifestyle & Travel</h3>
-            <Link href="/explore" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
-              See more
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { Icon: Plane, label: 'Book Flights', sub: 'AED 2,100 deals', color: '#40C4AA', bg: '#E7FEF8' },
-              { Icon: Car, label: 'Book Rides', sub: 'Careem Business', color: '#7C3AED', bg: '#F7F1FF' },
-              { Icon: Palmtree, label: 'Vacations', sub: 'Group trips', color: '#EA580C', bg: '#FFF6E0' },
-              { Icon: Gamepad2, label: 'Gaming', sub: 'FIFA, Padel, COD', color: '#DC2626', bg: '#FEEFF2' },
-            ].map(({ Icon, label, sub, color, bg }) => (
-              <Link key={label} href="/services"
-                className="flex items-center gap-3 rounded-[16px] border border-[#DFE1E6] p-3 hover:shadow-md transition-all active:scale-[0.97]"
-                style={{ backgroundColor: bg }}>
-                <div className="w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}18` }}>
-                  <Icon size={20} style={{ color }} strokeWidth={1.8} />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-bold text-[#15161E]">{label}</p>
-                  <p className="text-[10px] font-medium" style={{ color }}>{sub}</p>
-                </div>
-              </Link>
             ))}
           </div>
         </div>
@@ -468,29 +426,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── Perks strip ── */}
-        <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <Zap size={15} className="text-[#EA580C]" strokeWidth={2} />
-            <h3 className="text-sm font-bold text-[#15161E]">Perks & Wellness</h3>
-          </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {[
-              { Icon: Dumbbell, label: 'Palms Sports', value: 'AED 150/mo', color: '#EA580C' },
-              { Icon: Activity, label: 'Health', value: 'Free Annual', color: '#059669' },
-              { Icon: UtensilsCrossed, label: 'Meals', value: '25% Off', color: '#DC2626' },
-              { Icon: Car, label: 'EasyLease', value: 'AED 1,299', color: '#7C3AED' },
-              { Icon: Coffee, label: 'Cafe', value: 'AED 500/mo', color: '#FFBD4C' },
-            ].map(({ Icon, label, value, color }) => (
-              <div key={label} className="rounded-[12px] bg-[#F8F9FB] border border-[#DFE1E6] p-2 text-center">
-                <div className="flex justify-center mb-0.5"><Icon size={18} style={{ color }} strokeWidth={1.8} /></div>
-                <p className="text-[9px] font-bold text-[#15161E] leading-tight">{label}</p>
-                <p className="text-[9px] font-semibold mt-0.5" style={{ color }}>{value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* ── Network ── */}
         <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
           <div className="flex items-center justify-between mb-3">
@@ -515,16 +450,6 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
-        </div>
-
-        {/* ── Weather ── */}
-        <div className="flex items-center gap-2.5 bg-gradient-to-br from-[#9D63F6] to-[#2A5298] rounded-[16px] px-4 py-3 text-white">
-          <Sun size={18} className="text-yellow-300 shrink-0" />
-          <div>
-            <p className="text-[10px] font-semibold text-blue-200">Abu Dhabi</p>
-            <p className="text-sm font-bold">36°C</p>
-          </div>
-          <p className="text-[10px] text-blue-200 ml-auto">{new Date().toLocaleDateString('en-AE', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
         </div>
 
         {/* ── IHC Stock Trading Card — Live ── */}
@@ -610,7 +535,10 @@ export default function DashboardPage() {
               <Calendar size={15} className="text-[#9D63F6]" strokeWidth={2} />
               <h3 className="text-sm font-bold text-[#15161E]">Today</h3>
             </div>
-            <span className="text-[10px] text-[#A4ABB8] font-medium">{new Date().toLocaleDateString('en-AE', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+            <div className="flex items-center gap-2">
+              <Sun size={13} className="text-yellow-500" />
+              <span className="text-[10px] text-[#A4ABB8] font-medium">36°C · {new Date().toLocaleDateString('en-AE', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+            </div>
           </div>
           <div className="space-y-2">
             {[
@@ -632,64 +560,6 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* ── Notifications ── */}
-        <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Bell size={15} className="text-[#7C3AED]" strokeWidth={2} />
-              <h3 className="text-sm font-bold text-[#15161E]">Recent</h3>
-            </div>
-            <span className="text-[10px] text-[#9D63F6] font-semibold">View all</span>
-          </div>
-          <div className="space-y-2">
-            {[
-              { icon: CheckCircle2, color: '#059669', text: 'Annual leave approved — Apr 15–17', time: '2h ago' },
-              { icon: Gift, color: '#FFBD4C', text: 'New offer: 15% off Yas Island units', time: '5h ago' },
-              { icon: Gamepad2, color: '#DC2626', text: 'FIFA Tournament — Round 2 starts today', time: '8h ago' },
-              { icon: Plane, color: '#40C4AA', text: 'Flight deal: Abu Dhabi to London AED 2,100', time: '1d ago' },
-            ].map((n, i) => (
-              <div key={i} className="flex items-start gap-2.5 bg-[#F8F9FB] rounded-[12px] px-3 py-2.5 border border-[#DFE1E6]">
-                <div className="w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0"
-                  style={{ background: n.color + '15' }}>
-                  <n.icon size={14} style={{ color: n.color }} strokeWidth={2} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-[#15161E] leading-snug">{n.text}</p>
-                  <p className="text-[10px] text-[#A4ABB8] mt-0.5">{n.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Announcements ── */}
-        <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-bold text-[#15161E]">Announcements</h3>
-            <Link href="/announcements" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
-              See more
-            </Link>
-          </div>
-          {allAnns.map(ann => {
-            const colors: Record<string, string> = {
-              Financial: '#9D63F6', HR: '#7C3AED', Events: '#40C4AA',
-              Compliance: '#DC2626', Offers: '#FFBD4C', Property: '#FFBD4C',
-              Wellness: '#059669', Rewards: '#EA580C',
-            };
-            const color = colors[ann.category] || '#9D63F6';
-            return (
-              <div key={ann.id} className="flex items-start gap-3 py-2.5 border-b border-[#F8F9FB] last:border-0">
-                <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ background: color }} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-[#15161E] leading-snug line-clamp-1">{ann.title}</p>
-                  <p className="text-[10px] text-[#A4ABB8] mt-0.5">{ann.date} · {ann.tag}</p>
-                </div>
-                {ann.urgent && <span className="text-[9px] font-bold text-red-500 bg-red-50 px-1.5 py-0.5 rounded-full shrink-0">Urgent</span>}
-              </div>
-            );
-          })}
         </div>
 
       </div>

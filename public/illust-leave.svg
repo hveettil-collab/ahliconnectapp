@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" fill="none">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="240" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D1FAE5"/>
+      <stop offset="1" stop-color="#ECFDF5"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="160" rx="16" fill="url(#bg2)"/>
+  <!-- Calendar body -->
+  <rect x="55" y="30" width="130" height="100" rx="12" fill="white" stroke="#DFE1E6" stroke-width="1.5"/>
+  <!-- Calendar header -->
+  <rect x="55" y="30" width="130" height="28" rx="12" fill="#40C4AA"/>
+  <rect x="55" y="46" width="130" height="12" fill="#40C4AA"/>
+  <!-- Month text -->
+  <rect x="85" y="38" width="50" height="5" rx="2.5" fill="white" opacity="0.7"/>
+  <rect x="145" y="38" width="20" height="5" rx="2.5" fill="white" opacity="0.4"/>
+  <!-- Calendar rings -->
+  <rect x="80" y="26" width="4" height="12" rx="2" fill="#2D8A6E"/>
+  <rect x="105" y="26" width="4" height="12" rx="2" fill="#2D8A6E"/>
+  <rect x="130" y="26" width="4" height="12" rx="2" fill="#2D8A6E"/>
+  <rect x="155" y="26" width="4" height="12" rx="2" fill="#2D8A6E"/>
+  <!-- Day grid -->
+  <g opacity="0.5">
+    <rect x="66" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+    <rect x="84" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+    <rect x="102" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+    <rect x="120" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+    <rect x="138" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+    <rect x="156" y="66" width="14" height="14" rx="4" fill="#F8F9FB"/>
+  </g>
+  <!-- Second row -->
+  <rect x="66" y="84" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <rect x="84" y="84" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <!-- Highlighted days (leave days) -->
+  <rect x="102" y="84" width="14" height="14" rx="4" fill="#40C4AA" opacity="0.2"/>
+  <rect x="120" y="84" width="14" height="14" rx="4" fill="#40C4AA" opacity="0.3"/>
+  <rect x="138" y="84" width="14" height="14" rx="4" fill="#40C4AA"/>
+  <rect x="156" y="84" width="14" height="14" rx="4" fill="#40C4AA" opacity="0.3"/>
+  <!-- Third row -->
+  <rect x="66" y="102" width="14" height="14" rx="4" fill="#40C4AA" opacity="0.2"/>
+  <rect x="84" y="102" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <rect x="102" y="102" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <rect x="120" y="102" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <rect x="138" y="102" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <rect x="156" y="102" width="14" height="14" rx="4" fill="#F8F9FB" opacity="0.5"/>
+  <!-- Checkmark on selected day -->
+  <path d="M142 88l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- AI sparkle -->
+  <circle cx="35" cy="60" r="16" fill="#9D63F6" opacity="0.1"/>
+  <path d="M35 52v4M35 64v4M27 60h4M39 60h4M30 55l2.5 2.5M37.5 62.5l2.5 2.5M30 65l2.5-2.5M37.5 57.5l2.5-2.5" stroke="#9D63F6" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- Palm tree accent -->
+  <circle cx="210" cy="110" r="3" fill="#40C4AA" opacity="0.3"/>
+  <circle cx="218" cy="100" r="2" fill="#FFBD4C" opacity="0.4"/>
+</svg>
