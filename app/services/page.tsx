@@ -42,7 +42,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('flight') || t.includes('fly') || t.includes('travel') || t.includes('airport') || t.includes('airline')) {
     return {
-      content: `Great, ${userName}! I found some employee-exclusive flight deals:\n\n✈️ **Abu Dhabi → London** — from AED 2,100 return\n✈️ **Abu Dhabi → Mumbai** — from AED 890 return\n✈️ **Abu Dhabi → Cairo** — from AED 1,200 return\n\nIHC employees get up to **15% off** with Etihad and **10% off** with Emirates.`,
+      content: `Great, ${userName}! I found some employee-exclusive flight deals:\n\n• **Abu Dhabi to London** — from AED 2,100 return\n• **Abu Dhabi to Mumbai** — from AED 890 return\n• **Abu Dhabi to Cairo** — from AED 1,200 return\n\nIHC employees get up to **15% off** with Etihad and **10% off** with Emirates.`,
       cards: [
         { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates via Etihad & Emirates', color: '#40C4AA' },
         { type: 'info', icon: Globe, title: 'Travel Policy', subtitle: 'Annual return flight benefit for you + family', color: '#9D63F6' },
@@ -53,7 +53,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('ride') || t.includes('taxi') || t.includes('cab') || t.includes('careem') || t.includes('uber') || t.includes('transport')) {
     return {
-      content: `I can help you get a ride! As an IHC employee:\n\n🚗 **Careem Business** — Up to 30% off\n🚕 **Airport Transfers** — AED 50 flat rate\n🏢 **Office Shuttle** — Free daily routes\n⚡ **EasyLease** — Monthly car lease from AED 1,299`,
+      content: `I can help you get a ride! As an IHC employee:\n\n• **Careem Business** — Up to 30% off\n• **Airport Transfers** — AED 50 flat rate\n• **Office Shuttle** — Free daily routes\n• **EasyLease** — Monthly car lease from AED 1,299`,
       cards: [
         { type: 'booking', icon: Car, title: 'Book a Ride', subtitle: 'Careem Business — 30% off', color: '#9D63F6' },
         { type: 'info', icon: MapPin, title: 'Shuttle Schedule', subtitle: '6 pickup points · Every 30 min', color: '#40C4AA' },
@@ -63,7 +63,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('vacation') || t.includes('holiday') || t.includes('trip') || t.includes('getaway') || t.includes('beach') || t.includes('resort')) {
     return {
-      content: `Time for a getaway! IHC vacation perks:\n\n🏝️ **Yas Island Staycation** — 40% off\n🏔️ **Jebel Akhdar Group Trip** — AED 450/person\n🌊 **Maldives Package** — AED 3,200 all-inclusive`,
+      content: `Time for a getaway! IHC vacation perks:\n\n• **Yas Island Staycation** — 40% off\n• **Jebel Akhdar Group Trip** — AED 450/person\n• **Maldives Package** — AED 3,200 all-inclusive`,
       cards: [
         { type: 'booking', icon: Palmtree, title: 'Book Yas Staycation', subtitle: '40% IHC employee discount', color: '#FFBD4C' },
         { type: 'social', icon: Users, title: 'Join Group Trip', subtitle: 'Jebel Akhdar — 8/12 spots filled', color: '#40C4AA' },
@@ -73,7 +73,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('game') || t.includes('gaming') || t.includes('fifa') || t.includes('tournament') || t.includes('play') || t.includes('league')) {
     return {
-      content: `Here's what's happening in IHC Gaming! 🎮\n\n🏆 **FIFA Tournament** — Round 2 starts today\n🎯 **Padel League** — Sign up by Apr 5\n🎮 **Call of Duty League** — 48/64 slots filled`,
+      content: `Here's what's happening in IHC Gaming!\n\n• **FIFA Tournament** — Round 2 starts today\n• **Padel League** — Sign up by Apr 5\n• **Call of Duty League** — 48/64 slots filled`,
       cards: [
         { type: 'social', icon: Trophy, title: 'FIFA Tournament', subtitle: 'Round 2 today — 32 players', color: '#DC2626' },
         { type: 'social', icon: Gamepad2, title: 'COD League', subtitle: '48/64 slots — Register now', color: '#9D63F6' },
@@ -83,7 +83,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('benefit') || t.includes('insurance') || t.includes('medical') || t.includes('health') || t.includes('wellness')) {
     return {
-      content: `Your benefits summary, ${userName}:\n\n🏥 **Medical** — Daman Enhanced (family)\n💰 **Life Insurance** — 24× monthly salary\n🏋️ **Gym** — AED 150/month at Palms Sports\n📚 **Education** — AED 20,000/year\n\nTotal value: ~**AED 85,000/year**!`,
+      content: `Your benefits summary, ${userName}:\n\n• **Medical** — Daman Enhanced (family)\n• **Life Insurance** — 24x monthly salary\n• **Gym** — AED 150/month at Palms Sports\n• **Education** — AED 20,000/year\n\nTotal value: ~**AED 85,000/year**!`,
       cards: [
         { type: 'info', icon: Heart, title: 'Medical Coverage', subtitle: 'Daman Enhanced · Family plan', color: '#DC2626' },
         { type: 'info', icon: Shield, title: 'Life Insurance', subtitle: '24× salary · Group coverage', color: '#9D63F6' },
@@ -94,7 +94,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('save') || t.includes('promo')) {
     return {
-      content: `Best employee offers right now:\n\n🏠 **Aldar** — 15% off Yas Island residences\n🚗 **Shory** — Motor insurance from AED 799/year\n🏥 **PureHealth** — Health screening AED 299\n🍽️ **Ghitha** — 25% meal subsidy`,
+      content: `Best employee offers right now:\n\n• **Aldar** — 15% off Yas Island residences\n• **Shory** — Motor insurance from AED 799/year\n• **PureHealth** — Health screening AED 299\n• **Ghitha** — 25% meal subsidy`,
       cards: OFFERS.slice(0, 3).map(offer => ({
         type: 'offer' as const, icon: Gift, title: offer.title,
         subtitle: `${offer.company} · ${offer.value}`, color: offer.color || '#FFBD4C', image: offer.image,
@@ -104,7 +104,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('sell') || t.includes('marketplace') || t.includes('buy') || t.includes('listing')) {
     return {
-      content: `The IHC Marketplace connects 45,000+ employees!\n\n📊 **Active listings**: 234 items\n🔥 **Trending**: Cars, electronics, furniture`,
+      content: `The IHC Marketplace connects 45,000+ employees!\n\n• **Active listings**: 234 items\n• **Trending**: Cars, electronics, furniture`,
       cards: [
         { type: 'action', icon: ShoppingBag, title: 'Sell Something', subtitle: 'AI writes your listing from a photo', color: '#40C4AA' },
         { type: 'action', icon: Star, title: 'Browse Marketplace', subtitle: '234 items from verified employees', color: '#FFBD4C' },
@@ -114,9 +114,9 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('sick leave') || t.includes('time off')) {
     return {
-      content: `Your leave summary:\n\n📅 **Annual Leave**: **22 days** remaining\n🏥 **Sick Leave**: 10 days available\n⏰ **Emergency Leave**: 5 days/incident\n\n⚡ **NEW:** You can now submit leave requests instantly using our **Smart Leave Manager** automation — no more email chains!`,
+      content: `Your leave summary:\n\n• **Annual Leave**: **22 days** remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days/incident\n\n**NEW:** You can now submit leave requests instantly using our **Smart Leave Manager** automation — no more email chains!`,
       cards: [
-        { type: 'action', icon: Zap, title: '⚡ Submit Leave Request', subtitle: 'Automated — instant approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
+        { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Automated — instant approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
         { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6' },
         { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
       ]
@@ -125,9 +125,9 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('salary') || t.includes('payslip') || t.includes('certificate') || t.includes('pay')) {
     return {
-      content: `Salary options:\n\n💰 **March payslip** ready to download\n📄 **Salary certificates** — now **instant** with automation!\n📊 **Next salary credit**: April 28th\n\n⚡ **No more waiting 3-5 days!** Generate your salary certificate in under 30 seconds with digital verification.`,
+      content: `Salary options:\n\n• **March payslip** ready to download\n• **Salary certificates** — now **instant** with automation!\n• **Next salary credit**: April 28th\n\n**No more waiting 3-5 days!** Generate your salary certificate in under 30 seconds with digital verification.`,
       cards: [
-        { type: 'action', icon: Zap, title: '⚡ Generate Salary Certificate', subtitle: 'Automated — ready in < 30 seconds', color: '#40C4AA', link: '/automations/salary-certificate' },
+        { type: 'action', icon: Zap, title: 'Generate Salary Certificate', subtitle: 'Automated — ready in < 30 seconds', color: '#40C4AA', link: '/automations/salary-certificate' },
         { type: 'info', icon: DollarSign, title: 'View Payslip', subtitle: 'March 2026', color: '#40C4AA' },
         { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
       ]
@@ -136,9 +136,9 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('expense') || t.includes('receipt') || t.includes('reimburse') || t.includes('claim') || t.includes('reimbursement')) {
     return {
-      content: `Expense management:\n\n💳 **AI Expense Processor** — snap a receipt, AI does the rest!\n📊 **Pending claims**: 0\n✅ **Last reimbursement**: AED 420 (31 Mar)\n\n⚡ No more manual Excel entry. Our AI extracts vendor, amount, date & category automatically and validates against company policy.`,
+      content: `Expense management:\n\n• **AI Expense Processor** — snap a receipt, AI does the rest!\n• **Pending claims**: 0\n• **Last reimbursement**: AED 420 (31 Mar)\n\nNo more manual Excel entry. Our AI extracts vendor, amount, date & category automatically and validates against company policy.`,
       cards: [
-        { type: 'action', icon: Zap, title: '⚡ Submit Expense Claim', subtitle: 'AI-powered — receipt to reimbursement in 2 min', color: '#40C4AA', link: '/automations/expense-claim' },
+        { type: 'action', icon: Zap, title: 'Submit Expense Claim', subtitle: 'AI-powered — receipt to reimbursement in 2 min', color: '#40C4AA', link: '/automations/expense-claim' },
         { type: 'info', icon: Receipt, title: 'Expense History', subtitle: '3 claims this month · AED 1,142', color: '#9D63F6' },
         { type: 'action', icon: TrendingUp, title: 'View All Automations', subtitle: '347 hrs/week saved across IHC', color: '#FFBD4C', link: '/automations' },
       ]
@@ -147,17 +147,17 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if (t.includes('automat') || t.includes('workflow') || t.includes('process')) {
     return {
-      content: `Here are the automations available to you:\n\n📄 **Salary Certificate** — Instant PDF with digital verification\n📅 **Smart Leave Manager** — Auto-balance, conflict check, approval pipeline\n💳 **AI Expense Processor** — Receipt scanning with policy compliance\n\n🚀 Together these save **347 hours/week** across IHC with a **95% error reduction**.`,
+      content: `Here are the automations available to you:\n\n• **Salary Certificate** — Instant PDF with digital verification\n• **Smart Leave Manager** — Auto-balance, conflict check, approval pipeline\n• **AI Expense Processor** — Receipt scanning with policy compliance\n\nTogether these save **347 hours/week** across IHC with a **95% error reduction**.`,
       cards: [
-        { type: 'action', icon: FileText, title: '⚡ Salary Certificate', subtitle: 'Generate in < 30 seconds', color: '#9D63F6', link: '/automations/salary-certificate' },
-        { type: 'action', icon: Calendar, title: '⚡ Leave Request', subtitle: 'Automated approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
-        { type: 'action', icon: Receipt, title: '⚡ Expense Claim', subtitle: 'AI receipt extraction', color: '#FFBD4C', link: '/automations/expense-claim' },
+        { type: 'action', icon: FileText, title: 'Salary Certificate', subtitle: 'Generate in < 30 seconds', color: '#9D63F6', link: '/automations/salary-certificate' },
+        { type: 'action', icon: Calendar, title: 'Leave Request', subtitle: 'Automated approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
+        { type: 'action', icon: Receipt, title: 'Expense Claim', subtitle: 'AI receipt extraction', color: '#FFBD4C', link: '/automations/expense-claim' },
       ]
     };
   }
 
   return {
-    content: `I'm your AI assistant for everything at IHC! I can help with:\n\n✈️ Book flights with employee discounts\n🚗 Book rides & check shuttle schedules\n🏝️ Plan vacations & join group trips\n🎮 Join gaming tournaments & leagues\n💰 View benefits, offers & discounts\n\nJust ask me anything, ${userName}!`,
+    content: `I'm your AI assistant for everything at IHC! I can help with:\n\n• Book flights with employee discounts\n• Book rides & check shuttle schedules\n• Plan vacations & join group trips\n• Join gaming tournaments & leagues\n• View benefits, offers & discounts\n\nJust ask me anything, ${userName}!`,
     cards: [
       { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#40C4AA' },
       { type: 'booking', icon: Palmtree, title: 'Plan a Vacation', subtitle: 'Group trips & staycations', color: '#FFBD4C' },
@@ -333,7 +333,7 @@ export default function ServicesPage() {
         {messages.length > 0 && messages[messages.length - 1]?.role === 'ai' && !messages[messages.length - 1]?.typing && (
           <div className="px-3 md:px-6 lg:px-8 pb-2 shrink-0 max-w-4xl mx-auto w-full">
             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
-              {['Flights ✈️', 'Benefits 💰', 'Gaming 🎮', 'Offers 🎁', 'Rides 🚗'].map(chip => (
+              {['Flights', 'Benefits', 'Gaming', 'Offers', 'Rides'].map(chip => (
                 <button
                   key={chip}
                   onClick={() => handleSend(chip.split(' ')[0])}

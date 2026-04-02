@@ -141,7 +141,7 @@ export default function LeaveRequestPage() {
       // Step 7: Notifications
       updateStep('notify', 'running');
       await Promise.all([
-        notifySlack(`${user?.company?.toLowerCase().replace(/\s+/g, '-')}-team`, `🏖 ${user?.name} on ${selectedType.label}: ${startDate} to ${endDate}`, run.id),
+        notifySlack(`${user?.company?.toLowerCase().replace(/\s+/g, '-')}-team`, `${user?.name} on ${selectedType.label}: ${startDate} to ${endDate}`, run.id),
         sendEmail(user?.email ?? '', `Leave Approved: ${selectedType.label} (${startDate} to ${endDate})`, run.id),
       ]);
       addStep(run.id, { id: 's7', name: 'Send notifications', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() });
@@ -304,7 +304,7 @@ export default function LeaveRequestPage() {
                   <p className="text-[11px] text-[#666D80]">• Auto-balance + conflicts</p>
                   <p className="text-[11px] text-[#666D80]">• One-tap approval</p>
                   <p className="text-[11px] text-[#666D80]">• Auto-sync everything</p>
-                  <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 2 min</p>
+                  <p className="font-bold text-[#059669] mt-2 text-[11px]">Under 2 min</p>
                 </div>
               </div>
             </div>

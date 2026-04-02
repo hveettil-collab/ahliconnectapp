@@ -11,7 +11,8 @@ import {
   Calendar, Clock, Bell, Sparkles, ChevronRight, Sun,
   Compass, Heart, Shield, GraduationCap, Gift, Zap, Star,
   Plane, Car, Gamepad2, Users, Globe, UtensilsCrossed,
-  CreditCard, MapPin, Palmtree, Menu, RefreshCw
+  CreditCard, MapPin, Palmtree, Menu, RefreshCw,
+  Dumbbell, Activity, Coffee
 } from 'lucide-react';
 import Link from 'next/link';
 import Avatar from '@/components/ui/Avatar';
@@ -305,14 +306,17 @@ export default function DashboardPage() {
           </div>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { emoji: '✈️', label: 'Book Flights', sub: 'AED 2,100 deals', color: '#40C4AA', bg: 'from-teal-50 to-emerald-50' },
-              { emoji: '🚗', label: 'Book Rides', sub: 'Careem Business', color: '#7C3AED', bg: 'from-violet-50 to-purple-50' },
-              { emoji: '🏝️', label: 'Vacations', sub: 'Group trips', color: '#EA580C', bg: 'from-orange-50 to-amber-50' },
-              { emoji: '🎮', label: 'Gaming', sub: 'FIFA, Padel, COD', color: '#DC2626', bg: 'from-red-50 to-rose-50' },
-            ].map(({ emoji, label, sub, color, bg }) => (
+              { Icon: Plane, label: 'Book Flights', sub: 'AED 2,100 deals', color: '#40C4AA', bg: '#E7FEF8' },
+              { Icon: Car, label: 'Book Rides', sub: 'Careem Business', color: '#7C3AED', bg: '#F7F1FF' },
+              { Icon: Palmtree, label: 'Vacations', sub: 'Group trips', color: '#EA580C', bg: '#FFF6E0' },
+              { Icon: Gamepad2, label: 'Gaming', sub: 'FIFA, Padel, COD', color: '#DC2626', bg: '#FEEFF2' },
+            ].map(({ Icon, label, sub, color, bg }) => (
               <Link key={label} href="/services"
-                className={`flex items-center gap-3 bg-gradient-to-br ${bg} rounded-[16px] border border-[#DFE1E6] p-3 hover:shadow-md transition-all active:scale-[0.97]`}>
-                <span className="text-2xl">{emoji}</span>
+                className="flex items-center gap-3 rounded-[16px] border border-[#DFE1E6] p-3 hover:shadow-md transition-all active:scale-[0.97]"
+                style={{ backgroundColor: bg }}>
+                <div className="w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}18` }}>
+                  <Icon size={20} style={{ color }} strokeWidth={1.8} />
+                </div>
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-[#15161E]">{label}</p>
                   <p className="text-[10px] font-medium" style={{ color }}>{sub}</p>
@@ -357,14 +361,14 @@ export default function DashboardPage() {
           </div>
           <div className="grid grid-cols-3 gap-1.5">
             {[
-              { emoji: '🏋️', label: 'Palms Sports', value: 'AED 150/mo', color: '#EA580C' },
-              { emoji: '🏥', label: 'Health', value: 'Free Annual', color: '#059669' },
-              { emoji: '🍽️', label: 'Meals', value: '25% Off', color: '#DC2626' },
-              { emoji: '🚗', label: 'EasyLease', value: 'AED 1,299', color: '#7C3AED' },
-              { emoji: '☕', label: 'Café', value: 'AED 500/mo', color: '#FFBD4C' },
-            ].map(({ emoji, label, value, color }) => (
+              { Icon: Dumbbell, label: 'Palms Sports', value: 'AED 150/mo', color: '#EA580C' },
+              { Icon: Activity, label: 'Health', value: 'Free Annual', color: '#059669' },
+              { Icon: UtensilsCrossed, label: 'Meals', value: '25% Off', color: '#DC2626' },
+              { Icon: Car, label: 'EasyLease', value: 'AED 1,299', color: '#7C3AED' },
+              { Icon: Coffee, label: 'Café', value: 'AED 500/mo', color: '#FFBD4C' },
+            ].map(({ Icon, label, value, color }) => (
               <div key={label} className="rounded-[12px] bg-[#F8F9FB] border border-[#DFE1E6] p-2 text-center">
-                <span className="text-lg block mb-0.5">{emoji}</span>
+                <div className="flex justify-center mb-0.5"><Icon size={18} style={{ color }} strokeWidth={1.8} /></div>
                 <p className="text-[9px] font-bold text-[#15161E] leading-tight">{label}</p>
                 <p className="text-[9px] font-semibold mt-0.5" style={{ color }}>{value}</p>
               </div>

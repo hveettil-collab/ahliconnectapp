@@ -6,8 +6,13 @@ import {
   Receipt, ArrowLeft, CheckCircle2, Loader2, Clock, Shield,
   Zap, Camera, Sparkles, AlertCircle, Upload, Eye,
   DollarSign, Tag, Calendar, Building2, AlertTriangle,
-  FileCheck, XCircle, RefreshCw,
+  FileCheck, XCircle, RefreshCw, UtensilsCrossed, Car, Package, Ticket,
+  type LucideIcon,
 } from 'lucide-react';
+
+const THUMBNAIL_ICONS: Record<string, LucideIcon> = {
+  dinner: UtensilsCrossed, taxi: Car, supplies: Package, conference: Ticket,
+};
 import {
   createRun, addStep, completeRun, notifySlack,
   syncSuccessFactors, sendEmail,
@@ -27,19 +32,19 @@ const STEP_STYLES = `
 // Pre-built receipt templates for demo
 const SAMPLE_RECEIPTS = [
   {
-    id: 'r1', label: 'Business Dinner', thumbnail: '🍽️',
+    id: 'r1', label: 'Business Dinner', thumbnail: 'dinner',
     extracted: { vendor: 'Zuma Restaurant, DIFC', amount: 420, currency: 'AED', date: '31 Mar 2026', category: 'Client Entertainment', confidence: 98.5, items: ['Set Menu x2 — AED 340', 'Beverages — AED 60', 'Service Charge — AED 20'] },
   },
   {
-    id: 'r2', label: 'Taxi Receipts', thumbnail: '🚕',
+    id: 'r2', label: 'Taxi Receipts', thumbnail: 'taxi',
     extracted: { vendor: 'Careem Business', amount: 87.50, currency: 'AED', date: '01 Apr 2026', category: 'Transport', confidence: 99.2, items: ['Office → Client site — AED 45', 'Client site → Office — AED 42.50'] },
   },
   {
-    id: 'r3', label: 'Office Supplies', thumbnail: '📦',
+    id: 'r3', label: 'Office Supplies', thumbnail: 'supplies',
     extracted: { vendor: 'IKEA Abu Dhabi', amount: 235, currency: 'AED', date: '28 Mar 2026', category: 'Office Supplies', confidence: 97.8, items: ['Desk organiser — AED 89', 'Monitor riser — AED 119', 'Cable management kit — AED 27'] },
   },
   {
-    id: 'r4', label: 'Conference Pass', thumbnail: '🎟️',
+    id: 'r4', label: 'Conference Pass', thumbnail: 'conference',
     extracted: { vendor: 'GITEX Global 2026', amount: 1500, currency: 'AED', date: '25 Mar 2026', category: 'Conference & Events', confidence: 96.1, items: ['3-Day Premium Pass — AED 1,500'] },
   },
 ];
@@ -142,7 +147,7 @@ export default function ExpenseClaimPage() {
       // Step 7: Notify
       updateStep('notify', 'running');
       await Promise.all([
-        notifySlack('finance-claims', `💳 New expense: ${ex.vendor} — AED ${ex.amount} by ${user?.name}`, run.id),
+        notifySlack('finance-claims', `New expense: ${ex.vendor} — AED ${ex.amount} by ${user?.name}`, run.id),
         sendEmail(user?.email ?? '', `Expense submitted: AED ${ex.amount} (${ex.category})`, run.id),
       ]);
       addStep(run.id, { id: 's7', name: 'Notifications', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() });
@@ -205,7 +210,7 @@ export default function ExpenseClaimPage() {
                 {SAMPLE_RECEIPTS.map(r => (
                   <button key={r.id} onClick={() => simulateAIScan(r)}
                     className="flex items-center gap-3 p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6] text-left active:scale-[0.97] transition-all hover:border-[#FFBD4C]">
-                    <span className="text-3xl shrink-0">{r.thumbnail}</span>
+                    {(() => { const TIcon = THUMBNAIL_ICONS[r.thumbnail] || Receipt; return <div className="w-10 h-10 rounded-[12px] bg-[#F7F1FF] flex items-center justify-center shrink-0"><TIcon size={20} className="text-[#9D63F6]" /></div>; })()}
                     <div className="flex-1 min-w-0">
                       <p className="text-[12px] font-semibold text-[#15161E]">{r.label}</p>
                       <p className="text-[11px] text-[#A4ABB8]">AED {r.extracted.amount}</p>
@@ -235,7 +240,7 @@ export default function ExpenseClaimPage() {
                   <p className="text-[11px] text-[#666D80]">• Auto-categorise</p>
                   <p className="text-[11px] text-[#666D80]">• Policy check ✓</p>
                   <p className="text-[11px] text-[#666D80]">• One-tap submit</p>
-                  <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 2 min</p>
+                  <p className="font-bold text-[#059669] mt-2 text-[11px]">Under 2 min</p>
                 </div>
               </div>
             </div>
@@ -248,7 +253,7 @@ export default function ExpenseClaimPage() {
             <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-5 text-center relative overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
               <div className="ai-scan absolute inset-0 pointer-events-none" />
               <div className="relative z-10">
-                <div className="text-5xl mb-3">{selectedReceipt.thumbnail}</div>
+                {(() => { const TIcon = THUMBNAIL_ICONS[selectedReceipt.thumbnail] || Receipt; return <div className="w-14 h-14 rounded-[16px] bg-[#F7F1FF] flex items-center justify-center mb-3 mx-auto"><TIcon size={28} className="text-[#9D63F6]" /></div>; })()}
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <Sparkles size={15} className="text-[#FFBD4C] animate-pulse" />
                   <p className="text-[13px] font-bold text-[#9D63F6]">Claude AI Analyzing...</p>

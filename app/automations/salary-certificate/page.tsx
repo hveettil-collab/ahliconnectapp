@@ -134,7 +134,7 @@ export default function SalaryCertificatePage() {
       // Step 6: Notifications
       updateStep('notify', 'running');
       await Promise.all([
-        notifySlack('hr-documents', `📄 Salary certificate generated for ${user?.name} (${purpose})`, run.id),
+        notifySlack('hr-documents', `Salary certificate generated for ${user?.name} (${purpose})`, run.id),
         sendEmail(user?.email ?? '', `Your salary certificate is ready — ${purpose}`, run.id),
       ]);
       addStep(run.id, { id: 's6', name: 'Send notifications', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() });
@@ -302,7 +302,7 @@ export default function SalaryCertificatePage() {
                   <p className="text-[11px] text-[#666D80]">• Click "Generate"</p>
                   <p className="text-[11px] text-[#666D80]">• Auto-pull + PDF + sign</p>
                   <p className="text-[11px] text-[#666D80]">• Download instantly</p>
-                  <p className="font-bold text-[#059669] mt-2 text-[11px]">⚡ &lt; 30 sec</p>
+                  <p className="font-bold text-[#059669] mt-2 text-[11px]">Under 30 sec</p>
                 </div>
               </div>
             </div>
