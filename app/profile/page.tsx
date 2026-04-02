@@ -2,10 +2,11 @@
 import { useState, useRef, useEffect } from 'react';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
+import { useWallet } from '@/context/WalletContext';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
-import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight } from 'lucide-react';
+import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
    COUNTDOWN HOOK
@@ -33,6 +34,310 @@ function getTimeLeft(target: Date) {
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
   return { days, hours, minutes, seconds, expired: false };
+}
+
+/* ═══════════════════════════════════════════
+   WALLET & REWARDS SECTION
+   ═══════════════════════════════════════════ */
+
+function WalletSection() {
+  const wallet = useWallet();
+  const [showFund, setShowFund] = useState(false);
+  const [showRedeem, setShowRedeem] = useState(false);
+  const [fundAmount, setFundAmount] = useState('');
+  const [redeemAmount, setRedeemAmount] = useState('');
+  const [showAllTx, setShowAllTx] = useState(false);
+  const [fundSuccess, setFundSuccess] = useState(false);
+  const [redeemSuccess, setRedeemSuccess] = useState(false);
+
+  const REWARD_CATEGORIES: Record<string, { icon: typeof Star; color: string; bg: string }> = {
+    performance: { icon: TrendingUp, color: '#9D63F6', bg: '#F7F1FF' },
+    innovation: { icon: Zap, color: '#FFBD4C', bg: '#FFF6E0' },
+    engagement: { icon: Star, color: '#54B6ED', bg: '#EEF8FD' },
+    recognition: { icon: Gift, color: '#40C4AA', bg: '#E7FEF8' },
+    referral: { icon: Sparkles, color: '#EC4899', bg: '#FDF2F8' },
+  };
+
+  const handleFund = () => {
+    const amt = parseFloat(fundAmount);
+    if (amt > 0) {
+      wallet.fundWallet(amt);
+      setFundSuccess(true);
+      setTimeout(() => { setFundSuccess(false); setShowFund(false); setFundAmount(''); }, 1500);
+    }
+  };
+
+  const handleRedeem = () => {
+    const pts = parseInt(redeemAmount);
+    if (pts > 0 && wallet.redeemPoints(pts)) {
+      setRedeemSuccess(true);
+      setTimeout(() => { setRedeemSuccess(false); setShowRedeem(false); setRedeemAmount(''); }, 1500);
+    }
+  };
+
+  const visibleTx = showAllTx ? wallet.transactions : wallet.transactions.slice(0, 5);
+
+  return (
+    <div className="space-y-4">
+      {/* ── Wallet Balance Card ── */}
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="p-5" style={{ background: 'linear-gradient(135deg, #15161E 0%, #1E3A5F 50%, #2D1B69 100%)' }}>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
+                <Wallet size={17} className="text-white" />
+              </div>
+              <div>
+                <p className="text-[11px] text-white/50 font-medium">Ahli Wallet</p>
+                <p className="text-[10px] text-[#40C4AA] font-semibold">Active</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.08)' }}>
+              <CreditCard size={10} className="text-white/50" />
+              <span className="text-[9px] text-white/50 font-medium">Virtual Card</span>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-white/40 font-medium mb-1">Available Balance</p>
+          <p className="text-[32px] font-extrabold text-white tracking-tight leading-none mb-1">
+            AED {wallet.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+          </p>
+
+          <div className="flex gap-2 mt-5">
+            <button
+              onClick={() => setShowFund(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[12px] text-[12px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'rgba(157,99,246,0.4)', border: '1px solid rgba(157,99,246,0.3)' }}
+            >
+              <Plus size={14} /> Fund Wallet
+            </button>
+            <button
+              onClick={() => setShowRedeem(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-[12px] text-[12px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'rgba(64,196,170,0.3)', border: '1px solid rgba(64,196,170,0.25)' }}
+            >
+              <Gift size={14} /> Redeem Points
+            </button>
+          </div>
+        </div>
+
+        {/* Transaction History */}
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-[13px] font-bold text-[#15161E]">Recent Transactions</p>
+            <button onClick={() => setShowAllTx(!showAllTx)} className="text-[11px] font-semibold text-[#9D63F6]">
+              {showAllTx ? 'Show Less' : 'View All'}
+            </button>
+          </div>
+          <div className="space-y-1.5">
+            {visibleTx.map(tx => (
+              <div key={tx.id} className="flex items-center gap-3 py-2.5 px-3 rounded-[12px] hover:bg-[#F8F9FB] transition-colors">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === 'credit' ? 'bg-[#E7FEF8]' : 'bg-[#FEF2F2]'}`}>
+                  {tx.type === 'credit' ? <ArrowDownLeft size={14} className="text-[#40C4AA]" /> : <ArrowUpRight size={14} className="text-[#DF1C41]" />}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[12px] font-semibold text-[#15161E] truncate">{tx.label}</p>
+                  <p className="text-[10px] text-[#A4ABB8]">{tx.timestamp.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                </div>
+                <p className={`text-[13px] font-bold ${tx.type === 'credit' ? 'text-[#40C4AA]' : 'text-[#15161E]'}`}>
+                  {tx.type === 'credit' ? '+' : '-'}AED {tx.amount.toLocaleString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Reward Points Card ── */}
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="p-5" style={{ background: `linear-gradient(135deg, ${wallet.rewardTierColor}15 0%, ${wallet.rewardTierColor}08 100%)` }}>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-9 h-9 rounded-[12px] flex items-center justify-center" style={{ background: `${wallet.rewardTierColor}20` }}>
+                <Star size={17} style={{ color: wallet.rewardTierColor }} />
+              </div>
+              <div>
+                <p className="text-[14px] font-bold text-[#15161E]">Reward Points</p>
+                <p className="text-[10px] font-semibold" style={{ color: wallet.rewardTierColor }}>{wallet.rewardTier} Tier</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-[22px] font-extrabold" style={{ color: wallet.rewardTierColor }}>{wallet.rewardPoints.toLocaleString()}</p>
+              <p className="text-[9px] text-[#A4ABB8] font-medium">= AED {wallet.getPointsValue(wallet.rewardPoints).toLocaleString()}</p>
+            </div>
+          </div>
+
+          {/* Tier progress */}
+          <div className="mt-3">
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-[10px] text-[#666D80] font-medium">Next: {wallet.rewardTierNext}</p>
+              <p className="text-[10px] font-bold" style={{ color: wallet.rewardTierColor }}>{Math.round(wallet.rewardProgress)}%</p>
+            </div>
+            <div className="h-2 rounded-full bg-[#F0F0F0] overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-700" style={{ width: `${wallet.rewardProgress}%`, background: `linear-gradient(90deg, ${wallet.rewardTierColor}, ${wallet.rewardTierColor}90)` }} />
+            </div>
+          </div>
+        </div>
+
+        {/* How to earn */}
+        <div className="p-4">
+          <p className="text-[12px] font-bold text-[#15161E] mb-3">How You Earn Points</p>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { label: 'Performance Reviews', pts: 'Up to 1,000', cat: 'performance' as const },
+              { label: 'Innovation Ideas', pts: 'Up to 2,000', cat: 'innovation' as const },
+              { label: 'Platform Engagement', pts: '50-250/mo', cat: 'engagement' as const },
+              { label: 'Colleague Referrals', pts: '100 each', cat: 'referral' as const },
+            ].map(item => {
+              const catStyle = REWARD_CATEGORIES[item.cat];
+              const Icon = catStyle.icon;
+              return (
+                <div key={item.label} className="flex items-center gap-2 p-2.5 rounded-[12px]" style={{ background: catStyle.bg }}>
+                  <Icon size={14} style={{ color: catStyle.color }} />
+                  <div>
+                    <p className="text-[10px] font-semibold text-[#15161E]">{item.label}</p>
+                    <p className="text-[9px] font-bold" style={{ color: catStyle.color }}>{item.pts}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Recent rewards */}
+          <p className="text-[12px] font-bold text-[#15161E] mt-4 mb-2.5">Recent Rewards</p>
+          <div className="space-y-1.5">
+            {wallet.rewardHistory.slice(0, 4).map(r => {
+              const catStyle = REWARD_CATEGORIES[r.category] || REWARD_CATEGORIES.engagement;
+              const Icon = catStyle.icon;
+              return (
+                <div key={r.id} className="flex items-center gap-3 py-2 px-2.5 rounded-[10px] hover:bg-[#F8F9FB] transition-colors">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: catStyle.bg }}>
+                    <Icon size={12} style={{ color: catStyle.color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold text-[#15161E] truncate">{r.reason}</p>
+                    <p className="text-[9px] text-[#A4ABB8]">{r.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                  </div>
+                  <span className="text-[12px] font-bold" style={{ color: catStyle.color }}>+{r.points}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Fund Wallet Bottom Sheet ── */}
+      {showFund && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowFund(false)}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-5" />
+            {fundSuccess ? (
+              <div className="flex flex-col items-center py-6">
+                <div className="w-16 h-16 rounded-full bg-[#E7FEF8] flex items-center justify-center mb-3">
+                  <CheckCircle2 size={32} className="text-[#40C4AA]" />
+                </div>
+                <p className="text-lg font-bold text-[#15161E]">Wallet Funded!</p>
+                <p className="text-sm text-[#666D80]">AED {parseFloat(fundAmount).toLocaleString()} added</p>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-[16px] font-bold text-[#15161E] mb-1">Fund Your Wallet</h3>
+                <p className="text-[13px] text-[#666D80] mb-5">Add money to use for in-app purchases</p>
+
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {[500, 1000, 2000].map(amt => (
+                    <button key={amt} onClick={() => setFundAmount(String(amt))}
+                      className="py-3 rounded-[12px] text-[13px] font-bold border transition-all active:scale-95"
+                      style={{
+                        borderColor: fundAmount === String(amt) ? '#9D63F6' : '#DFE1E6',
+                        backgroundColor: fundAmount === String(amt) ? '#F7F1FF' : 'white',
+                        color: fundAmount === String(amt) ? '#9D63F6' : '#15161E',
+                      }}
+                    >
+                      AED {amt.toLocaleString()}
+                    </button>
+                  ))}
+                </div>
+
+                <input
+                  type="number"
+                  value={fundAmount}
+                  onChange={e => setFundAmount(e.target.value)}
+                  placeholder="Enter custom amount"
+                  className="w-full border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm mb-4 outline-none focus:border-[#9D63F6] transition-colors"
+                />
+
+                <button onClick={handleFund}
+                  className="w-full py-3.5 rounded-[14px] text-sm font-bold text-white active:scale-[0.97] transition-all"
+                  style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)' }}
+                >
+                  Fund AED {fundAmount ? parseFloat(fundAmount).toLocaleString() : '0'}
+                </button>
+                <button onClick={() => setShowFund(false)} className="w-full mt-2 py-3 text-sm font-medium text-[#666D80]">Cancel</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── Redeem Points Bottom Sheet ── */}
+      {showRedeem && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowRedeem(false)}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-5" />
+            {redeemSuccess ? (
+              <div className="flex flex-col items-center py-6">
+                <div className="w-16 h-16 rounded-full bg-[#F7F1FF] flex items-center justify-center mb-3">
+                  <Sparkles size={32} className="text-[#9D63F6]" />
+                </div>
+                <p className="text-lg font-bold text-[#15161E]">Points Redeemed!</p>
+                <p className="text-sm text-[#666D80]">AED {wallet.getPointsValue(parseInt(redeemAmount)).toLocaleString()} added to wallet</p>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-[16px] font-bold text-[#15161E] mb-1">Redeem Points</h3>
+                <p className="text-[13px] text-[#666D80] mb-1">Convert reward points to wallet balance</p>
+                <p className="text-[12px] font-semibold text-[#9D63F6] mb-5">Available: {wallet.rewardPoints.toLocaleString()} pts = AED {wallet.getPointsValue(wallet.rewardPoints).toLocaleString()}</p>
+
+                <div className="grid grid-cols-3 gap-2 mb-4">
+                  {[500, 1000, 2000].map(pts => (
+                    <button key={pts} onClick={() => setRedeemAmount(String(pts))}
+                      disabled={pts > wallet.rewardPoints}
+                      className="py-3 rounded-[12px] text-center border transition-all active:scale-95 disabled:opacity-30"
+                      style={{
+                        borderColor: redeemAmount === String(pts) ? '#40C4AA' : '#DFE1E6',
+                        backgroundColor: redeemAmount === String(pts) ? '#E7FEF8' : 'white',
+                      }}
+                    >
+                      <p className="text-[13px] font-bold" style={{ color: redeemAmount === String(pts) ? '#40C4AA' : '#15161E' }}>{pts.toLocaleString()} pts</p>
+                      <p className="text-[9px] text-[#A4ABB8]">= AED {wallet.getPointsValue(pts)}</p>
+                    </button>
+                  ))}
+                </div>
+
+                <input
+                  type="number"
+                  value={redeemAmount}
+                  onChange={e => setRedeemAmount(e.target.value)}
+                  placeholder="Enter points to redeem"
+                  className="w-full border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm mb-2 outline-none focus:border-[#40C4AA] transition-colors"
+                />
+                {redeemAmount && <p className="text-[11px] text-[#666D80] mb-4 ml-1">You&apos;ll receive AED {wallet.getPointsValue(parseInt(redeemAmount) || 0).toLocaleString()} in your wallet</p>}
+
+                <button onClick={handleRedeem}
+                  className="w-full py-3.5 rounded-[14px] text-sm font-bold text-white active:scale-[0.97] transition-all"
+                  style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)' }}
+                >
+                  Redeem {redeemAmount ? parseInt(redeemAmount).toLocaleString() : '0'} Points
+                </button>
+                <button onClick={() => setShowRedeem(false)} className="w-full mt-2 py-3 text-sm font-medium text-[#666D80]">Cancel</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 /* ═══════════════════════════════════════════
@@ -506,6 +811,11 @@ export default function ProfilePage() {
               </div>
             </div>
           )}
+
+          {/* ═══════════════════════════════════════
+              WALLET & REWARDS
+              ═══════════════════════════════════════ */}
+          <WalletSection />
 
           {/* ═══════════════════════════════════════
               MY ASSETS — Car, Home & Insurance

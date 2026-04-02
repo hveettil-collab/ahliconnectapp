@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useWallet } from '@/context/WalletContext';
 import AppShell from '@/components/layout/AppShell';
 import {
   IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, OFFERS,
@@ -12,7 +13,7 @@ import {
   Compass, Heart, Shield, GraduationCap, Gift, Zap,
   Plane, Users, UtensilsCrossed,
   Timer, Receipt, Award, X, ExternalLink,
-  CreditCard, Building2, Briefcase,
+  CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -67,6 +68,7 @@ function useCountUp(target: number, duration = 1800, delay = 300) {
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const wallet = useWallet();
   const router = useRouter();
   const greeting = useGreeting();
   const time = useLiveTime();
@@ -454,6 +456,42 @@ export default function DashboardPage() {
             ))}
           </div>
         </div>
+
+        {/* ── Wallet & Rewards Quick Widget ── */}
+        <Link href="/profile" className="no-underline block">
+          <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+            <div className="p-4" style={{ background: 'linear-gradient(135deg, #15161E 0%, #2D1B69 100%)' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[14px] flex items-center justify-center" style={{ background: 'rgba(157,99,246,0.2)' }}>
+                    <Wallet size={18} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-white/40 font-medium">Ahli Wallet</p>
+                    <p className="text-[20px] font-extrabold text-white leading-tight">AED {wallet.balance.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-1.5">
+                  <div className="flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: `${wallet.rewardTierColor}25` }}>
+                    <Star size={10} style={{ color: wallet.rewardTierColor }} />
+                    <span className="text-[10px] font-bold" style={{ color: wallet.rewardTierColor }}>{wallet.rewardTier}</span>
+                  </div>
+                  <p className="text-[10px] text-white/50 font-medium">{wallet.rewardPoints.toLocaleString()} points</p>
+                </div>
+              </div>
+            </div>
+            <div className="px-4 py-2.5 flex items-center justify-between" style={{ background: 'linear-gradient(90deg, #F7F1FF, #EEF8FD)' }}>
+              <div className="flex items-center gap-4">
+                {wallet.rewardHistory.slice(0, 1).map(r => (
+                  <p key={r.id} className="text-[10px] text-[#666D80]">
+                    <span className="font-bold text-[#40C4AA]">+{r.points} pts</span> · {r.reason}
+                  </p>
+                ))}
+              </div>
+              <ChevronRight size={14} className="text-[#A4ABB8]" />
+            </div>
+          </div>
+        </Link>
 
         {/* ── IHC Stock Trading Card — Live ── */}
         <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">

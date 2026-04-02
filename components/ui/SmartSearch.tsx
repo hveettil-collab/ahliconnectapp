@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Search,
   X,
@@ -68,10 +69,31 @@ export default function SmartSearch({
   open: boolean;
   onClose: () => void;
 }) {
+  const router = useRouter();
   const [query, setQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Navigate to proper page based on result category
+  const navigateToResult = useCallback((result: SearchResult) => {
+    const routes: Record<string, string> = {
+      announcements: '/dashboard',
+      offers: '/offers',
+      marketplace: '/marketplace',
+      services: '/services?prompt=' + encodeURIComponent(result.title),
+      people: '/profile',
+    };
+    onClose();
+    setQuery('');
+    router.push(routes[result.category] || '/dashboard');
+  }, [router, onClose]);
+
+  const navigateToAI = useCallback((prompt: string) => {
+    onClose();
+    setQuery('');
+    router.push('/services?prompt=' + encodeURIComponent(prompt));
+  }, [router, onClose]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -375,7 +397,7 @@ export default function SmartSearch({
                     <p className="text-sm text-white/90 mb-4">
                       {aiSuggestion.description}
                     </p>
-                    <button className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white hover:bg-white/30 transition-colors">
+                    <button onClick={() => navigateToAI(query)} className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white hover:bg-white/30 transition-colors">
                       {aiSuggestion.action}
                       <ArrowRight size={14} />
                     </button>
@@ -397,6 +419,7 @@ export default function SmartSearch({
                           {items.map((item) => (
                             <div
                               key={item.id}
+                              onClick={() => navigateToResult(item)}
                               className={`${CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS]} group cursor-pointer rounded-[14px] border border-[#DFE1E6] p-4 transition-all duration-200 hover:border-[#9D63F6] hover:shadow-md`}
                             >
                               <div className="flex items-start justify-between gap-3">
@@ -472,60 +495,29 @@ export default function SmartSearch({
                   What you can search
                 </h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-blue-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <FileText size={16} className="text-blue-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        Announcements
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">Company updates & news</p>
-                  </div>
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-purple-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Tag size={16} className="text-purple-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        Offers
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">Partner benefits & deals</p>
-                  </div>
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-amber-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <ShoppingBag size={16} className="text-amber-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        Marketplace
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">Items for sale</p>
-                  </div>
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-green-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Wrench size={16} className="text-green-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        Services
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">HR & employee tools</p>
-                  </div>
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-pink-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Users size={16} className="text-pink-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        People
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">Find colleagues</p>
-                  </div>
-                  <div className="rounded-[14px] border border-[#DFE1E6] bg-yellow-50 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles size={16} className="text-yellow-600" />
-                      <span className="text-xs font-semibold text-[#15161E]">
-                        AI Assistant
-                      </span>
-                    </div>
-                    <p className="text-xs text-[#A4ABB8]">Smart suggestions</p>
-                  </div>
+                  {[
+                    { icon: FileText, label: 'Announcements', desc: 'Company updates & news', color: 'text-blue-600', bg: 'bg-blue-50', search: 'announcements' },
+                    { icon: Tag, label: 'Offers', desc: 'Partner benefits & deals', color: 'text-purple-600', bg: 'bg-purple-50', search: 'offers' },
+                    { icon: ShoppingBag, label: 'Marketplace', desc: 'Items for sale', color: 'text-amber-600', bg: 'bg-amber-50', search: 'marketplace' },
+                    { icon: Wrench, label: 'Services', desc: 'HR & employee tools', color: 'text-green-600', bg: 'bg-green-50', search: 'salary certificate' },
+                    { icon: Users, label: 'People', desc: 'Find colleagues', color: 'text-pink-600', bg: 'bg-pink-50', search: 'colleagues' },
+                    { icon: Sparkles, label: 'AI Assistant', desc: 'Smart suggestions', color: 'text-yellow-600', bg: 'bg-yellow-50', search: '' },
+                  ].map(cat => {
+                    const CatIcon = cat.icon;
+                    return (
+                      <button key={cat.label} onClick={() => {
+                        if (cat.label === 'AI Assistant') { navigateToAI('What can you help me with?'); }
+                        else { setQuery(cat.search); }
+                      }}
+                        className={`rounded-[14px] border border-[#DFE1E6] ${cat.bg} p-4 text-left hover:border-[#9D63F6] transition-all active:scale-[0.97]`}>
+                        <div className="flex items-center gap-2 mb-2">
+                          <CatIcon size={16} className={cat.color} />
+                          <span className="text-xs font-semibold text-[#15161E]">{cat.label}</span>
+                        </div>
+                        <p className="text-xs text-[#A4ABB8]">{cat.desc}</p>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>

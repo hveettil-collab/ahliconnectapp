@@ -100,23 +100,42 @@ interface BentoItem {
   href: string;
   size: 'large' | 'medium' | 'small';
   accent: string;
+  detail: {
+    title: string;
+    subtitle: string;
+    description: string;
+    highlights: { label: string; value: string }[];
+    cta: string;
+    ctaHref: string;
+  };
 }
 
 const BENTO_LIFESTYLE: BentoItem[] = [
-  { icon: UtensilsCrossed, label: 'Dining', desc: '25% off at 40+ restaurants', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#FFBD4C' },
-  { icon: Heart, label: 'Healthcare', desc: 'Daman Enhanced coverage', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#DC2626' },
-  { icon: Dumbbell, label: 'Fitness', desc: 'Palms Sports — AED 150/mo', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA' },
-  { icon: Palmtree, label: 'Leisure', desc: 'Yas Island 40% off', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6' },
-  { icon: Coffee, label: 'Café', desc: 'Daily coffee perks', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#92400E' },
-  { icon: Calendar, label: 'Events', desc: '5 upcoming this month', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop', href: '/explore', size: 'small', accent: '#7C3AED' },
+  { icon: UtensilsCrossed, label: 'Dining', desc: '25% off at 40+ restaurants', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#FFBD4C',
+    detail: { title: 'Employee Dining Program', subtitle: 'Exclusive restaurant discounts across the UAE', description: 'Enjoy 25% off at over 40 premium restaurants including Zuma, Nobu, La Petite Maison, and more. Simply show your Ahli Connect digital card at participating venues. New restaurants added weekly.', highlights: [{ label: 'Restaurants', value: '40+' }, { label: 'Max Discount', value: '25%' }, { label: 'Avg Saving', value: 'AED 85/visit' }, { label: 'Valid Until', value: 'Dec 2026' }], cta: 'Browse Restaurants', ctaHref: '/services?prompt=Show+me+dining+offers' } },
+  { icon: Heart, label: 'Healthcare', desc: 'Daman Enhanced coverage', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#DC2626',
+    detail: { title: 'Enhanced Healthcare Plan', subtitle: 'Daman Platinum — fully covered by IHC Group', description: 'Your IHC employee healthcare covers 100% of in-network medical expenses, dental, optical, and mental health support. Access 500+ clinics and hospitals across the UAE with zero co-pay.', highlights: [{ label: 'Network', value: '500+ clinics' }, { label: 'Coverage', value: '100%' }, { label: 'Co-Pay', value: 'AED 0' }, { label: 'Dental', value: 'Included' }], cta: 'View My Coverage', ctaHref: '/services?prompt=Show+me+my+health+insurance+details' } },
+  { icon: Dumbbell, label: 'Fitness', desc: 'Palms Sports — AED 150/mo', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA',
+    detail: { title: 'Palms Sports Membership', subtitle: 'Corporate rate — 60% off standard pricing', description: 'Access all Palms Sports facilities across Abu Dhabi including gyms, swimming pools, padel courts, and group fitness classes. Family add-on available at AED 100/member.', highlights: [{ label: 'Monthly', value: 'AED 150' }, { label: 'Locations', value: '8 venues' }, { label: 'Family', value: '+AED 100' }, { label: 'Savings', value: '60% off' }], cta: 'Activate Membership', ctaHref: '/services?prompt=I+want+to+join+Palms+Sports+gym' } },
+  { icon: Palmtree, label: 'Leisure', desc: 'Yas Island 40% off', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6',
+    detail: { title: 'Yas Island Leisure Pass', subtitle: 'Theme parks & attractions at employee rates', description: 'Get 40% off Ferrari World, Yas Waterworld, and Warner Bros. World. Includes weekday priority access and 20% off F&B. Valid for employee + 3 guests.', highlights: [{ label: 'Discount', value: '40% off' }, { label: 'Parks', value: '3 parks' }, { label: 'Guests', value: 'Up to 3' }, { label: 'F&B', value: '20% off' }], cta: 'Get Passes', ctaHref: '/services?prompt=I+want+Yas+Island+tickets' } },
+  { icon: Coffee, label: 'Café', desc: 'Daily coffee perks', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#92400E',
+    detail: { title: 'Daily Coffee Benefit', subtitle: 'Free daily coffee at 25+ locations', description: 'Enjoy one complimentary coffee per day at partnered cafés including Starbucks, %Arabica, and Tim Hortons. Simply scan your Ahli Connect QR at the counter.', highlights: [{ label: 'Daily Limit', value: '1 free' }, { label: 'Cafés', value: '25+' }, { label: 'Value', value: 'AED 600/yr' }, { label: 'Method', value: 'QR scan' }], cta: 'Find Nearby Café', ctaHref: '/services?prompt=Show+me+nearby+coffee+offers' } },
+  { icon: Calendar, label: 'Events', desc: '5 upcoming this month', image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop', href: '/explore', size: 'small', accent: '#7C3AED',
+    detail: { title: 'Company Events', subtitle: 'Networking, training & social gatherings', description: 'Browse and register for upcoming IHC Group events — hackathons, wellness days, sports tournaments, training sessions, and team socials across all subsidiaries.', highlights: [{ label: 'This Month', value: '5 events' }, { label: 'This Quarter', value: '18 events' }, { label: 'Categories', value: '6 types' }, { label: 'Free', value: 'Most events' }], cta: 'View All Events', ctaHref: '/explore' } },
 ];
 
 const BENTO_BUSINESS: BentoItem[] = [
-  { icon: GraduationCap, label: 'IHC Academy', desc: 'Courses & certifications', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#9D63F6' },
-  { icon: Globe, label: 'IHC Portals', desc: 'All group platforms', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA' },
-  { icon: FileText, label: 'HR Services', desc: 'Certificates & requests', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#FFBD4C' },
-  { icon: Building2, label: 'Directory', desc: '45,000+ employees', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6' },
-  { icon: Briefcase, label: 'Business Centres', desc: 'Meeting rooms & co-work', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#059669' },
+  { icon: GraduationCap, label: 'IHC Academy', desc: 'Courses & certifications', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=500&h=500&fit=crop', href: '/services', size: 'large', accent: '#9D63F6',
+    detail: { title: 'IHC Academy', subtitle: 'AED 15,000 annual learning allowance', description: 'Access 2,000+ courses from LinkedIn Learning, Coursera, and IHC custom programs. Earn professional certifications in leadership, AI, finance, and more. Fully funded by your education benefit.', highlights: [{ label: 'Courses', value: '2,000+' }, { label: 'Budget', value: 'AED 15K/yr' }, { label: 'Certificates', value: 'Included' }, { label: 'Format', value: 'Online + IRL' }], cta: 'Browse Courses', ctaHref: '/services?prompt=Show+me+available+courses' } },
+  { icon: Globe, label: 'IHC Portals', desc: 'All group platforms', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#40C4AA',
+    detail: { title: 'IHC Group Portals', subtitle: 'Quick access to all internal platforms', description: 'One-click access to all IHC group systems — Oracle HR, SAP, Workday, IT helpdesk, expense portals, and subsidiary-specific platforms. Single sign-on enabled.', highlights: [{ label: 'Portals', value: '12 systems' }, { label: 'SSO', value: 'Enabled' }, { label: 'Access', value: 'All roles' }, { label: 'Support', value: '24/7 IT' }], cta: 'Open Portals', ctaHref: '/services?prompt=Show+me+IHC+portals' } },
+  { icon: FileText, label: 'HR Services', desc: 'Certificates & requests', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=400&fit=crop', href: '/services', size: 'medium', accent: '#FFBD4C',
+    detail: { title: 'HR Services Hub', subtitle: 'AI-powered HR requests in seconds', description: 'Generate salary certificates in 8 seconds, submit leave requests in 2 taps, file expense claims with auto-processing, and access all your HR documents instantly.', highlights: [{ label: 'Salary Cert', value: '8 seconds' }, { label: 'Leave', value: '2 taps' }, { label: 'Expense', value: 'Auto-process' }, { label: 'Payslips', value: 'Instant' }], cta: 'Open HR Services', ctaHref: '/services?prompt=I+need+HR+services' } },
+  { icon: Building2, label: 'Directory', desc: '45,000+ employees', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#9D63F6',
+    detail: { title: 'Employee Directory', subtitle: 'Find anyone across IHC Group', description: 'Search and connect with 45,000+ verified employees across all 30+ IHC subsidiaries. View profiles, org charts, and direct message colleagues instantly.', highlights: [{ label: 'Employees', value: '45,000+' }, { label: 'Companies', value: '30+' }, { label: 'Search', value: 'Instant' }, { label: 'Messaging', value: 'Direct' }], cta: 'Search Directory', ctaHref: '/services?prompt=Search+employee+directory' } },
+  { icon: Briefcase, label: 'Business Centres', desc: 'Meeting rooms & co-work', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop', href: '/services', size: 'small', accent: '#059669',
+    detail: { title: 'Business Centres', subtitle: 'Book meeting rooms & co-working spaces', description: 'Reserve meeting rooms, hot desks, and private offices across IHC Group buildings in Abu Dhabi and Dubai. Free for employees, equipment included.', highlights: [{ label: 'Locations', value: '14 sites' }, { label: 'Cost', value: 'Free' }, { label: 'Equipment', value: 'AV + WiFi' }, { label: 'Booking', value: 'Instant' }], cta: 'Book a Space', ctaHref: '/services?prompt=I+need+to+book+a+meeting+room' } },
 ];
 
 /* ═══════════════════════════════════════════
@@ -345,10 +364,81 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
 }
 
 /* ═══════════════════════════════════════════
+   BENTO DETAIL MODAL
+   ═══════════════════════════════════════════ */
+
+function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => void }) {
+  const [actionTaken, setActionTaken] = useState(false);
+  const Icon = item.icon;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[88vh] overflow-y-auto">
+        {/* Hero image */}
+        <div className="relative h-48 overflow-hidden rounded-t-[28px]">
+          <img src={item.image} alt={item.label} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center">
+            <X size={16} className="text-white" />
+          </button>
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: item.accent }}>
+                <Icon size={16} className="text-white" />
+              </div>
+              <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider">{item.label}</span>
+            </div>
+            <h2 className="text-lg font-bold text-white leading-snug">{item.detail.title}</h2>
+          </div>
+        </div>
+
+        <div className="p-5 space-y-5">
+          {/* Subtitle */}
+          <p className="text-[13px] font-semibold" style={{ color: item.accent }}>{item.detail.subtitle}</p>
+
+          {/* Description */}
+          <p className="text-[13px] text-[#666D80] leading-relaxed">{item.detail.description}</p>
+
+          {/* Highlights grid */}
+          <div className="grid grid-cols-2 gap-2">
+            {item.detail.highlights.map(h => (
+              <div key={h.label} className="bg-[#F8F9FB] rounded-[14px] p-3 text-center border border-[#DFE1E6]">
+                <p className="text-[16px] font-bold" style={{ color: item.accent }}>{h.value}</p>
+                <p className="text-[10px] text-[#A4ABB8] font-medium mt-0.5">{h.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="space-y-2 pb-4">
+            {!actionTaken ? (
+              <Link href={item.detail.ctaHref} onClick={() => { setActionTaken(true); onClose(); }}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98]"
+                style={{ background: item.accent }}>
+                {item.detail.cta} <ArrowRight size={15} />
+              </Link>
+            ) : (
+              <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-[14px] px-4 py-3">
+                <CheckCircle2 size={18} className="text-green-600 shrink-0" />
+                <p className="text-xs font-bold text-green-700">Action taken!</p>
+              </div>
+            )}
+            <button onClick={onClose} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
    BENTO GRID COMPONENT
    ═══════════════════════════════════════════ */
 
-function BentoGrid({ items }: { items: BentoItem[] }) {
+function BentoGrid({ items, onSelect }: { items: BentoItem[]; onSelect: (item: BentoItem) => void }) {
   const large = items.find(i => i.size === 'large');
   const mediums = items.filter(i => i.size === 'medium');
   const smalls = items.filter(i => i.size === 'small');
@@ -357,7 +447,7 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
     <div className="grid grid-cols-2 gap-2.5">
       {/* Large card — spans full width */}
       {large && (
-        <Link href={large.href} className="col-span-2 card-rise relative rounded-[20px] overflow-hidden h-[160px] group active:scale-[0.98] transition-transform">
+        <button onClick={() => onSelect(large)} className="col-span-2 card-rise relative rounded-[20px] overflow-hidden h-[160px] group active:scale-[0.98] transition-transform text-left">
           <img src={large.image} alt={large.label} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
           <div className="absolute inset-0 p-5 flex flex-col justify-end">
@@ -372,13 +462,13 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
           <div className="absolute top-4 right-4">
             <ArrowRight size={18} className="text-white/50 group-hover:text-white transition-colors" />
           </div>
-        </Link>
+        </button>
       )}
 
       {/* Medium cards — 1 column each */}
       {mediums.map((item, i) => (
-        <Link key={item.label} href={item.href}
-          className={`card-rise card-rise-${i + 1} relative rounded-[18px] overflow-hidden h-[140px] group active:scale-[0.97] transition-transform`}>
+        <button key={item.label} onClick={() => onSelect(item)}
+          className={`card-rise card-rise-${i + 1} relative rounded-[18px] overflow-hidden h-[140px] group active:scale-[0.97] transition-transform text-left`}>
           <img src={item.image} alt={item.label} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/5" />
           <div className="absolute inset-0 p-3.5 flex flex-col justify-between">
@@ -390,13 +480,13 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
               <p className="text-white/70 text-[10px] mt-0.5">{item.desc}</p>
             </div>
           </div>
-        </Link>
+        </button>
       ))}
 
       {/* Small cards — 3-up or fill remaining */}
       {smalls.map((item, i) => (
-        <Link key={item.label} href={item.href}
-          className={`card-rise card-rise-${i + 3} rounded-[16px] overflow-hidden p-3.5 flex items-center gap-3 border border-[#DFE1E6] active:scale-[0.97] transition-all ${smalls.length === 3 && i === 2 ? 'col-span-2' : ''}`}
+        <button key={item.label} onClick={() => onSelect(item)}
+          className={`card-rise card-rise-${i + 3} rounded-[16px] overflow-hidden p-3.5 flex items-center gap-3 border border-[#DFE1E6] active:scale-[0.97] transition-all text-left ${smalls.length === 3 && i === 2 ? 'col-span-2' : ''}`}
           style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
           <div className="w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: item.accent + '12' }}>
             <item.icon size={18} style={{ color: item.accent }} strokeWidth={1.8} />
@@ -406,7 +496,7 @@ function BentoGrid({ items }: { items: BentoItem[] }) {
             <p className="text-[10px] text-[#A4ABB8] truncate">{item.desc}</p>
           </div>
           <ChevronRight size={14} className="text-[#D1D5DB] shrink-0" />
-        </Link>
+        </button>
       ))}
     </div>
   );
@@ -442,6 +532,7 @@ export default function ExplorePage() {
   const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState('For You');
   const [selectedEvent, setSelectedEvent] = useState<CompanyEvent | null>(null);
+  const [selectedBento, setSelectedBento] = useState<BentoItem | null>(null);
   const [heroIdx, setHeroIdx] = useState(0);
 
   if (!user) return null;
@@ -542,7 +633,7 @@ export default function ExplorePage() {
         {/* ═══ LIFESTYLE — bento grid ═══ */}
         <section>
           <SectionHeader title="Lifestyle" href="/offers" />
-          <BentoGrid items={BENTO_LIFESTYLE} />
+          <BentoGrid items={BENTO_LIFESTYLE} onSelect={setSelectedBento} />
         </section>
 
         {/* ═══ UPCOMING EVENTS — vertical stack ═══ */}
@@ -596,7 +687,7 @@ export default function ExplorePage() {
         {/* ═══ BUSINESS — bento grid ═══ */}
         <section>
           <SectionHeader title="Business" href="/services" />
-          <BentoGrid items={BENTO_BUSINESS} />
+          <BentoGrid items={BENTO_BUSINESS} onSelect={setSelectedBento} />
         </section>
 
         {/* ═══ GAMING & ACTIVITIES — immersive cards ═══ */}
@@ -620,7 +711,7 @@ export default function ExplorePage() {
                 </div>
               </div>
             </button>
-            <Link href="/services" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
+            <Link href="/services?prompt=Show+me+gaming+tournaments" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
               <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=200&fit=crop" alt="FIFA" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
               <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
@@ -628,7 +719,7 @@ export default function ExplorePage() {
                 <p className="text-[11px] font-bold text-white">FIFA League</p>
               </div>
             </Link>
-            <Link href="/services" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
+            <Link href="/services?prompt=Show+me+gaming+tournaments" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
               <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=300&h=200&fit=crop" alt="Padel" className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
               <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
@@ -672,6 +763,7 @@ export default function ExplorePage() {
       </div>
 
       {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
+      {selectedBento && <BentoDetailModal item={selectedBento} onClose={() => setSelectedBento(null)} />}
     </AppShell>
   );
 }

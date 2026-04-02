@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { NotificationProvider } from '@/context/NotificationContext';
+import { WalletProvider } from '@/context/WalletContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 export const metadata: Metadata = {
@@ -20,9 +21,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <AuthProvider>
             <NotificationProvider>
-              <ErrorBoundary>
-                {children}
-              </ErrorBoundary>
+              <WalletProvider>
+                <ErrorBoundary>
+                  {children}
+                </ErrorBoundary>
+              </WalletProvider>
             </NotificationProvider>
           </AuthProvider>
         </ThemeProvider>
