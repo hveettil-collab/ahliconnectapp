@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { ViewModeProvider } from '@/context/ViewModeContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 export const metadata: Metadata = {
@@ -15,9 +16,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <AuthProvider>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
+            <ViewModeProvider>
+              <ErrorBoundary>
+                {children}
+              </ErrorBoundary>
+            </ViewModeProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

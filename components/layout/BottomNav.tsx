@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Compass, Sparkles, ShoppingBag, User } from 'lucide-react';
+import { useViewMode } from '@/context/ViewModeContext';
 
 const TABS = [
   { label: 'Home', href: '/dashboard', icon: Home },
@@ -13,9 +14,10 @@ const TABS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { isMobilePreview } = useViewMode();
 
   return (
-    <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center">
+    <div className={isMobilePreview ? "absolute bottom-3 left-3 right-3 z-40 flex justify-center" : "md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center"}>
       {/* Inline keyframes for AI orb animation */}
       <style>{`
         @keyframes ai-orb-glow {

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Bell, Search, MessageCircle, Menu } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { useViewMode } from '@/context/ViewModeContext';
 import Avatar from '@/components/ui/Avatar';
 import { COMPANIES } from '@/lib/mockData';
 import Link from 'next/link';
@@ -15,16 +16,17 @@ interface TopBarProps {
 
 export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
   const { user } = useAuth();
+  const { isMobilePreview } = useViewMode();
   const company = COMPANIES.find(c => c.id === user?.companyId);
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
     <>
       <header className="h-14 md:h-16 bg-white border-b border-[#E8E2D9] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
-        {/* Hamburger - mobile only */}
+        {/* Hamburger - mobile only (or mobile preview) */}
         <button
           onClick={onMenuToggle}
-          className="md:hidden p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0"
+          className={isMobilePreview ? "p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0" : "md:hidden p-2 -ml-1 rounded-[10px] text-[#6B7280] hover:bg-[#F4EFE8] transition-colors shrink-0"}
           aria-label="Open menu"
         >
           <Menu size={20} strokeWidth={1.8} />
