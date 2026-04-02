@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
+import AppShell from '@/components/layout/AppShell';
 import Link from 'next/link';
 import {
   Sparkles, Send, ArrowRight, Plane, Car, Gamepad2,
@@ -232,10 +233,10 @@ export default function ServicesPage() {
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
 
-  /* ── Chat mode — full-screen layout ── */
+  /* ── Chat mode ── */
   if (messages.length > 0) {
     return (
-      <div className="fixed inset-0 flex flex-col bg-[#F4EFE8]">
+      <AppShell title="Ahli AI" subtitle="Online" hideTopBar>
         <style>{`
           @keyframes typing-bounce {
             0%, 60%, 100% { transform: translateY(0); }
@@ -244,8 +245,8 @@ export default function ServicesPage() {
         `}</style>
 
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3.5 shrink-0" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E8E2D9' }}>
-          <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-white/60 transition-all md:hover:bg-white/80">
+        <div className="flex items-center gap-3 px-4 py-3.5 sticky top-0 z-10" style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E8E2D9' }}>
+          <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-[#F4EFE8] transition-all">
             <ArrowLeft size={20} />
           </button>
           <div className="flex items-center gap-2.5 flex-1">
@@ -260,7 +261,7 @@ export default function ServicesPage() {
         </div>
 
         {/* Messages Container */}
-        <div className="flex-1 overflow-y-auto px-3 md:px-6 lg:px-8 py-4 space-y-3 max-w-4xl mx-auto w-full">
+        <div className="px-3 md:px-6 py-4 space-y-3 max-w-4xl mx-auto w-full">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'ai' && (
@@ -345,8 +346,8 @@ export default function ServicesPage() {
           </div>
         )}
 
-        {/* Input — fixed at bottom */}
-        <div className="fixed bottom-0 left-0 right-0 px-3 md:px-6 lg:px-8 py-3 shrink-0" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid #E8E2D9' }}>
+        {/* Input bar */}
+        <div className="sticky bottom-0 px-3 md:px-6 py-3" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid #E8E2D9' }}>
           <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#E8E2D9] max-w-4xl mx-auto">
             <input
               type="text"
@@ -362,7 +363,7 @@ export default function ServicesPage() {
             {inputValue.trim() ? (
               <button
                 onClick={() => handleSend()}
-                className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md md:hover:shadow-lg"
+                className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
               >
                 <Send size={14} />
               </button>
@@ -373,16 +374,13 @@ export default function ServicesPage() {
             )}
           </div>
         </div>
-
-        {/* Spacer for fixed input */}
-        <div className="h-20" />
-      </div>
+      </AppShell>
     );
   }
 
-  /* ── Welcome state — full-screen centered layout ── */
+  /* ── Welcome state ── */
   return (
-    <div className="min-h-screen flex flex-col bg-[#F4EFE8]">
+    <AppShell title="AI Assistant" subtitle="Ask me anything" hideTopBar>
 
       {/* Inline CSS for all animations */}
       <style>{`
@@ -437,15 +435,15 @@ export default function ServicesPage() {
       `}</style>
 
       {/* Header */}
-      <div className="flex items-center justify-center px-4 py-4 shrink-0 relative" style={{ background: 'rgba(255,255,255,0.5)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(232,226,217,0.6)' }}>
-        <Link href="/dashboard" className="absolute left-4 p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-white/60 md:hover:bg-white/80 transition-all">
+      <div className="flex items-center justify-center px-4 py-4 relative sticky top-0 z-10" style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(232,226,217,0.6)' }}>
+        <Link href="/dashboard" className="absolute left-4 p-1.5 rounded-lg text-[#6B7280] hover:text-[#1A1A2E] hover:bg-[#F4EFE8] transition-all">
           <ArrowLeft size={20} />
         </Link>
         <p className="text-[15px] font-bold text-[#1A1A2E]">Ahli AI</p>
       </div>
 
-      {/* Main Content Area — centered and scrollable */}
-      <div className="flex-1 flex flex-col overflow-y-auto max-w-3xl mx-auto w-full px-4 md:px-6 lg:px-8">
+      {/* Main Content Area */}
+      <div className="flex flex-col max-w-3xl mx-auto w-full px-4 md:px-6">
 
         {/* ── Animated star visual ── */}
         <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '280px' }}>
@@ -539,8 +537,8 @@ export default function ServicesPage() {
         </div>
       </div>
 
-      {/* ── Input bar — fixed at bottom ── */}
-      <div className="fixed bottom-0 left-0 right-0 px-3 md:px-6 lg:px-8 py-3" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid rgba(232,226,217,0.6)' }}>
+      {/* ── Input bar ── */}
+      <div className="sticky bottom-0 px-3 md:px-6 py-3" style={{ background: 'rgba(244,239,232,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid rgba(232,226,217,0.6)' }}>
         <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#E8E2D9] max-w-3xl mx-auto">
           <input
             type="text"
@@ -556,7 +554,7 @@ export default function ServicesPage() {
           {inputValue.trim() ? (
             <button
               onClick={() => handleSend()}
-              className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md md:hover:shadow-lg"
+              className="w-8 h-8 rounded-full bg-[#1B3A6B] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
             >
               <Send size={14} />
             </button>
@@ -567,6 +565,6 @@ export default function ServicesPage() {
           )}
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }
