@@ -1,0 +1,6 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" rx="40" fill="#C8973A"/>
+  <path d="M65 70 L100 110 L135 70" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M65 110 L100 150 L135 110" fill="none" stroke="white" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="100" y="185" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="16" fill="white">MULTIPLY</text>
+</svg>
