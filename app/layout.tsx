@@ -4,6 +4,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { WalletProvider } from '@/context/WalletContext';
+import { ListingsProvider } from '@/context/ListingsContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 export const metadata: Metadata = {
@@ -22,9 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <NotificationProvider>
               <WalletProvider>
-                <ErrorBoundary>
-                  {children}
-                </ErrorBoundary>
+                <ListingsProvider>
+                  <ErrorBoundary>
+                    {children}
+                  </ErrorBoundary>
+                </ListingsProvider>
               </WalletProvider>
             </NotificationProvider>
           </AuthProvider>

@@ -141,6 +141,7 @@ const TESTIMONIALS = [
     role: 'Senior Analyst, Aldar Properties',
     text: 'Ahli Connect transformed how I manage my benefits. I renewed my car insurance in 60 seconds through the AI assistant — what used to take hours.',
     avatar: 'FA',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
     rating: 5,
   },
   {
@@ -148,6 +149,7 @@ const TESTIMONIALS = [
     role: 'Operations Manager, PureHealth',
     text: 'The marketplace is incredible. I sold my car to a colleague within a day. The verified employee network makes everything trustworthy.',
     avatar: 'OA',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
     rating: 5,
   },
   {
@@ -155,6 +157,7 @@ const TESTIMONIALS = [
     role: 'Marketing Lead, Shory',
     text: 'Getting my salary certificate used to require 3 emails and 5 days. Now I generate it instantly with AI. This is the future of employee platforms.',
     avatar: 'SA',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face',
     rating: 5,
   },
 ];
@@ -229,7 +232,7 @@ export default function LandingPage() {
               className="text-sm font-semibold text-white px-5 py-2.5 rounded-xl no-underline shadow-md hover:shadow-lg transition-all"
               style={{ backgroundColor: 'var(--accent)' }}
             >
-              Get Started Free
+              Join IHC Connect
             </Link>
           </div>
 
@@ -315,7 +318,7 @@ export default function LandingPage() {
                 className="flex items-center justify-center gap-2 w-full text-white text-sm font-semibold px-5 py-3.5 rounded-xl no-underline"
                 style={{ backgroundColor: 'var(--accent)' }}
               >
-                Get Started Free
+                Join IHC Connect
                 <ArrowRight size={16} />
               </Link>
             </div>
@@ -386,7 +389,7 @@ export default function LandingPage() {
                     className="inline-flex items-center justify-center gap-2 text-white font-semibold px-8 py-3.5 rounded-xl text-base w-full sm:w-auto no-underline shadow-lg hover:shadow-xl transition-all"
                     style={{ backgroundColor: 'var(--accent)' }}
                   >
-                    Create Free Account
+                    Join the IHC Family
                     <ArrowRight size={18} />
                   </Link>
                   <Link
@@ -406,17 +409,19 @@ export default function LandingPage() {
                 {/* Micro social proof */}
                 <div className="flex items-center justify-center md:justify-start gap-3">
                   <div className="flex -space-x-2">
-                    {['FA', 'OA', 'SA', 'MK'].map((initials, i) => (
-                      <div
+                    {[
+                      'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=face',
+                      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face',
+                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face',
+                      'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop&crop=face',
+                    ].map((src, i) => (
+                      <img
                         key={i}
-                        className="w-8 h-8 rounded-full border-2 flex items-center justify-center text-[10px] font-bold text-white"
-                        style={{
-                          borderColor: 'var(--bg)',
-                          background: ['#9D63F6', '#54B6ED', '#40C4AA', '#FFBD4C'][i],
-                        }}
-                      >
-                        {initials}
-                      </div>
+                        src={src}
+                        alt=""
+                        className="w-8 h-8 rounded-full border-2 object-cover"
+                        style={{ borderColor: 'var(--bg)' }}
+                      />
                     ))}
                   </div>
                   <div>
@@ -920,12 +925,16 @@ export default function LandingPage() {
 
                   {/* Author */}
                   <div className="flex items-center gap-3 pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
-                    <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                      style={{ background: 'linear-gradient(135deg, #9D63F6, #54B6ED)' }}
-                    >
-                      {t.avatar}
-                    </div>
+                    {t.image ? (
+                      <img src={t.image} alt={t.name} className="w-9 h-9 rounded-full object-cover" />
+                    ) : (
+                      <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                        style={{ background: 'linear-gradient(135deg, #9D63F6, #54B6ED)' }}
+                      >
+                        {t.avatar}
+                      </div>
+                    )}
                     <div>
                       <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>{t.name}</p>
                       <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{t.role}</p>
@@ -960,7 +969,7 @@ export default function LandingPage() {
                 className="inline-flex items-center justify-center gap-2 text-white font-semibold px-8 py-4 rounded-xl text-base w-full sm:w-auto no-underline shadow-lg hover:shadow-xl transition-all"
                 style={{ backgroundColor: 'var(--accent)' }}
               >
-                Create Your Free Account
+                Become Part of IHC
                 <ArrowRight size={18} />
               </Link>
               <Link

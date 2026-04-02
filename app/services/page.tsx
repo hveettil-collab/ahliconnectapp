@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { useListings } from '@/context/ListingsContext';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import AppShell from '@/components/layout/AppShell';
@@ -16,7 +17,7 @@ import {
   Paperclip, ChevronRight, Search, MapPinned, Navigation,
   CircleDot, Package, Utensils, Coffee, ShoppingCart,
   BadgeCheck, Download, Wallet, X, Check, Loader2,
-  Camera, Eye, Share2,
+  Camera, Eye, Share2, Building2,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
@@ -805,12 +806,17 @@ function FlightsFlow() {
    ═══════════════════════════════════════════ */
 
 function SellFlow() {
-  const [phase, setPhase] = useState<'category' | 'details' | 'preview' | 'publishing' | 'live'>('category');
+  const router = useRouter();
+  const { user } = useAuth();
+  const listings = useListings();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [phase, setPhase] = useState<'category' | 'details' | 'photos' | 'preview' | 'publishing' | 'live'>('category');
   const [category, setCategory] = useState('');
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [condition, setCondition] = useState('');
   const [description, setDescription] = useState('');
+  const [images, setImages] = useState<string[]>([]);
 
   const CATEGORIES = [
     { id: 'cars', label: 'Cars', icon: '🚗' },
@@ -823,12 +829,50 @@ function SellFlow() {
 
   useEffect(() => {
     if (phase === 'publishing') {
-      const t = setTimeout(() => setPhase('live'), 2000);
+      const t = setTimeout(() => {
+        // Add listing to shared context
+        const cat = CATEGORIES.find(c => c.id === category);
+        listings.addListing({
+          title,
+          price: `AED ${parseInt(price || '0').toLocaleString()}`,
+          category: cat?.label || 'Other',
+          condition,
+          description,
+          images,
+          seller: user?.name || 'You',
+          sellerCompany: user?.company || 'IHC Group',
+          specs: { condition, category: cat?.label || 'Other' },
+        });
+        setPhase('live');
+      }, 2000);
       return () => clearTimeout(t);
     }
   }, [phase]);
 
-  // Auto-generate description when moving to preview
+  const handleImageUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    Array.from(files).forEach(file => {
+      if (images.length >= 5) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        if (ev.target?.result) {
+          setImages(prev => [...prev, ev.target!.result as string]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  };
+
+  const removeImage = (idx: number) => {
+    setImages(prev => prev.filter((_, i) => i !== idx));
+  };
+
   const generateDescription = () => {
     const cat = CATEGORIES.find(c => c.id === category);
     setDescription(`${condition} ${cat?.label || ''} for sale. ${title}. Selling at AED ${price}. Contact me through the app for more details. Quick sale preferred.`);
@@ -837,6 +881,7 @@ function SellFlow() {
 
   return (
     <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
+      <input type="file" ref={fileInputRef} className="hidden" accept="image/*" multiple onChange={handleFileChange} />
       <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
         <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
           <ShoppingCart size={18} className="text-white" />
@@ -896,10 +941,53 @@ function SellFlow() {
                 ))}
               </div>
             </div>
-            <button onClick={() => { if (title && price && condition) generateDescription(); }}
+            <button onClick={() => { if (title && price && condition) setPhase('photos'); }}
               className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
               style={{ background: (title && price && condition) ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: (title && price && condition) ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
-              <Sparkles size={14} className="inline mr-1.5" />Generate Listing with AI
+              Continue to Photos
+            </button>
+          </div>
+        )}
+
+        {phase === 'photos' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Add photos of your item</p>
+            <p className="text-[11px] text-[#A4ABB8]">Items with photos sell 3x faster. Add up to 5 photos.</p>
+
+            {/* Image grid */}
+            <div className="grid grid-cols-3 gap-2">
+              {images.map((img, i) => (
+                <div key={i} className="relative aspect-square rounded-[12px] overflow-hidden border border-[#DFE1E6]">
+                  <img src={img} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
+                  <button onClick={() => removeImage(i)}
+                    className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-black/50 flex items-center justify-center">
+                    <X size={10} className="text-white" />
+                  </button>
+                  {i === 0 && (
+                    <span className="absolute bottom-1.5 left-1.5 text-[8px] font-bold text-white bg-[#40C4AA] px-1.5 py-0.5 rounded-full">Cover</span>
+                  )}
+                </div>
+              ))}
+              {images.length < 5 && (
+                <button onClick={handleImageUpload}
+                  className="aspect-square rounded-[12px] border-2 border-dashed border-[#DFE1E6] flex flex-col items-center justify-center gap-1.5 active:scale-95 transition-all hover:border-[#40C4AA] hover:bg-[#F0FDF4]">
+                  <Camera size={20} className="text-[#A4ABB8]" />
+                  <span className="text-[9px] font-semibold text-[#A4ABB8]">Add Photo</span>
+                </button>
+              )}
+            </div>
+
+            <div className="flex gap-2">
+              <button onClick={handleImageUpload}
+                className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                <Camera size={14} /> Upload from Gallery
+              </button>
+            </div>
+
+            <button onClick={generateDescription}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+              <Sparkles size={14} className="inline mr-1.5" />{images.length > 0 ? 'Generate Listing with AI' : 'Skip Photos & Generate'}
             </button>
           </div>
         )}
@@ -910,22 +998,39 @@ function SellFlow() {
               <Sparkles size={14} /> <p className="text-[12px] font-semibold">AI-generated listing preview</p>
             </div>
             <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6]">
-              <div className="w-full h-24 rounded-[10px] bg-[#DFE1E6] flex items-center justify-center text-[#A4ABB8] mb-3">
-                <Camera size={24} />
-              </div>
+              {images.length > 0 ? (
+                <div className="flex gap-1.5 mb-3 overflow-x-auto scrollbar-hide">
+                  {images.map((img, i) => (
+                    <img key={i} src={img} alt={`Photo ${i + 1}`} className="w-20 h-20 rounded-[10px] object-cover shrink-0" />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full h-24 rounded-[10px] bg-[#DFE1E6] flex items-center justify-center text-[#A4ABB8] mb-3">
+                  <Camera size={24} />
+                </div>
+              )}
               <p className="text-[15px] font-bold text-[#15161E]">{title}</p>
               <p className="text-[17px] font-extrabold text-[#40C4AA] mt-1">AED {parseInt(price || '0').toLocaleString()}</p>
               <div className="flex gap-2 mt-2">
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#40C4AA] text-white">{condition}</span>
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{CATEGORIES.find(c => c.id === category)?.label}</span>
+                {images.length > 0 && (
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{images.length} photo{images.length > 1 ? 's' : ''}</span>
+                )}
               </div>
               <p className="text-[12px] text-[#666D80] mt-2 leading-relaxed">{description}</p>
             </div>
-            <button onClick={() => setPhase('publishing')}
-              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
-              Publish Listing
-            </button>
+            <div className="flex gap-2">
+              <button onClick={() => setPhase('photos')}
+                className="px-4 py-3 rounded-[14px] text-[13px] font-bold text-[#666D80] border border-[#DFE1E6] active:scale-[0.97] transition-all">
+                Edit
+              </button>
+              <button onClick={() => setPhase('publishing')}
+                className="flex-1 py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+                style={{ background: 'linear-gradient(135deg, #40C4AA, #059669)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+                Publish Listing
+              </button>
+            </div>
           </div>
         )}
 
@@ -947,6 +1052,9 @@ function SellFlow() {
               <p className="text-[12px] text-[#A4ABB8]">Your item is now live on the marketplace</p>
             </div>
             <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6]">
+              {images.length > 0 && (
+                <img src={images[0]} alt={title} className="w-full h-32 rounded-[10px] object-cover mb-2" />
+              )}
               <p className="text-[14px] font-bold text-[#15161E]">{title}</p>
               <p className="text-[15px] font-extrabold text-[#40C4AA]">AED {parseInt(price || '0').toLocaleString()}</p>
               <div className="flex items-center gap-2 mt-2 text-[11px] text-[#A4ABB8]">
@@ -957,7 +1065,8 @@ function SellFlow() {
               <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] active:scale-95 transition-all">
                 <Share2 size={13} className="inline mr-1" />Share
               </button>
-              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+              <button onClick={() => router.push('/marketplace?tab=my')}
+                className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
                 <Package size={13} className="inline mr-1" />My Listings
               </button>
             </div>
@@ -1129,7 +1238,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('food') || t.includes('eat') || t.includes('lunch') || t.includes('dinner') || t.includes('order food') || t.includes('noon') || t.includes('hungry') || t.includes('restaurant')) {
+  if (t.includes('food') || t.includes('eat') || t.includes('lunch') || t.includes('dinner') || t.includes('order food') || t.includes('noon') || t.includes('hungry') || t.includes('restaurant') || t.includes('dining') || t.includes('café') || t.includes('cafe') || t.includes('coffee offer')) {
     return {
       content: `Let's get you some food! Noon Food has exclusive IHC discounts at top restaurants nearby, plus **free delivery** for IHC employees:`,
       flowType: 'food',
@@ -1157,7 +1266,87 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('benefit') || t.includes('medical') || t.includes('health') || t.includes('wellness')) {
+  if (t.includes('gym') || t.includes('palms sports') || t.includes('fitness') || t.includes('membership')) {
+    return {
+      content: `Your **Palms Sports** corporate membership details:\n\n• **Monthly fee**: AED 150 (60% off standard)\n• **Locations**: 8 venues across Abu Dhabi\n• **Includes**: Gym, pool, padel, group classes\n• **Family add-on**: +AED 100/member\n\nYou're saving **AED 2,700/year** with your corporate rate!`,
+      cards: [
+        { type: 'action', icon: Heart, title: 'Activate Membership', subtitle: 'Palms Sports · AED 150/mo', color: '#EA580C', action: 'I want to activate my Palms Sports membership' },
+        { type: 'info', icon: MapPin, title: 'Find Nearest Location', subtitle: '8 venues across Abu Dhabi', color: '#40C4AA', action: 'Show me Palms Sports locations near me' },
+      ]
+    };
+  }
+
+  if (t.includes('coffee') || t.includes('café nearby') || t.includes('nearby café') || t.includes('nearby coffee')) {
+    return {
+      content: `Your daily coffee benefit:\n\n• **1 free coffee per day** at 25+ cafés\n• Partners include **Starbucks**, **%Arabica**, **Tim Hortons**\n• Simply scan your **Ahli Connect QR** at the counter\n• Annual value: **AED 600+**`,
+      cards: [
+        { type: 'info', icon: Coffee, title: 'Nearest Starbucks', subtitle: '0.3 km · IHC Tower Lobby', color: '#92400E', action: 'Where is the nearest Starbucks' },
+        { type: 'info', icon: Coffee, title: 'Nearest %Arabica', subtitle: '0.8 km · The Galleria', color: '#92400E', action: 'Where is the nearest Arabica café' },
+      ]
+    };
+  }
+
+  if (t.includes('course') || t.includes('learning') || t.includes('academy') || t.includes('certification') || t.includes('training')) {
+    return {
+      content: `Your **IHC Academy** education benefit:\n\n• **Budget**: AED 15,000/year (AED 9,800 remaining)\n• **Courses**: 2,000+ from LinkedIn Learning, Coursera\n• **Completed**: 4 courses this year\n• **Certificates**: Available for all completed courses`,
+      cards: [
+        { type: 'action', icon: GraduationCap, title: 'Browse All Courses', subtitle: '2,000+ courses · Online + IRL', color: '#9D63F6', link: '/explore' },
+        { type: 'info', icon: Star, title: 'Recommended: AI Fundamentals', subtitle: '8 hours · Certificate included', color: '#FFBD4C', action: 'Tell me about the AI Fundamentals course' },
+      ]
+    };
+  }
+
+  if (t.includes('portal') || t.includes('oracle') || t.includes('sap') || t.includes('workday') || t.includes('it system') || t.includes('ihc portal')) {
+    return {
+      content: `Quick access to all IHC group systems:\n\n• **Oracle HR** — Payroll & leave\n• **SAP** — Finance & procurement\n• **Workday** — Performance & goals\n• **IT Helpdesk** — Tickets & support\n\nAll use **SSO** — single sign-on with your IHC credentials.`,
+      cards: [
+        { type: 'action', icon: Monitor, title: 'Open Oracle HR', subtitle: 'Payroll, leave, personal details', color: '#DC2626', link: '/explore' },
+        { type: 'action', icon: Monitor, title: 'IT Helpdesk', subtitle: 'Raise tickets · 24/7 support', color: '#7C3AED', action: 'I need IT support' },
+      ]
+    };
+  }
+
+  if (t.includes('hr service') || t.includes('salary cert') || t.includes('leave request') || t.includes('hr request')) {
+    return {
+      content: `HR Services at your fingertips:\n\n• **Salary Certificate** — generated in 8 seconds\n• **Leave Request** — submit in 2 taps\n• **Expense Claims** — auto-processing\n• **Payslips** — instant download\n\nAll powered by AI for instant processing!`,
+      cards: [
+        { type: 'action', icon: Zap, title: 'Generate Salary Certificate', subtitle: 'Ready in < 30 seconds', color: '#40C4AA', link: '/automations/salary-certificate' },
+        { type: 'action', icon: Calendar, title: 'Submit Leave Request', subtitle: 'Instant approval pipeline', color: '#9D63F6', link: '/automations/leave-request' },
+      ]
+    };
+  }
+
+  if (t.includes('directory') || t.includes('find someone') || t.includes('employee search') || t.includes('search employee') || t.includes('org chart')) {
+    return {
+      content: `Search the **IHC Employee Directory** with 45,000+ profiles across 30+ subsidiaries. You can find colleagues by name, department, or role.`,
+      cards: [
+        { type: 'action', icon: Users, title: 'Open Employee Directory', subtitle: '45,000+ employees · 30+ companies', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Building2, title: 'View Org Chart', subtitle: 'Your team structure', color: '#54B6ED', action: 'Show me my team org chart' },
+      ]
+    };
+  }
+
+  if (t.includes('meeting room') || t.includes('book a room') || t.includes('co-work') || t.includes('hot desk') || t.includes('business centre')) {
+    return {
+      content: `Book workspace across **14 IHC locations** in Abu Dhabi and Dubai:\n\n• **Meeting rooms** — free for employees\n• **Hot desks** — instant booking\n• **Private offices** — for focused work\n• All include AV equipment & WiFi`,
+      cards: [
+        { type: 'action', icon: Briefcase, title: 'Book Meeting Room', subtitle: '14 locations · Free for employees', color: '#059669', action: 'I need a meeting room for tomorrow at 10am' },
+        { type: 'action', icon: MapPin, title: 'View Locations', subtitle: 'Abu Dhabi & Dubai', color: '#7C3AED', link: '/explore' },
+      ]
+    };
+  }
+
+  if (t.includes('yas island') || t.includes('ticket') || t.includes('theme park') || t.includes('waterworld') || t.includes('ferrari world') || t.includes('warner')) {
+    return {
+      content: `Your **Yas Island Leisure Pass** benefits:\n\n• **40% off** Ferrari World, Yas Waterworld, Warner Bros. World\n• **Priority access** on weekdays\n• **20% off** F&B at all parks\n• Valid for you + **3 guests**\n\nBook through the app for instant digital tickets!`,
+      cards: [
+        { type: 'action', icon: Ticket, title: 'Get Yas Island Passes', subtitle: '40% off · Valid for 4 people', color: '#9D63F6', link: '/offers' },
+        { type: 'info', icon: Star, title: 'Ferrari World', subtitle: 'World\'s fastest rollercoaster', color: '#DC2626', action: 'Tell me about Ferrari World Abu Dhabi' },
+      ]
+    };
+  }
+
+  if (t.includes('benefit') || t.includes('medical') || t.includes('health insurance') || t.includes('wellness')) {
     return {
       content: `Your benefits summary, ${userName}:\n\n• **Medical** — Daman Enhanced (family)\n• **Life Insurance** — 24x monthly salary\n• **Gym** — AED 150/month at Palms Sports\n• **Education** — AED 20,000/year\n\nTotal value: ~**AED 85,000/year**!`,
       cards: [
@@ -1314,7 +1503,7 @@ function ServicesPageContent() {
   /* ── Chat mode ── */
   if (messages.length > 0) {
     return (
-      <AppShell title="Ahli AI" subtitle="Online" hideTopBar>
+      <div className="flex flex-col h-screen bg-[#F8F9FB]">
         <style>{`
           @keyframes typing-bounce {
             0%, 60%, 100% { transform: translateY(0); }
@@ -1323,7 +1512,7 @@ function ServicesPageContent() {
         `}</style>
 
         {/* Header */}
-        <div className="flex items-center gap-3 px-4 py-3.5 sticky top-0 z-10" style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #DFE1E6' }}>
+        <div className="flex items-center gap-3 px-4 py-3.5 shrink-0 z-10 bg-white" style={{ borderBottom: '1px solid #DFE1E6' }}>
           <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
             <ArrowLeft size={20} />
           </button>
@@ -1338,8 +1527,9 @@ function ServicesPageContent() {
           </div>
         </div>
 
-        {/* Messages Container */}
-        <div className="px-3 md:px-6 py-4 space-y-3 max-w-4xl mx-auto w-full">
+        {/* Scrollable messages area */}
+        <div className="flex-1 overflow-y-auto">
+        <div className="px-3 md:px-6 py-4 space-y-3 max-w-4xl mx-auto w-full pb-4">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'ai' && (
@@ -1421,7 +1611,7 @@ function ServicesPageContent() {
 
         {/* Quick chips */}
         {messages.length > 0 && messages[messages.length - 1]?.role === 'ai' && !messages[messages.length - 1]?.typing && (
-          <div className="px-3 md:px-6 lg:px-8 pb-2 shrink-0 max-w-4xl mx-auto w-full">
+          <div className="px-3 md:px-6 lg:px-8 pb-2 max-w-4xl mx-auto w-full">
             <div className="flex gap-2 overflow-x-auto scrollbar-hide">
               {['Flights', 'Rides', 'Food', 'Insurance', 'Benefits', 'Gaming', 'Offers'].map(chip => (
                 <button
@@ -1435,17 +1625,18 @@ function ServicesPageContent() {
             </div>
           </div>
         )}
+        </div>{/* end scrollable area */}
 
-        {/* Input bar */}
-        <div className="sticky bottom-0 px-3 md:px-6 py-3" style={{ background: 'rgba(248,249,251,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid #DFE1E6' }}>
-          <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#DFE1E6] max-w-4xl mx-auto">
+        {/* Input bar — fixed at bottom, outside scroll */}
+        <div className="shrink-0 px-3 md:px-6 py-3 bg-white" style={{ borderTop: '1px solid #DFE1E6' }}>
+          <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-[#F8F9FB] border border-[#DFE1E6] max-w-4xl mx-auto">
             <input
               type="text"
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSend()}
               placeholder="Message Ahli AI"
-              className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-3 outline-none"
+              className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-2.5 outline-none"
             />
             {inputValue.trim() ? (
               <button
@@ -1461,7 +1652,7 @@ function ServicesPageContent() {
             )}
           </div>
         </div>
-      </AppShell>
+      </div>
     );
   }
 

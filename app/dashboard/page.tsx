@@ -511,9 +511,9 @@ export default function DashboardPage() {
               </div>
               <div className="flex gap-2">
                 {[
-                  { name: 'IHC Group', color: '#1B3A6B', unread: 12, image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=80&h=80&fit=crop' },
-                  { name: 'Shory', color: '#0D9488', unread: 5, image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=80&h=80&fit=crop' },
-                  { name: 'Palms Sports', color: '#EA580C', unread: 3, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=80&h=80&fit=crop' },
+                  { name: 'IHC Group', color: '#1B3A6B', unread: 12, image: '/logos/ihc.svg' },
+                  { name: 'Shory', color: '#0D9488', unread: 5, image: '/logos/shory.svg' },
+                  { name: 'Palms Sports', color: '#EA580C', unread: 3, image: '/logos/palms-sports.svg' },
                 ].map(c => (
                   <div key={c.name} className="flex-1 flex items-center gap-2 px-2.5 py-2 rounded-[12px] border border-[#DFE1E6]">
                     <div className="w-7 h-7 rounded-[8px] overflow-hidden shrink-0">

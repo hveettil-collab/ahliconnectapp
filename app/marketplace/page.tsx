@@ -1,9 +1,10 @@
 'use client';
-import { useState, useRef, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useRef, useEffect, useMemo, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
 import { MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import { useAuth } from '@/context/AuthContext';
+import { useListings } from '@/context/ListingsContext';
 import {
   Search, X, Car, Home, Smartphone, Sofa, Plus,
   Sparkles, ArrowLeft, Heart, Share2, MessageCircle, Shield,
@@ -84,6 +85,7 @@ interface EnrichedListing {
   rating: number; reviews: number; views: number; saves: number;
   aiTags: string[]; verified: boolean; negotiable: boolean;
   urgency?: string;
+  isUserListing?: boolean;
 }
 
 const ENRICHMENTS: Record<string, Partial<EnrichedListing>> = {
@@ -95,7 +97,7 @@ const ENRICHMENTS: Record<string, Partial<EnrichedListing>> = {
   mk006: { rating: 4.9, reviews: 31, views: 467, saves: 78, aiTags: ['Agency Warranty', 'Low KM'], verified: true, negotiable: false, urgency: 'Hot' },
 };
 
-function enrichListing(l: typeof MARKETPLACE_LISTINGS[0]): EnrichedListing {
+function enrichListing(l: { id: string; title: string; category: string; price: string; seller: string; sellerCompany: string; condition: string; posted: string; featured: boolean; description: string; image: string; specs: Record<string, string> }): EnrichedListing {
   const e = ENRICHMENTS[l.id] ?? {};
   // Clean specs — remove undefined values from union type
   const cleanSpecs: Record<string, string> = {};
@@ -567,17 +569,54 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
    ═══════════════════════════════════════════ */
 
 export default function MarketplacePage() {
+  return (
+    <Suspense fallback={<AppShell title="Marketplace" subtitle=""><div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-2 border-[#9D63F6] border-t-transparent rounded-full animate-spin" /></div></AppShell>}>
+      <MarketplaceContent />
+    </Suspense>
+  );
+}
+
+function MarketplaceContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuth();
+  const { userListings } = useListings();
   const [search, setSearch] = useState('');
   const [cat, setCat] = useState('All');
   const [sort, setSort] = useState('Smart Match');
   const [showSort, setShowSort] = useState(false);
   const [showAISuggestions, setShowAISuggestions] = useState(false);
   const [selectedListing, setSelectedListing] = useState<EnrichedListing | null>(null);
+  const [showMyListings, setShowMyListings] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  const allEnriched = useMemo(() => MARKETPLACE_LISTINGS.map(enrichListing), []);
+  // Handle ?tab=my from sell flow redirect
+  useEffect(() => {
+    if (searchParams.get('tab') === 'my') {
+      setShowMyListings(true);
+    }
+  }, [searchParams]);
+
+  // Convert user listings into enriched format
+  const userEnriched: EnrichedListing[] = useMemo(() => userListings.map(ul => ({
+    ...enrichListing({
+      id: ul.id,
+      title: ul.title,
+      category: ul.category,
+      price: ul.price,
+      seller: ul.seller,
+      sellerCompany: ul.sellerCompany,
+      condition: ul.condition,
+      posted: ul.posted,
+      featured: ul.featured,
+      description: ul.description,
+      image: ul.images[0] || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=320&fit=crop',
+      specs: ul.specs,
+    }),
+    isUserListing: true,
+  })), [userListings]);
+
+  const allEnriched = useMemo(() => [...userEnriched, ...MARKETPLACE_LISTINGS.map(l => enrichListing({ ...l, specs: l.specs as unknown as Record<string, string> }))], [userEnriched]);
 
   const filtered = useMemo(() => {
     let results = allEnriched.filter(l => {
@@ -722,6 +761,43 @@ export default function MarketplacePage() {
             </div>
           )}
         </div>
+
+        {/* ═══════════════════════════════════
+           MY LISTINGS — User created listings
+           ═══════════════════════════════════ */}
+        {(showMyListings || userEnriched.length > 0) && userEnriched.length > 0 && (
+          <section className="spatial-rise d3">
+            <div className="flex items-center justify-between mb-2.5">
+              <div className="flex items-center gap-2">
+                <Package size={15} className="text-[#40C4AA]" />
+                <h3 className="text-[14px] font-bold text-[#15161E]">My Listings</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#40C4AA] text-white">{userEnriched.length}</span>
+              </div>
+              <button onClick={() => setShowMyListings(!showMyListings)} className="text-[11px] font-semibold text-[#9D63F6]">
+                {showMyListings ? 'Hide' : 'Show All'}
+              </button>
+            </div>
+            <div className="space-y-2">
+              {userEnriched.map(listing => (
+                <button key={listing.id} onClick={() => setSelectedListing(listing)}
+                  className="w-full flex items-center gap-3 p-3 rounded-[16px] border-2 border-[#40C4AA]/30 bg-[#F0FDF4] text-left active:scale-[0.98] transition-all">
+                  <div className="w-14 h-14 rounded-[12px] overflow-hidden shrink-0 border border-[#DFE1E6]">
+                    <img src={listing.image} alt={listing.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[8px] font-bold text-white bg-[#40C4AA] px-1.5 py-0.5 rounded-full">YOUR LISTING</span>
+                      <span className="text-[9px] text-[#A4ABB8]">{listing.posted}</span>
+                    </div>
+                    <p className="text-[13px] font-bold text-[#15161E] truncate">{listing.title}</p>
+                    <p className="text-[12px] font-extrabold text-[#40C4AA]">{listing.price}</p>
+                  </div>
+                  <ChevronRight size={16} className="text-[#A4ABB8] shrink-0" />
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ═══════════════════════════════════
            FEATURED — Dimensional hero cards

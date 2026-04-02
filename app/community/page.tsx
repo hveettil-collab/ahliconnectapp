@@ -92,7 +92,7 @@ const COMMUNITIES: Community[] = [
     description: 'Insurance innovators connecting, sharing ideas, and building the future of digital insurance in the UAE.',
     members: 2847, posts: 1256, color: '#0D9488',
     image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1560472355-536de3962603?w=100&h=100&fit=crop',
+    logo: '/logos/shory.svg',
     tags: ['InsurTech', 'Innovation', 'Digital'],
     isJoined: true,
     channels: [
@@ -107,7 +107,7 @@ const COMMUNITIES: Community[] = [
     description: 'The hub for Aldar Properties employees — real estate insights, project updates, and community events.',
     members: 5234, posts: 2890, color: '#C8973A',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=100&h=100&fit=crop',
+    logo: '/logos/aldar.svg',
     tags: ['Real Estate', 'Community', 'Abu Dhabi'],
     isJoined: false,
     channels: [
@@ -121,7 +121,7 @@ const COMMUNITIES: Community[] = [
     description: 'Healthcare professionals united — share best practices, wellness tips, and breakthrough research.',
     members: 8912, posts: 4320, color: '#059669',
     image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=100&h=100&fit=crop',
+    logo: '/logos/purehealth.svg',
     tags: ['Healthcare', 'Wellness', 'Research'],
     isJoined: false,
     channels: [
@@ -135,7 +135,7 @@ const COMMUNITIES: Community[] = [
     description: 'Mobility solutions team — fleet management insights, auto trends, and employee perks.',
     members: 1456, posts: 678, color: '#7C3AED',
     image: 'https://images.unsplash.com/photo-1449965408869-ebd13bc9e5a8?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=100&h=100&fit=crop',
+    logo: '/logos/easylease.svg',
     tags: ['Automotive', 'Fleet', 'Leasing'],
     isJoined: false,
     channels: [
@@ -148,7 +148,7 @@ const COMMUNITIES: Community[] = [
     description: 'Food & beverage colleagues — recipes, restaurant reviews, and culinary innovation at Ghitha.',
     members: 3210, posts: 1890, color: '#DC2626',
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=100&h=100&fit=crop',
+    logo: '/logos/ghitha.svg',
     tags: ['F&B', 'Culinary', 'Innovation'],
     isJoined: false,
     channels: [
@@ -161,7 +161,7 @@ const COMMUNITIES: Community[] = [
     description: 'Sports & fitness enthusiasts — training tips, tournament updates, and fitness challenges.',
     members: 4567, posts: 3456, color: '#EA580C',
     image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=100&h=100&fit=crop',
+    logo: '/logos/palms-sports.svg',
     tags: ['Sports', 'Fitness', 'Wellness'],
     isJoined: true,
     channels: [
@@ -175,7 +175,7 @@ const COMMUNITIES: Community[] = [
     description: 'The cross-company hub for all IHC Group employees. Stay connected across 30+ subsidiaries.',
     members: 20000, posts: 8765, color: '#1B3A6B',
     image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=400&fit=crop',
-    logo: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=100&h=100&fit=crop',
+    logo: '/logos/ihc.svg',
     tags: ['All Employees', 'Cross-Company', 'Networking'],
     isJoined: true,
     channels: [
