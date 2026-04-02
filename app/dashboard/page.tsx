@@ -240,7 +240,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          SMART AUTOMATIONS — Stacked image cards
+          SMART AUTOMATIONS — 1×3 Bento Grid
           ═══════════════════════════════════════ */}
       <div className="px-4 -mt-1 pb-1">
         <div className="flex items-center justify-between mb-3">
@@ -251,62 +251,57 @@ export default function DashboardPage() {
           <span className="text-[10px] font-semibold text-[#9D63F6] bg-[#9D63F6]/8 px-2.5 py-1 rounded-full">AI-Powered</span>
         </div>
 
-        <div className="space-y-3">
+        <div className="grid grid-cols-3 gap-2">
           {[
             {
-              title: 'Salary Certificate',
-              subtitle: 'AI-generated official documents in seconds. No HR queues, no waiting.',
+              title: 'Salary\nCertificate',
               image: '/illust-salary.svg',
               stat: '<30s',
               statLabel: 'avg. time',
               accent: '#9D63F6',
+              accentBg: '#F7F1FF',
               href: '/automations/salary-certificate',
             },
             {
-              title: 'Smart Leave',
-              subtitle: 'AI suggests optimal dates based on team calendar and workload.',
+              title: 'Smart\nLeave',
               image: '/illust-leave.svg',
               stat: '1-tap',
               statLabel: 'approval',
               accent: '#40C4AA',
+              accentBg: '#E7FEF8',
               href: '/automations/leave-request',
             },
             {
-              title: 'Expense Claim',
-              subtitle: 'Snap a receipt photo. AI reads, categorizes, and submits for you.',
+              title: 'Expense\nClaim',
               image: '/illust-expense.svg',
               stat: '98%',
               statLabel: 'accuracy',
               accent: '#FFBD4C',
+              accentBg: '#FFF6E0',
               href: '/automations/expense-claim',
             },
           ].map((card, i) => (
             <Link key={card.title} href={card.href}
-              className="block rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.98]"
+              className="block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
               style={{
                 opacity: mounted ? 1 : 0,
-                transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.15}s`,
+                transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
               }}>
               {/* Illustration */}
-              <div className="relative w-full overflow-hidden" style={{ height: '140px' }}>
+              <div className="w-full overflow-hidden" style={{ height: '90px', background: card.accentBg }}>
                 <img
                   src={card.image}
-                  alt={card.title}
+                  alt={card.title.replace('\n', ' ')}
                   className="w-full h-full object-cover"
                 />
               </div>
               {/* Card content */}
-              <div className="px-4 py-3.5">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0 pr-3">
-                    <p className="text-[15px] font-bold text-[#15161E] leading-tight">{card.title}</p>
-                    <p className="text-[12px] text-[#666D80] mt-1 leading-relaxed">{card.subtitle}</p>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-[22px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
-                    <p className="text-[10px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
-                  </div>
+              <div className="px-2.5 py-2.5">
+                <p className="text-[11px] font-bold text-[#15161E] leading-tight whitespace-pre-line">{card.title}</p>
+                <div className="mt-2">
+                  <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
+                  <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
                 </div>
               </div>
             </Link>
