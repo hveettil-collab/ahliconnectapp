@@ -14,6 +14,9 @@ const TABS = [
 export default function BottomNav() {
   const pathname = usePathname();
 
+  // Hide bottom nav on AI page
+  if (pathname === '/services') return null;
+
   return (
     <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center">
       {/* Inline keyframes for AI orb animation */}
@@ -45,7 +48,7 @@ export default function BottomNav() {
         className="flex items-center gap-1.5 rounded-full px-1.5 py-1.5"
         style={{
           background: '#FFFFFF',
-          boxShadow: '0px 2px 64px 0px rgba(0,0,0,0.18)',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
         }}
       >
         {TABS.map(({ label, href, icon: Icon, isAI }) => {
