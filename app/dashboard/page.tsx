@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import AppShell from '@/components/layout/AppShell';
 import {
@@ -12,7 +12,8 @@ import {
   Compass, Heart, Shield, GraduationCap, Gift, Zap, Star,
   Plane, Car, Gamepad2, Users, Globe, UtensilsCrossed,
   CreditCard, MapPin, Palmtree, Menu, RefreshCw,
-  Dumbbell, Activity, Coffee
+  Dumbbell, Activity, Coffee, FileText, Timer, Brain,
+  Wallet, Receipt, Award, ArrowUpRight, Play
 } from 'lucide-react';
 import Link from 'next/link';
 import Avatar from '@/components/ui/Avatar';
@@ -42,20 +43,26 @@ function useLiveTime() {
   return time;
 }
 
-/* ════════════════ HERO CAROUSEL ════════════════ */
-
-interface HeroSlide {
-  image: string;
-  label: string;
-  branded?: boolean;  // Show IHC logo + tagline centered
+/* ──── Animated Counter Hook ──── */
+function useCountUp(target: number, duration = 1800, delay = 300) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      const start = performance.now();
+      const animate = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(Math.round(eased * target));
+        if (progress < 1) requestAnimationFrame(animate);
+      };
+      requestAnimationFrame(animate);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [target, duration, delay]);
+  return value;
 }
-
-const HERO_SLIDES: HeroSlide[] = [
-  { image: '/1.jpg', label: 'IHC group', branded: true },
-  { image: '/2.jpg', label: 'news', branded: true },
-  { image: '/3.jpg', label: 'community', branded: true },
-  { image: '/4.jpg', label: 'partnerships', branded: true },
-];
 
 /* ════════════════ DASHBOARD ════════════════ */
 
@@ -63,25 +70,26 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const greeting = useGreeting();
   const time = useLiveTime();
-  const [heroIdx, setHeroIdx] = useState(0);
   const { stock, loading: stockLoading, refetch: refetchStock } = useStockPrice();
   const { unreadCount, togglePanel } = useNotifications();
+  const [mounted, setMounted] = useState(false);
 
-  // Merge live stock data with fallback to MARKET_DATA
+  // Animated counters for USP stats
+  const hoursSaved = useCountUp(347, 2000, 600);
+  const employees = useCountUp(45, 2000, 800);
+  const benefitsVal = useCountUp(85, 2000, 1000);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Merge live stock data with fallback
   const sd = stock ?? {
     ...MARKET_DATA,
     live: false,
     updatedAt: '',
     prevClose: MARKET_DATA.price - MARKET_DATA.change,
   };
-
-  /* Auto-advance carousel every 4 seconds */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setHeroIdx(prev => (prev + 1) % HERO_SLIDES.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
 
   if (!user) return null;
 
@@ -93,167 +101,274 @@ export default function DashboardPage() {
 
   return (
     <AppShell title="Home" subtitle={time} hideTopBar>
+
       {/* ══════════════════════════════════════════
-          IMMERSIVE HERO CAROUSEL
-          Full-bleed, editorial, premium feel
+          HERO — Immersive gradient with greeting
           ══════════════════════════════════════════ */}
-      <div className="relative mx-1.5 mt-1 rounded-[32px] overflow-hidden" style={{ height: 'clamp(170px, 25.6vh, 208px)' }}>
-
-        {/* ── Carousel images with crossfade ── */}
-        {HERO_SLIDES.map((slide, i) => (
-          <img
-            key={slide.image}
-            src={slide.image}
-            alt={slide.label}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              opacity: i === heroIdx ? 1 : 0,
-              transform: i === heroIdx ? 'scale(1)' : 'scale(1.05)',
-              transition: 'opacity 800ms ease-in-out, transform 2000ms ease-out',
-            }}
-          />
-        ))}
-
-        {/* ── Layered gradient overlay — lighter for branded slide ── */}
-        <div
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{
-            background: HERO_SLIDES[heroIdx].branded
-              ? 'linear-gradient(to top, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.05) 40%, transparent 100%)'
-              : 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.08) 65%, rgba(0,0,0,0.15) 100%)',
-          }}
-        />
-
-        {/* ── Vertical side label (like ADGM "lifestyle") ── */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 z-20">
-          <p
-            className="text-[11px] font-bold tracking-[0.2em] uppercase pl-2 transition-colors duration-500"
-            style={{
-              writingMode: 'vertical-lr',
-              transform: 'rotate(180deg)',
-              color: HERO_SLIDES[heroIdx].branded ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.4)',
-            }}
-          >
-            {HERO_SLIDES[heroIdx].label}
-          </p>
+      <div className="relative overflow-hidden" style={{ minHeight: 'clamp(320px, 52vh, 420px)' }}>
+        {/* Animated mesh gradient background */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 30%, #54B6ED 70%, #40C4AA 100%)',
+        }}>
+          {/* Floating orbs for depth */}
+          <div className="absolute w-[300px] h-[300px] rounded-full opacity-30" style={{
+            background: 'radial-gradient(circle, #FFBD4C 0%, transparent 70%)',
+            top: '-80px', right: '-60px',
+            animation: 'float 8s ease-in-out infinite',
+          }} />
+          <div className="absolute w-[200px] h-[200px] rounded-full opacity-20" style={{
+            background: 'radial-gradient(circle, #54B6ED 0%, transparent 70%)',
+            bottom: '20px', left: '-40px',
+            animation: 'float 6s ease-in-out infinite reverse',
+          }} />
+          <div className="absolute w-[150px] h-[150px] rounded-full opacity-15" style={{
+            background: 'radial-gradient(circle, #fff 0%, transparent 70%)',
+            top: '40%', left: '50%',
+            animation: 'float 10s ease-in-out infinite',
+          }} />
         </div>
 
-        {/* ── Floating top controls ── */}
-        <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-20">
-          {/* Profile avatar */}
-          <img
-            src={user.image}
-            alt={user.name}
-            className="w-[48px] h-[48px] rounded-full object-cover shadow-[0_4px_20px_rgba(0,0,0,0.3)]"
-            style={{ border: '2.5px solid rgba(255,255,255,0.25)' }}
-          />
+        {/* Noise texture overlay for premium feel */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }} />
 
-          {/* Action buttons */}
-          <div className="flex flex-col gap-3">
-            {/* Notification bell */}
-            <button onClick={togglePanel} className="relative">
-              <div
-                className="w-[44px] h-[44px] rounded-full flex items-center justify-center shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
-                style={{
-                  background: 'rgba(244, 239, 232, 0.92)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                }}
-              >
-                <Bell size={18} className="text-[#15161E]" />
-              </div>
-              {unreadCount > 0 && (
-                <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#EF4444] flex items-center justify-center px-1 shadow-md">
-                  <span className="text-[9px] font-bold text-white">{unreadCount}</span>
-                </div>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* ── Hero text content — bottom region (hidden on branded slide) ── */}
-        <div
-          className="absolute bottom-16 left-6 right-16 z-20 transition-opacity duration-500"
-          style={{ opacity: HERO_SLIDES[heroIdx].branded ? 0 : 1 }}
-        >
-          <p className="text-white/50 text-[13px] font-medium tracking-wide mb-2">
-            {greeting}
-          </p>
-          <h1
-            className="text-white leading-[1.08] tracking-tight mb-3"
-            style={{ fontSize: 'clamp(24px, 6vw, 28px)', fontWeight: 700 }}
-          >
-            Unwind &<br />Indulge
-          </h1>
-          <p className="text-white/55 text-[15px] leading-relaxed">
-            Explore the{' '}
-            <Link
-              href="/offers"
-              className="text-white font-medium underline underline-offset-[3px] decoration-white/50 hover:decoration-white transition-colors"
-            >
-              top shopping &amp; lifestyle offers.
-            </Link>
-          </p>
-        </div>
-
-        {/* ── Carousel indicators — bottom right ── */}
-        <div className="absolute bottom-6 right-6 flex items-center gap-2 z-20">
-          {HERO_SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setHeroIdx(i)}
-              className="rounded-full transition-all duration-500 ease-out"
+        {/* Top bar — avatar + bell */}
+        <div className="relative z-20 flex items-start justify-between px-5 pt-5">
+          <div className="flex items-center gap-3">
+            <img
+              src={user.image}
+              alt={user.name}
+              className="w-[48px] h-[48px] rounded-full object-cover"
               style={{
-                width: i === heroIdx ? 24 : 7,
-                height: 7,
-                background: i === heroIdx ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.35)',
+                border: '2.5px solid rgba(255,255,255,0.3)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
               }}
             />
+            <div>
+              <p className="text-white/60 text-[11px] font-medium tracking-wide">{greeting}</p>
+              <p className="text-white text-[16px] font-bold leading-tight">{user.name.split(' ')[0]}</p>
+            </div>
+          </div>
+          <button onClick={togglePanel} className="relative">
+            <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
+              <Bell size={18} className="text-white" />
+            </div>
+            {unreadCount > 0 && (
+              <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#DF1C41] flex items-center justify-center px-1 shadow-md">
+                <span className="text-[9px] font-bold text-white">{unreadCount}</span>
+              </div>
+            )}
+          </button>
+        </div>
+
+        {/* Hero tagline */}
+        <div className="relative z-20 px-5 mt-6">
+          <h1 className="text-white leading-[1.1] tracking-tight"
+            style={{
+              fontSize: 'clamp(28px, 7vw, 36px)',
+              fontWeight: 800,
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+            }}>
+            Your work life,{'\n'}
+            <span style={{ color: '#FFBD4C' }}>supercharged.</span>
+          </h1>
+          <p className="text-white/60 text-[14px] mt-2 leading-relaxed max-w-[280px]"
+            style={{
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+            }}>
+            AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
+          </p>
+        </div>
+
+        {/* USP Stats Strip — Animated Counters */}
+        <div className="relative z-20 flex items-center justify-between px-5 mt-5"
+          style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s',
+          }}>
+          {[
+            { value: `${hoursSaved}`, suffix: 'hrs', label: 'Saved weekly', icon: Timer },
+            { value: `${employees}K`, suffix: '+', label: 'Employees', icon: Users },
+            { value: `${benefitsVal}K`, suffix: '+', label: 'Benefits AED', icon: Award },
+          ].map(({ value, suffix, label, icon: Icon }, i) => (
+            <div key={label} className="flex-1 text-center">
+              <div className="flex items-center justify-center gap-1 mb-0.5">
+                <Icon size={13} className="text-white/50" strokeWidth={2} />
+                <p className="text-white text-[20px] font-bold tabular-nums leading-none">
+                  {value}<span className="text-white/50 text-[12px]">{suffix}</span>
+                </p>
+              </div>
+              <p className="text-white/40 text-[10px] font-medium">{label}</p>
+              {i < 2 && <div className="hidden" />}
+            </div>
+          ))}
+        </div>
+
+        {/* AI Assistant — Floating CTA */}
+        <div className="relative z-20 px-5 mt-5 pb-5"
+          style={{
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
+          }}>
+          <Link href="/services" className="block">
+            <div className="relative rounded-[20px] overflow-hidden" style={{
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.15)',
+            }}>
+              <div className="flex items-center gap-3.5 px-4 py-3.5">
+                {/* Pulsing AI orb */}
+                <div className="relative w-[44px] h-[44px] shrink-0">
+                  <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{
+                    background: 'linear-gradient(135deg, #FFBD4C, #9D63F6)',
+                    animationDuration: '2s',
+                  }} />
+                  <div className="relative w-full h-full rounded-full flex items-center justify-center" style={{
+                    background: 'linear-gradient(135deg, #FFBD4C 0%, #9D63F6 100%)',
+                    boxShadow: '0 4px 20px rgba(157,99,246,0.4)',
+                  }}>
+                    <Sparkles size={20} className="text-white" strokeWidth={2} />
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-[14px] font-bold">Ask AI anything</p>
+                  <p className="text-white/50 text-[12px] mt-0.5">Salary certs, leaves, expenses — instant</p>
+                </div>
+                <ArrowRight size={18} className="text-white/40 shrink-0" />
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Bottom curve */}
+        <div className="absolute bottom-0 left-0 right-0 h-6 bg-[#F8F9FB] rounded-t-[24px]" />
+      </div>
+
+      {/* ═══════════════════════════════════════
+          SMART AUTOMATIONS — The hero USP cards
+          ═══════════════════════════════════════ */}
+      <div className="px-4 -mt-1 pb-1">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Zap size={15} className="text-[#FFBD4C]" strokeWidth={2.5} />
+            <h3 className="text-[15px] font-bold text-[#15161E]">Smart Automations</h3>
+          </div>
+          <span className="text-[10px] font-semibold text-[#9D63F6] bg-[#9D63F6]/8 px-2.5 py-1 rounded-full">AI-Powered</span>
+        </div>
+
+        <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-4 px-4" style={{ scrollSnapType: 'x mandatory' }}>
+          {[
+            {
+              title: 'Salary Certificate',
+              subtitle: 'Generated in under 30 seconds',
+              icon: FileText,
+              gradient: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 100%)',
+              stat: '<30s',
+              statLabel: 'avg. time',
+              href: '/automations/salary-certificate',
+            },
+            {
+              title: 'Smart Leave',
+              subtitle: 'AI suggests best dates for you',
+              icon: Calendar,
+              gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)',
+              stat: '1-tap',
+              statLabel: 'approval',
+              href: '/automations/leave-request',
+            },
+            {
+              title: 'Expense Claim',
+              subtitle: 'Scan receipt, auto-categorize',
+              icon: Receipt,
+              gradient: 'linear-gradient(135deg, #FFBD4C 0%, #EA580C 100%)',
+              stat: '98%',
+              statLabel: 'accuracy',
+              href: '/automations/expense-claim',
+            },
+          ].map((card, i) => (
+            <Link key={card.title} href={card.href}
+              className="shrink-0 rounded-[20px] overflow-hidden active:scale-[0.97] transition-transform"
+              style={{
+                width: 'clamp(200px, 52vw, 240px)',
+                scrollSnapAlign: 'start',
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.1}s`,
+              }}>
+              <div className="relative p-4 pb-3" style={{ background: card.gradient }}>
+                {/* Decorative circles */}
+                <div className="absolute top-3 right-3 w-16 h-16 rounded-full opacity-10" style={{ background: 'white' }} />
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full opacity-5" style={{ background: 'white' }} />
+                <card.icon size={24} className="text-white mb-3" strokeWidth={1.8} />
+                <p className="text-white text-[14px] font-bold leading-tight">{card.title}</p>
+                <p className="text-white/60 text-[11px] mt-1 leading-snug">{card.subtitle}</p>
+              </div>
+              <div className="bg-white border border-[#DFE1E6] border-t-0 rounded-b-[20px] px-4 py-2.5 flex items-center justify-between">
+                <div>
+                  <p className="text-[18px] font-bold text-[#15161E] leading-none">{card.stat}</p>
+                  <p className="text-[10px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center">
+                  <ArrowRight size={14} className="text-[#15161E]" />
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
 
-      {/* ── Quick-access bento grid — below hero ── */}
+      {/* ═══════════════════════════════════════
+          QUICK ACCESS BENTO — Redesigned
+          ═══════════════════════════════════════ */}
       <div className="px-4 pt-3 pb-1">
-        <div className="grid grid-cols-2 gap-2" style={{ gridTemplateRows: 'auto auto' }}>
-          {/* Row 1, Col 1 */}
-          <Link href="/services" className="bg-white rounded-[18px] border border-[#DFE1E6] p-3.5 flex flex-col items-start justify-between min-h-[88px] hover:shadow-md transition-all active:scale-[0.97]">
-            <Sparkles size={22} className="text-[#15161E]" strokeWidth={1.5} />
-            <p className="text-[11px] font-semibold text-[#15161E]">Ask AI</p>
-          </Link>
-          {/* Row 1, Col 2 */}
-          <Link href="/offers" className="bg-white rounded-[18px] border border-[#DFE1E6] p-3.5 flex flex-col items-start justify-between min-h-[88px] hover:shadow-md transition-all active:scale-[0.97]">
-            <Gift size={22} className="text-[#15161E]" strokeWidth={1.5} />
-            <p className="text-[11px] font-semibold text-[#15161E]">Benefits</p>
-          </Link>
-          {/* Event card — moved below other items for mobile */}
-          <Link href="/explore" className="bg-[#15161E] rounded-[18px] p-3.5 flex flex-col items-start justify-between col-span-2 hover:shadow-lg transition-all active:scale-[0.97]">
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
-              <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
-            </div>
-            <div>
-              <p className="text-[9px] text-white/40 font-medium">Event</p>
-              <p className="text-[11px] font-bold text-white leading-snug mt-0.5">Sports Day Yas Island</p>
-              <p className="text-[20px] font-bold text-white mt-2 leading-none">22 May</p>
-              <p className="text-[9px] text-white/40 mt-1">Yas Sports Complex</p>
-            </div>
-          </Link>
-          {/* Row 2, Col 1 */}
-          <Link href="/explore" className="bg-[#E8F5E9] rounded-[18px] border border-[#DFE1E6] p-3.5 flex flex-col items-start justify-between min-h-[88px] hover:shadow-md transition-all active:scale-[0.97]">
-            <Compass size={22} className="text-[#15161E]" strokeWidth={1.5} />
-            <p className="text-[11px] font-semibold text-[#15161E]">Explore</p>
-          </Link>
-          {/* Row 2, Col 2 */}
-          <Link href="/marketplace" className="bg-white rounded-[18px] border border-[#DFE1E6] p-3.5 flex flex-col items-start justify-between min-h-[88px] hover:shadow-md transition-all active:scale-[0.97]">
-            <UtensilsCrossed size={22} className="text-[#15161E]" strokeWidth={1.5} />
-            <p className="text-[11px] font-semibold text-[#15161E]">Market</p>
-          </Link>
+        <div className="grid grid-cols-4 gap-2">
+          {[
+            { icon: Gift, label: 'Benefits', href: '/offers', bg: '#F7F1FF', color: '#9D63F6' },
+            { icon: Compass, label: 'Explore', href: '/explore', bg: '#E7FEF8', color: '#40C4AA' },
+            { icon: UtensilsCrossed, label: 'Market', href: '/marketplace', bg: '#FFF6E0', color: '#FFBD4C' },
+            { icon: Users, label: 'Chat', href: '/chat', bg: '#EBF5FF', color: '#54B6ED' },
+          ].map(({ icon: Icon, label, href, bg, color }) => (
+            <Link key={label} href={href}
+              className="flex flex-col items-center gap-1.5 py-3 rounded-[16px] border border-[#DFE1E6] bg-white hover:shadow-md transition-all active:scale-[0.96]">
+              <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: bg }}>
+                <Icon size={20} style={{ color }} strokeWidth={1.8} />
+              </div>
+              <p className="text-[10px] font-semibold text-[#15161E]">{label}</p>
+            </Link>
+          ))}
         </div>
       </div>
 
       {/* ── Rest of dashboard content ── */}
-      <div className="px-4 space-y-3 pb-4">
+      <div className="px-4 space-y-3 pb-4 pt-2">
+
+        {/* ── Featured Event Banner ── */}
+        <Link href="/explore" className="block">
+          <div className="relative bg-[#15161E] rounded-[20px] p-4 overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{
+              background: 'radial-gradient(circle, #9D63F6, transparent)',
+            }} />
+            <div className="flex items-center gap-1.5 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <p className="text-[10px] text-white/40 font-medium">Upcoming Event</p>
+            </div>
+            <p className="text-[15px] font-bold text-white leading-snug">Sports Day Yas Island</p>
+            <div className="flex items-center gap-3 mt-2">
+              <p className="text-[22px] font-bold text-white leading-none">22 May</p>
+              <div className="w-px h-6 bg-white/15" />
+              <p className="text-[11px] text-white/40">Yas Sports Complex</p>
+            </div>
+          </div>
+        </Link>
 
         {/* ── Benefits Highlight ── */}
         <div>
@@ -283,7 +398,7 @@ export default function DashboardPage() {
             {[
               { icon: GraduationCap, color: '#FFBD4C', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr' },
               { icon: Plane, color: '#40C4AA', bg: '#D1FAE5', title: 'Flights', value: 'Return home' },
-              { icon: Shield, color: '#7C3AED', bg: '#EDE9FE', title: 'Life Cover', value: '24× salary' },
+              { icon: Shield, color: '#7C3AED', bg: '#EDE9FE', title: 'Life Cover', value: '24x salary' },
             ].map(({ icon: Icon, color, bg, title, value }) => (
               <div key={title} className="rounded-[14px] p-3 bg-white border border-[#DFE1E6] text-center">
                 <div className="w-9 h-9 rounded-[10px] flex items-center justify-center mx-auto mb-2" style={{ background: bg }}>
@@ -365,7 +480,7 @@ export default function DashboardPage() {
               { Icon: Activity, label: 'Health', value: 'Free Annual', color: '#059669' },
               { Icon: UtensilsCrossed, label: 'Meals', value: '25% Off', color: '#DC2626' },
               { Icon: Car, label: 'EasyLease', value: 'AED 1,299', color: '#7C3AED' },
-              { Icon: Coffee, label: 'Café', value: 'AED 500/mo', color: '#FFBD4C' },
+              { Icon: Coffee, label: 'Cafe', value: 'AED 500/mo', color: '#FFBD4C' },
             ].map(({ Icon, label, value, color }) => (
               <div key={label} className="rounded-[12px] bg-[#F8F9FB] border border-[#DFE1E6] p-2 text-center">
                 <div className="flex justify-center mb-0.5"><Icon size={18} style={{ color }} strokeWidth={1.8} /></div>
@@ -407,14 +522,13 @@ export default function DashboardPage() {
           <Sun size={18} className="text-yellow-300 shrink-0" />
           <div>
             <p className="text-[10px] font-semibold text-blue-200">Abu Dhabi</p>
-            <p className="text-sm font-bold">36°C ☀️</p>
+            <p className="text-sm font-bold">36°C</p>
           </div>
           <p className="text-[10px] text-blue-200 ml-auto">{new Date().toLocaleDateString('en-AE', { weekday: 'short', month: 'short', day: 'numeric' })}</p>
         </div>
 
         {/* ── IHC Stock Trading Card — Live ── */}
         <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
-          {/* Stock header */}
           <div className="px-4 pt-4 pb-3">
             <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2.5">
@@ -447,7 +561,6 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
-            {/* Mini chart — bars sit on a baseline with labels below */}
             <div className="flex items-end gap-1.5">
               {sd.chartData.map((d, i) => {
                 const prices = sd.chartData.map(x => x.price);
@@ -464,7 +577,6 @@ export default function DashboardPage() {
               })}
             </div>
           </div>
-          {/* Stats row */}
           <div className="flex items-center border-t border-[#F8F9FB] px-4 py-3">
             <div className="flex-1 text-center">
               <p className="text-[9px] text-[#A4ABB8] font-semibold uppercase tracking-wide">Mkt Cap</p>
@@ -481,7 +593,6 @@ export default function DashboardPage() {
               <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{sd.low52w}–{sd.high52w}</p>
             </div>
           </div>
-          {/* Trade buttons */}
           <div className="grid grid-cols-2 gap-2.5 px-4 pb-4 pt-1.5">
             <button className="flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white bg-green-600 active:scale-[0.97] transition-all">
               <TrendingUp size={15} /> Buy
@@ -537,7 +648,7 @@ export default function DashboardPage() {
               { icon: CheckCircle2, color: '#059669', text: 'Annual leave approved — Apr 15–17', time: '2h ago' },
               { icon: Gift, color: '#FFBD4C', text: 'New offer: 15% off Yas Island units', time: '5h ago' },
               { icon: Gamepad2, color: '#DC2626', text: 'FIFA Tournament — Round 2 starts today', time: '8h ago' },
-              { icon: Plane, color: '#40C4AA', text: 'Flight deal: Abu Dhabi → London AED 2,100', time: '1d ago' },
+              { icon: Plane, color: '#40C4AA', text: 'Flight deal: Abu Dhabi to London AED 2,100', time: '1d ago' },
             ].map((n, i) => (
               <div key={i} className="flex items-start gap-2.5 bg-[#F8F9FB] rounded-[12px] px-3 py-2.5 border border-[#DFE1E6]">
                 <div className="w-8 h-8 rounded-[10px] flex items-center justify-center shrink-0"
@@ -582,6 +693,14 @@ export default function DashboardPage() {
         </div>
 
       </div>
+
+      {/* Float animation keyframes */}
+      <style>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+      `}</style>
     </AppShell>
   );
 }
