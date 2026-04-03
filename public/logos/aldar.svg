@@ -1,8 +1,12 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <circle cx="100" cy="100" r="100" fill="white"/>
-  <!-- Aldar arch/building icon -->
-  <path d="M100 35 C100 35 60 55 60 95 L60 120 L80 120 L80 95 C80 75 90 60 100 55 C110 60 120 75 120 95 L120 120 L140 120 L140 95 C140 55 100 35 100 35Z" fill="#B8860B"/>
-  <rect x="90" y="85" width="20" height="35" rx="3" fill="white"/>
+  <!-- Aldar arch/gateway icon -->
+  <g transform="translate(100,55)">
+    <!-- Main arch -->
+    <path d="M-28 55 L-28 15 C-28 -18 0 -35 0 -35 C0 -35 28 -18 28 15 L28 55" fill="none" stroke="#1A1A2E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Inner arch cutout -->
+    <path d="M-12 55 L-12 25 C-12 8 0 0 0 0 C0 0 12 8 12 25 L12 55" fill="none" stroke="#1A1A2E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
   <!-- ALDAR text -->
-  <text x="100" y="158" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="22" fill="#1A1A2E" letter-spacing="2">ALDAR</text>
+  <text x="100" y="155" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="24" fill="#1A1A2E" letter-spacing="3">ALDAR</text>
 </svg>

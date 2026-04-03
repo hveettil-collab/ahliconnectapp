@@ -1,6 +1,7 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <circle cx="100" cy="100" r="100" fill="#F5C518"/>
-  <!-- easy lease wordmark -->
-  <text x="100" y="92" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="30" fill="#1A1A2E" letter-spacing="-0.5">easy</text>
-  <text x="100" y="122" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="400" font-size="28" fill="#1A1A2E" letter-spacing="0.5">lease</text>
+  <!-- easy text (bold) -->
+  <text x="100" y="92" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="36" fill="#1A1A2E">easy</text>
+  <!-- lease text (lighter weight) -->
+  <text x="100" y="124" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="400" font-size="32" fill="#1A1A2E" letter-spacing="0.5">lease</text>
 </svg>
