@@ -1,5 +1,7 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="40" fill="#DC2626"/>
-  <path d="M70 55 L90 55 L90 85 L110 85 L110 55 L130 55 L130 145 L110 145 L110 105 L90 105 L90 145 L70 145 Z" fill="white"/>
-  <text x="100" y="180" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="20" fill="white">GHITHA</text>
+  <circle cx="100" cy="100" r="100" fill="white"/>
+  <!-- Arabic غذا text -->
+  <text x="100" y="95" text-anchor="middle" font-family="'Noto Sans Arabic','Geeza Pro','Tahoma',sans-serif" font-weight="700" font-size="48" fill="#059669" direction="rtl">غِذَا</text>
+  <!-- Ghitha english text -->
+  <text x="100" y="130" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="700" font-size="22" fill="#059669" letter-spacing="1">Ghitha</text>
 </svg>

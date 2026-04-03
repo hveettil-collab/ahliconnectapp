@@ -1,5 +1,8 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="40" fill="#009B77"/>
-  <path d="M80 60 L80 100 L60 100 L60 120 L80 120 L80 140 L100 140 L100 120 L140 120 L140 100 L100 100 L100 60 Z" fill="white"/>
-  <text x="100" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="18" fill="white">PureHealth</text>
+  <circle cx="100" cy="100" r="100" fill="white"/>
+  <!-- PureHealth wordmark with + -->
+  <text x="100" y="98" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="18" fill="#1B3A6B" letter-spacing="1.5">PURE</text>
+  <text x="100" y="118" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="18" fill="#1B3A6B" letter-spacing="1.5">HEALTH</text>
+  <!-- Green plus symbol -->
+  <text x="155" y="100" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="24" fill="#059669">+</text>
 </svg>

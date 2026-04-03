@@ -1,5 +1,8 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="40" fill="#FFFFFF"/>
-  <path d="M100 30 L160 110 L140 110 L140 170 L60 170 L60 110 L40 110 Z" fill="#B8860B"/>
-  <text x="100" y="192" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="22" fill="#1A1A2E">ALDAR</text>
+  <circle cx="100" cy="100" r="100" fill="white"/>
+  <!-- Aldar arch/building icon -->
+  <path d="M100 35 C100 35 60 55 60 95 L60 120 L80 120 L80 95 C80 75 90 60 100 55 C110 60 120 75 120 95 L120 120 L140 120 L140 95 C140 55 100 35 100 35Z" fill="#B8860B"/>
+  <rect x="90" y="85" width="20" height="35" rx="3" fill="white"/>
+  <!-- ALDAR text -->
+  <text x="100" y="158" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="22" fill="#1A1A2E" letter-spacing="2">ALDAR</text>
 </svg>

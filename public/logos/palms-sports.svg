@@ -1,7 +1,18 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="40" fill="#EA580C"/>
-  <path d="M100 40 C100 40 75 50 75 75 C75 90 85 95 90 100 L90 140 L110 140 L110 100 C115 95 125 90 125 75 C125 50 100 40 100 40Z" fill="white"/>
-  <path d="M60 75 C55 65 60 50 70 48" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <path d="M140 75 C145 65 140 50 130 48" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <text x="100" y="175" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="16" fill="white">PALMS SPORTS</text>
+  <circle cx="100" cy="100" r="100" fill="white"/>
+  <!-- Palm tree icon -->
+  <g transform="translate(100,50)">
+    <!-- Trunk -->
+    <path d="M0 40 C2 60 -2 80 0 100" stroke="#059669" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <!-- Left fronds -->
+    <path d="M0 35 C-20 20 -45 25 -55 15" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M0 30 C-15 10 -40 5 -50 -10" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M0 25 C-10 5 -25 -10 -30 -25" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <!-- Right fronds -->
+    <path d="M0 35 C20 20 45 25 55 15" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M0 30 C15 10 40 5 50 -10" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M0 25 C10 5 25 -10 30 -25" stroke="#059669" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+  <!-- PALMS text -->
+  <text x="100" y="178" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="18" fill="#EA580C" letter-spacing="3">PALMS</text>
 </svg>

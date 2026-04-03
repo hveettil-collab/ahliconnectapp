@@ -1,4 +1,31 @@
 <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" rx="40" fill="#1B3A6B"/>
-  <text x="100" y="115" text-anchor="middle" font-family="Arial,sans-serif" font-weight="bold" font-size="64" fill="white">IHC</text>
+  <circle cx="100" cy="100" r="100" fill="white"/>
+  <!-- Globe wireframe -->
+  <g transform="translate(100,88)" stroke="#4338CA" fill="none" stroke-width="1.8" opacity="0.85">
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="42"/>
+    <!-- Horizontal lines -->
+    <ellipse cx="0" cy="0" rx="42" ry="14"/>
+    <ellipse cx="0" cy="0" rx="42" ry="28"/>
+    <line x1="0" y1="-42" x2="0" y2="42"/>
+    <!-- Vertical ellipses -->
+    <ellipse cx="0" cy="0" rx="14" ry="42"/>
+    <ellipse cx="0" cy="0" rx="28" ry="42"/>
+    <!-- Latitude lines -->
+    <ellipse cx="0" cy="-21" rx="36" ry="8"/>
+    <ellipse cx="0" cy="21" rx="36" ry="8"/>
+  </g>
+  <!-- Dots scattered on globe -->
+  <g fill="#7C3AED" opacity="0.7">
+    <circle cx="80" cy="72" r="3"/>
+    <circle cx="110" cy="65" r="2.5"/>
+    <circle cx="95" cy="80" r="2"/>
+    <circle cx="120" cy="85" r="3"/>
+    <circle cx="75" cy="95" r="2.5"/>
+    <circle cx="105" cy="100" r="2"/>
+    <circle cx="90" cy="110" r="3"/>
+    <circle cx="115" cy="105" r="2.5"/>
+  </g>
+  <!-- IHC text -->
+  <text x="100" y="160" text-anchor="middle" font-family="'Inter','Helvetica Neue',Arial,sans-serif" font-weight="800" font-size="24" fill="#1B3A6B" letter-spacing="3">IHC</text>
 </svg>
