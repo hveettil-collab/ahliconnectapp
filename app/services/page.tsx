@@ -1468,11 +1468,89 @@ function ServicesPageContent() {
   const searchParams = useSearchParams();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
+  const [isListening, setIsListening] = useState(false);
   const autoPromptSentRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   const userName = user?.name?.split(' ')[0] || 'there';
   const companyId = user?.companyId || 'ihc';
+
+  /* ── Speech Recognition helper ── */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function createSpeechRecognition(): any {
+    const W = window as any;
+    const SR = W.SpeechRecognition || W.webkitSpeechRecognition;
+    if (!SR) return null;
+    const r = new SR();
+    r.continuous = false;
+    r.interimResults = true;
+    r.lang = 'en-US';
+    return r;
+  }
+
+  function toggleVoice() {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    if (!recognitionRef.current) {
+      recognitionRef.current = createSpeechRecognition();
+    }
+    const recognition = recognitionRef.current;
+    if (!recognition) {
+      alert('Voice input is not supported in this browser. Please try Chrome or Edge.');
+      return;
+    }
+
+    let finalTranscript = '';
+
+    recognition.onresult = (event: any) => {
+      let interim = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interim += transcript;
+        }
+      }
+      setInputValue(finalTranscript || interim);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      if (finalTranscript.trim()) {
+        setTimeout(() => {
+          handleSend(finalTranscript.trim());
+          setInputValue('');
+        }, 300);
+      }
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      if (event.error === 'not-allowed') {
+        alert('Microphone access was denied. Please allow microphone access in your browser settings.');
+      }
+    };
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      finalTranscript = '';
+      setInputValue('');
+    };
+
+    try {
+      recognition.start();
+    } catch {
+      setIsListening(false);
+    }
+  }
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -1650,8 +1728,11 @@ function ServicesPageContent() {
                 <Send size={14} />
               </button>
             ) : (
-              <button onClick={() => handleSend('What can you help me with?')} className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
-                <Mic size={18} />
+              <button
+                onClick={toggleVoice}
+                className={`p-1.5 rounded-full transition-all ${isListening ? 'bg-red-50' : ''}`}
+              >
+                <Mic size={18} className={isListening ? 'text-red-500 animate-pulse' : 'text-[#A4ABB8] hover:text-[#666D80]'} />
               </button>
             )}
           </div>
@@ -1973,11 +2054,19 @@ function ServicesPageContent() {
               </button>
             ) : (
               <button
-                onClick={() => handleSend('What can you help me with?')}
-                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 ahli-mic-pulse transition-all active:scale-90"
-                style={{ background: 'rgba(157,99,246,0.08)' }}
+                onClick={toggleVoice}
+                className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all active:scale-90 ${isListening ? '' : 'ahli-mic-pulse'}`}
+                style={{ background: isListening ? 'rgba(239,68,68,0.12)' : 'rgba(157,99,246,0.08)' }}
               >
-                <Mic size={17} className="text-[#9D63F6]" />
+                {isListening ? (
+                  <div className="flex items-center gap-[3px]">
+                    <div className="w-[3px] h-3 rounded-full bg-red-500 animate-pulse" />
+                    <div className="w-[3px] h-4 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.15s' }} />
+                    <div className="w-[3px] h-2.5 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.3s' }} />
+                  </div>
+                ) : (
+                  <Mic size={17} className="text-[#9D63F6]" />
+                )}
               </button>
             )}
           </div>
