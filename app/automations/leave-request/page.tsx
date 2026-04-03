@@ -139,7 +139,7 @@ export default function LeaveRequestPage() {
       addStep(run.id, { id: 's6', name: 'Confirm submission', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString(), detail: 'Request submitted' });
       updateStep('confirm', 'completed', 'Request submitted ✓');
 
-      completeRun(run.id, 'submitted', { submittedTo: mgr.name, requestedDays, leaveType });
+      completeRun(run.id, 'completed', { submittedTo: mgr.name, requestedDays, leaveType });
       setPhase('submitted');
     } catch {
       completeRun(run.id, 'failed', undefined, 'Automation pipeline error');
