@@ -425,7 +425,10 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative w-full bg-white rounded-t-[28px] px-4 py-5 space-y-5 slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
-            <h3 className="text-[17px] font-bold text-[#15161E]">Make an Offer</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-[17px] font-bold text-[#15161E]">Make an Offer</h3>
+              <button onClick={() => setShowOffer(false)} className="w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center"><X size={16} className="text-[#666D80]" /></button>
+            </div>
             <div className="flex items-center gap-3 p-3 rounded-[16px] bg-[#F8F9FB]">
               <img src={listing.image} alt="" className="w-12 h-12 rounded-[12px] object-cover shrink-0" />
               <div className="min-w-0">
@@ -458,6 +461,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative w-full bg-white rounded-t-[28px] px-5 py-5 space-y-4 slide-up max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <button onClick={() => setShowSellerProfile(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-[18px] bg-gradient-to-br from-[#9D63F6] to-[#B182F8] flex items-center justify-center text-[20px] font-bold text-white shadow-lg">
                 {listing.seller.slice(0, 2)}
@@ -510,6 +514,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative w-full bg-white rounded-t-[28px] px-5 py-5 space-y-4 slide-up" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <button onClick={() => setShowCallSheet(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-[14px] bg-gradient-to-br from-[#9D63F6] to-[#B182F8] flex items-center justify-center text-[14px] font-bold text-white">
                 {listing.seller.slice(0, 2)}

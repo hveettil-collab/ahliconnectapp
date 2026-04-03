@@ -229,8 +229,9 @@ function WalletSection() {
       {/* ── Fund Wallet Bottom Sheet ── */}
       {showFund && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowFund(false)}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-5" />
+            <button onClick={() => setShowFund(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             {fundSuccess ? (
               <div className="flex flex-col items-center py-6">
                 <div className="w-16 h-16 rounded-full bg-[#E7FEF8] flex items-center justify-center mb-3">
@@ -283,8 +284,9 @@ function WalletSection() {
       {/* ── Redeem Points Bottom Sheet ── */}
       {showRedeem && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowRedeem(false)}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
             <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-5" />
+            <button onClick={() => setShowRedeem(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             {redeemSuccess ? (
               <div className="flex flex-col items-center py-6">
                 <div className="w-16 h-16 rounded-full bg-[#F7F1FF] flex items-center justify-center mb-3">
@@ -778,8 +780,9 @@ export default function ProfilePage() {
           {/* Share Bottom Sheet */}
           {showShareSheet && (
             <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }}>
-              <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+              <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
                 <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-5" />
+                <button onClick={() => setShowShareSheet(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
                 <h3 className="text-[16px] font-bold text-[#15161E] mb-1">Share Business Card</h3>
                 <p className="text-[13px] text-[#666D80] mb-5">Send your digital card to colleagues within IHC Group</p>
                 <div className="grid grid-cols-4 gap-3 mb-5">
@@ -902,8 +905,9 @@ export default function ProfilePage() {
       {/* Logout bottom sheet */}
       {showLogout && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl">
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-6 shadow-2xl relative">
             <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-6" />
+            <button onClick={() => setShowLogout(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             <div className="flex flex-col items-center text-center mb-6">
               <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
                 <LogOut size={28} className="text-red-500" strokeWidth={1.8} />

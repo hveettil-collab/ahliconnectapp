@@ -662,8 +662,9 @@ export default function DashboardPage() {
           ═══════════════════════════════════════ */}
       {showBenefitDetail && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowBenefitDetail(null)}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl max-h-[85vh] overflow-y-auto relative" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
             <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
+            <button onClick={() => setShowBenefitDetail(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             {showBenefitDetail === 'medical' && (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
@@ -795,8 +796,9 @@ export default function DashboardPage() {
           ═══════════════════════════════════════ */}
       {showStockAction && (
         <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowStockAction(null)}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl relative" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
             <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
+            <button onClick={() => { setShowStockAction(null); setStockConfirmed(false); setStockShares(''); }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
             {!stockConfirmed ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
