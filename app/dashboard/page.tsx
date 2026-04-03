@@ -105,24 +105,19 @@ export default function DashboardPage() {
           HERO — Immersive gradient with greeting
           ══════════════════════════════════════════ */}
       <div className="relative overflow-hidden" style={{ minHeight: 'clamp(320px, 52vh, 420px)' }}>
-        {/* Animated mesh gradient background */}
+        {/* Animated mesh gradient background — violet dominant */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 30%, #54B6ED 70%, #40C4AA 100%)',
+          background: 'linear-gradient(200deg, #9D63F6 20%, #7C3AED 63%, #ffffff 78%)',
         }}>
           <div className="absolute w-[300px] h-[300px] rounded-full opacity-30" style={{
-            background: 'radial-gradient(circle, #FFBD4C 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(235,195,127,1) 0%, rgba(255,189,76,0) 70%)',
             top: '-80px', right: '-60px',
             animation: 'float 8s ease-in-out infinite',
           }} />
-          <div className="absolute w-[200px] h-[200px] rounded-full opacity-20" style={{
-            background: 'radial-gradient(circle, #54B6ED 0%, transparent 70%)',
+          <div className="absolute w-[200px] h-[200px] rounded-full opacity-15" style={{
+            background: 'radial-gradient(circle, #9D63F6 0%, transparent 70%)',
             bottom: '20px', left: '-40px',
             animation: 'float 6s ease-in-out infinite reverse',
-          }} />
-          <div className="absolute w-[150px] h-[150px] rounded-full opacity-15" style={{
-            background: 'radial-gradient(circle, #fff 0%, transparent 70%)',
-            top: '40%', left: '50%',
-            animation: 'float 10s ease-in-out infinite',
           }} />
         </div>
 
@@ -172,9 +167,9 @@ export default function DashboardPage() {
               transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
             }}>
             Your work life,{'\n'}
-            <span style={{ color: '#FFBD4C' }}>supercharged.</span>
+            <span style={{ color: '#000000' }}>supercharged.</span>
           </h1>
-          <p className="text-white/60 text-[14px] mt-2 leading-relaxed max-w-[280px]"
+          <p className="text-[rgba(0,0,0,0.6)] text-[14px] mt-2 leading-relaxed max-w-[280px]"
             style={{
               opacity: mounted ? 1 : 0,
               transform: mounted ? 'translateY(0)' : 'translateY(16px)',
@@ -185,7 +180,7 @@ export default function DashboardPage() {
         </div>
 
         {/* USP Stats Strip */}
-        <div className="relative z-20 flex items-center justify-between px-5 mt-5"
+        <div className="relative z-20 flex items-center gap-3 px-5 mt-5"
           style={{
             opacity: mounted ? 1 : 0,
             transform: mounted ? 'translateY(0)' : 'translateY(20px)',
@@ -196,14 +191,14 @@ export default function DashboardPage() {
             { value: `${employees}K`, suffix: '+', label: 'Employees', icon: Users },
             { value: `${benefitsVal}K`, suffix: '+', label: 'Benefits AED', icon: Award },
           ].map(({ value, suffix, label, icon: Icon }) => (
-            <div key={label} className="flex-1 text-center">
+            <div key={label} className="flex-1 bg-white rounded-[32px] py-3 text-center">
               <div className="flex items-center justify-center gap-1 mb-0.5">
-                <Icon size={13} className="text-white/50" strokeWidth={2} />
-                <p className="text-white text-[20px] font-bold tabular-nums leading-none">
-                  {value}<span className="text-white/50 text-[12px]">{suffix}</span>
+                <Icon size={13} className="text-black/40" strokeWidth={2} />
+                <p className="text-black text-[20px] font-bold tabular-nums leading-none">
+                  {value}<span className="text-black/55 text-[12px]">{suffix}</span>
                 </p>
               </div>
-              <p className="text-white/40 text-[10px] font-medium">{label}</p>
+              <p className="text-black text-[10px] font-medium">{label}</p>
             </div>
           ))}
         </div>
@@ -218,9 +213,9 @@ export default function DashboardPage() {
           <Link href="/services" className="block">
             <div className="relative rounded-[20px] overflow-hidden" style={{
               background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid #b47bff',
             }}>
               <div className="flex items-center gap-3.5 px-4 py-3.5">
                 <div className="relative w-[44px] h-[44px] shrink-0">

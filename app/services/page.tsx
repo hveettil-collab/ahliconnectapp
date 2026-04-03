@@ -1577,12 +1577,16 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('hr service') || t.includes('salary cert') || t.includes('leave request') || t.includes('hr request')) {
+  if (/\bhr\b/.test(t) || t.includes('human resource') || t.includes('salary cert') || t.includes('leave request') || t.includes('payslip') || t.includes('noc letter') || t.includes('employment letter') || t.includes('onboarding') || t.includes('offboarding') || t.includes('transfer request') || t.includes('grievance') || t.includes('hr service') || t.includes('hr help') || t.includes('hr request') || t.includes('hr support')) {
     return {
-      content: `HR Services at your fingertips:\n\n• **Salary Certificate** — generated in 8 seconds\n• **Leave Request** — submit in 2 taps\n• **Expense Claims** — auto-processing\n• **Payslips** — instant download\n\nAll powered by AI for instant processing!`,
+      content: `Here are all the HR services available to you, ${userName}. Everything is AI-powered for instant processing:\n\n• **Salary Certificate** — auto-generated with digital QR verification\n• **Leave Management** — annual, sick, emergency, compassionate\n• **Expense Claims** — snap a receipt, AI does the rest\n• **Payslips** — download current or past months instantly\n• **NOC / Employment Letters** — ready in under 60 seconds\n• **Transfer Requests** — apply for internal mobility\n• **Grievance Portal** — confidential HR support\n\nWhat would you like to do?`,
       cards: [
-        { type: 'action', icon: Zap, title: 'Generate Salary Certificate', subtitle: 'Ready in < 30 seconds', color: '#40C4AA', link: '/automations/salary-certificate' },
-        { type: 'action', icon: Calendar, title: 'Submit Leave Request', subtitle: 'Instant approval pipeline', color: '#9D63F6', link: '/automations/leave-request' },
+        { type: 'action', icon: Zap, title: 'Generate Salary Certificate', subtitle: 'Instant PDF with QR verification', color: '#40C4AA', link: '/automations/salary-certificate' },
+        { type: 'action', icon: Calendar, title: 'Submit Leave Request', subtitle: 'Smart approval pipeline', color: '#9D63F6', link: '/automations/leave-request' },
+        { type: 'action', icon: Receipt, title: 'Submit Expense Claim', subtitle: 'AI receipt scanner · auto-process', color: '#FFBD4C', link: '/automations/expense-claim' },
+        { type: 'action', icon: FileText, title: 'Download Payslip', subtitle: 'March 2026 · PDF ready', color: '#54B6ED', action: 'Show me my latest payslip' },
+        { type: 'action', icon: Shield, title: 'NOC / Employment Letter', subtitle: 'Auto-generated in < 60 seconds', color: '#059669', action: 'I need an NOC letter' },
+        { type: 'info', icon: Users, title: 'HR Helpdesk', subtitle: 'Chat with HR team directly', color: '#7C3AED', action: 'Connect me to HR helpdesk' },
       ]
     };
   }
