@@ -30,6 +30,7 @@ interface ChatMessage {
   cards?: ActionCard[];
   typing?: boolean;
   flowType?: 'insurance' | 'rides' | 'food' | 'flights' | 'sell' | 'vacation' | 'gaming';
+  sellCategory?: string;
 }
 
 interface ActionCard {
@@ -805,13 +806,13 @@ function FlightsFlow() {
    INLINE FLOW: SELL LISTING
    ═══════════════════════════════════════════ */
 
-function SellFlow() {
+function SellFlow({ initialCategory }: { initialCategory?: string }) {
   const router = useRouter();
   const { user } = useAuth();
   const listings = useListings();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [phase, setPhase] = useState<'category' | 'details' | 'photos' | 'preview' | 'publishing' | 'live'>('category');
-  const [category, setCategory] = useState('');
+  const [phase, setPhase] = useState<'category' | 'details' | 'photos' | 'preview' | 'publishing' | 'live'>(initialCategory ? 'details' : 'category');
+  const [category, setCategory] = useState(initialCategory || '');
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [condition, setCondition] = useState('');
@@ -1221,8 +1222,50 @@ function GamingFlow() {
    AI RESPONSE ENGINE (updated with flow triggers)
    ═══════════════════════════════════════════ */
 
-function generateAIResponse(text: string, userName: string, companyId: string): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType'] } {
+function generateAIResponse(text: string, userName: string, companyId: string): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType']; sellCategory?: string } {
   const t = text.toLowerCase();
+
+  /* ═══════════════════════════════════════════
+     SPECIFIC SELL SUB-INTENTS — must come first
+     so "sell my car" never falls through to
+     generic sell or insurance handlers
+     ═══════════════════════════════════════════ */
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('car') || t.includes('vehicle') || t.includes('auto'))) {
+    return {
+      content: `Let's sell your car on the IHC Marketplace! I'll help you create a professional car listing. Fill in the details below:`,
+      flowType: 'sell',
+      sellCategory: 'cars',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('electronic') || t.includes('phone') || t.includes('iphone') || t.includes('laptop') || t.includes('tablet') || t.includes('ipad') || t.includes('macbook') || t.includes('samsung') || t.includes('gadget'))) {
+    return {
+      content: `Let's list your electronics on the IHC Marketplace! I'll help you create a professional listing. Fill in the details below:`,
+      flowType: 'sell',
+      sellCategory: 'electronics',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('furniture') || t.includes('sofa') || t.includes('desk') || t.includes('chair') || t.includes('table') || t.includes('bed'))) {
+    return {
+      content: `Let's list your furniture on the IHC Marketplace! Fill in the details below and AI will craft a great listing:`,
+      flowType: 'sell',
+      sellCategory: 'furniture',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post') || t.includes('rent')) && (t.includes('property') || t.includes('apartment') || t.includes('villa') || t.includes('flat') || t.includes('house') || t.includes('room'))) {
+    return {
+      content: `Let's list your property on the IHC Marketplace! Fill in the details below:`,
+      flowType: 'sell',
+      sellCategory: 'property',
+    };
+  }
+
+  /* ═══════════════════════════════════════════
+     BOOKING & SERVICE INTENTS
+     ═══════════════════════════════════════════ */
 
   if (t.includes('flight') || t.includes('fly') || t.includes('travel') || t.includes('airport') || t.includes('airline') || t.includes('book a flight')) {
     return {
@@ -1367,6 +1410,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  /* ── Generic sell (no specific category detected) ── */
   if (t.includes('sell') || t.includes('list something') || t.includes('create listing') || t.includes('sell something')) {
     return {
       content: `Let's list your item on the IHC Marketplace! AI will help you create a professional listing in seconds:`,
@@ -1422,13 +1466,6 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
         { type: 'action', icon: Calendar, title: 'Leave Request', subtitle: 'Automated approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
         { type: 'action', icon: Receipt, title: 'Expense Claim', subtitle: 'AI receipt extraction', color: '#FFBD4C', link: '/automations/expense-claim' },
       ]
-    };
-  }
-
-  if (t.includes('renew') && t.includes('insurance')) {
-    return {
-      content: `I can help you renew your motor insurance through **Shory**. Your current policy is expiring soon. Let's get you renewed with the **15% IHC corporate discount**:`,
-      flowType: 'insurance',
     };
   }
 
@@ -1566,7 +1603,7 @@ function ServicesPageContent() {
     const response = generateAIResponse(msg, userName, companyId);
     setMessages(prev => [
       ...prev.filter(m => !m.typing),
-      { role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType },
+      { role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType, sellCategory: response.sellCategory },
     ]);
   };
 
@@ -1648,7 +1685,7 @@ function ServicesPageContent() {
                     {msg.flowType === 'rides' && <RidesFlow />}
                     {msg.flowType === 'food' && <FoodFlow />}
                     {msg.flowType === 'flights' && <FlightsFlow />}
-                    {msg.flowType === 'sell' && <SellFlow />}
+                    {msg.flowType === 'sell' && <SellFlow initialCategory={msg.sellCategory} />}
                     {msg.flowType === 'vacation' && <VacationFlow />}
                     {msg.flowType === 'gaming' && <GamingFlow />}
 
