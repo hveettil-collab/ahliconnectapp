@@ -1,23 +1,20 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 /**
  * Detects when the mobile virtual keyboard is open.
  * Uses visualViewport API (best) with a fallback to focusin/focusout events.
- * Returns true when keyboard is likely visible.
  *
- * Also sets a CSS class `keyboard-open` on <html> so CSS can react globally.
+ * ONLY toggles a CSS class `keyboard-open` on <html> — no React state update,
+ * which avoids triggering re-renders that can steal input focus on mobile.
  */
-export function useKeyboardVisible(): boolean {
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-
+export function useKeyboardVisible(): void {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const html = document.documentElement;
 
     function setOpen(open: boolean) {
-      setIsKeyboardVisible(open);
       if (open) {
         html.classList.add('keyboard-open');
       } else {
@@ -70,6 +67,4 @@ export function useKeyboardVisible(): boolean {
       html.classList.remove('keyboard-open');
     };
   }, []);
-
-  return isKeyboardVisible;
 }

@@ -124,7 +124,7 @@ export default function ChatPage() {
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && send()}
               placeholder={`Message ${activeColleague.name.split(' ')[0]}...`}
-              className="flex-1 bg-[#F8F9FB] border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-sm outline-none focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10"
+              className="flex-1 bg-[#F8F9FB] border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-sm text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10"
             />
             <button
               onClick={send}

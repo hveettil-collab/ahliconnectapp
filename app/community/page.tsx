@@ -18,21 +18,7 @@ import {
    ANIMATIONS
    ═══════════════════════════════════════════ */
 
-const COMMUNITY_STYLES = `
-  @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-  @keyframes heart-pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
-  @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes double-tap-heart { 0% { opacity: 0; transform: scale(0); } 40% { opacity: 1; transform: scale(1.2); } 70% { opacity: 1; transform: scale(0.95); } 100% { opacity: 0; transform: scale(1); } }
-  @keyframes confetti-pop { 0% { opacity: 1; transform: scale(0) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(180deg); } 100% { opacity: 0; transform: scale(0.8) rotate(360deg); } }
-  .fade-up { animation: fade-up 0.4s ease-out both; }
-  .scale-in { animation: scale-in 0.3s ease-out both; }
-  .heart-pop { animation: heart-pop 0.3s ease-out; }
-  .slide-up { animation: slide-up 0.35s ease-out both; }
-  .double-tap-heart { animation: double-tap-heart 0.8s ease-out forwards; }
-  .scrollbar-hide::-webkit-scrollbar { display: none; }
-  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-`;
+/* Community animations are now in globals.css — no inline <style> needed */
 
 /* ═══════════════════════════════════════════
    TYPES
@@ -699,13 +685,13 @@ function ShareSheet({ post, onClose }: { post: Post; onClose: () => void }) {
    POST CARD
    ═══════════════════════════════════════════ */
 
-function FeedPostCard({ post, community, onLike, onComment, onShare, onDelete, isOwn }: {
+function FeedPostCard({ post, community, onLike, onComment, onShare, onDelete, onToggleSave, isOwn, isSaved }: {
   post: Post; community?: Community;
   onLike: (id: string) => void; onComment: (id: string) => void; onShare: (id: string) => void;
-  onDelete?: (id: string) => void; isOwn?: boolean;
+  onDelete?: (id: string) => void; onToggleSave?: (id: string) => void; isOwn?: boolean; isSaved?: boolean;
 }) {
   const [liked, setLiked] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const saved = isSaved ?? false;
   const [showHeart, setShowHeart] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -754,7 +740,7 @@ function FeedPostCard({ post, community, onLike, onComment, onShare, onDelete, i
       {/* Context menu */}
       {showMenu && (
         <div className="absolute right-4 top-14 z-20 bg-white rounded-[12px] border border-[#DFE1E6] shadow-lg overflow-hidden scale-in w-44">
-          <button onClick={() => { setSaved(!saved); setShowMenu(false); }}
+          <button onClick={() => { onToggleSave?.(post.id); setShowMenu(false); }}
             className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-[#F8F9FB] text-left">
             <Bookmark size={14} className="text-[#666D80]" />
             <span className="text-[12px] text-[#15161E]">{saved ? 'Unsave' : 'Save post'}</span>
@@ -806,7 +792,7 @@ function FeedPostCard({ post, community, onLike, onComment, onShare, onDelete, i
             <Send size={22} strokeWidth={1.8} className="text-[#15161E]" />
           </button>
         </div>
-        <button onClick={() => setSaved(!saved)}>
+        <button onClick={() => onToggleSave?.(post.id)}>
           <Bookmark size={24} strokeWidth={1.8} fill={saved ? '#15161E' : 'none'} className="text-[#15161E]" />
         </button>
       </div>
@@ -876,9 +862,10 @@ function FeedPostCard({ post, community, onLike, onComment, onShare, onDelete, i
    COMMUNITY DETAIL SHEET
    ═══════════════════════════════════════════ */
 
-function CommunitySheet({ community, posts, onClose, onJoin, onLike, onComment, onShare }: {
+function CommunitySheet({ community, posts, onClose, onJoin, onLike, onComment, onShare, onToggleSave, savedPostIds }: {
   community: Community; posts: Post[]; onClose: () => void;
   onJoin: (id: string) => void; onLike: (id: string) => void; onComment: (id: string) => void; onShare: (id: string) => void;
+  onToggleSave?: (id: string) => void; savedPostIds?: Set<string>;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
@@ -917,7 +904,7 @@ function CommunitySheet({ community, posts, onClose, onJoin, onLike, onComment, 
         </div>
         <div className="pb-8">
           {posts.length > 0 ? posts.map(post => (
-            <FeedPostCard key={post.id} post={post} community={community} onLike={onLike} onComment={onComment} onShare={onShare} />
+            <FeedPostCard key={post.id} post={post} community={community} onLike={onLike} onComment={onComment} onShare={onShare} onToggleSave={onToggleSave} isSaved={savedPostIds?.has(post.id)} />
           )) : (
             <div className="text-center py-12">
               <MessageCircle size={32} className="text-[#DFE1E6] mx-auto mb-2" />
@@ -948,6 +935,7 @@ export default function CommunityPage() {
   const [commentingPostId, setCommentingPostId] = useState<string | null>(null);
   const [sharingPostId, setSharingPostId] = useState<string | null>(null);
   const [postSuccess, setPostSuccess] = useState(false);
+  const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
 
   if (!user) return null;
 
@@ -960,7 +948,10 @@ export default function CommunityPage() {
     return 0;
   });
 
-  const filteredPosts = filterCommunity ? allPosts.filter(p => p.communityId === filterCommunity) : allPosts;
+  const filteredPosts = filterCommunity === 'saved'
+    ? allPosts.filter(p => savedPostIds.has(p.id))
+    : filterCommunity ? allPosts.filter(p => p.communityId === filterCommunity)
+    : allPosts;
   const commentingPost = commentingPostId ? posts.find(p => p.id === commentingPostId) : null;
   const sharingPost = sharingPostId ? posts.find(p => p.id === sharingPostId) : null;
 
@@ -1048,15 +1039,28 @@ export default function CommunityPage() {
 
   function handleDeletePost(postId: string) {
     setPosts(prev => prev.filter(p => p.id !== postId));
+    setSavedPostIds(prev => { const next = new Set(prev); next.delete(postId); return next; });
     showToast('Post deleted');
+  }
+
+  function handleToggleSave(postId: string) {
+    setSavedPostIds(prev => {
+      const next = new Set(prev);
+      if (next.has(postId)) {
+        next.delete(postId);
+        showToast('Post removed from saved');
+      } else {
+        next.add(postId);
+        showToast('Post saved');
+      }
+      return next;
+    });
   }
 
   const communityPosts = selectedCommunity ? posts.filter(p => p.communityId === selectedCommunity.id) : [];
 
   return (
     <AppShell title="Community" subtitle="">
-      <style>{COMMUNITY_STYLES}</style>
-
       {/* Reward toast */}
       {rewardToast && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-4 py-2.5 rounded-full bg-[#15161E] text-white text-[12px] font-bold flex items-center gap-2 shadow-lg scale-in">
@@ -1087,6 +1091,18 @@ export default function CommunityPage() {
           <span className={`text-[10px] leading-tight ${!filterCommunity ? 'font-bold text-[#15161E]' : 'font-medium text-[#666D80]'}`}>All</span>
         </button>
 
+        <button onClick={() => setFilterCommunity('saved')} className="shrink-0 flex flex-col items-center gap-1.5 w-[72px]">
+          <div className="w-[62px] h-[62px] rounded-full flex items-center justify-center" style={{ background: filterCommunity === 'saved' ? '#15161E' : '#DFE1E6', padding: '2.5px' }}>
+            <div className="w-full h-full rounded-full bg-white flex items-center justify-center relative">
+              <Bookmark size={22} style={{ color: filterCommunity === 'saved' ? '#15161E' : '#A4ABB8' }} />
+              {savedPostIds.size > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#9D63F6] text-white text-[8px] font-bold flex items-center justify-center">{savedPostIds.size > 9 ? '9+' : savedPostIds.size}</span>
+              )}
+            </div>
+          </div>
+          <span className={`text-[10px] leading-tight ${filterCommunity === 'saved' ? 'font-bold text-[#15161E]' : 'font-medium text-[#666D80]'}`}>Saved</span>
+        </button>
+
         {communities.map(c => (
           <StoryCircle key={c.id} community={c} isActive={filterCommunity === c.id}
             hasUnread={c.isJoined && c.channels.reduce((s, ch) => s + ch.unread, 0) > 0}
@@ -1102,6 +1118,8 @@ export default function CommunityPage() {
       </div>
 
       <div className="h-[1px] bg-[#F0F1F3] -mx-4 mb-4" />
+
+      {/* SAVED VIEW EMPTY STATE — handled inline via filteredPosts */}
 
       {/* DISCOVER VIEW */}
       {filterCommunity === 'discover' ? (
@@ -1207,9 +1225,21 @@ export default function CommunityPage() {
               return (
                 <FeedPostCard key={post.id} post={post} community={community}
                   onLike={handleLike} onComment={handleComment} onShare={handleShare}
-                  onDelete={handleDeletePost} isOwn={isOwn} />
+                  onDelete={handleDeletePost} onToggleSave={handleToggleSave}
+                  isOwn={isOwn} isSaved={savedPostIds.has(post.id)} />
               );
             })
+          ) : filterCommunity === 'saved' ? (
+            <div className="text-center py-16 px-4">
+              <Bookmark size={40} className="text-[#DFE1E6] mx-auto mb-3" />
+              <p className="text-[15px] font-bold text-[#15161E] mb-1">No saved posts</p>
+              <p className="text-[12px] text-[#A4ABB8] mb-4">Bookmark posts to find them here later</p>
+              <button onClick={() => setFilterCommunity(null)}
+                className="px-5 py-2.5 rounded-full text-[13px] font-bold text-white active:scale-95 transition-all"
+                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)' }}>
+                Browse Feed
+              </button>
+            </div>
           ) : (
             <div className="text-center py-16 px-4">
               <MessageCircle size={40} className="text-[#DFE1E6] mx-auto mb-3" />
@@ -1259,7 +1289,8 @@ export default function CommunityPage() {
       {selectedCommunity && (
         <CommunitySheet community={selectedCommunity} posts={communityPosts}
           onClose={() => setSelectedCommunity(null)} onJoin={handleJoin}
-          onLike={handleLike} onComment={handleComment} onShare={handleShare} />
+          onLike={handleLike} onComment={handleComment} onShare={handleShare}
+          onToggleSave={handleToggleSave} savedPostIds={savedPostIds} />
       )}
     </AppShell>
   );

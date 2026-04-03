@@ -810,6 +810,17 @@ function FlightsFlow() {
    INLINE FLOW: SELL LISTING
    ═══════════════════════════════════════════ */
 
+/* Stable component defined OUTSIDE SellFlow to prevent re-mount on every render */
+function SellFieldInput({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
+  return (
+    <div>
+      <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">{label}</label>
+      <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+        className="w-full mt-1.5 bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#40C4AA] transition-colors" />
+    </div>
+  );
+}
+
 function SellFlow({ initialCategory }: { initialCategory?: string }) {
   const router = useRouter();
   const { user } = useAuth();
@@ -950,14 +961,7 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
 
   const removeImage = (idx: number) => { setImages(prev => prev.filter((_, i) => i !== idx)); };
 
-  /* ── Input helper ── */
-  const FieldInput = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => (
-    <div>
-      <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">{label}</label>
-      <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full mt-1.5 bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#40C4AA] transition-colors" />
-    </div>
-  );
+  /* ── Input helper: uses SellFieldInput defined outside SellFlow ── */
 
   return (
     <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
@@ -1002,15 +1006,15 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           <div className="space-y-3">
             <p className="text-[13px] text-[#4B5563]">Tell us about your car</p>
             <div className="grid grid-cols-2 gap-2">
-              <FieldInput label="Make" value={carMake} onChange={setCarMake} placeholder="e.g. Toyota" />
-              <FieldInput label="Model" value={carModel} onChange={setCarModel} placeholder="e.g. Camry" />
+              <SellFieldInput label="Make" value={carMake} onChange={setCarMake} placeholder="e.g. Toyota" />
+              <SellFieldInput label="Model" value={carModel} onChange={setCarModel} placeholder="e.g. Camry" />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <FieldInput label="Year" value={carYear} onChange={setCarYear} placeholder="e.g. 2022" />
-              <FieldInput label="Mileage (km)" value={carMileage} onChange={setCarMileage} placeholder="e.g. 35000" />
+              <SellFieldInput label="Year" value={carYear} onChange={setCarYear} placeholder="e.g. 2022" />
+              <SellFieldInput label="Mileage (km)" value={carMileage} onChange={setCarMileage} placeholder="e.g. 35000" />
             </div>
-            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 85000" />
-            <FieldInput label="Location" value={carLocation} onChange={setCarLocation} placeholder="e.g. Abu Dhabi" />
+            <SellFieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 85000" />
+            <SellFieldInput label="Location" value={carLocation} onChange={setCarLocation} placeholder="e.g. Abu Dhabi" />
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
               <div className="flex gap-2 mt-1.5 flex-wrap">
@@ -1034,10 +1038,10 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
         {phase === 'details' && category === 'electronics' && (
           <div className="space-y-3">
             <p className="text-[13px] text-[#4B5563]">Tell us about your device</p>
-            <FieldInput label="Brand" value={elecBrand} onChange={setElecBrand} placeholder="e.g. Apple, Samsung, Sony" />
-            <FieldInput label="Product Name" value={title} onChange={setTitle} placeholder="e.g. iPhone 15 Pro Max 256GB" />
-            <FieldInput label="Storage / Specs" value={elecStorage} onChange={setElecStorage} placeholder="e.g. 256GB, 16GB RAM" />
-            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 3500" />
+            <SellFieldInput label="Brand" value={elecBrand} onChange={setElecBrand} placeholder="e.g. Apple, Samsung, Sony" />
+            <SellFieldInput label="Product Name" value={title} onChange={setTitle} placeholder="e.g. iPhone 15 Pro Max 256GB" />
+            <SellFieldInput label="Storage / Specs" value={elecStorage} onChange={setElecStorage} placeholder="e.g. 256GB, 16GB RAM" />
+            <SellFieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 3500" />
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
               <div className="flex gap-2 mt-1.5 flex-wrap">
@@ -1061,12 +1065,12 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
         {phase === 'details' && category === 'furniture' && (
           <div className="space-y-3">
             <p className="text-[13px] text-[#4B5563]">Tell us about the furniture</p>
-            <FieldInput label="Item Name" value={title} onChange={setTitle} placeholder="e.g. L-shaped Sofa, Office Desk" />
+            <SellFieldInput label="Item Name" value={title} onChange={setTitle} placeholder="e.g. L-shaped Sofa, Office Desk" />
             <div className="grid grid-cols-2 gap-2">
-              <FieldInput label="Material" value={furnMaterial} onChange={setFurnMaterial} placeholder="e.g. Leather, Wood" />
-              <FieldInput label="Dimensions" value={furnDimensions} onChange={setFurnDimensions} placeholder="e.g. 200x90 cm" />
+              <SellFieldInput label="Material" value={furnMaterial} onChange={setFurnMaterial} placeholder="e.g. Leather, Wood" />
+              <SellFieldInput label="Dimensions" value={furnDimensions} onChange={setFurnDimensions} placeholder="e.g. 200x90 cm" />
             </div>
-            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 1200" />
+            <SellFieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 1200" />
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
               <div className="flex gap-2 mt-1.5 flex-wrap">
@@ -1103,11 +1107,11 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <FieldInput label="Bedrooms" value={propBedrooms} onChange={setPropBedrooms} placeholder="e.g. 2" />
-              <FieldInput label="Area (sq ft)" value={propArea} onChange={setPropArea} placeholder="e.g. 1200" />
+              <SellFieldInput label="Bedrooms" value={propBedrooms} onChange={setPropBedrooms} placeholder="e.g. 2" />
+              <SellFieldInput label="Area (sq ft)" value={propArea} onChange={setPropArea} placeholder="e.g. 1200" />
             </div>
-            <FieldInput label="Location" value={propLocation} onChange={setPropLocation} placeholder="e.g. Al Reem Island" />
-            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 950000" />
+            <SellFieldInput label="Location" value={propLocation} onChange={setPropLocation} placeholder="e.g. Al Reem Island" />
+            <SellFieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 950000" />
             <button onClick={() => { if (canContinue()) setPhase('photos'); }}
               className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
               style={{ background: canContinue() ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
@@ -1119,8 +1123,8 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
         {phase === 'details' && !['cars', 'electronics', 'furniture', 'property'].includes(category) && (
           <div className="space-y-3">
             <p className="text-[13px] text-[#4B5563]">Tell us about your item</p>
-            <FieldInput label="Title" value={title} onChange={setTitle} placeholder="e.g. Vintage Watch, Bicycle" />
-            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 500" />
+            <SellFieldInput label="Title" value={title} onChange={setTitle} placeholder="e.g. Vintage Watch, Bicycle" />
+            <SellFieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 500" />
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
               <div className="flex gap-2 mt-1.5 flex-wrap">
@@ -1534,7 +1538,31 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('game') || t.includes('gaming') || t.includes('fifa') || t.includes('tournament') || t.includes('play') || t.includes('league')) {
+  /* ── Sick leave — proactive medical support (must come before gaming) ── */
+  if (t.includes('sick leave') || t.includes('sick day') || t.includes('not feeling well') || t.includes('unwell') || t.includes('feeling sick') || t.includes('medical leave') || (t.includes('sick') && (t.includes('leave') || t.includes('day off') || t.includes('rest')))) {
+    return {
+      content: `I'm sorry to hear that, ${userName}. I can help you submit a sick leave request right away. Your line manager will be notified and you'll get an update once it's reviewed.\n\nYou have **10 sick leave days** available. Under UAE labour law, you're entitled to up to **90 days** of medical leave per year.\n\nHere are some resources that may help:`,
+      cards: [
+        { type: 'action', icon: Zap, title: 'Submit Sick Leave', subtitle: 'Your manager will be notified for review', color: '#DC2626', link: '/automations/leave-request' },
+        { type: 'info', icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km away · Open 24/7', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
+        { type: 'info', icon: Heart, title: 'Mediclinic Al Noor', subtitle: '3.4 km away · Open 24/7', color: '#059669', action: 'Show me directions to Mediclinic' },
+        { type: 'info', icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services', color: '#DC2626', action: 'Show me emergency contacts' },
+      ]
+    };
+  }
+
+  /* ── General leave request (must come before gaming) ── */
+  if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('time off') || (t.includes('play') && t.includes('leave'))) {
+    return {
+      content: `Here's your current leave balance, ${userName}:\n\n• **Annual Leave**: 22 days remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days per incident\n\nYou can submit a request below — your line manager will be notified and you'll receive an update once it's approved or rejected.`,
+      cards: [
+        { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Manager will be notified for review', color: '#40C4AA', link: '/automations/leave-request' },
+        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6', action: 'Show me my detailed leave balance' },
+      ]
+    };
+  }
+
+  if ((t.includes('game') || t.includes('gaming') || t.includes('fifa') || t.includes('tournament') || t.includes('league') || (t.includes('play') && !t.includes('leave') && !t.includes('sick'))) && !t.includes('leave') && !t.includes('sick')) {
     return {
       content: `Here's what's happening in IHC Gaming! Register for tournaments and leagues below:`,
       flowType: 'gaming',
@@ -1674,29 +1702,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  /* ── Sick leave — proactive medical support ── */
-  if (t.includes('sick leave') || t.includes('sick day') || t.includes('not feeling well') || t.includes('unwell') || t.includes('feeling sick') || t.includes('medical leave')) {
-    return {
-      content: `I'm sorry to hear that, ${userName}. I can help you submit a sick leave request right away. Your line manager will be notified and you'll get an update once it's reviewed.\n\nYou have **10 sick leave days** available. Under UAE labour law, you're entitled to up to **90 days** of medical leave per year.\n\nHere are some resources that may help:`,
-      cards: [
-        { type: 'action', icon: Zap, title: 'Submit Sick Leave', subtitle: 'Your manager will be notified for review', color: '#DC2626', link: '/automations/leave-request' },
-        { type: 'info', icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km away · Open 24/7', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
-        { type: 'info', icon: Heart, title: 'Mediclinic Al Noor', subtitle: '3.4 km away · Open 24/7', color: '#059669', action: 'Show me directions to Mediclinic' },
-        { type: 'info', icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services', color: '#DC2626', action: 'Show me emergency contacts' },
-      ]
-    };
-  }
-
-  /* ── General leave request ── */
-  if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('time off')) {
-    return {
-      content: `Here's your current leave balance, ${userName}:\n\n• **Annual Leave**: 22 days remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days per incident\n\nYou can submit a request below — your line manager will be notified and you'll receive an update once it's approved or rejected.`,
-      cards: [
-        { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Manager will be notified for review', color: '#40C4AA', link: '/automations/leave-request' },
-        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6', action: 'Show me my detailed leave balance' },
-      ]
-    };
-  }
+  /* ── Sick leave & general leave handlers moved above gaming intent ── */
 
   if (t.includes('salary') || t.includes('payslip') || t.includes('certificate') || t.includes('pay')) {
     return {
@@ -1886,13 +1892,6 @@ function ServicesPageContent() {
   if (messages.length > 0) {
     return (
       <div className="flex flex-col h-screen-safe bg-[#F8F9FB]">
-        <style>{`
-          @keyframes typing-bounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-5px); }
-          }
-        `}</style>
-
         {/* Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 shrink-0 z-10 bg-white" style={{ borderBottom: '1px solid #DFE1E6' }}>
           <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
@@ -2044,7 +2043,7 @@ function ServicesPageContent() {
      WELCOME STATE — Premium AI Assistant Experience
      ══════════════════════════════════════════════════ */
   return (
-    <div className="flex flex-col h-screen relative overflow-hidden">
+    <div className="flex flex-col h-screen-safe relative overflow-hidden">
 
       {/* ── Full-page pastel gradient background ── */}
       <div className="absolute inset-0 z-0" style={{
@@ -2055,89 +2054,6 @@ function ServicesPageContent() {
         <div className="absolute" style={{ bottom: '5%', left: '-15%', width: '50%', height: '50%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(84,182,237,0.08) 0%, transparent 70%)' }} />
         <div className="absolute" style={{ top: '40%', right: '10%', width: '30%', height: '30%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,189,76,0.06) 0%, transparent 70%)' }} />
       </div>
-
-      {/* ── Animations ── */}
-      <style>{`
-        @keyframes ahli-orb-float {
-          0%, 100% { transform: translateY(0px) scale(1); }
-          50% { transform: translateY(-14px) scale(1.02); }
-        }
-        @keyframes ahli-orb-glow-pulse {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50% { opacity: 0.7; transform: scale(1.15); }
-        }
-        @keyframes ahli-orb-rotate {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes ahli-orb-rotate-reverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
-        @keyframes ahli-orb-highlight-drift {
-          0%, 100% { transform: translate(-15%, -25%) scale(1); opacity: 0.65; }
-          33% { transform: translate(-5%, -20%) scale(1.15); opacity: 0.9; }
-          66% { transform: translate(-25%, -15%) scale(0.9); opacity: 0.7; }
-        }
-        @keyframes ahli-shimmer-orbit {
-          0% { transform: rotate(0deg) translateX(55px) rotate(0deg); opacity: 0; }
-          15% { opacity: 0.7; }
-          50% { opacity: 0.25; }
-          85% { opacity: 0.7; }
-          100% { transform: rotate(360deg) translateX(55px) rotate(-360deg); opacity: 0; }
-        }
-        @keyframes ahli-particle-drift-1 {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-          50% { transform: translate(10px, -16px) scale(1.4); opacity: 0.7; }
-        }
-        @keyframes ahli-particle-drift-2 {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
-          50% { transform: translate(-12px, 10px) scale(1.3); opacity: 0.65; }
-        }
-        @keyframes ahli-particle-drift-3 {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
-          50% { transform: translate(8px, 12px) scale(0.7); opacity: 0.8; }
-        }
-        @keyframes ahli-card-appear {
-          from { opacity: 0; transform: translateY(16px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes ahli-fade-in {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes ahli-mic-pulse {
-          0%, 100% { box-shadow: 0 0 0 0 rgba(157,99,246,0.2); }
-          50% { box-shadow: 0 0 0 6px rgba(157,99,246,0); }
-        }
-        @keyframes ahli-input-glow {
-          0%, 100% { box-shadow: 0 2px 12px rgba(157,99,246,0.06), 0 0 0 1px rgba(223,225,230,0.5); }
-          50% { box-shadow: 0 4px 20px rgba(157,99,246,0.12), 0 0 0 1px rgba(157,99,246,0.15); }
-        }
-        .ahli-orb-float { animation: ahli-orb-float 5.5s ease-in-out infinite; }
-        .ahli-orb-glow { animation: ahli-orb-glow-pulse 4s ease-in-out infinite; }
-        .ahli-orb-ring { animation: ahli-orb-rotate 22s linear infinite; }
-        .ahli-orb-ring-rev { animation: ahli-orb-rotate-reverse 17s linear infinite; }
-        .ahli-orb-highlight { animation: ahli-orb-highlight-drift 7s ease-in-out infinite; }
-        .ahli-shimmer { animation: ahli-shimmer-orbit 9s linear infinite; }
-        .ahli-p1 { animation: ahli-particle-drift-1 5s ease-in-out infinite; }
-        .ahli-p2 { animation: ahli-particle-drift-2 6s ease-in-out infinite; }
-        .ahli-p3 { animation: ahli-particle-drift-3 4.2s ease-in-out infinite; }
-        .ahli-card { animation: ahli-card-appear 0.5s ease-out both; }
-        .ahli-card:nth-child(1) { animation-delay: 0.05s; }
-        .ahli-card:nth-child(2) { animation-delay: 0.1s; }
-        .ahli-card:nth-child(3) { animation-delay: 0.15s; }
-        .ahli-card:nth-child(4) { animation-delay: 0.2s; }
-        .ahli-card:nth-child(5) { animation-delay: 0.25s; }
-        .ahli-card:nth-child(6) { animation-delay: 0.3s; }
-        .ahli-card:nth-child(7) { animation-delay: 0.35s; }
-        .ahli-card:nth-child(8) { animation-delay: 0.4s; }
-        .ahli-fade { animation: ahli-fade-in 0.6s ease-out both; }
-        .ahli-fade-d1 { animation-delay: 0.15s; }
-        .ahli-fade-d2 { animation-delay: 0.3s; }
-        .ahli-mic-pulse { animation: ahli-mic-pulse 2s ease-in-out infinite; }
-        .ahli-input-glow { animation: ahli-input-glow 3s ease-in-out infinite; }
-      `}</style>
 
       {/* ═══ HEADER ═══ */}
       <div className="relative z-10 shrink-0 flex items-center justify-center px-5 pt-[max(env(safe-area-inset-top),12px)] pb-3">
@@ -2372,9 +2288,47 @@ function ServicesPageContent() {
   );
 }
 
+function ServicesFallback() {
+  return (
+    <div className="flex flex-col h-screen-safe relative overflow-hidden">
+      <div className="absolute inset-0 z-0" style={{
+        background: 'linear-gradient(165deg, #F4EFFF 0%, #EDE8FF 15%, #F0EEFF 25%, #EBF0FF 40%, #F2EDFF 55%, #FEECF4 75%, #F5EEFF 90%, #EBF3FF 100%)',
+      }} />
+      {/* Header */}
+      <div className="relative z-10 shrink-0 flex items-center justify-center px-5 pt-[max(env(safe-area-inset-top),12px)] pb-3">
+        <div className="flex items-center gap-1.5">
+          <Sparkles size={14} className="text-[#9D63F6]" />
+          <p className="text-[14px] font-semibold text-[#3D3D5C]">Ahli AI</p>
+        </div>
+      </div>
+      {/* Center loading */}
+      <div className="relative z-10 flex-1 flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#9D63F6]" size={32} />
+      </div>
+      {/* Input bar always visible */}
+      <div className="relative z-20 px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-4" style={{
+        background: 'linear-gradient(to top, rgba(240,236,255,0.98) 60%, rgba(240,236,255,0) 100%)',
+      }}>
+        <div className="max-w-lg mx-auto">
+          <div className="flex items-center gap-2.5 rounded-full px-4 py-2"
+            style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', boxShadow: '0 2px 12px rgba(157,99,246,0.06), 0 0 0 1px rgba(223,225,230,0.5)' }}>
+            <Paperclip size={18} className="text-[#A4ABB8] shrink-0" />
+            <input type="text" disabled placeholder="Ask me anything..."
+              className="flex-1 bg-transparent text-[14px] text-[#1E1E3A] placeholder:text-[#B4B4CC] py-2.5 outline-none" />
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+              style={{ background: 'rgba(157,99,246,0.08)' }}>
+              <Mic size={17} className="text-[#9D63F6]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ServicesPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F8F9FB] flex items-center justify-center"><Loader2 className="animate-spin text-[#9D63F6]" size={32} /></div>}>
+    <Suspense fallback={<ServicesFallback />}>
       <ServicesPageContent />
     </Suspense>
   );
