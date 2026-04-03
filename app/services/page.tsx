@@ -1591,6 +1591,16 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  if (t.includes('people map') || t.includes('nearby colleague') || t.includes('who is nearby') || t.includes('around me') || t.includes('colleagues near') || t.includes('team map')) {
+    return {
+      content: `The **People Map** lets you see nearby IHC colleagues across all subsidiaries. You can filter by company, distance, or availability. Only colleagues who have enabled location sharing are visible — your privacy is always respected.`,
+      cards: [
+        { type: 'action', icon: MapPin, title: 'Open People Map', subtitle: 'See nearby IHC colleagues', color: '#9D63F6', link: '/people-map' },
+        { type: 'info', icon: Shield, title: 'Privacy Settings', subtitle: 'Control your visibility', color: '#40C4AA', link: '/profile' },
+      ]
+    };
+  }
+
   if (t.includes('directory') || t.includes('find someone') || t.includes('employee search') || t.includes('search employee') || t.includes('org chart')) {
     return {
       content: `Search the **IHC Employee Directory** with 45,000+ profiles across 30+ subsidiaries. You can find colleagues by name, department, or role.`,
@@ -1660,12 +1670,26 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('sick leave') || t.includes('time off')) {
+  /* ── Sick leave — proactive medical support ── */
+  if (t.includes('sick leave') || t.includes('sick day') || t.includes('not feeling well') || t.includes('unwell') || t.includes('feeling sick') || t.includes('medical leave')) {
     return {
-      content: `Your leave summary:\n\n• **Annual Leave**: **22 days** remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days/incident\n\n**NEW:** Submit leave requests instantly using the **Smart Leave Manager** automation!`,
+      content: `I'm sorry to hear that, ${userName}. I can help you submit a sick leave request right away. Your line manager will be notified and you'll get an update once it's reviewed.\n\nYou have **10 sick leave days** available. Under UAE labour law, you're entitled to up to **90 days** of medical leave per year.\n\nHere are some resources that may help:`,
       cards: [
-        { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Automated — instant approval pipeline', color: '#40C4AA', link: '/automations/leave-request' },
-        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6', action: 'How many leave days do I have left this year' },
+        { type: 'action', icon: Zap, title: 'Submit Sick Leave', subtitle: 'Your manager will be notified for review', color: '#DC2626', link: '/automations/leave-request' },
+        { type: 'info', icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km away · Open 24/7', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
+        { type: 'info', icon: Heart, title: 'Mediclinic Al Noor', subtitle: '3.4 km away · Open 24/7', color: '#059669', action: 'Show me directions to Mediclinic' },
+        { type: 'info', icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services', color: '#DC2626', action: 'Show me emergency contacts' },
+      ]
+    };
+  }
+
+  /* ── General leave request ── */
+  if (t.includes('leave') || t.includes('vacation day') || t.includes('days off') || t.includes('annual leave') || t.includes('time off')) {
+    return {
+      content: `Here's your current leave balance, ${userName}:\n\n• **Annual Leave**: 22 days remaining\n• **Sick Leave**: 10 days available\n• **Emergency Leave**: 5 days per incident\n\nYou can submit a request below — your line manager will be notified and you'll receive an update once it's approved or rejected.`,
+      cards: [
+        { type: 'action', icon: Zap, title: 'Submit Leave Request', subtitle: 'Manager will be notified for review', color: '#40C4AA', link: '/automations/leave-request' },
+        { type: 'info', icon: Calendar, title: 'Leave Balance', subtitle: '22 annual · 10 sick · 5 emergency', color: '#9D63F6', action: 'Show me my detailed leave balance' },
       ]
     };
   }

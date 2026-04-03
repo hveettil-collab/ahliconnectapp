@@ -6,6 +6,7 @@ import {
   Calendar, ArrowLeft, CheckCircle2, Loader2, Clock, Shield,
   AlertTriangle, Users, Zap, ChevronRight, AlertCircle, XCircle,
   CalendarDays, CalendarCheck, Sun, Stethoscope, Baby, Plane,
+  MapPin, Phone, Heart,
 } from 'lucide-react';
 import {
   createRun, addStep, completeRun, notifySlack,
@@ -50,7 +51,7 @@ export default function LeaveRequestPage() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [reason, setReason] = useState('');
-  const [phase, setPhase] = useState<'form' | 'processing' | 'approved' | 'error'>('form');
+  const [phase, setPhase] = useState<'form' | 'processing' | 'submitted' | 'error'>('form');
   const [steps, setSteps] = useState<StepState[]>([]);
   const [calMonth, setCalMonth] = useState(3); // April (0-indexed)
   const [calYear] = useState(2026);
@@ -87,9 +88,8 @@ export default function LeaveRequestPage() {
       { id: 'policy', name: 'Checking company policy rules', status: 'pending' },
       { id: 'conflicts', name: 'Scanning team calendar for conflicts', status: 'pending' },
       { id: 'route', name: 'Routing to manager for approval', status: 'pending' },
-      { id: 'approval', name: `Awaiting manager approval`, status: 'pending' },
-      { id: 'sync', name: 'Syncing to SuccessFactors & calendar', status: 'pending' },
-      { id: 'notify', name: 'Sending notifications', status: 'pending' },
+      { id: 'notify', name: 'Sending notification to line manager', status: 'pending' },
+      { id: 'confirm', name: 'Confirming request submission', status: 'pending' },
     ];
     setSteps(pipelineSteps);
 
@@ -126,29 +126,21 @@ export default function LeaveRequestPage() {
       addStep(run.id, { id: 's4', name: 'Route to manager', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString(), detail: `Routed to ${mgr.name}` });
       updateStep('route', 'completed', `Sent to ${mgr.name} (${mgr.title})`);
 
-      // Step 5: Manager approval (simulate 3s wait)
-      updateStep('approval', 'running');
-      await delay(3000);
-      addStep(run.id, { id: 's5', name: 'Manager approval', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString(), detail: `Approved by ${mgr.name}` });
-      updateStep('approval', 'completed', `Approved by ${mgr.name} ✓`);
-
-      // Step 6: Sync
-      updateStep('sync', 'running');
-      await syncSuccessFactors(`Deducted ${requestedDays} days, new balance: ${remainingAfter}`, { requestedDays, remainingAfter }, run.id);
-      addStep(run.id, { id: 's6', name: 'Sync to SuccessFactors', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() });
-      updateStep('sync', 'completed', `Balance updated: ${remainingAfter} days remaining ✓`);
-
-      // Step 7: Notifications
+      // Step 5: Notify manager
       updateStep('notify', 'running');
-      await Promise.all([
-        notifySlack(`${user?.company?.toLowerCase().replace(/\s+/g, '-')}-team`, `${user?.name} on ${selectedType.label}: ${startDate} to ${endDate}`, run.id),
-        sendEmail(user?.email ?? '', `Leave Approved: ${selectedType.label} (${startDate} to ${endDate})`, run.id),
-      ]);
-      addStep(run.id, { id: 's7', name: 'Send notifications', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString() });
-      updateStep('notify', 'completed', 'Slack + Email sent ✓');
+      await delay(500);
+      await notifySlack(`${user?.company?.toLowerCase().replace(/\s+/g, '-')}-team`, `New leave request from ${user?.name} for ${selectedType.label}: ${startDate} to ${endDate} (${requestedDays}d) — Awaiting approval from ${mgr.name}`, run.id);
+      addStep(run.id, { id: 's5', name: 'Notify manager', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString(), detail: `${mgr.name} notified` });
+      updateStep('notify', 'completed', `${mgr.name} notified ✓`);
 
-      completeRun(run.id, 'approved', { approvedBy: mgr.name, remainingBalance: remainingAfter });
-      setPhase('approved');
+      // Step 6: Confirm submission
+      updateStep('confirm', 'running');
+      await delay(400);
+      addStep(run.id, { id: 's6', name: 'Confirm submission', status: 'completed', startedAt: new Date().toISOString(), completedAt: new Date().toISOString(), detail: 'Request submitted' });
+      updateStep('confirm', 'completed', 'Request submitted ✓');
+
+      completeRun(run.id, 'submitted', { submittedTo: mgr.name, requestedDays, leaveType });
+      setPhase('submitted');
     } catch {
       completeRun(run.id, 'failed', undefined, 'Automation pipeline error');
       setPhase('error');
@@ -349,20 +341,106 @@ export default function LeaveRequestPage() {
           </div>
         )}
 
-        {/* ═══ APPROVED ═══ */}
-        {phase === 'approved' && (
+        {/* ═══ SUBMITTED ═══ */}
+        {phase === 'submitted' && (
           <div className="space-y-4 fade-up">
-            <div className="rounded-[16px] bg-[#F0FDF4] border border-[#BBF7D0] p-4 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#059669] flex items-center justify-center mx-auto mb-2 step-check">
-                <CheckCircle2 size={24} className="text-white" />
+            <div className="rounded-[16px] bg-[#F3F0FF] border border-[#DDD6FE] p-4 text-center">
+              <div className="w-12 h-12 rounded-full bg-[#9D63F6] flex items-center justify-center mx-auto mb-2 step-check">
+                <Clock size={24} className="text-white" />
               </div>
-              <h3 className="text-[16px] font-bold text-[#065F46]">Leave Approved</h3>
-              <p className="text-[12px] text-[#047857] mt-1">
-                {selectedType.label}: {startDate} to {endDate} ({requestedDays}d)
+              <h3 className="text-[16px] font-bold text-[#6B21A8]">Leave Request Submitted</h3>
+              <p className="text-[12px] text-[#7E22CE] mt-1">
+                Your request has been submitted and your line manager has been notified for review. You'll receive a notification once it is approved or rejected.
               </p>
-              <p className="text-[11px] text-[#666D80] mt-1">Approved by {approver.name}</p>
             </div>
 
+            {/* Pipeline Summary */}
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Request Details</p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="text-[#666D80]">Leave Type</span>
+                  <span className="font-semibold text-[#15161E]">{selectedType.label}</span>
+                </div>
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="text-[#666D80]">Duration</span>
+                  <span className="font-semibold text-[#15161E]">{startDate} to {endDate} ({requestedDays}d)</span>
+                </div>
+                <div className="flex items-center justify-between text-[12px]">
+                  <span className="text-[#666D80]">Balance After</span>
+                  <span className={`font-semibold ${remainingAfter >= 0 ? 'text-[#059669]' : 'text-red-600'}`}>{remainingAfter} days</span>
+                </div>
+                {reason && (
+                  <div className="pt-2 border-t border-[#DFE1E6]">
+                    <p className="text-[11px] text-[#666D80] mb-1">Reason</p>
+                    <p className="text-[12px] text-[#15161E]">{reason}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Pending Approval Card */}
+            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-[#FEF9F0] flex items-center justify-center shrink-0">
+                  <Clock size={18} className="text-[#EA580C]" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-[13px] font-bold text-[#15161E]">Pending Approval</p>
+                  <p className="text-[12px] text-[#666D80] mt-0.5">
+                    {approver.name} • {approver.title}
+                  </p>
+                  <p className="text-[11px] text-[#A4ABB8] mt-1">{approver.company}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Medical Support Card (only for sick leave) */}
+            {leaveType === 'sick' && (
+              <div className="rounded-[16px] bg-[#FCE7F3] border border-[#FBCFE8] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
+                <div className="flex items-center gap-2 mb-2.5">
+                  <Heart size={16} className="text-[#EC4899]" />
+                  <p className="text-[12px] font-bold text-[#831843] uppercase tracking-wider">Medical Support</p>
+                </div>
+
+                <div className="space-y-2.5">
+                  {/* Nearby Hospitals */}
+                  <div>
+                    <p className="text-[11px] font-semibold text-[#831843] mb-1.5 flex items-center gap-1.5">
+                      <MapPin size={12} /> Nearby Hospitals
+                    </p>
+                    <div className="space-y-1">
+                      <p className="text-[11px] text-[#9D174D]">• Cleveland Clinic Abu Dhabi — 2.1 km</p>
+                      <p className="text-[11px] text-[#9D174D]">• Mediclinic — 3.4 km</p>
+                      <p className="text-[11px] text-[#9D174D]">• NMC Royal Hospital — 4.2 km</p>
+                    </div>
+                  </div>
+
+                  {/* Emergency Contacts */}
+                  <div className="pt-2 border-t border-[#FBCFE8]">
+                    <p className="text-[11px] font-semibold text-[#831843] mb-1.5 flex items-center gap-1.5">
+                      <Phone size={12} /> Emergency
+                    </p>
+                    <div className="space-y-1">
+                      <p className="text-[11px] text-[#9D174D]">• Ambulance: 998</p>
+                      <p className="text-[11px] text-[#9D174D]">• Health Authority: 8001111</p>
+                    </div>
+                  </div>
+
+                  {/* Medical Benefits & Tip */}
+                  <div className="pt-2 border-t border-[#FBCFE8] space-y-2">
+                    <p className="text-[11px] text-[#831843]">
+                      <strong>Medical leave benefits:</strong> Up to 90 days paid sick leave per UAE labor law
+                    </p>
+                    <p className="text-[11px] text-[#9D174D] italic">
+                      Tip: Upload your medical certificate within 48 hours for faster processing
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Pipeline Steps Summary */}
             <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
               <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Pipeline Summary</p>
               {steps.map(step => (
@@ -370,16 +448,6 @@ export default function LeaveRequestPage() {
                   <CheckCircle2 size={14} className="text-[#059669] shrink-0" />
                   <span className="text-[#4B5563] flex-1">{step.name}</span>
                   <span className="text-[#A4ABB8] text-[10px]">{step.detail}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="rounded-[16px] bg-white border border-[#DFE1E6] p-3" style={{ boxShadow: '0 2px 12px rgba(27,58,107,0.05)' }}>
-              <p className="text-[10px] font-bold text-[#A4ABB8] uppercase tracking-wider mb-2">Integrations Triggered</p>
-              {['SAP SuccessFactors — Balance deducted, calendar updated', 'Slack — Team notified of absence', 'Email — Confirmation sent to employee'].map(i => (
-                <div key={i} className="flex items-center gap-2.5 text-[12px] py-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
-                  <span className="text-[#4B5563]">{i}</span>
                 </div>
               ))}
             </div>

@@ -511,6 +511,8 @@ export default function ProfilePage() {
   const [cardFlipped, setCardFlipped] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
+  const [locationVisible, setLocationVisible] = useState(true);
+  const [locationMode, setLocationMode] = useState<'off' | 'nearby' | 'company' | 'all'>('nearby');
 
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
@@ -824,6 +826,64 @@ export default function ProfilePage() {
               MY ASSETS — Car, Home & Insurance
               ═══════════════════════════════════════ */}
           <MyAssetsSection />
+
+          {/* Location & Privacy */}
+          <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+            <div className="px-5 py-4 border-b border-[#F8F9FB]">
+              <div className="flex items-center gap-2">
+                <MapPin size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
+                <p className="text-sm font-bold text-[#15161E]">Location & Privacy</p>
+              </div>
+            </div>
+            <div className="px-5 py-4 border-b border-[#F8F9FB]">
+              <div className="flex items-center justify-between mb-1">
+                <div>
+                  <p className="text-sm font-medium text-[#15161E]">Show me on People Map</p>
+                  <p className="text-xs text-[#A4ABB8]">Nearby IHC colleagues can see your location</p>
+                </div>
+                <button
+                  onClick={() => setLocationVisible(!locationVisible)}
+                  className="relative w-[44px] h-[24px] rounded-full transition-colors duration-200"
+                  style={{ background: locationVisible ? '#9D63F6' : '#DFE1E6' }}
+                >
+                  <div className="absolute top-[2px] w-[20px] h-[20px] rounded-full bg-white shadow-sm transition-transform duration-200"
+                    style={{ transform: locationVisible ? 'translateX(22px)' : 'translateX(2px)' }} />
+                </button>
+              </div>
+              {locationVisible && (
+                <div className="mt-3 flex gap-2 flex-wrap">
+                  {[
+                    { id: 'nearby' as const, label: 'Nearby only' },
+                    { id: 'company' as const, label: 'Same company' },
+                    { id: 'all' as const, label: 'All IHC employees' },
+                  ].map(opt => (
+                    <button key={opt.id} onClick={() => setLocationMode(opt.id)}
+                      className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                      style={{
+                        background: locationMode === opt.id ? '#9D63F6' : '#F8F9FB',
+                        color: locationMode === opt.id ? '#fff' : '#666D80',
+                        border: locationMode === opt.id ? 'none' : '1px solid #DFE1E6',
+                      }}>
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {!locationVisible && (
+                <p className="text-xs text-[#A4ABB8] mt-2 italic">You won&apos;t appear on the People Map when this is off.</p>
+              )}
+            </div>
+            <Link href="/people-map" className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-[#F8F9FB] transition-colors text-left">
+              <div className="w-9 h-9 rounded-[10px] bg-[#F5F0FF] flex items-center justify-center shrink-0">
+                <MapPin size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-[#15161E]">Open People Map</p>
+                <p className="text-xs text-[#A4ABB8]">See nearby IHC colleagues</p>
+              </div>
+              <ChevronRight size={14} className="text-[#A4ABB8]" />
+            </Link>
+          </div>
 
           {/* Settings */}
           <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">

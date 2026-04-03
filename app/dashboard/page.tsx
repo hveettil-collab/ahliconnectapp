@@ -13,7 +13,7 @@ import {
   Compass, Heart, Shield, GraduationCap, Gift, Zap,
   Plane, Users, UtensilsCrossed,
   Timer, Receipt, Award, X, ExternalLink,
-  CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight,
+  CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight, MapPin,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -434,7 +434,7 @@ export default function DashboardPage() {
               <h3 className="text-sm font-bold text-[#15161E]">Network</h3>
               <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">{onlineColleagues.length} online</span>
             </div>
-            <Link href="/chat" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
+            <Link href="/people-map" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
               See more
             </Link>
           </div>
@@ -450,6 +450,17 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
+          {/* People Map CTA */}
+          <Link href="/people-map" className="mt-3 flex items-center gap-3 p-3 rounded-[14px] bg-[#F5F0FF] border border-[#E9DEFF] active:scale-[0.98] transition-all">
+            <div className="w-9 h-9 rounded-[10px] bg-[#9D63F6]/15 flex items-center justify-center shrink-0">
+              <MapPin size={16} className="text-[#9D63F6]" strokeWidth={2} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-bold text-[#15161E]">People Map</p>
+              <p className="text-[10px] text-[#666D80]">See nearby IHC colleagues on the map</p>
+            </div>
+            <ChevronRight size={14} className="text-[#9D63F6] shrink-0" />
+          </Link>
         </div>
 
         {/* ── Wallet & Rewards Quick Widget ── */}
