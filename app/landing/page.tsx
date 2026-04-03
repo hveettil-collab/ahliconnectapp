@@ -358,7 +358,7 @@ export default function LandingPage() {
                     }}
                   >
                     <Shield size={12} />
-                    Trusted by 20,000+ IHC Employees
+                    Trusted by 100K+ IHC Employees
                   </div>
                 </div>
 
