@@ -1237,7 +1237,7 @@ export default function CommunityPage() {
       {/* Floating Create Post Button */}
       {filterCommunity !== 'discover' && !showComposer && (
         <button onClick={() => setShowComposer(true)}
-          className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all"
+          className="fixed bottom-24 right-5 z-40 w-14 h-14 rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all hide-on-keyboard"
           style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 6px 24px rgba(124,58,237,0.4)' }}>
           <Plus size={24} className="text-white" />
         </button>

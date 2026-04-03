@@ -25,6 +25,7 @@ import {
    ═══════════════════════════════════════════ */
 
 interface ChatMessage {
+  id: string;
   role: 'user' | 'ai';
   content: string;
   cards?: ActionCard[];
@@ -32,6 +33,9 @@ interface ChatMessage {
   flowType?: 'insurance' | 'rides' | 'food' | 'flights' | 'sell' | 'vacation' | 'gaming';
   sellCategory?: string;
 }
+
+let _msgId = 0;
+function nextMsgId() { return `msg_${++_msgId}_${Date.now()}`; }
 
 interface ActionCard {
   type: 'action' | 'info' | 'offer' | 'booking' | 'social';
@@ -1853,13 +1857,16 @@ function ServicesPageContent() {
     const msg = text || inputValue.trim();
     if (!msg) return;
     setInputValue('');
-    setMessages(prev => [...prev, { role: 'user', content: msg }]);
-    setMessages(prev => [...prev, { role: 'ai', content: '', typing: true }]);
+    const userMsgId = nextMsgId();
+    const typingMsgId = nextMsgId();
+    setMessages(prev => [...prev, { id: userMsgId, role: 'user', content: msg }]);
+    setMessages(prev => [...prev, { id: typingMsgId, role: 'ai', content: '', typing: true }]);
     await new Promise(r => setTimeout(r, 1000 + Math.random() * 800));
     const response = generateAIResponse(msg, userName, companyId);
+    const aiMsgId = nextMsgId();
     setMessages(prev => [
       ...prev.filter(m => !m.typing),
-      { role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType, sellCategory: response.sellCategory },
+      { id: aiMsgId, role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType, sellCategory: response.sellCategory },
     ]);
   };
 
@@ -1878,7 +1885,7 @@ function ServicesPageContent() {
   /* ── Chat mode ── */
   if (messages.length > 0) {
     return (
-      <div className="flex flex-col h-screen bg-[#F8F9FB]">
+      <div className="flex flex-col h-screen-safe bg-[#F8F9FB]">
         <style>{`
           @keyframes typing-bounce {
             0%, 60%, 100% { transform: translateY(0); }
@@ -1905,8 +1912,8 @@ function ServicesPageContent() {
         {/* Scrollable messages area */}
         <div className="flex-1 overflow-y-auto">
         <div className="px-3 md:px-6 py-4 space-y-3 max-w-4xl mx-auto w-full pb-4">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+          {messages.map((msg) => (
+            <div key={msg.id} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'ai' && (
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#9D63F6] to-[#B182F8] flex items-center justify-center shrink-0 mt-0.5 shadow-md">
                   <Sparkles size={12} className="text-white" />
@@ -2013,21 +2020,20 @@ function ServicesPageContent() {
               placeholder="Message Ahli AI"
               className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-2.5 outline-none"
             />
-            {inputValue.trim() ? (
-              <button
-                onClick={() => handleSend()}
-                className="w-8 h-8 rounded-full bg-[#9D63F6] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
-              >
-                <Send size={14} />
-              </button>
-            ) : (
-              <button
-                onClick={toggleVoice}
-                className={`p-1.5 rounded-full transition-all ${isListening ? 'bg-red-50' : ''}`}
-              >
-                <Mic size={18} className={isListening ? 'text-red-500 animate-pulse' : 'text-[#A4ABB8] hover:text-[#666D80]'} />
-              </button>
-            )}
+            <button
+              onClick={() => handleSend()}
+              className="w-8 h-8 rounded-full bg-[#9D63F6] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
+              style={{ display: inputValue.trim() ? 'flex' : 'none' }}
+            >
+              <Send size={14} />
+            </button>
+            <button
+              onClick={toggleVoice}
+              className={`p-1.5 rounded-full transition-all ${isListening ? 'bg-red-50' : ''}`}
+              style={{ display: inputValue.trim() ? 'none' : 'block' }}
+            >
+              <Mic size={18} className={isListening ? 'text-red-500 animate-pulse' : 'text-[#A4ABB8] hover:text-[#666D80]'} />
+            </button>
           </div>
         </div>
       </div>
@@ -2337,31 +2343,28 @@ function ServicesPageContent() {
               placeholder="Ask me anything..."
               className="flex-1 bg-transparent text-[14px] text-[#1E1E3A] placeholder:text-[#B4B4CC] py-2.5 outline-none"
             />
-            {inputValue.trim() ? (
-              <button
-                onClick={() => handleSend()}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white active:scale-90 transition-all shrink-0"
-                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 3px 12px rgba(157,99,246,0.35)' }}
-              >
-                <Send size={15} />
-              </button>
-            ) : (
-              <button
-                onClick={toggleVoice}
-                className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all active:scale-90 ${isListening ? '' : 'ahli-mic-pulse'}`}
-                style={{ background: isListening ? 'rgba(239,68,68,0.12)' : 'rgba(157,99,246,0.08)' }}
-              >
-                {isListening ? (
-                  <div className="flex items-center gap-[3px]">
-                    <div className="w-[3px] h-3 rounded-full bg-red-500 animate-pulse" />
-                    <div className="w-[3px] h-4 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.15s' }} />
-                    <div className="w-[3px] h-2.5 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.3s' }} />
-                  </div>
-                ) : (
-                  <Mic size={17} className="text-[#9D63F6]" />
-                )}
-              </button>
-            )}
+            <button
+              onClick={() => handleSend()}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-white active:scale-90 transition-all shrink-0"
+              style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 3px 12px rgba(157,99,246,0.35)', display: inputValue.trim() ? 'flex' : 'none' }}
+            >
+              <Send size={15} />
+            </button>
+            <button
+              onClick={toggleVoice}
+              className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all active:scale-90 ${isListening ? '' : 'ahli-mic-pulse'}`}
+              style={{ background: isListening ? 'rgba(239,68,68,0.12)' : 'rgba(157,99,246,0.08)', display: inputValue.trim() ? 'none' : 'flex' }}
+            >
+              {isListening ? (
+                <div className="flex items-center gap-[3px]">
+                  <div className="w-[3px] h-3 rounded-full bg-red-500 animate-pulse" />
+                  <div className="w-[3px] h-4 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.15s' }} />
+                  <div className="w-[3px] h-2.5 rounded-full bg-red-500 animate-pulse" style={{ animationDelay: '0.3s' }} />
+                </div>
+              ) : (
+                <Mic size={17} className="text-[#9D63F6]" />
+              )}
+            </button>
           </div>
         </div>
       </div>

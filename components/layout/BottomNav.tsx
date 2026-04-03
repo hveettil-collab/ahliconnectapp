@@ -18,7 +18,7 @@ export default function BottomNav() {
   if (pathname === '/services') return null;
 
   return (
-    <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center">
+    <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center hide-on-keyboard">
       {/* Inline keyframes for AI orb animation */}
       <style>{`
         @keyframes ai-orb-glow {

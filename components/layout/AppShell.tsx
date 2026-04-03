@@ -26,7 +26,7 @@ export default function AppShell({ children, title, subtitle, hideTopBar }: AppS
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex h-screen bg-[#F8F9FB]">
+    <div className="flex h-screen-safe bg-[#F8F9FB]">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex-1 flex flex-col md:ml-64 min-w-0 min-h-screen">

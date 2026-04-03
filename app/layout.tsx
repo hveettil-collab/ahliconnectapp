@@ -6,6 +6,7 @@ import { NotificationProvider } from '@/context/NotificationContext';
 import { WalletProvider } from '@/context/WalletContext';
 import { ListingsProvider } from '@/context/ListingsContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import KeyboardManager from '@/components/layout/KeyboardManager';
 
 export const metadata: Metadata = {
   title: 'Ahli Connect — IHC Employee Platform',
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" />
       </head>
       <body>
         <ThemeProvider>
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <WalletProvider>
                 <ListingsProvider>
                   <ErrorBoundary>
+                    <KeyboardManager />
                     {children}
                   </ErrorBoundary>
                 </ListingsProvider>

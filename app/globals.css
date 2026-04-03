@@ -204,3 +204,32 @@ html, body {
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* ===== Mobile Keyboard Open — Global Fixes ===== */
+/* When keyboard is open, hide floating UI that overlaps */
+html.keyboard-open .hide-on-keyboard {
+  display: none !important;
+}
+html.keyboard-open .fade-on-keyboard {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.15s ease;
+}
+/* Reduce backdrop-blur when keyboard is open to prevent GPU jank */
+html.keyboard-open .blur-reduce-on-keyboard {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Fix iOS 100vh issue — use dvh where supported */
+.h-screen-safe {
+  height: 100vh;
+  height: 100dvh;
+}
+/* Prevent layout shift when keyboard opens */
+html.keyboard-open body {
+  overflow: hidden;
+}
+/* Keep inputs stable during typing — prevent scroll-into-view jank */
+input:focus, textarea:focus, select:focus {
+  scroll-margin-bottom: 120px;
+}
