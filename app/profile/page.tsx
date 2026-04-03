@@ -265,7 +265,7 @@ function WalletSection() {
                   value={fundAmount}
                   onChange={e => setFundAmount(e.target.value)}
                   placeholder="Enter custom amount"
-                  className="w-full border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm mb-4 outline-none focus:border-[#9D63F6] transition-colors"
+                  className="w-full bg-white border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm text-[#15161E] placeholder:text-[#A4ABB8] mb-4 outline-none focus:border-[#9D63F6] transition-colors"
                 />
 
                 <button onClick={handleFund}
@@ -322,7 +322,7 @@ function WalletSection() {
                   value={redeemAmount}
                   onChange={e => setRedeemAmount(e.target.value)}
                   placeholder="Enter points to redeem"
-                  className="w-full border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm mb-2 outline-none focus:border-[#40C4AA] transition-colors"
+                  className="w-full bg-white border border-[#DFE1E6] rounded-[14px] px-4 py-3.5 text-sm text-[#15161E] placeholder:text-[#A4ABB8] mb-2 outline-none focus:border-[#40C4AA] transition-colors"
                 />
                 {redeemAmount && <p className="text-[11px] text-[#666D80] mb-4 ml-1">You&apos;ll receive AED {wallet.getPointsValue(parseInt(redeemAmount) || 0).toLocaleString()} in your wallet</p>}
 

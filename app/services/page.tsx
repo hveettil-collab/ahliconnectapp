@@ -201,18 +201,18 @@ function InsuranceFlow() {
               <div>
                 <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Card Number</label>
                 <input type="text" value={cardNum} onChange={e => setCardNum(e.target.value)} placeholder="4242 4242 4242 4242"
-                  className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+                  className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
               </div>
               <div className="flex gap-3">
                 <div className="flex-1">
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Expiry</label>
                   <input type="text" value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="MM/YY"
-                    className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
                 </div>
                 <div className="w-24">
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">CVV</label>
                   <input type="text" value={cvv} onChange={e => setCvv(e.target.value)} placeholder="123"
-                    className="w-full mt-1.5 border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors" />
+                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
                 </div>
               </div>
             </div>
@@ -325,9 +325,9 @@ function RidesFlow() {
               </div>
               <div className="flex-1 space-y-2">
                 <input type="text" value={pickup} onChange={e => setPickup(e.target.value)} placeholder="Pickup location"
-                  className="w-full border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
+                  className="w-full bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
                 <input type="text" value={dropoff} onChange={e => setDropoff(e.target.value)} placeholder="Where to?"
-                  className="w-full border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
+                  className="w-full bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors placeholder:text-[#A4ABB8]" />
               </div>
             </div>
             <div className="flex gap-2">
@@ -656,7 +656,7 @@ function FlightsFlow() {
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">To</label>
               <input type="text" value={to} onChange={e => setTo(e.target.value)} placeholder="Select destination"
-                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
+                className="w-full mt-1.5 bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#9D63F6] transition-colors" />
               <div className="flex gap-1.5 mt-2 flex-wrap">
                 {DESTINATIONS.map(d => (
                   <button key={d} onClick={() => setTo(d)}
@@ -671,7 +671,7 @@ function FlightsFlow() {
               <div className="flex-1">
                 <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Date</label>
                 <input type="date" value={date} onChange={e => setDate(e.target.value)}
-                  className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
+                  className="w-full mt-1.5 bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors" />
               </div>
               <div className="w-20">
                 <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Pax</label>
@@ -951,7 +951,7 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
     <div>
       <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">{label}</label>
       <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+        className="w-full mt-1.5 bg-white border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#40C4AA] transition-colors" />
     </div>
   );
 

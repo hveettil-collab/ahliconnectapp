@@ -105,18 +105,18 @@ export default function DashboardPage() {
           HERO — Immersive gradient with greeting
           ══════════════════════════════════════════ */}
       <div className="relative overflow-hidden" style={{ minHeight: 'clamp(320px, 52vh, 420px)' }}>
-        {/* Animated mesh gradient background — violet dominant */}
+        {/* Animated mesh gradient background — smooth violet to white */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(200deg, #9D63F6 20%, #7C3AED 63%, #ffffff 78%)',
+          background: 'linear-gradient(180deg, #9D63F6 0%, #B07AF8 25%, #C9A4FB 45%, #E2CBF9 60%, #F0E0FC 72%, #F8F9FB 88%)',
         }}>
-          <div className="absolute w-[300px] h-[300px] rounded-full opacity-30" style={{
-            background: 'radial-gradient(circle, rgba(235,195,127,1) 0%, rgba(255,189,76,0) 70%)',
+          <div className="absolute w-[300px] h-[300px] rounded-full opacity-20" style={{
+            background: 'radial-gradient(circle, rgba(235,195,127,0.8) 0%, rgba(255,189,76,0) 70%)',
             top: '-80px', right: '-60px',
             animation: 'float 8s ease-in-out infinite',
           }} />
-          <div className="absolute w-[200px] h-[200px] rounded-full opacity-15" style={{
-            background: 'radial-gradient(circle, #9D63F6 0%, transparent 70%)',
-            bottom: '20px', left: '-40px',
+          <div className="absolute w-[250px] h-[250px] rounded-full opacity-15" style={{
+            background: 'radial-gradient(circle, rgba(124,58,237,0.4) 0%, transparent 70%)',
+            top: '10%', left: '-30px',
             animation: 'float 6s ease-in-out infinite reverse',
           }} />
         </div>
@@ -212,10 +212,11 @@ export default function DashboardPage() {
           }}>
           <Link href="/services" className="block">
             <div className="relative rounded-[20px] overflow-hidden" style={{
-              background: 'rgba(255,255,255,0.12)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              border: '1px solid #b47bff',
+              background: 'rgba(255,255,255,0.65)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid rgba(157,99,246,0.2)',
+              boxShadow: '0 2px 16px rgba(157,99,246,0.08)',
             }}>
               <div className="flex items-center gap-3.5 px-4 py-3.5">
                 <div className="relative w-[44px] h-[44px] shrink-0">
@@ -231,10 +232,10 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-[14px] font-bold">Ask AI anything</p>
-                  <p className="text-white/50 text-[12px] mt-0.5">Salary certs, leaves, expenses — instant</p>
+                  <p className="text-[#15161E] text-[14px] font-bold">Ask AI anything</p>
+                  <p className="text-[#666D80] text-[12px] mt-0.5">Salary certs, leaves, expenses — instant</p>
                 </div>
-                <ArrowRight size={18} className="text-white/40 shrink-0" />
+                <ArrowRight size={18} className="text-[#9D63F6] shrink-0" />
               </div>
             </div>
           </Link>
@@ -819,7 +820,7 @@ export default function DashboardPage() {
                 <div>
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Number of Shares</label>
                   <input type="number" value={stockShares} onChange={e => setStockShares(e.target.value)} placeholder="e.g. 100"
-                    className="w-full mt-2 border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#9D63F6] transition-colors text-center" />
+                    className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#9D63F6] transition-colors text-center" />
                 </div>
                 {stockShares && parseInt(stockShares) > 0 && (
                   <div className="p-3 rounded-[14px] bg-[#F8F9FB] space-y-2">

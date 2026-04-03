@@ -83,7 +83,7 @@ export default function VerifyPage() {
                     value={digit}
                     onChange={e => handleChange(i, e.target.value)}
                     onKeyDown={e => handleKey(i, e)}
-                    className="w-10 h-10 text-center text-lg font-semibold border border-[#DFE1E6] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#9D63F6] focus:border-transparent"
+                    className="w-10 h-10 text-center text-lg font-semibold bg-white text-[#15161E] border border-[#DFE1E6] rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#9D63F6] focus:border-transparent"
                   />
                 ))}
               </div>

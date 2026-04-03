@@ -215,7 +215,7 @@ export default function InsurancePage() {
                   value={plateNumber}
                   onChange={e => setPlateNumber(e.target.value)}
                   placeholder="e.g. 12345"
-                  className="w-full h-[52px] pl-10 pr-4 rounded-[14px] border border-[#DFE1E6] text-[15px] font-semibold text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
+                  className="w-full h-[52px] pl-10 pr-4 rounded-[14px] bg-white border border-[#DFE1E6] text-[15px] font-semibold text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                   style={{ fontSize: '16px' }}
                 />
               </div>
@@ -430,7 +430,7 @@ export default function InsurancePage() {
                     value={cardNumber}
                     onChange={e => setCardNumber(e.target.value.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim())}
                     placeholder="1234 5678 9012 3456"
-                    className="w-full h-[48px] pl-10 pr-4 rounded-[12px] border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
+                    className="w-full h-[48px] pl-10 pr-4 rounded-[12px] bg-white border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                     style={{ fontSize: '16px' }}
                   />
                 </div>
@@ -447,7 +447,7 @@ export default function InsurancePage() {
                       setCardExpiry(v);
                     }}
                     placeholder="MM/YY"
-                    className="w-full h-[48px] px-4 rounded-[12px] border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
+                    className="w-full h-[48px] px-4 rounded-[12px] bg-white border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                     style={{ fontSize: '16px' }}
                   />
                 </div>
@@ -458,7 +458,7 @@ export default function InsurancePage() {
                     value={cardCvv}
                     onChange={e => setCardCvv(e.target.value.replace(/\D/g, '').slice(0, 3))}
                     placeholder="•••"
-                    className="w-full h-[48px] px-4 rounded-[12px] border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
+                    className="w-full h-[48px] px-4 rounded-[12px] bg-white border border-[#DFE1E6] text-[14px] font-medium text-[#15161E] placeholder:text-[#A4ABB8] focus:border-[#7C3AED] focus:ring-2 focus:ring-[#7C3AED]/20 outline-none transition-all"
                     style={{ fontSize: '16px' }}
                   />
                 </div>

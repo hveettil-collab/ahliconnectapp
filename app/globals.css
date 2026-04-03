@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Ensure text is always visible in form inputs */
+input, textarea, select {
+  color: var(--text-primary, #15161E);
+  background-color: var(--bg-card, #FFFFFF);
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted, #A4ABB8);
+}
+
 /* Prevent iOS Safari auto-zoom on input focus */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   input, textarea, select {
