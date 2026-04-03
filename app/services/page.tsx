@@ -17,7 +17,7 @@ import {
   Paperclip, ChevronRight, Search, MapPinned, Navigation,
   CircleDot, Package, Utensils, Coffee, ShoppingCart,
   BadgeCheck, Download, Wallet, X, Check, Loader2,
-  Camera, Eye, Share2, Building2,
+  Camera, Eye, Share2, Building2, MessageCircle,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
@@ -819,6 +819,29 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
   const [description, setDescription] = useState('');
   const [images, setImages] = useState<string[]>([]);
 
+  /* ── Category-specific extra fields ── */
+  const [carMake, setCarMake] = useState('');
+  const [carModel, setCarModel] = useState('');
+  const [carYear, setCarYear] = useState('');
+  const [carMileage, setCarMileage] = useState('');
+  const [carLocation, setCarLocation] = useState('');
+
+  const [elecBrand, setElecBrand] = useState('');
+  const [elecStorage, setElecStorage] = useState('');
+
+  const [furnMaterial, setFurnMaterial] = useState('');
+  const [furnDimensions, setFurnDimensions] = useState('');
+
+  const [propType, setPropType] = useState('');
+  const [propBedrooms, setPropBedrooms] = useState('');
+  const [propArea, setPropArea] = useState('');
+  const [propLocation, setPropLocation] = useState('');
+
+  /* ── Listing analytics (simulated) ── */
+  const [views, setViews] = useState(0);
+  const [inquiries, setInquiries] = useState(0);
+  const [saves, setSaves] = useState(0);
+
   const CATEGORIES = [
     { id: 'cars', label: 'Cars', icon: '🚗' },
     { id: 'electronics', label: 'Electronics', icon: '📱' },
@@ -826,15 +849,65 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
     { id: 'property', label: 'Property', icon: '🏠' },
     { id: 'other', label: 'Other', icon: '📦' },
   ];
-  const CONDITIONS = ['New', 'Like New', 'Excellent', 'Good'];
+
+  const CAR_CONDITIONS = ['Brand New', 'Excellent', 'Good', 'Fair'];
+  const ELEC_CONDITIONS = ['Sealed / New', 'Like New', 'Good', 'Fair'];
+  const FURN_CONDITIONS = ['New', 'Like New', 'Good', 'Used'];
+  const PROP_TYPES = ['Apartment', 'Villa', 'Studio', 'Townhouse', 'Office'];
+  const CONDITIONS_FOR = category === 'cars' ? CAR_CONDITIONS : category === 'electronics' ? ELEC_CONDITIONS : category === 'furniture' ? FURN_CONDITIONS : ['New', 'Like New', 'Excellent', 'Good'];
+
+  const headerConfig: Record<string, { title: string; subtitle: string; gradient: string }> = {
+    cars: { title: 'Sell Your Car', subtitle: 'AI car listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 100%)' },
+    electronics: { title: 'Sell Electronics', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #54B6ED 0%, #2563EB 100%)' },
+    furniture: { title: 'Sell Furniture', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #FFBD4C 0%, #F59E0B 100%)' },
+    property: { title: 'List Property', subtitle: 'AI listing · 45K+ employees', gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' },
+    other: { title: 'Sell on Marketplace', subtitle: 'AI-powered listing · 45K+ employees', gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' },
+  };
+  const hdr = headerConfig[category] || headerConfig.other;
+
+  /* ── Build smart title from fields ── */
+  const buildTitle = () => {
+    if (category === 'cars') return `${carYear} ${carMake} ${carModel}`.trim();
+    if (category === 'electronics') return `${elecBrand} ${title}`.trim();
+    return title;
+  };
+
+  /* ── Generate AI description per category ── */
+  const generateDescription = () => {
+    let desc = '';
+    const finalTitle = buildTitle();
+    if (category === 'cars') {
+      desc = `${condition} ${carYear} ${carMake} ${carModel} for sale. ${carMileage ? `Mileage: ${carMileage} km. ` : ''}${carLocation ? `Located in ${carLocation}. ` : ''}Asking AED ${parseInt(price || '0').toLocaleString()}. Serious buyers only — contact me through the Ahli Connect app for a test drive.`;
+    } else if (category === 'electronics') {
+      desc = `${condition} ${elecBrand} ${title}${elecStorage ? ` (${elecStorage})` : ''} for sale. Asking AED ${parseInt(price || '0').toLocaleString()}. ${condition === 'Sealed / New' ? 'Factory sealed with warranty.' : 'Fully functional, no issues.'} Contact through the app.`;
+    } else if (category === 'furniture') {
+      desc = `${condition} ${title} for sale.${furnMaterial ? ` Material: ${furnMaterial}.` : ''}${furnDimensions ? ` Dimensions: ${furnDimensions}.` : ''} Asking AED ${parseInt(price || '0').toLocaleString()}. Pick-up available. Contact me through the app.`;
+    } else if (category === 'property') {
+      desc = `${propType}${propBedrooms ? ` — ${propBedrooms} bedroom(s)` : ''} available${propLocation ? ` in ${propLocation}` : ''}. ${propArea ? `Area: ${propArea} sq ft. ` : ''}Asking AED ${parseInt(price || '0').toLocaleString()}. Contact through Ahli Connect for viewing.`;
+    } else {
+      desc = `${condition} item for sale: ${title}. Asking AED ${parseInt(price || '0').toLocaleString()}. Contact me through the app for more details. Quick sale preferred.`;
+    }
+    setTitle(finalTitle);
+    setDescription(desc);
+    setPhase('preview');
+  };
+
+  /* ── Can continue from details? ── */
+  const canContinue = () => {
+    if (category === 'cars') return carMake && carModel && carYear && price && condition;
+    if (category === 'electronics') return title && price && condition;
+    if (category === 'furniture') return title && price && condition;
+    if (category === 'property') return propType && price && propLocation;
+    return title && price && condition;
+  };
 
   useEffect(() => {
     if (phase === 'publishing') {
       const t = setTimeout(() => {
-        // Add listing to shared context
         const cat = CATEGORIES.find(c => c.id === category);
+        const finalTitle = buildTitle() || title;
         listings.addListing({
-          title,
+          title: finalTitle,
           price: `AED ${parseInt(price || '0').toLocaleString()}`,
           category: cat?.label || 'Other',
           condition,
@@ -845,14 +918,19 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           specs: { condition, category: cat?.label || 'Other' },
         });
         setPhase('live');
+        // Simulate live analytics
+        const iv = setInterval(() => {
+          setViews(p => p + Math.floor(Math.random() * 3) + 1);
+          if (Math.random() > 0.6) setInquiries(p => p + 1);
+          if (Math.random() > 0.7) setSaves(p => p + 1);
+        }, 3000);
+        return () => clearInterval(iv);
       }, 2000);
       return () => clearTimeout(t);
     }
   }, [phase]);
 
-  const handleImageUpload = () => {
-    fileInputRef.current?.click();
-  };
+  const handleImageUpload = () => { fileInputRef.current?.click(); };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -860,40 +938,38 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
     Array.from(files).forEach(file => {
       if (images.length >= 5) return;
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        if (ev.target?.result) {
-          setImages(prev => [...prev, ev.target!.result as string]);
-        }
-      };
+      reader.onload = (ev) => { if (ev.target?.result) setImages(prev => [...prev, ev.target!.result as string]); };
       reader.readAsDataURL(file);
     });
     e.target.value = '';
   };
 
-  const removeImage = (idx: number) => {
-    setImages(prev => prev.filter((_, i) => i !== idx));
-  };
+  const removeImage = (idx: number) => { setImages(prev => prev.filter((_, i) => i !== idx)); };
 
-  const generateDescription = () => {
-    const cat = CATEGORIES.find(c => c.id === category);
-    setDescription(`${condition} ${cat?.label || ''} for sale. ${title}. Selling at AED ${price}. Contact me through the app for more details. Quick sale preferred.`);
-    setPhase('preview');
-  };
+  /* ── Input helper ── */
+  const FieldInput = ({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) => (
+    <div>
+      <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">{label}</label>
+      <input type="text" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
+        className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+    </div>
+  );
 
   return (
     <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
       <input type="file" ref={fileInputRef} className="hidden" accept="image/*" multiple onChange={handleFileChange} />
-      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
+      <div className="p-4 flex items-center gap-3" style={{ background: hdr.gradient }}>
         <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-          <ShoppingCart size={18} className="text-white" />
+          {category === 'cars' ? <Car size={18} className="text-white" /> : category === 'electronics' ? <Monitor size={18} className="text-white" /> : <ShoppingCart size={18} className="text-white" />}
         </div>
         <div>
-          <p className="text-[14px] font-bold text-white">Sell on Marketplace</p>
-          <p className="text-[11px] text-white/70">AI-powered listing · 45K+ employees</p>
+          <p className="text-[14px] font-bold text-white">{hdr.title}</p>
+          <p className="text-[11px] text-white/70">{hdr.subtitle}</p>
         </div>
       </div>
 
       <div className="p-4">
+        {/* ── CATEGORY SELECTION (only if no initialCategory) ── */}
         {phase === 'category' && (
           <div className="space-y-3">
             <p className="text-[13px] text-[#4B5563]">What are you selling?</p>
@@ -917,23 +993,134 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           </div>
         )}
 
-        {phase === 'details' && (
+        {/* ── CATEGORY-SPECIFIC DETAILS ── */}
+        {phase === 'details' && category === 'cars' && (
           <div className="space-y-3">
-            <p className="text-[13px] text-[#4B5563]">Tell us about your item</p>
-            <div>
-              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Title</label>
-              <input type="text" value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. iPhone 15 Pro Max 256GB"
-                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+            <p className="text-[13px] text-[#4B5563]">Tell us about your car</p>
+            <div className="grid grid-cols-2 gap-2">
+              <FieldInput label="Make" value={carMake} onChange={setCarMake} placeholder="e.g. Toyota" />
+              <FieldInput label="Model" value={carModel} onChange={setCarModel} placeholder="e.g. Camry" />
             </div>
-            <div>
-              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Price (AED)</label>
-              <input type="text" value={price} onChange={e => setPrice(e.target.value)} placeholder="e.g. 3500"
-                className="w-full mt-1.5 border border-[#DFE1E6] rounded-[12px] px-3 py-2.5 text-[13px] text-[#15161E] outline-none focus:border-[#40C4AA] transition-colors" />
+            <div className="grid grid-cols-2 gap-2">
+              <FieldInput label="Year" value={carYear} onChange={setCarYear} placeholder="e.g. 2022" />
+              <FieldInput label="Mileage (km)" value={carMileage} onChange={setCarMileage} placeholder="e.g. 35000" />
             </div>
+            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 85000" />
+            <FieldInput label="Location" value={carLocation} onChange={setCarLocation} placeholder="e.g. Abu Dhabi" />
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
               <div className="flex gap-2 mt-1.5 flex-wrap">
-                {CONDITIONS.map(c => (
+                {CONDITIONS_FOR.map(c => (
+                  <button key={c} onClick={() => setCondition(c)}
+                    className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: condition === c ? '#9D63F6' : '#F8F9FB', color: condition === c ? '#fff' : '#666D80', border: condition === c ? 'none' : '1px solid #DFE1E6' }}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => { if (canContinue()) setPhase('photos'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: canContinue() ? 'linear-gradient(135deg, #9D63F6, #7C3AED)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(124,58,237,0.3)' : 'none' }}>
+              Continue to Photos
+            </button>
+          </div>
+        )}
+
+        {phase === 'details' && category === 'electronics' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Tell us about your device</p>
+            <FieldInput label="Brand" value={elecBrand} onChange={setElecBrand} placeholder="e.g. Apple, Samsung, Sony" />
+            <FieldInput label="Product Name" value={title} onChange={setTitle} placeholder="e.g. iPhone 15 Pro Max 256GB" />
+            <FieldInput label="Storage / Specs" value={elecStorage} onChange={setElecStorage} placeholder="e.g. 256GB, 16GB RAM" />
+            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 3500" />
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {CONDITIONS_FOR.map(c => (
+                  <button key={c} onClick={() => setCondition(c)}
+                    className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: condition === c ? '#54B6ED' : '#F8F9FB', color: condition === c ? '#fff' : '#666D80', border: condition === c ? 'none' : '1px solid #DFE1E6' }}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => { if (canContinue()) setPhase('photos'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: canContinue() ? 'linear-gradient(135deg, #54B6ED, #2563EB)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(37,99,235,0.3)' : 'none' }}>
+              Continue to Photos
+            </button>
+          </div>
+        )}
+
+        {phase === 'details' && category === 'furniture' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Tell us about the furniture</p>
+            <FieldInput label="Item Name" value={title} onChange={setTitle} placeholder="e.g. L-shaped Sofa, Office Desk" />
+            <div className="grid grid-cols-2 gap-2">
+              <FieldInput label="Material" value={furnMaterial} onChange={setFurnMaterial} placeholder="e.g. Leather, Wood" />
+              <FieldInput label="Dimensions" value={furnDimensions} onChange={setFurnDimensions} placeholder="e.g. 200x90 cm" />
+            </div>
+            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 1200" />
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {CONDITIONS_FOR.map(c => (
+                  <button key={c} onClick={() => setCondition(c)}
+                    className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: condition === c ? '#FFBD4C' : '#F8F9FB', color: condition === c ? '#fff' : '#666D80', border: condition === c ? 'none' : '1px solid #DFE1E6' }}>
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => { if (canContinue()) setPhase('photos'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: canContinue() ? 'linear-gradient(135deg, #FFBD4C, #F59E0B)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(245,158,11,0.3)' : 'none' }}>
+              Continue to Photos
+            </button>
+          </div>
+        )}
+
+        {phase === 'details' && category === 'property' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Tell us about the property</p>
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Property Type</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {PROP_TYPES.map(p => (
+                  <button key={p} onClick={() => setPropType(p)}
+                    className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
+                    style={{ background: propType === p ? '#40C4AA' : '#F8F9FB', color: propType === p ? '#fff' : '#666D80', border: propType === p ? 'none' : '1px solid #DFE1E6' }}>
+                    {p}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <FieldInput label="Bedrooms" value={propBedrooms} onChange={setPropBedrooms} placeholder="e.g. 2" />
+              <FieldInput label="Area (sq ft)" value={propArea} onChange={setPropArea} placeholder="e.g. 1200" />
+            </div>
+            <FieldInput label="Location" value={propLocation} onChange={setPropLocation} placeholder="e.g. Al Reem Island" />
+            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 950000" />
+            <button onClick={() => { if (canContinue()) setPhase('photos'); }}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: canContinue() ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
+              Continue to Photos
+            </button>
+          </div>
+        )}
+
+        {phase === 'details' && !['cars', 'electronics', 'furniture', 'property'].includes(category) && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563]">Tell us about your item</p>
+            <FieldInput label="Title" value={title} onChange={setTitle} placeholder="e.g. Vintage Watch, Bicycle" />
+            <FieldInput label="Asking Price (AED)" value={price} onChange={setPrice} placeholder="e.g. 500" />
+            <div>
+              <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Condition</label>
+              <div className="flex gap-2 mt-1.5 flex-wrap">
+                {CONDITIONS_FOR.map(c => (
                   <button key={c} onClick={() => setCondition(c)}
                     className="px-3 py-2 rounded-[10px] text-[12px] font-semibold transition-all active:scale-95"
                     style={{ background: condition === c ? '#40C4AA' : '#F8F9FB', color: condition === c ? '#fff' : '#666D80', border: condition === c ? 'none' : '1px solid #DFE1E6' }}>
@@ -942,20 +1129,25 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
                 ))}
               </div>
             </div>
-            <button onClick={() => { if (title && price && condition) setPhase('photos'); }}
+            <button onClick={() => { if (canContinue()) setPhase('photos'); }}
               className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: (title && price && condition) ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: (title && price && condition) ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
+              style={{ background: canContinue() ? 'linear-gradient(135deg, #40C4AA, #059669)' : '#DFE1E6', boxShadow: canContinue() ? '0 4px 16px rgba(5,150,105,0.3)' : 'none' }}>
               Continue to Photos
             </button>
           </div>
         )}
 
+        {/* ── PHOTOS ── */}
         {phase === 'photos' && (
           <div className="space-y-3">
-            <p className="text-[13px] text-[#4B5563]">Add photos of your item</p>
+            <p className="text-[13px] text-[#4B5563]">
+              {category === 'cars' ? 'Add photos of your car — exterior, interior, and mileage' :
+               category === 'electronics' ? 'Add photos of your device — front, back, and any accessories' :
+               category === 'property' ? 'Add photos — living area, kitchen, bedrooms, view' :
+               'Add photos of your item'}
+            </p>
             <p className="text-[11px] text-[#A4ABB8]">Items with photos sell 3x faster. Add up to 5 photos.</p>
 
-            {/* Image grid */}
             <div className="grid grid-cols-3 gap-2">
               {images.map((img, i) => (
                 <div key={i} className="relative aspect-square rounded-[12px] overflow-hidden border border-[#DFE1E6]">
@@ -993,6 +1185,7 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           </div>
         )}
 
+        {/* ── AI PREVIEW ── */}
         {phase === 'preview' && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-[#059669] mb-1">
@@ -1012,17 +1205,18 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
               )}
               <p className="text-[15px] font-bold text-[#15161E]">{title}</p>
               <p className="text-[17px] font-extrabold text-[#40C4AA] mt-1">AED {parseInt(price || '0').toLocaleString()}</p>
-              <div className="flex gap-2 mt-2">
-                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#40C4AA] text-white">{condition}</span>
+              <div className="flex gap-2 mt-2 flex-wrap">
+                {condition && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#40C4AA] text-white">{condition}</span>}
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{CATEGORIES.find(c => c.id === category)?.label}</span>
-                {images.length > 0 && (
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{images.length} photo{images.length > 1 ? 's' : ''}</span>
-                )}
+                {category === 'cars' && carMileage && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{parseInt(carMileage).toLocaleString()} km</span>}
+                {category === 'cars' && carLocation && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{carLocation}</span>}
+                {category === 'property' && propBedrooms && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{propBedrooms} BR</span>}
+                {images.length > 0 && <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#F8F9FB] text-[#666D80] border border-[#DFE1E6]">{images.length} photo{images.length > 1 ? 's' : ''}</span>}
               </div>
               <p className="text-[12px] text-[#666D80] mt-2 leading-relaxed">{description}</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setPhase('photos')}
+              <button onClick={() => setPhase('details')}
                 className="px-4 py-3 rounded-[14px] text-[13px] font-bold text-[#666D80] border border-[#DFE1E6] active:scale-[0.97] transition-all">
                 Edit
               </button>
@@ -1035,6 +1229,7 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           </div>
         )}
 
+        {/* ── PUBLISHING ── */}
         {phase === 'publishing' && (
           <div className="py-8 text-center space-y-3">
             <Loader2 size={32} className="text-[#40C4AA] mx-auto animate-spin" />
@@ -1043,25 +1238,58 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
           </div>
         )}
 
+        {/* ── LIVE WITH ANALYTICS ── */}
         {phase === 'live' && (
           <div className="space-y-4">
             <div className="text-center py-2">
               <div className="w-14 h-14 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto mb-3">
                 <CheckCircle2 size={28} className="text-[#059669]" />
               </div>
-              <p className="text-[16px] font-bold text-[#15161E]">Listed!</p>
-              <p className="text-[12px] text-[#A4ABB8]">Your item is now live on the marketplace</p>
+              <p className="text-[16px] font-bold text-[#15161E]">Your listing is live!</p>
+              <p className="text-[12px] text-[#A4ABB8]">Visible to 45,000+ IHC employees across 30+ companies</p>
             </div>
+
+            {/* Listing card */}
             <div className="p-3 rounded-[14px] bg-[#F8F9FB] border border-[#DFE1E6]">
               {images.length > 0 && (
                 <img src={images[0]} alt={title} className="w-full h-32 rounded-[10px] object-cover mb-2" />
               )}
               <p className="text-[14px] font-bold text-[#15161E]">{title}</p>
               <p className="text-[15px] font-extrabold text-[#40C4AA]">AED {parseInt(price || '0').toLocaleString()}</p>
-              <div className="flex items-center gap-2 mt-2 text-[11px] text-[#A4ABB8]">
-                <Eye size={11} /> <span>Visible to 45,000+ employees</span>
+            </div>
+
+            {/* Live Analytics */}
+            <div className="grid grid-cols-3 gap-2">
+              <div className="p-3 rounded-[14px] bg-[#F5F0FF] border border-[#E9DEFF] text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <Eye size={13} className="text-[#9D63F6]" />
+                </div>
+                <p className="text-[18px] font-extrabold text-[#9D63F6]">{views}</p>
+                <p className="text-[9px] font-semibold text-[#9D63F6]/60 uppercase">Views</p>
+              </div>
+              <div className="p-3 rounded-[14px] bg-[#EBF6FF] border border-[#C5E4FF] text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <MessageCircle size={13} className="text-[#54B6ED]" />
+                </div>
+                <p className="text-[18px] font-extrabold text-[#54B6ED]">{inquiries}</p>
+                <p className="text-[9px] font-semibold text-[#54B6ED]/60 uppercase">Inquiries</p>
+              </div>
+              <div className="p-3 rounded-[14px] bg-[#FFF8EB] border border-[#FFE4A8] text-center">
+                <div className="flex items-center justify-center gap-1 mb-1">
+                  <Heart size={13} className="text-[#FFBD4C]" />
+                </div>
+                <p className="text-[18px] font-extrabold text-[#F59E0B]">{saves}</p>
+                <p className="text-[9px] font-semibold text-[#F59E0B]/60 uppercase">Saved</p>
               </div>
             </div>
+
+            {inquiries > 0 && (
+              <div className="p-3 rounded-[14px] bg-[#EDFAF6] border border-[#A7F3D0]">
+                <p className="text-[12px] font-bold text-[#059669] mb-1">New interest from buyers!</p>
+                <p className="text-[11px] text-[#059669]/70">{inquiries} employee{inquiries > 1 ? 's' : ''} sent you a message about this listing. Check your inbox.</p>
+              </div>
+            )}
+
             <div className="flex gap-2">
               <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#059669] bg-[#F0FDF4] border border-[#BBF7D0] active:scale-95 transition-all">
                 <Share2 size={13} className="inline mr-1" />Share
@@ -1233,7 +1461,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('car') || t.includes('vehicle') || t.includes('auto'))) {
     return {
-      content: `Let's sell your car on the IHC Marketplace! I'll help you create a professional car listing. Fill in the details below:`,
+      content: `Absolutely — I can help you sell your car! Just fill in the make, model, year, mileage, condition, and your asking price below. I'll generate a professional listing and push it to **45,000+ IHC employees** instantly.`,
       flowType: 'sell',
       sellCategory: 'cars',
     };
@@ -1241,7 +1469,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('electronic') || t.includes('phone') || t.includes('iphone') || t.includes('laptop') || t.includes('tablet') || t.includes('ipad') || t.includes('macbook') || t.includes('samsung') || t.includes('gadget'))) {
     return {
-      content: `Let's list your electronics on the IHC Marketplace! I'll help you create a professional listing. Fill in the details below:`,
+      content: `Sure thing! Let's get your device listed. Just provide the brand, model, storage/specs, condition, and price — I'll craft a listing that stands out to **45K+ potential buyers**.`,
       flowType: 'sell',
       sellCategory: 'electronics',
     };
@@ -1249,7 +1477,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('furniture') || t.includes('sofa') || t.includes('desk') || t.includes('chair') || t.includes('table') || t.includes('bed'))) {
     return {
-      content: `Let's list your furniture on the IHC Marketplace! Fill in the details below and AI will craft a great listing:`,
+      content: `Great — let's list your furniture! Fill in the item name, material, dimensions, condition, and price. AI will write a polished description for you.`,
       flowType: 'sell',
       sellCategory: 'furniture',
     };
@@ -1257,7 +1485,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
 
   if ((t.includes('sell') || t.includes('list') || t.includes('post') || t.includes('rent')) && (t.includes('property') || t.includes('apartment') || t.includes('villa') || t.includes('flat') || t.includes('house') || t.includes('room'))) {
     return {
-      content: `Let's list your property on the IHC Marketplace! Fill in the details below:`,
+      content: `I can help you list your property! Just tell me the type, bedrooms, area, location, and price — I'll create a professional listing visible to the entire IHC network.`,
       flowType: 'sell',
       sellCategory: 'property',
     };
