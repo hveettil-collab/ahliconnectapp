@@ -1,11 +1,18 @@
 @import "tailwindcss";
 
-/* Ensure text is always visible in form inputs */
+/* Ensure text is always visible in form inputs — force dark text on light input backgrounds */
 input, textarea, select {
-  color: var(--text-primary, #15161E);
+  color: #15161E !important;
 }
 input::placeholder, textarea::placeholder {
-  color: var(--text-muted, #A4ABB8);
+  color: #A4ABB8 !important;
+}
+/* Allow transparent-bg inputs inside dark containers to inherit the correct color */
+input.dark-input, textarea.dark-input, select.dark-input {
+  color: #F8F9FB !important;
+}
+input.dark-input::placeholder, textarea.dark-input::placeholder {
+  color: #808897 !important;
 }
 
 /* Prevent iOS Safari auto-zoom on input focus */
