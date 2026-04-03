@@ -18,6 +18,7 @@ import {
   syncSuccessFactors, sendEmail,
 } from '@/lib/automationEngine';
 import Link from 'next/link';
+import type { StepState } from '@/types/automation';
 
 const STEP_STYLES = `
   @keyframes step-check { from { transform: scale(0); } to { transform: scale(1); } }
@@ -57,8 +58,6 @@ const POLICY_LIMITS: Record<string, number> = {
   'Meals': 150,
   'Software & Tools': 500,
 };
-
-interface StepState { id: string; name: string; status: 'pending' | 'running' | 'completed' | 'failed'; detail?: string; }
 
 export default function ExpenseClaimPage() {
   const { user } = useAuth();

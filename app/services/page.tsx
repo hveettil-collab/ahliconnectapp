@@ -1684,6 +1684,19 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  /* ── Events / Activities / What's happening ── */
+  if (t.includes('event') || t.includes('happening') || t.includes('what\'s on') || t.includes('whats on') || t.includes('activities') || t.includes('things to do') || t.includes('what\'s going on') || t.includes('whats going on') || t.includes('upcoming') || t.includes('anything going on') || t.includes('what can i do') || /\bfun\b/.test(t) || t.includes('social')) {
+    return {
+      content: `Here's what's happening across IHC right now, ${userName}! 🎉\n\n**🏆 Gaming & Tournaments**\n• FIFA Tournament — Round 2 happening today (32 players)\n• Call of Duty League — 16 spots left, registration open\n• Chess Championship — Starting Apr 10\n\n**🏋️ Sports & Fitness**\n• Padel League — Sign up by Apr 5 (24 teams)\n• Palms Sports Corporate Challenge — Apr 12\n• Morning Yoga sessions — Every Tuesday & Thursday 7AM\n\n**🎓 Learning & Development**\n• AI Fundamentals Workshop — Apr 8, 10AM\n• Leadership Masterclass — Apr 15\n• Public Speaking Bootcamp — Apr 20\n\n**🎉 Social & Community**\n• IHC Town Hall — Apr 7, 2PM (Virtual + In-person)\n• Ramadan Iftar Gathering — Apr 9, 6:30PM\n• Earth Day Volunteering — Apr 22\n\nWant details on any of these?`,
+      cards: [
+        { type: 'action', icon: Gamepad2, title: 'Gaming Hub', subtitle: 'FIFA, COD, Chess & more', color: '#DC2626', action: 'Show me gaming tournaments' },
+        { type: 'action', icon: Heart, title: 'Fitness & Sports', subtitle: 'Padel, Yoga, Gym deals', color: '#40C4AA', action: 'Tell me about fitness events' },
+        { type: 'action', icon: GraduationCap, title: 'Learning Events', subtitle: 'Workshops & certifications', color: '#9D63F6', action: 'Show me learning courses' },
+        { type: 'info', icon: Calendar, title: 'View Full Calendar', subtitle: 'All upcoming IHC events', color: '#54B6ED', link: '/explore' },
+      ]
+    };
+  }
+
   /* ── Generic sell (no specific category detected) ── */
   if (t.includes('sell') || t.includes('list something') || t.includes('create listing') || t.includes('sell something')) {
     return {
@@ -1774,17 +1787,14 @@ function ServicesPageContent() {
   const [isListening, setIsListening] = useState(false);
   const autoPromptSentRef = useRef(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const userName = user?.name?.split(' ')[0] || 'there';
   const companyId = user?.companyId || 'ihc';
 
   /* ── Speech Recognition helper ── */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function createSpeechRecognition(): any {
-    const W = window as any;
-    const SR = W.SpeechRecognition || W.webkitSpeechRecognition;
+  function createSpeechRecognition(): SpeechRecognition | null {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) return null;
     const r = new SR();
     r.continuous = false;
@@ -1811,7 +1821,7 @@ function ServicesPageContent() {
 
     let finalTranscript = '';
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interim = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
@@ -1834,8 +1844,8 @@ function ServicesPageContent() {
       }
     };
 
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      if (process.env.NODE_ENV === 'development') console.error('Speech recognition error:', event.error);
       setIsListening(false);
       if (event.error === 'not-allowed') {
         alert('Microphone access was denied. Please allow microphone access in your browser settings.');

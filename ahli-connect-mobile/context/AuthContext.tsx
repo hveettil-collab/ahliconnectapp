@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(JSON.parse(stored));
         }
       } catch (error) {
-        console.error('Failed to restore auth:', error);
+        if (__DEV__) console.error('Failed to restore auth:', error);
       } finally {
         setIsLoading(false);
       }
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await AsyncStorage.setItem('ahli_user', JSON.stringify(found));
       return true;
     } catch (error) {
-      console.error('Login error:', error);
+      if (__DEV__) console.error('Login error:', error);
       return false;
     }
   };
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       await AsyncStorage.removeItem('ahli_user');
     } catch (error) {
-      console.error('Logout error:', error);
+      if (__DEV__) console.error('Logout error:', error);
     }
   };
 

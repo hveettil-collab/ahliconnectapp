@@ -341,7 +341,6 @@ input:focus, textarea:focus, select:focus {
 @keyframes heart-pop { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 @keyframes slide-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes double-tap-heart { 0% { opacity: 0; transform: scale(0); } 40% { opacity: 1; transform: scale(1.2); } 70% { opacity: 1; transform: scale(0.95); } 100% { opacity: 0; transform: scale(1); } }
-@keyframes confetti-pop { 0% { opacity: 1; transform: scale(0) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(180deg); } 100% { opacity: 0; transform: scale(0.8) rotate(360deg); } }
 .fade-up { animation: fade-up 0.4s ease-out both; }
 .scale-in { animation: scale-in 0.3s ease-out both; }
 .heart-pop { animation: heart-pop 0.3s ease-out; }

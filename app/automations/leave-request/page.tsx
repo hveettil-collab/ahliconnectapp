@@ -13,6 +13,7 @@ import {
   syncSuccessFactors, sendEmail,
 } from '@/lib/automationEngine';
 import Link from 'next/link';
+import type { StepState } from '@/types/automation';
 
 const STEP_STYLES = `
   @keyframes step-check { from { transform: scale(0); } to { transform: scale(1); } }
@@ -36,8 +37,6 @@ const MANAGERS = [
   { name: 'Maryam Jaber', title: 'Head of Leasing', company: 'Aldar Properties' },
   { name: 'Faris Al Nuaimi', title: 'Engineering Lead', company: 'Shory' },
 ];
-
-interface StepState { id: string; name: string; status: 'pending' | 'running' | 'completed' | 'failed'; detail?: string; }
 
 // Simple calendar helper
 function getDaysInMonth(year: number, month: number) { return new Date(year, month + 1, 0).getDate(); }

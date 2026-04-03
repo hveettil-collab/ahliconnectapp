@@ -23,14 +23,16 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Production logging — would send to monitoring service
-    console.error('[Ahli Connect Error]', {
-      error: error.message,
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
-      timestamp: new Date().toISOString(),
-      url: typeof window !== 'undefined' ? window.location.href : 'unknown',
-    });
+    // Production: send to monitoring service; Dev: log to console
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[Ahli Connect Error]', {
+        error: error.message,
+        stack: error.stack,
+        componentStack: errorInfo.componentStack,
+        timestamp: new Date().toISOString(),
+        url: typeof window !== 'undefined' ? window.location.href : 'unknown',
+      });
+    }
   }
 
   render() {

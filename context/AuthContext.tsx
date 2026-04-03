@@ -1,6 +1,7 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { MOCK_USERS } from '@/lib/mockData';
+import { STORAGE_KEYS } from '@/lib/constants';
 
 type User = typeof MOCK_USERS[keyof typeof MOCK_USERS] | null;
 
@@ -22,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [pendingCompany, setPendingCompany] = useState('');
 
   useEffect(() => {
-    const stored = localStorage.getItem('ahli_user');
+    const stored = localStorage.getItem(STORAGE_KEYS.AUTH_USER);
     if (stored) setUser(JSON.parse(stored));
   }, []);
 
@@ -34,13 +35,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (email: string): boolean => {
     const found = MOCK_USERS[email] || Object.values(MOCK_USERS)[0];
     setUser(found);
-    localStorage.setItem('ahli_user', JSON.stringify(found));
+    localStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(found));
     return true;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('ahli_user');
+    localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
   };
 
   return (

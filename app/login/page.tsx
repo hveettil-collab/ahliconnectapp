@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Eye, EyeOff, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { COMPANIES } from '@/lib/mockData';
 import { Suspense } from 'react';

@@ -71,7 +71,7 @@ export default function AutomationsHub() {
         const allLogs = await getAllLogs();
         setLogs(allLogs);
       } catch (err) {
-        console.error('Failed to load logs:', err);
+        if (__DEV__) console.error('Failed to load logs:', err);
       } finally {
         setLoading(false);
       }

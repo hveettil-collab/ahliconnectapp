@@ -13,14 +13,13 @@ import {
   type AutomationStep,
 } from '@/lib/automationEngine';
 import Link from 'next/link';
+import type { StepState } from '@/types/automation';
 
 /* ═══════════════════════════════════════════
    SALARY CERTIFICATE AUTOMATION — End-to-end
    ═══════════════════════════════════════════ */
 
 const PURPOSES = ['Bank Loan', 'Visa Application', 'Tenancy Contract', 'Personal Records', 'Government Authority', 'Other'];
-
-interface StepState { id: string; name: string; status: 'pending' | 'running' | 'completed' | 'failed'; detail?: string; }
 
 const SALARY_DATA: Record<string, { basic: number; housing: number; transport: number; other: number; joinDate: string }> = {
   'Shory':            { basic: 18000, housing: 7000, transport: 2500, other: 3500, joinDate: '15 March 2022' },
