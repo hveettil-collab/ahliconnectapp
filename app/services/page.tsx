@@ -1448,10 +1448,14 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
    ═══════════════════════════════════════════ */
 
 const SUGGESTIONS = [
-  { icon: Plane, label: 'Book Flight', prompt: 'I want to book a flight', color: '#9D63F6' },
-  { icon: Car, label: 'Book Ride', prompt: 'I need to book a ride', color: '#40C4AA' },
-  { icon: UtensilsCrossed, label: 'Order Food', prompt: 'I want to order food for lunch', color: '#FFBD4C' },
-  { icon: Shield, label: 'Insurance', prompt: 'I need motor insurance', color: '#7C3AED' },
+  { icon: Car, label: 'Sell My Car', prompt: 'I want to sell my car', color: '#9D63F6', bg: '#F3EEFF' },
+  { icon: Monitor, label: 'Post Electronics', prompt: 'I want to post electronics for sale', color: '#40C4AA', bg: '#EDFAF6' },
+  { icon: HelpCircle, label: 'Need Help', prompt: 'I need help with something', color: '#54B6ED', bg: '#EBF6FF' },
+  { icon: Gift, label: 'Find Offers', prompt: 'Show me the best offers', color: '#FFBD4C', bg: '#FFF8EB' },
+  { icon: Plane, label: 'Book Flight', prompt: 'I want to book a flight', color: '#7C3AED', bg: '#F0EAFF' },
+  { icon: Shield, label: 'Insurance', prompt: 'I need motor insurance', color: '#0D9488', bg: '#EDFCFA' },
+  { icon: ShoppingBag, label: 'Marketplace', prompt: 'Take me to the marketplace', color: '#EA580C', bg: '#FFF4EC' },
+  { icon: Briefcase, label: 'HR Services', prompt: 'I need HR help', color: '#6366F1', bg: '#EEEEFF' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -1656,296 +1660,330 @@ function ServicesPageContent() {
     );
   }
 
-  /* ── Welcome state ── */
+  /* ══════════════════════════════════════════════════
+     WELCOME STATE — Premium AI Assistant Experience
+     ══════════════════════════════════════════════════ */
   return (
-    <AppShell title="AI Assistant" subtitle="Ask me anything" hideTopBar>
+    <div className="flex flex-col h-screen relative overflow-hidden">
 
-      {/* Inline CSS for all animations */}
+      {/* ── Full-page pastel gradient background ── */}
+      <div className="absolute inset-0 z-0" style={{
+        background: 'linear-gradient(165deg, #F4EFFF 0%, #EDE8FF 15%, #F0EEFF 25%, #EBF0FF 40%, #F2EDFF 55%, #FEECF4 75%, #F5EEFF 90%, #EBF3FF 100%)',
+      }}>
+        {/* Soft radial overlays for depth */}
+        <div className="absolute" style={{ top: '-10%', right: '-20%', width: '60%', height: '60%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(177,130,248,0.12) 0%, transparent 70%)' }} />
+        <div className="absolute" style={{ bottom: '5%', left: '-15%', width: '50%', height: '50%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(84,182,237,0.08) 0%, transparent 70%)' }} />
+        <div className="absolute" style={{ top: '40%', right: '10%', width: '30%', height: '30%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,189,76,0.06) 0%, transparent 70%)' }} />
+      </div>
+
+      {/* ── Animations ── */}
       <style>{`
-        /* ── Frosted Glass Orb Animations ── */
-        @keyframes orb-float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+        @keyframes ahli-orb-float {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-14px) scale(1.02); }
         }
-        @keyframes orb-gradient-rotate {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes ahli-orb-glow-pulse {
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(1.15); }
         }
-        @keyframes orb-highlight-shift {
-          0%, 100% { transform: translate(-20%, -30%) scale(1); opacity: 0.7; }
-          33% { transform: translate(-10%, -25%) scale(1.1); opacity: 0.9; }
-          66% { transform: translate(-30%, -20%) scale(0.95); opacity: 0.75; }
-        }
-        @keyframes orb-inner-pulse {
-          0%, 100% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(1.08); opacity: 0.7; }
-        }
-        @keyframes orb-glow-breathe {
-          0%, 100% { opacity: 0.3; transform: scale(1); }
-          50% { opacity: 0.55; transform: scale(1.12); }
-        }
-        @keyframes orb-shimmer {
-          0% { transform: rotate(0deg) translateX(50px) rotate(0deg); opacity: 0; }
-          20% { opacity: 0.6; }
-          50% { opacity: 0.3; }
-          80% { opacity: 0.6; }
-          100% { transform: rotate(360deg) translateX(50px) rotate(-360deg); opacity: 0; }
-        }
-        @keyframes orb-ring-spin {
+        @keyframes ahli-orb-rotate {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        @keyframes orb-ring-spin-reverse {
+        @keyframes ahli-orb-rotate-reverse {
           from { transform: rotate(360deg); }
           to { transform: rotate(0deg); }
         }
-        @keyframes orb-particle-1 {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-          50% { transform: translate(12px, -18px) scale(1.3); opacity: 0.8; }
+        @keyframes ahli-orb-highlight-drift {
+          0%, 100% { transform: translate(-15%, -25%) scale(1); opacity: 0.65; }
+          33% { transform: translate(-5%, -20%) scale(1.15); opacity: 0.9; }
+          66% { transform: translate(-25%, -15%) scale(0.9); opacity: 0.7; }
         }
-        @keyframes orb-particle-2 {
+        @keyframes ahli-shimmer-orbit {
+          0% { transform: rotate(0deg) translateX(55px) rotate(0deg); opacity: 0; }
+          15% { opacity: 0.7; }
+          50% { opacity: 0.25; }
+          85% { opacity: 0.7; }
+          100% { transform: rotate(360deg) translateX(55px) rotate(-360deg); opacity: 0; }
+        }
+        @keyframes ahli-particle-drift-1 {
           0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-          50% { transform: translate(-15px, 10px) scale(1.2); opacity: 0.7; }
+          50% { transform: translate(10px, -16px) scale(1.4); opacity: 0.7; }
         }
-        @keyframes orb-particle-3 {
-          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-          50% { transform: translate(8px, 14px) scale(0.8); opacity: 0.9; }
+        @keyframes ahli-particle-drift-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.25; }
+          50% { transform: translate(-12px, 10px) scale(1.3); opacity: 0.65; }
         }
-        @keyframes card-appear {
-          from { opacity: 0; transform: translateY(12px); }
+        @keyframes ahli-particle-drift-3 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+          50% { transform: translate(8px, 12px) scale(0.7); opacity: 0.8; }
+        }
+        @keyframes ahli-card-appear {
+          from { opacity: 0; transform: translateY(16px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes ahli-fade-in {
+          from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .orb-float { animation: orb-float 5s ease-in-out infinite; }
-        .orb-gradient-rotate { animation: orb-gradient-rotate 8s linear infinite; }
-        .orb-highlight { animation: orb-highlight-shift 7s ease-in-out infinite; }
-        .orb-inner-pulse { animation: orb-inner-pulse 4s ease-in-out infinite; }
-        .orb-glow { animation: orb-glow-breathe 4s ease-in-out infinite; }
-        .orb-shimmer { animation: orb-shimmer 10s linear infinite; }
-        .orb-ring { animation: orb-ring-spin 20s linear infinite; }
-        .orb-ring-reverse { animation: orb-ring-spin-reverse 15s linear infinite; }
-        .orb-p1 { animation: orb-particle-1 4.5s ease-in-out infinite; }
-        .orb-p2 { animation: orb-particle-2 5.5s ease-in-out infinite; }
-        .orb-p3 { animation: orb-particle-3 3.8s ease-in-out infinite; }
-        .suggestion-card { animation: card-appear 0.5s ease-out both; }
-        .suggestion-card:nth-child(2) { animation-delay: 0.1s; }
-        .suggestion-card:nth-child(3) { animation-delay: 0.2s; }
-        .suggestion-card:nth-child(4) { animation-delay: 0.3s; }
+        @keyframes ahli-mic-pulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(157,99,246,0.2); }
+          50% { box-shadow: 0 0 0 6px rgba(157,99,246,0); }
+        }
+        @keyframes ahli-input-glow {
+          0%, 100% { box-shadow: 0 2px 12px rgba(157,99,246,0.06), 0 0 0 1px rgba(223,225,230,0.5); }
+          50% { box-shadow: 0 4px 20px rgba(157,99,246,0.12), 0 0 0 1px rgba(157,99,246,0.15); }
+        }
+        .ahli-orb-float { animation: ahli-orb-float 5.5s ease-in-out infinite; }
+        .ahli-orb-glow { animation: ahli-orb-glow-pulse 4s ease-in-out infinite; }
+        .ahli-orb-ring { animation: ahli-orb-rotate 22s linear infinite; }
+        .ahli-orb-ring-rev { animation: ahli-orb-rotate-reverse 17s linear infinite; }
+        .ahli-orb-highlight { animation: ahli-orb-highlight-drift 7s ease-in-out infinite; }
+        .ahli-shimmer { animation: ahli-shimmer-orbit 9s linear infinite; }
+        .ahli-p1 { animation: ahli-particle-drift-1 5s ease-in-out infinite; }
+        .ahli-p2 { animation: ahli-particle-drift-2 6s ease-in-out infinite; }
+        .ahli-p3 { animation: ahli-particle-drift-3 4.2s ease-in-out infinite; }
+        .ahli-card { animation: ahli-card-appear 0.5s ease-out both; }
+        .ahli-card:nth-child(1) { animation-delay: 0.05s; }
+        .ahli-card:nth-child(2) { animation-delay: 0.1s; }
+        .ahli-card:nth-child(3) { animation-delay: 0.15s; }
+        .ahli-card:nth-child(4) { animation-delay: 0.2s; }
+        .ahli-card:nth-child(5) { animation-delay: 0.25s; }
+        .ahli-card:nth-child(6) { animation-delay: 0.3s; }
+        .ahli-card:nth-child(7) { animation-delay: 0.35s; }
+        .ahli-card:nth-child(8) { animation-delay: 0.4s; }
+        .ahli-fade { animation: ahli-fade-in 0.6s ease-out both; }
+        .ahli-fade-d1 { animation-delay: 0.15s; }
+        .ahli-fade-d2 { animation-delay: 0.3s; }
+        .ahli-mic-pulse { animation: ahli-mic-pulse 2s ease-in-out infinite; }
+        .ahli-input-glow { animation: ahli-input-glow 3s ease-in-out infinite; }
       `}</style>
 
-      {/* Header */}
-      <div className="flex items-center justify-center px-4 py-4 relative sticky top-0 z-10" style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(223,225,230,0.6)' }}>
-        <Link href="/dashboard" className="absolute left-4 p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
+      {/* ═══ HEADER ═══ */}
+      <div className="relative z-10 shrink-0 flex items-center justify-center px-5 pt-[max(env(safe-area-inset-top),12px)] pb-3">
+        <Link href="/dashboard" className="absolute left-4 top-[max(env(safe-area-inset-top),12px)] p-2 rounded-full text-[#666D80]/70 hover:text-[#15161E] hover:bg-white/50 transition-all">
           <ArrowLeft size={20} />
         </Link>
-        <p className="text-[15px] font-bold text-[#15161E]">Ahli AI</p>
+        <div className="flex items-center gap-1.5 ahli-fade">
+          <Sparkles size={14} className="text-[#9D63F6]" />
+          <p className="text-[14px] font-semibold text-[#3D3D5C]">Ahli AI</p>
+        </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex flex-col max-w-3xl mx-auto w-full px-4 md:px-6">
+      {/* ═══ SCROLLABLE MAIN CONTENT ═══ */}
+      <div className="relative z-10 flex-1 overflow-y-auto">
+        <div className="flex flex-col items-center max-w-lg mx-auto px-5 pb-4">
 
-        {/* ── Animated Frosted Glass Orb ── */}
-        <div className="relative flex items-center justify-center pt-8 md:pt-12 pb-8" style={{ height: '300px' }}>
-
-          {/* Ambient glow behind orb */}
-          <div className="absolute orb-glow" style={{
-            width: 260, height: 260, borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(157,99,246,0.18) 0%, rgba(157,99,246,0.05) 45%, transparent 70%)',
-          }} />
-
-          {/* Subtle orbit rings */}
-          <div className="absolute orb-ring" style={{
-            width: 220, height: 220, borderRadius: '50%',
-            border: '1px solid rgba(157,99,246,0.08)',
-          }}>
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#B182F8]/50" />
-          </div>
-          <div className="absolute orb-ring-reverse" style={{
-            width: 260, height: 260, borderRadius: '50%',
-            border: '1px solid rgba(157,99,246,0.05)',
-          }}>
-            <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-1 h-1 rounded-full bg-[#FFBD4C]/40" />
+          {/* ═══ GREETING ═══ */}
+          <div className="text-center pt-4 pb-2 ahli-fade">
+            <p className="text-[14px] text-[#9D63F6] font-medium mb-1">Hello, {userName}!</p>
+            <h1 className="text-[24px] md:text-[28px] font-bold text-[#1E1E3A] leading-tight">
+              How can I help you<br />today?
+            </h1>
           </div>
 
-          {/* Floating particles */}
-          <div className="absolute orb-p1" style={{ top: '15%', left: '25%' }}>
-            <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(157,99,246,0.35)' }} />
-          </div>
-          <div className="absolute orb-p2" style={{ top: '25%', right: '22%' }}>
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: 'rgba(177,130,248,0.4)' }} />
-          </div>
-          <div className="absolute orb-p3" style={{ bottom: '20%', left: '22%' }}>
-            <div className="w-1 h-1 rounded-full" style={{ background: 'rgba(255,189,76,0.4)' }} />
-          </div>
+          {/* ═══ ANIMATED ORB ═══ */}
+          <div className="relative flex items-center justify-center my-6 ahli-fade-d1" style={{ width: 240, height: 240 }}>
 
-          {/* ── THE ORB ── */}
-          <div className="orb-float relative z-10" style={{ width: 160, height: 160 }}>
-            {/* SVG for the orb with filters */}
-            <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0 }}>
-              <defs>
-                {/* Main gradient — purple sphere */}
-                <radialGradient id="orb-main" cx="0.4" cy="0.35" r="0.65" fx="0.35" fy="0.3">
-                  <stop offset="0%" stopColor="#EEEAFF" />
-                  <stop offset="25%" stopColor="#D4C4FF" />
-                  <stop offset="50%" stopColor="#B182F8" />
-                  <stop offset="75%" stopColor="#9D63F6" />
-                  <stop offset="100%" stopColor="#7B4FD4" />
-                </radialGradient>
-
-                {/* Top-left highlight — glossy reflection */}
-                <radialGradient id="orb-highlight" cx="0.35" cy="0.28" r="0.4" fx="0.3" fy="0.25">
-                  <stop offset="0%" stopColor="white" stopOpacity="0.85" />
-                  <stop offset="40%" stopColor="white" stopOpacity="0.25" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0" />
-                </radialGradient>
-
-                {/* Secondary highlight — right edge */}
-                <radialGradient id="orb-rim" cx="0.72" cy="0.6" r="0.35">
-                  <stop offset="0%" stopColor="white" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="white" stopOpacity="0" />
-                </radialGradient>
-
-                {/* Inner depth shadow */}
-                <radialGradient id="orb-depth" cx="0.5" cy="0.7" r="0.5">
-                  <stop offset="0%" stopColor="#6B3FC7" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#6B3FC7" stopOpacity="0" />
-                </radialGradient>
-
-                {/* Noise texture filter */}
-                <filter id="orb-noise" x="0" y="0" width="100%" height="100%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" result="noise" />
-                  <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
-                  <feBlend in="SourceGraphic" in2="grayNoise" mode="overlay" result="noisy" />
-                  <feComposite in="noisy" in2="SourceGraphic" operator="in" />
-                </filter>
-
-                {/* Soft glow filter */}
-                <filter id="orb-soft-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="2" />
-                </filter>
-
-                {/* Drop shadow */}
-                <filter id="orb-shadow" x="-30%" y="-20%" width="160%" height="160%">
-                  <feGaussianBlur in="SourceAlpha" stdDeviation="12" />
-                  <feOffset dx="0" dy="8" />
-                  <feColorMatrix values="0 0 0 0 0.388 0 0 0 0 0.247 0 0 0 0 0.765 0 0 0 0.2 0" />
-                  <feMerge>
-                    <feMergeNode />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              <g filter="url(#orb-shadow)">
-                {/* Base sphere */}
-                <circle cx="80" cy="80" r="72" fill="url(#orb-main)" />
-
-                {/* Noise overlay for frosted glass texture */}
-                <circle cx="80" cy="80" r="72" fill="url(#orb-main)" filter="url(#orb-noise)" opacity="0.6" />
-
-                {/* Depth shadow at bottom */}
-                <circle cx="80" cy="80" r="72" fill="url(#orb-depth)" />
-
-                {/* Main glossy highlight — top left */}
-                <circle cx="80" cy="80" r="72" fill="url(#orb-highlight)" />
-
-                {/* Rim light — right edge */}
-                <circle cx="80" cy="80" r="72" fill="url(#orb-rim)" />
-
-                {/* Small bright specular highlight */}
-                <ellipse cx="58" cy="48" rx="18" ry="12" fill="white" opacity="0.2" filter="url(#orb-soft-glow)" />
-              </g>
-            </svg>
-
-            {/* Animated gradient overlay that rotates inside the orb */}
-            <div className="absolute inset-0 orb-gradient-rotate" style={{
-              width: 160, height: 160, borderRadius: '50%',
-              background: 'conic-gradient(from 0deg, rgba(157,99,246,0) 0%, rgba(177,130,248,0.15) 25%, rgba(255,255,255,0.1) 50%, rgba(157,99,246,0) 75%, rgba(107,63,199,0.1) 100%)',
-              mixBlendMode: 'overlay',
-              clipPath: 'circle(45% at 50% 50%)',
+            {/* Ambient glow */}
+            <div className="absolute ahli-orb-glow" style={{
+              width: 300, height: 300, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(157,99,246,0.2) 0%, rgba(157,99,246,0.06) 40%, transparent 65%)',
+              left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
             }} />
 
-            {/* Animated highlight that drifts */}
-            <div className="absolute orb-highlight" style={{
-              width: 60, height: 60, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%)',
-              top: '15%', left: '20%',
-              filter: 'blur(8px)',
-            }} />
+            {/* Orbit ring 1 */}
+            <div className="absolute ahli-orb-ring" style={{
+              width: 230, height: 230, borderRadius: '50%',
+              border: '1px solid rgba(157,99,246,0.08)',
+              left: '50%', top: '50%', marginLeft: -115, marginTop: -115,
+            }}>
+              <div className="absolute -top-[3px] left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full" style={{ background: 'rgba(177,130,248,0.5)' }} />
+            </div>
 
-            {/* Shimmer particle orbiting inside */}
-            <div className="absolute orb-shimmer" style={{
-              width: 6, height: 6, borderRadius: '50%',
-              background: 'rgba(255,255,255,0.7)',
-              top: '50%', left: '50%',
-              marginTop: -3, marginLeft: -3,
-              filter: 'blur(1px)',
-            }} />
+            {/* Orbit ring 2 */}
+            <div className="absolute ahli-orb-ring-rev" style={{
+              width: 200, height: 200, borderRadius: '50%',
+              border: '1px dashed rgba(157,99,246,0.06)',
+              left: '50%', top: '50%', marginLeft: -100, marginTop: -100,
+            }}>
+              <div className="absolute top-1/2 -right-[3px] -translate-y-1/2 w-[5px] h-[5px] rounded-full" style={{ background: 'rgba(255,189,76,0.45)' }} />
+            </div>
+
+            {/* Floating particles */}
+            <div className="absolute ahli-p1" style={{ top: '8%', left: '18%' }}>
+              <div className="w-[7px] h-[7px] rounded-full" style={{ background: 'rgba(157,99,246,0.35)' }} />
+            </div>
+            <div className="absolute ahli-p2" style={{ top: '18%', right: '14%' }}>
+              <div className="w-[5px] h-[5px] rounded-full" style={{ background: 'rgba(84,182,237,0.4)' }} />
+            </div>
+            <div className="absolute ahli-p3" style={{ bottom: '12%', left: '14%' }}>
+              <div className="w-[4px] h-[4px] rounded-full" style={{ background: 'rgba(255,189,76,0.45)' }} />
+            </div>
+
+            {/* ── THE ORB ── */}
+            <div className="ahli-orb-float relative" style={{ width: 150, height: 150 }}>
+              <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0">
+                <defs>
+                  <radialGradient id="wo-main" cx="0.4" cy="0.35" r="0.65" fx="0.35" fy="0.3">
+                    <stop offset="0%" stopColor="#F0ECFF" />
+                    <stop offset="20%" stopColor="#DDD2FF" />
+                    <stop offset="45%" stopColor="#B88DF8" />
+                    <stop offset="70%" stopColor="#9D63F6" />
+                    <stop offset="100%" stopColor="#7247C4" />
+                  </radialGradient>
+                  <radialGradient id="wo-hi" cx="0.33" cy="0.27" r="0.38" fx="0.28" fy="0.23">
+                    <stop offset="0%" stopColor="white" stopOpacity="0.9" />
+                    <stop offset="35%" stopColor="white" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="white" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="wo-rim" cx="0.73" cy="0.58" r="0.32">
+                    <stop offset="0%" stopColor="white" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="white" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="wo-depth" cx="0.5" cy="0.72" r="0.45">
+                    <stop offset="0%" stopColor="#5B2FB0" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#5B2FB0" stopOpacity="0" />
+                  </radialGradient>
+                  <filter id="wo-noise" x="0" y="0" width="100%" height="100%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" stitchTiles="stitch" result="n" />
+                    <feColorMatrix type="saturate" values="0" in="n" result="gn" />
+                    <feBlend in="SourceGraphic" in2="gn" mode="overlay" result="noisy" />
+                    <feComposite in="noisy" in2="SourceGraphic" operator="in" />
+                  </filter>
+                  <filter id="wo-blur" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="2.5" />
+                  </filter>
+                  <filter id="wo-shadow" x="-30%" y="-20%" width="160%" height="170%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="14" />
+                    <feOffset dx="0" dy="10" />
+                    <feColorMatrix values="0 0 0 0 0.38 0 0 0 0 0.24 0 0 0 0 0.76 0 0 0 0.18 0" />
+                    <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                </defs>
+                <g filter="url(#wo-shadow)">
+                  <circle cx="75" cy="75" r="67" fill="url(#wo-main)" />
+                  <circle cx="75" cy="75" r="67" fill="url(#wo-main)" filter="url(#wo-noise)" opacity="0.55" />
+                  <circle cx="75" cy="75" r="67" fill="url(#wo-depth)" />
+                  <circle cx="75" cy="75" r="67" fill="url(#wo-hi)" />
+                  <circle cx="75" cy="75" r="67" fill="url(#wo-rim)" />
+                  <ellipse cx="54" cy="44" rx="16" ry="11" fill="white" opacity="0.18" filter="url(#wo-blur)" />
+                </g>
+              </svg>
+
+              {/* Rotating inner conic glow */}
+              <div className="absolute inset-0" style={{
+                width: 150, height: 150, borderRadius: '50%',
+                background: 'conic-gradient(from 0deg, rgba(157,99,246,0) 0%, rgba(177,130,248,0.12) 25%, rgba(255,255,255,0.08) 50%, rgba(157,99,246,0) 75%)',
+                mixBlendMode: 'overlay',
+                clipPath: 'circle(44% at 50% 50%)',
+                animation: 'ahli-orb-rotate 10s linear infinite',
+              }} />
+
+              {/* Drifting highlight */}
+              <div className="absolute ahli-orb-highlight" style={{
+                width: 55, height: 55, borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 70%)',
+                top: '12%', left: '18%', filter: 'blur(10px)',
+              }} />
+
+              {/* Shimmer particle */}
+              <div className="absolute ahli-shimmer" style={{
+                width: 5, height: 5, borderRadius: '50%',
+                background: 'rgba(255,255,255,0.75)',
+                top: '50%', left: '50%', marginTop: -2.5, marginLeft: -2.5,
+                filter: 'blur(0.5px)',
+              }} />
+
+              {/* Minimal abstract "face" — two tiny eye marks */}
+              <div className="absolute flex gap-[14px] items-center justify-center" style={{ top: '43%', left: '50%', transform: 'translateX(-50%)' }}>
+                <div className="w-[3px] h-[10px] rounded-full bg-white/40" />
+                <div className="w-[3px] h-[10px] rounded-full bg-white/40" />
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* ── Greeting text ── */}
-        <div className="pb-6 text-center md:text-left">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#15161E] leading-snug mb-2">
-            I am here to simplify your work.
-          </h1>
-          <p className="text-base md:text-lg text-[#A4ABB8] font-medium">
-            How can I help you?
-          </p>
-        </div>
-
-        {/* ── Suggestion cards — responsive grid ── */}
-        <div className="pb-20 md:pb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {SUGGESTIONS.map((s, i) => {
-              const SIcon = s.icon;
-              return (
-                <button
-                  key={i}
-                  onClick={() => handleSend(s.prompt)}
-                  className="suggestion-card text-left rounded-[18px] p-4 border border-[#DFE1E6]/60 active:scale-[0.97] transition-all hover:shadow-md md:hover:shadow-lg"
-                  style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
-                >
-                  <div
-                    className="w-9 h-9 rounded-full flex items-center justify-center mb-3"
-                    style={{ background: s.color + '12' }}
+          {/* ═══ 2-COLUMN QUICK ACTION BENTO GRID ═══ */}
+          <div className="w-full ahli-fade-d2">
+            <p className="text-[11px] font-semibold text-[#9D63F6]/60 uppercase tracking-wider mb-3 text-center">Quick Actions</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              {SUGGESTIONS.map((s, i) => {
+                const SIcon = s.icon;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => handleSend(s.prompt)}
+                    className="ahli-card text-left rounded-[16px] p-3.5 active:scale-[0.96] transition-all duration-200 group"
+                    style={{
+                      background: 'rgba(255,255,255,0.7)',
+                      backdropFilter: 'blur(12px)',
+                      WebkitBackdropFilter: 'blur(12px)',
+                      border: '1px solid rgba(255,255,255,0.8)',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.04), 0 0 0 1px rgba(157,99,246,0.04)',
+                    }}
                   >
-                    <SIcon size={17} style={{ color: s.color }} strokeWidth={2} />
-                  </div>
-                  <p className="text-[13px] font-semibold text-[#15161E] mb-1">{s.label}</p>
-                  <p className="text-[11px] text-[#A4ABB8] leading-snug">{s.prompt}</p>
-                </button>
-              );
-            })}
+                    <div
+                      className="w-9 h-9 rounded-[11px] flex items-center justify-center mb-2.5 transition-transform duration-200 group-hover:scale-110"
+                      style={{ background: s.bg }}
+                    >
+                      <SIcon size={17} style={{ color: s.color }} strokeWidth={2} />
+                    </div>
+                    <p className="text-[12px] font-semibold text-[#1E1E3A] mb-0.5 leading-tight">{s.label}</p>
+                    <p className="text-[10px] text-[#8E8EA9] leading-snug">{s.prompt}</p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Spacer for input bar */}
+          <div className="h-24" />
         </div>
       </div>
 
-      {/* ── Input bar ── */}
-      <div className="sticky bottom-0 px-3 md:px-6 py-3" style={{ background: 'rgba(248,249,251,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: '1px solid rgba(223,225,230,0.6)' }}>
-        <div className="flex items-center gap-2 rounded-[16px] px-3 py-2 bg-white border border-[#DFE1E6] max-w-3xl mx-auto">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSend()}
-            placeholder="Message Ahli AI"
-            className="flex-1 bg-transparent text-sm text-[#15161E] placeholder:text-[#A4ABB8] py-3 outline-none"
-          />
-          {inputValue.trim() ? (
-            <button
-              onClick={() => handleSend()}
-              className="w-8 h-8 rounded-full bg-[#9D63F6] flex items-center justify-center text-white active:scale-95 transition-all shadow-md"
-            >
-              <Send size={14} />
-            </button>
-          ) : (
-            <button onClick={() => handleSend('What can you help me with?')} className="text-[#A4ABB8] hover:text-[#666D80] transition-colors p-1">
-              <Mic size={18} />
-            </button>
-          )}
+      {/* ═══ PREMIUM INPUT BAR ═══ */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-4" style={{
+        background: 'linear-gradient(to top, rgba(240,236,255,0.98) 60%, rgba(240,236,255,0) 100%)',
+      }}>
+        <div className="max-w-lg mx-auto">
+          <div
+            className="flex items-center gap-2.5 rounded-full px-4 py-2 ahli-input-glow"
+            style={{
+              background: 'rgba(255,255,255,0.85)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+            }}
+          >
+            <Paperclip size={18} className="text-[#A4ABB8] shrink-0" />
+            <input
+              type="text"
+              value={inputValue}
+              onChange={e => setInputValue(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSend()}
+              placeholder="Ask me anything..."
+              className="flex-1 bg-transparent text-[14px] text-[#1E1E3A] placeholder:text-[#B4B4CC] py-2.5 outline-none"
+            />
+            {inputValue.trim() ? (
+              <button
+                onClick={() => handleSend()}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white active:scale-90 transition-all shrink-0"
+                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 3px 12px rgba(157,99,246,0.35)' }}
+              >
+                <Send size={15} />
+              </button>
+            ) : (
+              <button
+                onClick={() => handleSend('What can you help me with?')}
+                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 ahli-mic-pulse transition-all active:scale-90"
+                style={{ background: 'rgba(157,99,246,0.08)' }}
+              >
+                <Mic size={17} className="text-[#9D63F6]" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </AppShell>
+    </div>
   );
 }
 
