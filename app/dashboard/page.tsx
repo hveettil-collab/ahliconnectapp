@@ -13,7 +13,7 @@ import {
   Compass, Heart, Shield, GraduationCap, Gift, Zap,
   Plane, Users, UtensilsCrossed,
   Timer, Receipt, Award, X, ExternalLink,
-  CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight, MapPin,
+  CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight, MapPin, Footprints,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -189,6 +189,12 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Steps Counter */}
+            <Link href="/steps" className="flex items-center gap-1.5 px-3 py-2 rounded-full"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+              <Footprints size={13} className="text-[#40C4AA]" />
+              <span className="text-[12px] font-bold text-white">7,432</span>
+            </Link>
             {/* Reward Points */}
             <Link href="/offers" className="flex items-center gap-1.5 px-3 py-2 rounded-full"
               style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>

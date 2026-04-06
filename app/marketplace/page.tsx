@@ -6,6 +6,7 @@ import { MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
+import { useWallet } from '@/context/WalletContext';
 import {
   Search, X, Car, Home, Smartphone, Sofa, Plus,
   Sparkles, ArrowLeft, Heart, Share2, MessageCircle, Shield,
@@ -13,7 +14,7 @@ import {
   TrendingUp, Star, Clock, MapPin, BadgeCheck, Camera,
   Zap, Package, Filter, ChevronDown, ArrowUpDown,
   Mic, Scan, Bookmark, MoreHorizontal, PhoneCall,
-  ShieldCheck, Award, Truck, RefreshCw, CircleDot, Layers,
+  ShieldCheck, Award, Truck, RefreshCw, CircleDot, Layers, Wallet,
 } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
@@ -190,6 +191,10 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
   const [offerSent, setOfferSent] = useState(false);
   const [showSellerProfile, setShowSellerProfile] = useState(false);
   const [showCallSheet, setShowCallSheet] = useState(false);
+  const wallet = useWallet();
+  const [showBuyConfirm, setShowBuyConfirm] = useState(false);
+  const [buySuccess, setBuySuccess] = useState(false);
+  const [buyError, setBuyError] = useState(false);
   const [messages, setMessages] = useState<ChatMsg[]>([
     { id: '1', from: 'seller', text: `Hi! Thanks for your interest in the ${listing.title}. Feel free to ask me anything.`, time: '2:30 PM' },
   ]);
@@ -220,6 +225,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
   };
 
   const cc = conditionColor(listing.condition);
+  const numericPrice = parseFloat(listing.price.replace(/[^0-9.]/g, ''));
 
   return (
     <div className="fixed inset-0 z-50 bg-[#FAFAF8] flex flex-col">
@@ -550,18 +556,103 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
         </div>
       )}
 
+      {/* ── Buy Confirm overlay ── */}
+      {showBuyConfirm && (
+        <div className="absolute inset-0 z-30 flex items-end" onClick={() => { setShowBuyConfirm(false); setBuyError(false); }}>
+          <div className="absolute inset-0 bg-black/40" />
+          <div className="relative w-full bg-white rounded-t-[28px] px-5 py-5 space-y-5 slide-up max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="w-10 h-1 rounded-full bg-[#DFE1E6] mx-auto" />
+            <div className="flex items-center justify-between">
+              <h3 className="text-[17px] font-bold text-[#15161E]">{buySuccess ? 'Purchase Complete!' : 'Confirm Purchase'}</h3>
+              <button onClick={() => { setShowBuyConfirm(false); setBuySuccess(false); setBuyError(false); }} className="w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center"><X size={16} className="text-[#666D80]" /></button>
+            </div>
+
+            {buySuccess ? (
+              <div className="text-center py-4 space-y-3">
+                <div className="w-16 h-16 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto">
+                  <ShieldCheck size={28} className="text-[#059669]" />
+                </div>
+                <p className="text-[15px] font-bold text-[#15161E]">Payment Successful</p>
+                <p className="text-[13px] text-[#666D80]">AED {numericPrice.toLocaleString()} has been deducted from your wallet.</p>
+                <p className="text-[12px] text-[#9D63F6] font-semibold">+{Math.floor(numericPrice / 10)} reward points earned!</p>
+                <button onClick={() => { setShowBuyConfirm(false); setBuySuccess(false); onClose(); }} className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white bg-[#059669] active:scale-[0.98] transition-all mt-2">
+                  Done
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 p-3 rounded-[16px] bg-[#F8F9FB]">
+                  <img src={listing.image} alt="" className="w-12 h-12 rounded-[12px] object-cover shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-semibold text-[#15161E] truncate">{listing.title}</p>
+                    <p className="text-[13px] font-bold text-[#9D63F6]">{listing.price}</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-[16px] bg-[#F8F9FB] border border-[#DFE1E6]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[12px] text-[#666D80]">Wallet Balance</span>
+                    <span className="text-[14px] font-bold text-[#15161E]">AED {wallet.balance.toLocaleString()}</span>
+                  </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[12px] text-[#666D80]">Item Price</span>
+                    <span className="text-[14px] font-bold text-[#DF1C41]">- AED {numericPrice.toLocaleString()}</span>
+                  </div>
+                  <div className="border-t border-[#DFE1E6] pt-2 mt-2 flex items-center justify-between">
+                    <span className="text-[12px] font-semibold text-[#666D80]">Remaining</span>
+                    <span className={`text-[14px] font-bold ${wallet.balance >= numericPrice ? 'text-[#059669]' : 'text-[#DF1C41]'}`}>
+                      AED {(wallet.balance - numericPrice).toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+
+                {buyError && (
+                  <div className="p-3 rounded-[14px] bg-[#FEF2F2] border border-[#FECACA] text-center">
+                    <p className="text-[12px] font-semibold text-[#DC2626]">Insufficient balance. Please fund your wallet first.</p>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 text-[11px] text-[#A4ABB8]">
+                  <Shield size={12} className="shrink-0" />
+                  <span>Secure payment via Ahli Wallet · Earn {Math.floor(numericPrice / 10)} points</span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    const success = wallet.makePayment(numericPrice, `Marketplace: ${listing.title}`);
+                    if (success) {
+                      setBuySuccess(true);
+                      setBuyError(false);
+                    } else {
+                      setBuyError(true);
+                    }
+                  }}
+                  className="w-full py-3.5 rounded-[16px] text-[14px] font-bold text-white active:scale-[0.98] transition-all"
+                  style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+                  <Wallet size={15} className="inline mr-1.5" /> Pay AED {numericPrice.toLocaleString()}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ── Sticky bottom CTA — glassmorphism ── */}
-      {!showChat && !showOffer && !showSellerProfile && !showCallSheet && (
+      {!showChat && !showOffer && !showSellerProfile && !showCallSheet && !showBuyConfirm && (
         <div className="shrink-0 px-4 py-3 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
-          <div className="flex gap-2.5">
+          <div className="flex gap-2">
             <button onClick={() => setShowChat(true)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[13px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
-              <MessageCircle size={15} /> Chat
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
+              <MessageCircle size={14} /> Chat
             </button>
             <button onClick={() => setShowOffer(true)}
-              className="flex-[1.3] flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
-              <Tag size={15} /> Make Offer
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
+              <Tag size={14} /> Offer
+            </button>
+            <button onClick={() => setShowBuyConfirm(true)}
+              className="flex-[1.4] flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
+              <Wallet size={14} /> Buy Now
             </button>
           </div>
         </div>
