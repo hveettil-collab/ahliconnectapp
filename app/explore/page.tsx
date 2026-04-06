@@ -235,7 +235,7 @@ const PARTNERS = [
    EVENT DETAIL MODAL
    ═══════════════════════════════════════════ */
 
-function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: () => void }) {
+function EventDetailModal({ event, onClose, onRegister }: { event: CompanyEvent; onClose: () => void; onRegister?: () => void }) {
   const [registered, setRegistered] = useState(false);
   const [showInvite, setShowInvite] = useState(false);
   const [inviteSent, setInviteSent] = useState<string[]>([]);
@@ -342,7 +342,7 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
           )}
           <div className="space-y-2 pb-4">
             {!registered ? (
-              <button onClick={() => setRegistered(true)} className="w-full py-3 rounded-[14px] text-sm font-bold text-white transition-all active:scale-[0.98]" style={{ background: event.color }}>
+              <button onClick={() => { if (onRegister) { onRegister(); } else { setRegistered(true); } }} className="w-full py-3 rounded-[14px] text-sm font-bold text-white transition-all active:scale-[0.98]" style={{ background: event.color }}>
                 Register for this Event
               </button>
             ) : (
@@ -371,7 +371,7 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
    BENTO DETAIL MODAL
    ═══════════════════════════════════════════ */
 
-function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => void }) {
+function BentoDetailModal({ item, onClose, onRegister }: { item: BentoItem; onClose: () => void; onRegister?: () => void }) {
   const [actionTaken, setActionTaken] = useState(false);
   const Icon = item.icon;
 
@@ -420,11 +420,11 @@ function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => v
           {/* CTA */}
           <div className="space-y-2 pb-4">
             {!actionTaken ? (
-              <Link href={item.detail.ctaHref} onClick={() => { setActionTaken(true); onClose(); }}
+              <button onClick={() => { if (onRegister) { onRegister(); } else { setActionTaken(true); } }}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98]"
                 style={{ background: item.accent }}>
                 {item.detail.cta} <ArrowRight size={15} />
-              </Link>
+              </button>
             ) : (
               <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-[14px] px-4 py-3">
                 <CheckCircle2 size={18} className="text-green-600 shrink-0" />
@@ -436,6 +436,152 @@ function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => v
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   REGISTRATION MODAL — Auto-fill form
+   ═══════════════════════════════════════════ */
+
+interface RegistrationInfo {
+  title: string;
+  subtitle: string;
+  date: string;
+  location: string;
+  color: string;
+  image: string;
+  type: 'event' | 'hackathon' | 'wellness' | 'course' | 'general';
+}
+
+function RegistrationModal({ info, user, onClose }: { info: RegistrationInfo; user: { name: string; email: string; company: string; title: string; department: string; employeeId: string }; onClose: () => void }) {
+  const [step, setStep] = useState<'form' | 'confirmed'>('form');
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="relative h-36 overflow-hidden rounded-t-[28px]">
+          <img src={info.image} alt={info.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/20" />
+          <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+            <X size={16} className="text-white" />
+          </button>
+          <div className="absolute bottom-3 left-4 right-4">
+            <span className="text-[9px] font-bold text-white/70 uppercase tracking-wider">{info.type === 'hackathon' ? 'Hackathon Registration' : info.type === 'wellness' ? 'Wellness Registration' : info.type === 'course' ? 'Course Enrollment' : 'Event Registration'}</span>
+            <h2 className="text-[16px] font-bold text-white leading-snug mt-0.5">{info.title}</h2>
+          </div>
+        </div>
+
+        {step === 'form' ? (
+          <div className="p-5 space-y-4">
+            {/* Event info pills */}
+            <div className="flex flex-wrap gap-2">
+              {info.date && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]">
+                  <Calendar size={12} className="text-[#666D80]" />
+                  <span className="text-[10px] font-semibold text-[#15161E]">{info.date}</span>
+                </div>
+              )}
+              {info.location && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]">
+                  <MapPin size={12} className="text-[#666D80]" />
+                  <span className="text-[10px] font-semibold text-[#15161E]">{info.location}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Auto-filled form */}
+            <div className="space-y-3">
+              <p className="text-[12px] font-bold text-[#15161E]">Your Details</p>
+              {[
+                { label: 'Full Name', value: user.name },
+                { label: 'Email', value: user.email },
+                { label: 'Company', value: user.company },
+                { label: 'Job Title', value: user.title },
+                { label: 'Department', value: user.department },
+                { label: 'Employee ID', value: user.employeeId },
+              ].map(field => (
+                <div key={field.label}>
+                  <label className="text-[9px] font-semibold text-[#A4ABB8] uppercase tracking-wider">{field.label}</label>
+                  <div className="mt-1 px-3.5 py-2.5 rounded-[12px] bg-[#F8F9FB] border border-[#DFE1E6] flex items-center justify-between">
+                    <span className="text-[12px] text-[#15161E] font-medium">{field.value}</span>
+                    <CheckCircle2 size={14} className="text-green-500 shrink-0" />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Submit */}
+            <div className="space-y-2 pt-2 pb-4">
+              <button onClick={() => setStep('confirmed')}
+                className="w-full py-3.5 rounded-[14px] text-[13px] font-bold text-white transition-all active:scale-[0.98]"
+                style={{ background: info.color }}>
+                {info.type === 'hackathon' ? 'Join Hackathon' : info.type === 'course' ? 'Enroll Now' : 'Register Now'}
+              </button>
+              <p className="text-[9px] text-center text-[#A4ABB8]">Your details are auto-filled from your Ahli Connect profile</p>
+            </div>
+          </div>
+        ) : (
+          <div className="p-5 pb-8 text-center space-y-4">
+            {/* Success state */}
+            <div className="w-16 h-16 mx-auto rounded-full flex items-center justify-center mt-2" style={{ background: info.color + '15' }}>
+              <CheckCircle2 size={36} style={{ color: info.color }} />
+            </div>
+            <div>
+              <h3 className="text-[18px] font-bold text-[#15161E]">You&apos;re In!</h3>
+              <p className="text-[13px] text-[#666D80] mt-1.5 leading-relaxed">
+                {info.type === 'hackathon'
+                  ? 'Welcome to the hackathon! Team formation details will be shared soon.'
+                  : info.type === 'wellness'
+                  ? 'You\'re registered for Wellness Week. See you there!'
+                  : info.type === 'course'
+                  ? 'You\'re enrolled! Course access will be granted shortly.'
+                  : 'You\'re all set for this event!'}
+              </p>
+            </div>
+
+            <div className="bg-[#F8F9FB] rounded-[16px] border border-[#DFE1E6] p-4 text-left space-y-2.5">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: info.color + '15' }}>
+                  <Calendar size={15} style={{ color: info.color }} />
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#A4ABB8]">When</p>
+                  <p className="text-[12px] font-semibold text-[#15161E]">{info.date || 'TBA'}</p>
+                </div>
+              </div>
+              {info.location && (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: info.color + '15' }}>
+                    <MapPin size={15} style={{ color: info.color }} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-[#A4ABB8]">Where</p>
+                    <p className="text-[12px] font-semibold text-[#15161E]">{info.location}</p>
+                  </div>
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-[10px] flex items-center justify-center bg-green-50">
+                  <Send size={15} className="text-green-600" />
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#A4ABB8]">Confirmation</p>
+                  <p className="text-[12px] font-semibold text-[#15161E]">Sent to {user.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <button onClick={onClose}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white transition-all active:scale-[0.98]"
+              style={{ background: info.color }}>
+              Done
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -458,7 +604,7 @@ interface GenericDetailItem {
   ctaHref?: string;
 }
 
-function ItemDetailModal({ item, onClose }: { item: GenericDetailItem; onClose: () => void }) {
+function ItemDetailModal({ item, onClose, onRegister }: { item: GenericDetailItem; onClose: () => void; onRegister?: () => void }) {
   const [actionTaken, setActionTaken] = useState(false);
   const Icon = item.icon;
 
@@ -513,7 +659,7 @@ function ItemDetailModal({ item, onClose }: { item: GenericDetailItem; onClose: 
 
           <div className="space-y-2 pb-4">
             {!actionTaken ? (
-              <button onClick={() => setActionTaken(true)}
+              <button onClick={() => { if (onRegister) { onRegister(); } else { setActionTaken(true); } }}
                 className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[14px] text-sm font-bold text-white transition-all active:scale-[0.98]"
                 style={{ background: item.color }}>
                 {item.cta || 'Interested'} <ArrowRight size={15} />
@@ -793,8 +939,9 @@ export default function ExplorePage() {
   const [selectedItem, setSelectedItem] = useState<GenericDetailItem | null>(null);
   const [heroIdx, setHeroIdx] = useState(0);
   const [showMap, setShowMap] = useState(false);
+  const [showRegistration, setShowRegistration] = useState<RegistrationInfo | null>(null);
 
-  useBodyScrollLock(!!selectedEvent || !!selectedBento || !!selectedItem || showMap);
+  useBodyScrollLock(!!selectedEvent || !!selectedBento || !!selectedItem || showMap || !!showRegistration);
 
   if (!user) return null;
 
@@ -1208,7 +1355,15 @@ export default function ExplorePage() {
                   <h3 className="text-[18px] font-bold text-white leading-snug mb-1">{hero.title}</h3>
                   <p className="text-[12px] text-white/75 mb-3 leading-relaxed">{hero.subtitle}</p>
                   <div className="flex items-center justify-between">
-                    <button className="px-5 py-2.5 rounded-full text-[12px] font-bold text-[#15161E] bg-white active:scale-95 transition-transform">{hero.cta}</button>
+                    <button onClick={() => setShowRegistration({
+                      title: hero.title,
+                      subtitle: hero.subtitle,
+                      date: hero.countdown,
+                      location: heroIdx === 0 ? 'PureHealth HQ' : 'IHC Tower, Abu Dhabi',
+                      color: hero.tagColor,
+                      image: hero.image,
+                      type: heroIdx === 0 ? 'wellness' : 'hackathon',
+                    })} className="px-5 py-2.5 rounded-full text-[12px] font-bold text-[#15161E] bg-white active:scale-95 transition-transform">{hero.cta}</button>
                     <span className="text-[10px] text-white/50 font-medium">{hero.spots}</span>
                   </div>
                 </div>
@@ -1465,9 +1620,44 @@ export default function ExplorePage() {
 
       </div>
 
-      {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
-      {selectedBento && <BentoDetailModal item={selectedBento} onClose={() => setSelectedBento(null)} />}
-      {selectedItem && <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
+      {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} onRegister={() => {
+        const evtType = selectedEvent.category === 'Hackathon' ? 'hackathon' : selectedEvent.category === 'Wellness' ? 'wellness' : selectedEvent.category === 'Training' ? 'course' : 'event';
+        setShowRegistration({
+          title: selectedEvent.title,
+          subtitle: selectedEvent.description,
+          date: selectedEvent.date,
+          location: selectedEvent.location,
+          color: selectedEvent.color,
+          image: selectedEvent.image,
+          type: evtType,
+        });
+        setSelectedEvent(null);
+      }} />}
+      {selectedBento && <BentoDetailModal item={selectedBento} onClose={() => setSelectedBento(null)} onRegister={() => {
+        setShowRegistration({
+          title: selectedBento.detail.title,
+          subtitle: selectedBento.detail.subtitle,
+          date: '',
+          location: '',
+          color: selectedBento.accent,
+          image: selectedBento.image,
+          type: 'general',
+        });
+        setSelectedBento(null);
+      }} />}
+      {selectedItem && <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} onRegister={() => {
+        setShowRegistration({
+          title: selectedItem.title,
+          subtitle: selectedItem.desc,
+          date: selectedItem.highlights?.find(h => h.label === 'Date' || h.label === 'When')?.value || '',
+          location: selectedItem.highlights?.find(h => h.label === 'Location' || h.label === 'Where')?.value || '',
+          color: selectedItem.color,
+          image: selectedItem.image,
+          type: 'general',
+        });
+        setSelectedItem(null);
+      }} />}
+      {showRegistration && user && <RegistrationModal info={showRegistration} user={{ name: user.name, email: user.email, company: COMPANIES.find(c => c.id === user.companyId)?.name || '', title: user.title, department: user.department, employeeId: user.employeeId }} onClose={() => setShowRegistration(null)} />}
     </AppShell>
   );
 }
