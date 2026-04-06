@@ -317,7 +317,7 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary Certificate',
-              lottie: '/lottie-salary.lottie',
+              lottie: '/lottie-salary-v2.lottie',
               gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
               statLabel: 'avg. time',
