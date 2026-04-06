@@ -38,7 +38,7 @@ export default function InsurancePage() {
         .slide-up { animation: slide-up 0.35s cubic-bezier(0.23,1,0.32,1); }
       `}</style>
 
-      <div style={{ touchAction: 'pan-y pinch-zoom', overscrollBehavior: 'none' }}>
+      <div style={{ overscrollBehaviorX: 'none' }}>
         {/* Hero header */}
         <div className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 40%, #065F46 70%, #F8F9FB 100%)', minHeight: 180 }}>
           <div className="relative z-20 flex items-center px-5 pt-5">

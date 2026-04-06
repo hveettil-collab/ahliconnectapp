@@ -47,7 +47,7 @@ export default function WalletPage() {
         .check-pop { animation: check-pop 0.4s cubic-bezier(0.16,1,0.3,1) 0.2s both; }
       `}</style>
 
-      <div style={{ touchAction: 'pan-y pinch-zoom', overscrollBehavior: 'none' }}>
+      <div style={{ overscrollBehaviorX: 'none' }}>
         {/* Hero */}
         <div className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #9D63F6 0%, #7C3AED 40%, #6D28D9 70%, #F8F9FB 100%)', minHeight: 280 }}>
           <div className="relative z-20 flex items-center px-5 pt-5">

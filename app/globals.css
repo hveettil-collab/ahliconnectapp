@@ -11,21 +11,18 @@ html, body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
-  overscroll-behavior: none;
-  overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
   -webkit-overflow-scrolling: touch;
-  touch-action: pan-y pinch-zoom;
 }
 
 /* Lock all main containers to vertical-only scroll */
 .h-screen-safe {
   overflow-x: hidden;
-  touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ── Mobile touch performance ── */
-a, button, [role="button"], input, textarea, select {
-  touch-action: manipulation;
+a, button, [role="button"] {
   -webkit-tap-highlight-color: transparent;
 }
 

@@ -41,7 +41,7 @@ export default function StepsPage() {
 
   return (
     <AppShell title="Steps" subtitle="" hideTopBar>
-      <div style={{ touchAction: 'pan-y pinch-zoom', overscrollBehavior: 'none' }}>
+      <div style={{ overscrollBehaviorX: 'none' }}>
         {/* Hero gradient header */}
         <div className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #059669 0%, #047857 30%, #065F46 60%, #F8F9FB 100%)', minHeight: 420 }}>
           {/* Back button */}

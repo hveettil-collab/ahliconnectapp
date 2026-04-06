@@ -1902,7 +1902,7 @@ function ServicesPageContent() {
   /* ── Chat mode ── */
   if (messages.length > 0) {
     return (
-      <div className="flex flex-col h-screen-safe bg-[#F8F9FB] overflow-x-hidden" style={{ overscrollBehavior: 'none', touchAction: 'pan-y pinch-zoom' }}>
+      <div className="flex flex-col h-screen-safe bg-[#F8F9FB] overflow-x-hidden" style={{ overscrollBehaviorX: 'none' }}>
         {/* Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 shrink-0 z-10 bg-white" style={{ borderBottom: '1px solid #DFE1E6' }}>
           <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
@@ -1920,7 +1920,7 @@ function ServicesPageContent() {
         </div>
 
         {/* Scrollable messages area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden" style={{ touchAction: 'pan-y pinch-zoom' }}>
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="px-3 md:px-6 py-4 space-y-3 max-w-4xl mx-auto w-full pb-4">
           {messages.map((msg) => (
             <div key={msg.id} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -2054,7 +2054,7 @@ function ServicesPageContent() {
      WELCOME STATE — Premium AI Assistant Experience
      ══════════════════════════════════════════════════ */
   return (
-    <div className="flex flex-col h-screen-safe relative overflow-hidden" style={{ overscrollBehavior: 'none', touchAction: 'pan-y pinch-zoom' }}>
+    <div className="flex flex-col h-screen-safe relative overflow-hidden" style={{ overscrollBehaviorX: 'none' }}>
 
       {/* ── Full-page pastel gradient background ── */}
       <div className="absolute inset-0 z-0" style={{
@@ -2078,7 +2078,7 @@ function ServicesPageContent() {
       </div>
 
       {/* ═══ SCROLLABLE MAIN CONTENT ═══ */}
-      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden" style={{ touchAction: 'pan-y pinch-zoom' }}>
+      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden">
         <div className="flex flex-col items-center max-w-lg mx-auto px-5 pb-4">
 
           {/* ═══ GREETING ═══ */}
