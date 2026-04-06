@@ -642,7 +642,13 @@ export default function DashboardPage() {
         {/* ══════════════════════════════════════════
             THE LATEST — 4-SLIDE AUTO-SCROLL CAROUSEL
             ══════════════════════════════════════════ */}
-        <LatestCarousel offers={relevantOffers} onSlideClick={(slide) => setShowCarouselDetail(slide)} />
+        <LatestCarousel offers={relevantOffers} onSlideClick={(slide) => {
+          if (slide === 'news') {
+            router.push(`/news?id=${topNews.id}`);
+          } else {
+            setShowCarouselDetail(slide);
+          }
+        }} />
 
         {/* ── Communities ── */}
         <div>
@@ -1000,46 +1006,6 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     )}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {/* ── News Detail ── */}
-            {showCarouselDetail === 'news' && (
-              <>
-                <div className="relative h-52 overflow-hidden rounded-t-[28px]">
-                  <img src={topNews.image} alt={topNews.title} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <ArrowLeft size={18} className="text-white" />
-                  </button>
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <X size={16} className="text-white" />
-                  </button>
-                  <div className="absolute top-14 left-4 flex items-center gap-2">
-                    {topNews.tags.map((tag: string) => (
-                      <span key={tag} className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-[#9D63F6]">{tag}</span>
-                    ))}
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h2 className="text-lg font-bold text-white leading-snug">{topNews.title}</h2>
-                  </div>
-                </div>
-                <div className="p-5 space-y-4">
-                  <div className="flex items-center gap-4 text-[11px] text-[#A4ABB8]">
-                    <span className="flex items-center gap-1"><Calendar size={11} /> {topNews.date}</span>
-                    <span className="flex items-center gap-1"><Clock size={11} /> {topNews.readTime}</span>
-                    <span className="flex items-center gap-1"><Building2 size={11} /> {topNews.author}</span>
-                  </div>
-                  <div className="bg-white rounded-[14px] border border-[#DFE1E6] p-4">
-                    <p className="text-[13px] text-[#666D80] leading-relaxed">{topNews.summary}</p>
-                  </div>
-                  <div className="space-y-2 pb-4">
-                    <Link href="/explore" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#9D63F6]">
-                      View All Announcements <ArrowRight size={15} />
-                    </Link>
-                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
                   </div>
                 </div>
               </>

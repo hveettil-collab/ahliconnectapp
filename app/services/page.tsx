@@ -1788,6 +1788,149 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     };
   }
 
+  /* ═══════════════════════════════════════════
+     EXPLORE PAGE DATA — Trending, Wellness,
+     Offers by category, Learning, Sports
+     ═══════════════════════════════════════════ */
+
+  /* ── Trending / What's popular ── */
+  if (t.includes('trending') || t.includes('what\'s hot') || t.includes('whats hot') || t.includes('popular') || t.includes('what\'s trending') || t.includes('whats trending') || t.includes('most popular')) {
+    return {
+      content: `Here's what's **trending** across Ahli Connect right now, ${userName}:\n\n1. **IHC Group Hackathon 2026** — Innovation · 2.4K engaged\n2. **Palms Sports Corporate** — Sports · 1.8K engaged\n3. **FIFA Tournament Season 3** — Gaming · 3.1K engaged\n4. **AI-Powered Expense Claims** — New Feature · 1.2K engaged\n5. **Yas Island Employee Pass** — Leisure · 2.8K engaged\n\nThese are the top items our employees are buzzing about. Tap below to explore more!`,
+      cards: [
+        { type: 'action', icon: Sparkles, title: 'IHC Hackathon 2026', subtitle: 'Innovation · 2.4K engaged · Register now', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Heart, title: 'Palms Sports Corporate', subtitle: 'Sports · 1.8K engaged', color: '#40C4AA', link: '/explore' },
+        { type: 'action', icon: Gamepad2, title: 'FIFA Tournament S3', subtitle: 'Gaming · 3.1K engaged', color: '#DC2626', action: 'Tell me about FIFA tournament' },
+        { type: 'action', icon: Zap, title: 'AI Expense Claims', subtitle: 'New Feature · Try it now', color: '#FFBD4C', link: '/automations/expense-claim' },
+        { type: 'action', icon: Ticket, title: 'Yas Island Pass', subtitle: 'Leisure · 40% off · 2.8K engaged', color: '#54B6ED', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Wellness ── */
+  if (t.includes('wellness') || t.includes('mental health') || t.includes('yoga') || t.includes('meditation') || t.includes('nutrition') || t.includes('health screening') || t.includes('well-being') || t.includes('wellbeing') || (t.includes('health') && !t.includes('insurance') && !t.includes('benefit'))) {
+    return {
+      content: `Here's what's available in the **Wellness** section, ${userName}:\n\n1. **Wellness Week 2026** — Apr 8-12 · IHC HQ · Health screenings, fitness assessments, mindfulness sessions · 200 spots remaining\n2. **Mental Health Support** — Confidential counseling · 6 free sessions/year for all IHC employees\n3. **Palms Sports Gym** — Corporate rate AED 150/month · 8 locations across Abu Dhabi\n4. **Nutrition Consultation** — Free 30-min session with certified nutritionist · Daman network\n5. **Yoga & Meditation** — Every Tue & Thu 7AM · IHC Tower Rooftop · Free for employees\n\nYour health matters — tap any item below for details or to register!`,
+      cards: [
+        { type: 'action', icon: Heart, title: 'Wellness Week 2026', subtitle: 'Apr 8-12 · 200 spots left · Register now', color: '#40C4AA', link: '/explore' },
+        { type: 'info', icon: Shield, title: 'Mental Health Support', subtitle: '6 free sessions/year · Confidential', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Heart, title: 'Palms Sports Gym', subtitle: 'AED 150/mo · 60% off · 8 locations', color: '#EA580C', action: 'I want to activate my Palms Sports membership' },
+        { type: 'info', icon: Star, title: 'Nutrition Consultation', subtitle: 'Free 30-min · Daman network', color: '#FFBD4C', link: '/explore' },
+        { type: 'info', icon: Calendar, title: 'Yoga & Meditation', subtitle: 'Tue & Thu 7AM · IHC Tower Rooftop', color: '#059669', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Explore Offers — Food / Dining / Healthcare / Fitness / Leisure / Electronics ── */
+  if ((t.includes('offer') || t.includes('discount') || t.includes('deal')) && (t.includes('food') || t.includes('dining') || t.includes('restaurant'))) {
+    return {
+      content: `Here are the latest **food & dining offers** for IHC employees, ${userName}:\n\n1. **Dining — 25% Off** — Premium restaurants across Abu Dhabi · 1,240 redeemed\n2. **Free Daily Coffee** — 1 free coffee/day at Starbucks, %Arabica, Tim Hortons · 3,100 redeemed\n\nThese are exclusive IHC employee perks — just show your Ahli Connect QR at checkout!`,
+      cards: [
+        { type: 'offer', icon: Gift, title: 'Dining 25% Off', subtitle: 'Premium restaurants · Abu Dhabi', color: '#EA580C', link: '/explore' },
+        { type: 'offer', icon: Coffee, title: 'Free Daily Coffee', subtitle: 'Starbucks, %Arabica, Tim Hortons', color: '#92400E', link: '/explore' },
+        { type: 'action', icon: Tag, title: 'View All Offers', subtitle: 'Browse all employee deals', color: '#9D63F6', link: '/explore' },
+      ]
+    };
+  }
+
+  if ((t.includes('offer') || t.includes('discount') || t.includes('deal')) && (t.includes('healthcare') || t.includes('health care') || t.includes('medical') || t.includes('daman'))) {
+    return {
+      content: `Here are the **healthcare-related offers** available to you, ${userName}:\n\n1. **Car Insurance — 30% Off** via Shory (also covers health top-ups)\n2. **Nutrition Consultation** — Free 30-min with certified nutritionist\n3. **Mental Health Support** — 6 free counseling sessions/year\n4. **Wellness Week 2026** — Free health screenings Apr 8-12\n\nYour Daman Enhanced medical plan covers most consultations and treatments.`,
+      cards: [
+        { type: 'action', icon: Shield, title: 'Shory Insurance 30% Off', subtitle: 'Car, Home, Pet & Health coverage', color: '#0D9488', action: 'I need insurance' },
+        { type: 'info', icon: Heart, title: 'Wellness Programs', subtitle: 'Nutrition, mental health & more', color: '#40C4AA', link: '/explore' },
+        { type: 'info', icon: Star, title: 'Daman Medical Coverage', subtitle: 'Enhanced family plan', color: '#DC2626', action: 'Tell me about my medical insurance details' },
+      ]
+    };
+  }
+
+  if ((t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('latest')) && (t.includes('fitness') || t.includes('gym') || t.includes('exercise') || t.includes('sport'))) {
+    return {
+      content: `Here are the **fitness & sports offers** for IHC employees, ${userName}:\n\n1. **Palms Sports Gym** — AED 150/month (60% off) · 8 locations\n2. **Yas Island Employee Pass** — 40% off Ferrari World, Yas Waterworld, Warner Bros\n3. **Sports Day** — Annual IHC sports event with 15+ activities\n4. **FIFA Tournament S3** — Gaming tournament · Registration open\n\nStay fit with your corporate discounts!`,
+      cards: [
+        { type: 'action', icon: Heart, title: 'Palms Sports Corporate', subtitle: 'AED 150/mo · 60% off · 8 locations', color: '#EA580C', action: 'I want to activate my Palms Sports membership' },
+        { type: 'action', icon: Ticket, title: 'Yas Island 40% Off', subtitle: 'Ferrari World, Waterworld & more', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Trophy, title: 'Sports Tournaments', subtitle: 'FIFA, Padel, Basketball & more', color: '#40C4AA', link: '/explore' },
+      ]
+    };
+  }
+
+  if ((t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('latest')) && (t.includes('travel') || t.includes('etihad') || t.includes('fly') || t.includes('airline'))) {
+    return {
+      content: `Here are the **travel offers** for IHC employees, ${userName}:\n\n1. **Etihad Airways — 50% Off** — Business & Economy class · Corporate booking portal · 890 redeemed\n2. **Emirates — 10% Off** — Select routes from Abu Dhabi\n3. **Yas Island — 40% Off** — Theme parks + hotel packages\n\nBook through Ahli Connect for automatic employee discounts!`,
+      cards: [
+        { type: 'offer', icon: Plane, title: 'Etihad 50% Off', subtitle: 'Business & Economy · 890 redeemed', color: '#54B6ED', action: 'I want to book a flight' },
+        { type: 'offer', icon: Ticket, title: 'Yas Island 40% Off', subtitle: 'Theme parks · Valid for 4 people', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Tag, title: 'View All Travel Deals', subtitle: 'Flights, hotels & leisure', color: '#FFBD4C', link: '/explore' },
+      ]
+    };
+  }
+
+  if ((t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('latest')) && (t.includes('electronic') || t.includes('tech') || t.includes('gadget') || t.includes('device'))) {
+    return {
+      content: `Here are the **electronics offers** for IHC employees, ${userName}:\n\n1. **Electronics — 20% Off** — Sharaf DG, Virgin Megastore · Laptops, phones, accessories · 567 redeemed\n\nUse your Ahli Connect QR code at checkout or shop online with your corporate code!`,
+      cards: [
+        { type: 'offer', icon: Monitor, title: 'Electronics 20% Off', subtitle: 'Sharaf DG, Virgin Megastore · 567 redeemed', color: '#7C3AED', link: '/explore' },
+        { type: 'action', icon: Tag, title: 'View All Offers', subtitle: 'Browse all employee deals', color: '#9D63F6', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Latest offers (generic "latest offers" without specific category) ── */
+  if (t.includes('latest offer') || t.includes('new offer') || t.includes('recent offer') || t.includes('all offer') || t.includes('show offer') || t.includes('available offer')) {
+    return {
+      content: `Here are all the **latest offers** on Ahli Connect, ${userName}:\n\n1. **Yas Island — 40% Off** — Ferrari World, Waterworld, Warner Bros · Leisure\n2. **Dining — 25% Off** — Premium restaurants across Abu Dhabi\n3. **Free Daily Coffee** — Starbucks, %Arabica, Tim Hortons · 1 free/day\n4. **Etihad Airways — 50% Off** — Business & Economy class\n5. **Car Insurance — 30% Off** — Shory digital insurance platform\n6. **Electronics — 20% Off** — Sharaf DG, Virgin Megastore\n\nAll offers apply automatically with your Ahli Connect employee ID!`,
+      cards: [
+        { type: 'offer', icon: Ticket, title: 'Yas Island 40% Off', subtitle: 'Leisure · Theme parks for 4 people', color: '#9D63F6', link: '/explore' },
+        { type: 'offer', icon: Gift, title: 'Dining 25% Off', subtitle: 'Premium restaurants · Abu Dhabi', color: '#EA580C', link: '/explore' },
+        { type: 'offer', icon: Coffee, title: 'Free Daily Coffee', subtitle: 'Starbucks, %Arabica, Tim Hortons', color: '#92400E', link: '/explore' },
+        { type: 'offer', icon: Plane, title: 'Etihad 50% Off', subtitle: 'Business & Economy · 890 redeemed', color: '#54B6ED', link: '/explore' },
+        { type: 'offer', icon: Shield, title: 'Car Insurance 30% Off', subtitle: 'Shory · IHC employee discount', color: '#0D9488', link: '/explore' },
+        { type: 'offer', icon: Monitor, title: 'Electronics 20% Off', subtitle: 'Sharaf DG & Virgin Megastore', color: '#7C3AED', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Learning / Courses from Explore ── */
+  if ((t.includes('latest') || t.includes('available') || t.includes('what') || t.includes('show') || t.includes('list')) && (t.includes('course') || t.includes('learning') || t.includes('training') || t.includes('study') || t.includes('certification'))) {
+    return {
+      content: `Here are the **latest courses** available on Ahli Connect, ${userName}:\n\n1. **AI & Automation** — IHC Academy · 8 hours · Beginner-friendly\n2. **Leadership Excellence** — LinkedIn Learning · 12 hours · Intermediate\n3. **Financial Planning** — Coursera · 6 hours · All levels\n4. **Project Management Pro** — IHC Academy · 10 hours · Advanced\n\nAll courses are free under your **AED 15,000/year education benefit** (AED 9,800 remaining). Certificates included!`,
+      cards: [
+        { type: 'action', icon: GraduationCap, title: 'AI & Automation', subtitle: 'IHC Academy · 8 hrs · Beginner', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: GraduationCap, title: 'Leadership Excellence', subtitle: 'LinkedIn Learning · 12 hrs · Intermediate', color: '#40C4AA', link: '/explore' },
+        { type: 'action', icon: GraduationCap, title: 'Financial Planning', subtitle: 'Coursera · 6 hrs · All levels', color: '#FFBD4C', link: '/explore' },
+        { type: 'action', icon: GraduationCap, title: 'Project Management Pro', subtitle: 'IHC Academy · 10 hrs · Advanced', color: '#54B6ED', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Sports Tournaments from Explore ── */
+  if ((t.includes('latest') || t.includes('available') || t.includes('what') || t.includes('show') || t.includes('list') || t.includes('upcoming')) && (t.includes('sport') || t.includes('tournament') || t.includes('padel') || t.includes('basketball') || t.includes('swimming'))) {
+    return {
+      content: `Here are the **sports tournaments** happening on Ahli Connect, ${userName}:\n\n1. **FIFA League Season 3** — eSports · Round 2 in progress · 32 players\n2. **Padel Cup 2026** — Registration open · 24 teams · Apr 15-20\n3. **Basketball 3v3** — Registration open · 16 teams · Apr 22\n4. **Swimming Relay Championship** — Coming soon · May 5\n\nRegister through the Explore page to secure your spot!`,
+      cards: [
+        { type: 'action', icon: Gamepad2, title: 'FIFA League S3', subtitle: 'eSports · Round 2 · 32 players', color: '#DC2626', link: '/explore' },
+        { type: 'action', icon: Trophy, title: 'Padel Cup 2026', subtitle: 'Registration open · 24 teams', color: '#40C4AA', link: '/explore' },
+        { type: 'action', icon: Trophy, title: 'Basketball 3v3', subtitle: 'Registration open · 16 teams', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Trophy, title: 'Swimming Relay', subtitle: 'Coming soon · May 5', color: '#54B6ED', link: '/explore' },
+      ]
+    };
+  }
+
+  /* ── Lifestyle / Bento categories from Explore ── */
+  if (t.includes('lifestyle') || (t.includes('what') && t.includes('available') && !t.includes('offer') && !t.includes('course'))) {
+    return {
+      content: `Here's everything in the **Lifestyle** section on Explore, ${userName}:\n\n• **Dining** — Restaurant discounts, daily coffee, food delivery\n• **Healthcare** — Daman coverage, wellness programs, mental health\n• **Fitness** — Palms Sports gym, yoga, sports events\n• **Leisure** — Yas Island passes, entertainment, travel deals\n• **Café** — Free daily coffee at 25+ partner cafés\n• **Events** — Hackathons, wellness week, sports day, training\n\nTap below to explore any category!`,
+      cards: [
+        { type: 'action', icon: Gift, title: 'Dining & Food', subtitle: '25% off restaurants · Free coffee', color: '#EA580C', link: '/explore' },
+        { type: 'action', icon: Heart, title: 'Healthcare & Wellness', subtitle: 'Daman, mental health, nutrition', color: '#40C4AA', link: '/explore' },
+        { type: 'action', icon: Heart, title: 'Fitness & Sports', subtitle: 'Palms Sports · AED 150/mo', color: '#DC2626', link: '/explore' },
+        { type: 'action', icon: Ticket, title: 'Leisure & Entertainment', subtitle: 'Yas Island 40% off + more', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Calendar, title: 'Events & Activities', subtitle: 'Hackathon, Wellness Week & more', color: '#FFBD4C', link: '/explore' },
+      ]
+    };
+  }
+
   if (t.includes('gym') || t.includes('palms sports') || t.includes('fitness') || t.includes('membership')) {
     return {
       content: `Your **Palms Sports** corporate membership details:\n\n• **Monthly fee**: AED 150 (60% off standard)\n• **Locations**: 8 venues across Abu Dhabi\n• **Includes**: Gym, pool, padel, group classes\n• **Family add-on**: +AED 100/member\n\nYou're saving **AED 2,700/year** with your corporate rate!`,
