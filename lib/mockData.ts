@@ -34,6 +34,13 @@ export const MOCK_USERS: Record<string, {
     avatar: 'NH', location: 'Dubai, UAE',
     image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face',
   },
+  'ali.rashid@ihcgroup.ae': {
+    id: 'u004', name: 'Ali Rashid', email: 'ali.rashid@ihcgroup.ae',
+    company: 'IHC Group', companyId: 'ihc', title: 'Group Strategy Manager',
+    department: 'Corporate Strategy', employeeId: 'IHC-0512',
+    avatar: 'AR', location: 'Abu Dhabi, UAE',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
+  },
 };
 
 export const IHC_ANNOUNCEMENTS = [

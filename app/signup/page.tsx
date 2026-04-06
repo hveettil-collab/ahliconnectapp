@@ -2,172 +2,182 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, ChevronDown, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Building2, Shield, Heart, Briefcase } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { COMPANIES } from '@/lib/mockData';
-import Logo from '@/components/ui/Logo';
 import Image from 'next/image';
+
+const DEMO_ACCOUNTS = [
+  {
+    name: 'Ahmed',
+    fullName: 'Khalid Al Mansouri',
+    email: 'khalid.mansouri@aldar.ae',
+    company: 'Aldar Properties',
+    companyId: 'aldar',
+    role: 'Real Estate Director',
+    icon: Building2,
+    color: '#40C4AA',
+    gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    emphasis: 'Property & Lifestyle',
+  },
+  {
+    name: 'Sara',
+    fullName: 'Sara Ahmed',
+    email: 'sara.ahmed@shory.ae',
+    company: 'Shory',
+    companyId: 'shory',
+    role: 'Senior Product Manager',
+    icon: Shield,
+    color: '#9D63F6',
+    gradient: 'linear-gradient(135deg, #9D63F6 0%, #7C3AED 100%)',
+    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face',
+    emphasis: 'Insurance & Benefits',
+  },
+  {
+    name: 'Fatima',
+    fullName: 'Noura Hassan',
+    email: 'noura.hassan@purehealth.ae',
+    company: 'PureHealth',
+    companyId: 'purehealth',
+    role: 'Clinical Operations Lead',
+    icon: Heart,
+    color: '#DF1C41',
+    gradient: 'linear-gradient(135deg, #DF1C41 0%, #BE123C 100%)',
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face',
+    emphasis: 'Wellness & Healthcare',
+  },
+  {
+    name: 'Ali',
+    fullName: 'Ali Rashid',
+    email: 'ali.rashid@ihcgroup.ae',
+    company: 'IHC Group',
+    companyId: 'ihc',
+    role: 'Group Strategy Manager',
+    icon: Briefcase,
+    color: '#1B3A6B',
+    gradient: 'linear-gradient(135deg, #1B3A6B 0%, #15161E 100%)',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
+    emphasis: 'Group-wide Experience',
+  },
+];
 
 export default function SignupPage() {
   const router = useRouter();
-  const { setAuth } = useAuth();
-  const [form, setForm] = useState({ company: '', email: '', password: '', confirm: '' });
-  const [showPass, setShowPass] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { login } = useAuth();
+  const [selected, setSelected] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const validate = () => {
-    const e: Record<string, string> = {};
-    if (!form.company) e.company = 'Please select your company';
-    if (!form.email || !form.email.includes('@')) e.email = 'Enter a valid work email';
-    if (form.password.length < 8) e.password = 'Password must be at least 8 characters';
-    if (form.password !== form.confirm) e.confirm = 'Passwords do not match';
-    return e;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+  const handleSelect = async (account: typeof DEMO_ACCOUNTS[0]) => {
+    setSelected(account.email);
     setLoading(true);
-    setAuth(form.email, form.company);
-    await new Promise(r => setTimeout(r, 800));
-    router.push('/verify');
+    await new Promise(r => setTimeout(r, 1200));
+    login(account.email);
+    router.push('/dashboard');
   };
-
-  const passwordStrength = () => {
-    if (!form.password) return 0;
-    let s = 0;
-    if (form.password.length >= 8) s++;
-    if (/[A-Z]/.test(form.password)) s++;
-    if (/[0-9]/.test(form.password)) s++;
-    if (/[^A-Za-z0-9]/.test(form.password)) s++;
-    return s;
-  };
-  const strength = passwordStrength();
-  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong'];
-  const strengthColor = ['', '#EF4444', '#F59E0B', '#3B82F6', '#10B981'];
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F8F9FB' }}>
+    <div className="min-h-screen w-full flex flex-col items-center px-4 py-8" style={{ backgroundColor: '#F8F9FB' }}>
+      <style>{`
+        @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-up { animation: fade-up 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+        .fade-up-1 { animation-delay: 0.05s; }
+        .fade-up-2 { animation-delay: 0.1s; }
+        .fade-up-3 { animation-delay: 0.15s; }
+        .fade-up-4 { animation-delay: 0.2s; }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(157,99,246,0.4); } 70% { box-shadow: 0 0 0 10px rgba(157,99,246,0); } 100% { box-shadow: 0 0 0 0 rgba(157,99,246,0); } }
+      `}</style>
+
       <div className="w-full max-w-md">
         {/* Back */}
-        <Link href="/landing" className="inline-flex items-center gap-1.5 text-sm text-[#A4ABB8] hover:text-[#15161E] transition-colors mb-6">
+        <Link href="/landing" className="inline-flex items-center gap-1.5 text-sm text-[#A4ABB8] hover:text-[#15161E] transition-colors mb-8 no-underline">
           <ArrowLeft size={15} /> Back
         </Link>
 
-        <div className="bg-white rounded-[24px] border border-[#DFE1E6] shadow-[0_4px_24px_rgba(0,0,0,0.06)] p-6 md:p-8">
-          {/* Logo */}
-          <div className="mb-6">
-            <div className="mb-4 flex justify-center">
-              <Image src="/logo-login.svg" alt="Ahli Connect" width={140} height={37} priority />
-            </div>
-            <p className="text-base font-bold text-[#15161E]">Create Account</p>
-            <p className="text-xs text-[#A4ABB8]">Ahli Connect · IHC Group</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Company select */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1.5">Your Company *</label>
-              <div className="relative">
-                <select
-                  value={form.company}
-                  onChange={e => { setForm(f => ({ ...f, company: e.target.value })); setErrors(er => ({ ...er, company: '' })); }}
-                  className={`w-full appearance-none border rounded-[14px] bg-white text-[#15161E] px-4 py-3 text-sm transition-all outline-none pr-10
-                    ${errors.company ? 'border-red-400 focus:ring-2 focus:ring-red-100' : 'border-[#DFE1E6] focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10'}
-                    ${!form.company ? 'text-[#A4ABB8]' : ''}`}
-                >
-                  <option value="" disabled>Select your company</option>
-                  {COMPANIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
-                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A4ABB8] pointer-events-none" />
-              </div>
-              {errors.company && <p className="text-xs text-red-500 mt-1">{errors.company}</p>}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1.5">Work Email *</label>
-              <input
-                type="email"
-                placeholder="you@company.ae"
-                value={form.email}
-                onChange={e => { setForm(f => ({ ...f, email: e.target.value })); setErrors(er => ({ ...er, email: '' })); }}
-                className={`w-full border rounded-[14px] bg-[#F7F1FF] text-[#15161E] placeholder:text-[#A4ABB8] px-4 py-3 text-sm outline-none transition-all
-                  ${errors.email ? 'border-red-400 focus:ring-2 focus:ring-red-100' : 'border-[#DFE1E6] focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10'}`}
-              />
-              {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1.5">Password *</label>
-              <div className="relative">
-                <input
-                  type={showPass ? 'text' : 'password'}
-                  placeholder="Min. 8 characters"
-                  value={form.password}
-                  onChange={e => { setForm(f => ({ ...f, password: e.target.value })); setErrors(er => ({ ...er, password: '' })); }}
-                  className={`w-full border rounded-[14px] bg-white text-[#15161E] placeholder:text-[#A4ABB8] px-4 py-3 pr-11 text-sm outline-none transition-all
-                    ${errors.password ? 'border-red-400 focus:ring-2 focus:ring-red-100' : 'border-[#DFE1E6] focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10'}`}
-                />
-                <button type="button" onClick={() => setShowPass(s => !s)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#A4ABB8] hover:text-[#666D80]">
-                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-              {form.password && (
-                <div className="mt-2 flex items-center gap-2">
-                  <div className="flex gap-1 flex-1">
-                    {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="h-1 flex-1 rounded-full transition-all duration-300"
-                        style={{ background: i <= strength ? strengthColor[strength] : '#DFE1E6' }} />
-                    ))}
-                  </div>
-                  <span className="text-xs font-medium" style={{ color: strengthColor[strength] }}>{strengthLabel[strength]}</span>
-                </div>
-              )}
-              {errors.password && <p className="text-xs text-red-500 mt-1">{errors.password}</p>}
-            </div>
-
-            {/* Confirm */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-1.5">Confirm Password *</label>
-              <div className="relative">
-                <input
-                  type={showPass ? 'text' : 'password'}
-                  placeholder="Re-enter password"
-                  value={form.confirm}
-                  onChange={e => { setForm(f => ({ ...f, confirm: e.target.value })); setErrors(er => ({ ...er, confirm: '' })); }}
-                  className={`w-full border rounded-[14px] bg-white text-[#15161E] placeholder:text-[#A4ABB8] px-4 py-3 pr-11 text-sm outline-none transition-all
-                    ${errors.confirm ? 'border-red-400 focus:ring-2 focus:ring-red-100' : 'border-[#DFE1E6] focus:border-[#9D63F6] focus:ring-2 focus:ring-[#9D63F6]/10'}`}
-                />
-                {form.confirm && form.confirm === form.password && (
-                  <CheckCircle2 size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-green-500" />
-                )}
-              </div>
-              {errors.confirm && <p className="text-xs text-red-500 mt-1">{errors.confirm}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#9D63F6] text-white font-semibold py-3.5 rounded-[14px] text-sm hover:bg-[#8A44F4] transition-all active:scale-[0.98] disabled:opacity-60 mt-2 flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Sending OTP...</>
-              ) : 'Create Account & Verify'}
-            </button>
-          </form>
-
-          <p className="text-center text-xs text-[#A4ABB8] mt-5">
-            Already have an account?{' '}
-            <Link href="/login" className="text-[#9D63F6] font-medium hover:underline">Sign in</Link>
-          </p>
+        {/* Logo — large & prominent */}
+        <div className="flex justify-center mb-8 fade-up">
+          <Image src="/logo-login.svg" alt="Ahli Connect" width={200} height={53} priority />
         </div>
 
-        <p className="text-center text-xs text-[#A4ABB8]">
-          For authorised IHC Group employees only
+        {/* Title */}
+        <div className="text-center mb-8 fade-up fade-up-1">
+          <h1 className="text-[22px] font-bold text-[#15161E] leading-tight">Choose a Demo Account</h1>
+          <p className="text-[13px] text-[#A4ABB8] mt-1.5">Sign in instantly to explore Ahli Connect</p>
+        </div>
+
+        {/* Demo Account Cards */}
+        <div className="space-y-3 mb-8">
+          {DEMO_ACCOUNTS.map((account, i) => {
+            const Icon = account.icon;
+            const isSelected = selected === account.email;
+            const isLoading = isSelected && loading;
+
+            return (
+              <button
+                key={account.email}
+                onClick={() => !loading && handleSelect(account)}
+                disabled={loading && !isSelected}
+                className={`fade-up fade-up-${i + 1} w-full flex items-center gap-4 p-4 rounded-[20px] border-2 transition-all active:scale-[0.98] text-left ${
+                  isSelected
+                    ? 'border-[#9D63F6] bg-white shadow-lg'
+                    : loading
+                    ? 'border-[#DFE1E6] bg-white opacity-40 cursor-not-allowed'
+                    : 'border-[#DFE1E6] bg-white hover:border-[#A4ABB8] hover:shadow-md'
+                }`}
+                style={isSelected ? { animation: 'pulse-ring 1.5s ease-out infinite', boxShadow: '0 8px 32px rgba(157,99,246,0.15)' } : { boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+              >
+                {/* Avatar */}
+                <div className="relative shrink-0">
+                  <img
+                    src={account.image}
+                    alt={account.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                    style={{ border: isSelected ? '2.5px solid #9D63F6' : '2px solid #DFE1E6' }}
+                  />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full flex items-center justify-center" style={{ background: account.gradient }}>
+                    <Icon size={10} className="text-white" />
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-[14px] font-bold text-[#15161E]">{account.fullName}</p>
+                  </div>
+                  <p className="text-[12px] text-[#666D80]">{account.role}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: account.color + '15', color: account.color }}>
+                      {account.company}
+                    </span>
+                    <span className="text-[10px] text-[#A4ABB8]">{account.emphasis}</span>
+                  </div>
+                </div>
+
+                {/* Action */}
+                <div className="shrink-0">
+                  {isLoading ? (
+                    <div className="w-8 h-8 flex items-center justify-center">
+                      <div className="w-5 h-5 border-2 border-[#9D63F6] border-t-transparent rounded-full animate-spin" />
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: isSelected ? '#9D63F6' : '#F8F9FB' }}>
+                      <ChevronRight size={16} className={isSelected ? 'text-white' : 'text-[#A4ABB8]'} />
+                    </div>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Already have account */}
+        <p className="text-center text-[12px] text-[#A4ABB8] mb-3">
+          Already have an account?{' '}
+          <Link href="/login" className="text-[#9D63F6] font-semibold no-underline">Sign in</Link>
+        </p>
+
+        {/* Footer */}
+        <p className="text-center text-[11px] text-[#A4ABB8]/60">
+          For demo purposes only
         </p>
       </div>
     </div>
