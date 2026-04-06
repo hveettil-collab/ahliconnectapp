@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
+import { useWallet } from '@/context/WalletContext';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES, CORPORATE_NEWS, IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
@@ -1635,7 +1636,15 @@ function GamingFlow() {
    AI RESPONSE ENGINE (updated with flow triggers)
    ═══════════════════════════════════════════ */
 
-function generateAIResponse(text: string, userName: string, companyId: string): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType']; sellCategory?: string } {
+interface WalletInfo {
+  balance: number;
+  rewardPoints: number;
+  rewardTier: string;
+  rewardTierNext: string;
+  rewardProgress: number;
+}
+
+function generateAIResponse(text: string, userName: string, companyId: string, wallet?: WalletInfo): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType']; sellCategory?: string } {
   const t = text.toLowerCase();
 
   /* ═══════════════════════════════════════════
@@ -2001,6 +2010,124 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  /* ── Wallet, Balance & Rewards ── */
+
+  if (t.includes('reward') || t.includes('point') || t.includes('tier') || t.includes('redeem')) {
+    const pts = wallet?.rewardPoints ?? 3200;
+    const tier = wallet?.rewardTier ?? 'Gold';
+    const next = wallet?.rewardTierNext ?? 'Platinum (10,000 pts)';
+    const prog = wallet?.rewardProgress ?? 24;
+    return {
+      content: `Here's your rewards summary, ${userName}:\n\n• **${pts.toLocaleString()} points** — ${tier} Tier\n• Next tier: ${next} (${Math.round(prog)}% there)\n• Points value: **AED ${(pts * 0.10).toFixed(0)}**\n\nYou can redeem points for wallet credit, extra leave days, dining vouchers, and Yas Island passes.`,
+      cards: [
+        { type: 'action', icon: Gift, title: 'Redeem Points', subtitle: `${pts.toLocaleString()} pts · AED ${(pts * 0.10).toFixed(0)} value`, color: '#FFBD4C', link: '/rewards' },
+        { type: 'info', icon: Trophy, title: `${tier} Tier`, subtitle: `${Math.round(prog)}% to ${next.split(' (')[0]}`, color: '#9D63F6', link: '/rewards' },
+        { type: 'info', icon: Star, title: 'How to Earn', subtitle: 'Performance, innovation, engagement & more', color: '#40C4AA', link: '/rewards' },
+      ]
+    };
+  }
+
+  if (t.includes('wallet') || t.includes('balance') || t.includes('fund') || t.includes('top up') || t.includes('top-up') || t.includes('add money') || t.includes('add fund')) {
+    const bal = wallet?.balance ?? 5600;
+    const pts = wallet?.rewardPoints ?? 3200;
+    return {
+      content: `Here's your Ahli Wallet, ${userName}:\n\n• **Wallet Balance**: AED ${bal.toLocaleString()}\n• **Reward Points**: ${pts.toLocaleString()} pts (worth AED ${(pts * 0.10).toFixed(0)})\n\nYou can fund your wallet to pay for insurance, flights, food orders, and marketplace purchases — all with IHC employee discounts applied automatically.`,
+      cards: [
+        { type: 'action', icon: Wallet, title: 'Fund Wallet', subtitle: `Current balance: AED ${bal.toLocaleString()}`, color: '#40C4AA', link: '/rewards' },
+        { type: 'info', icon: CreditCard, title: 'Recent Transactions', subtitle: 'View payment & top-up history', color: '#9D63F6', link: '/rewards' },
+        { type: 'action', icon: Gift, title: 'Redeem Points to Wallet', subtitle: `${pts.toLocaleString()} pts → AED ${(pts * 0.10).toFixed(0)}`, color: '#FFBD4C', link: '/rewards' },
+      ]
+    };
+  }
+
+  /* ── Community ── */
+
+  if (t.includes('community') || t.includes('post') && (t.includes('something') || t.includes('community')) || t.includes('social feed') || t.includes('connect with')) {
+    return {
+      content: `Welcome to the IHC Community, ${userName}! Here's what's buzzing:\n\n• **2.1K posts** this week across all subsidiaries\n• **156 active discussions** in special interest groups\n• **45 marketplace items** listed today\n\nJoin conversations, share updates, and connect with 45,000+ colleagues across 30+ companies.`,
+      cards: [
+        { type: 'action', icon: Users, title: 'Open Community Feed', subtitle: 'Posts, discussions & updates', color: '#9D63F6', link: '/community' },
+        { type: 'action', icon: MessageCircle, title: 'Create a Post', subtitle: 'Share with colleagues', color: '#40C4AA', link: '/community' },
+        { type: 'info', icon: TrendingUp, title: 'Trending Topics', subtitle: 'Wellness Week, Hackathon signup, Sports Day', color: '#FFBD4C', link: '/community' },
+      ]
+    };
+  }
+
+  /* ── Profile ── */
+
+  if (t.includes('profile') || t.includes('my account') || t.includes('my details') || t.includes('edit profile') || t.includes('my info') || t.includes('business card') || t.includes('digital card')) {
+    return {
+      content: `Your profile on Ahli Connect, ${userName}:\n\nYou can view and manage your digital business card, QR code, wallet, and personal details. Share your card with colleagues or external contacts instantly.`,
+      cards: [
+        { type: 'action', icon: Users, title: 'View My Profile', subtitle: 'Digital card, wallet & details', color: '#9D63F6', link: '/profile' },
+        { type: 'info', icon: CreditCard, title: 'Digital Business Card', subtitle: 'Share via QR or link', color: '#40C4AA', link: '/profile' },
+      ]
+    };
+  }
+
+  /* ── Explore ── */
+
+  if (t.includes('explore') || t.includes('what can i do') || t.includes('what is available') || t.includes('show me everything') || t.includes('browse') && !t.includes('offer') && !t.includes('marketplace')) {
+    return {
+      content: `The Explore page is your gateway to everything on Ahli Connect! Here's a quick overview:\n\n• **Trending** — What's hot across IHC right now\n• **Wellness** — Health screenings, yoga, nutrition\n• **Offers** — Dining, fitness, leisure deals\n• **Events** — Hackathons, sports, training\n• **Learning** — Courses, certifications, workshops\n• **Sports** — FIFA tournaments, padel, fitness\n\nYou can also discover benefits, register for events, and track what's popular.`,
+      cards: [
+        { type: 'action', icon: Sparkles, title: 'Open Explore', subtitle: 'Trending, events, offers & more', color: '#9D63F6', link: '/explore' },
+        { type: 'action', icon: Calendar, title: 'Upcoming Events', subtitle: 'Hackathon, Wellness Week & more', color: '#40C4AA', link: '/explore' },
+        { type: 'action', icon: Gift, title: 'All Offers', subtitle: `${OFFERS.length} employee perks`, color: '#FFBD4C', link: '/offers' },
+      ]
+    };
+  }
+
+  /* ── Dashboard / Home ── */
+
+  if (t.includes('dashboard') || t.includes('home page') || t.includes('main page') || t.includes('go home')) {
+    return {
+      content: `Your dashboard shows everything at a glance — weather, points, community highlights, and quick actions. It's your home base on Ahli Connect.`,
+      cards: [
+        { type: 'action', icon: Sparkles, title: 'Go to Dashboard', subtitle: 'Your personalized home screen', color: '#9D63F6', link: '/dashboard' },
+      ]
+    };
+  }
+
+  /* ── Thank you / positive feedback ── */
+
+  if (t.includes('thank') || t.includes('thanks') || t.includes('awesome') || t.includes('great') || t.includes('perfect') || t.includes('cool')) {
+    return {
+      content: `You're welcome, ${userName}! Happy to help anytime. Is there anything else I can assist you with?`,
+      cards: [
+        { type: 'action', icon: Gift, title: 'Browse Offers', subtitle: `${OFFERS.length} employee perks`, color: '#FFBD4C', link: '/offers' },
+        { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'IHC employee rates', color: '#54B6ED', action: 'I want to book a flight' },
+        { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Certs, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
+      ]
+    };
+  }
+
+  /* ── Who are you / what can you do ── */
+
+  if (t.includes('who are you') || t.includes('what can you do') || t.includes('help me') || t.includes('what do you do') || t.includes('capabilities')) {
+    return {
+      content: `I'm your **Ahli Connect AI Assistant**! Here's everything I can help you with:\n\n• **Insurance** — Car, Home, Pet & Health via Shory (15% off)\n• **Flights & Rides** — Book with employee discounts\n• **Food Orders** — Noon Food with free delivery\n• **HR Services** — Salary certs, leave, expenses, NOC letters\n• **Rewards & Wallet** — Check points, balance, redeem, top-up\n• **Marketplace** — Buy & sell with 45K+ colleagues\n• **Events** — Hackathons, sports, wellness, training\n• **Benefits** — Medical, education, fitness, coffee perks\n• **Community** — Posts, discussions, networking\n• **Directory** — Find anyone across IHC Group\n\nJust ask me anything!`,
+      cards: [
+        { type: 'booking', icon: Shield, title: 'Insurance Hub', subtitle: 'Car, Home, Pet & Health', color: '#0D9488', action: 'I need insurance' },
+        { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#54B6ED', action: 'I want to book a flight' },
+        { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Salary cert, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
+        { type: 'action', icon: Gift, title: 'Browse Offers', subtitle: `${OFFERS.length} perks & discounts`, color: '#FFBD4C', link: '/offers' },
+      ]
+    };
+  }
+
+  /* ── Specific NOC / employment letter ── */
+
+  if (t.includes('noc') || t.includes('no objection') || t.includes('employment letter') || t.includes('experience letter') || t.includes('visa letter')) {
+    return {
+      content: `I can generate your **NOC / Employment Letter** instantly, ${userName}!\n\nThese documents are auto-generated with your verified employee details and digital QR verification. They're accepted by all UAE government entities, banks, and embassies.`,
+      cards: [
+        { type: 'action', icon: FileText, title: 'Generate NOC Letter', subtitle: 'Auto-verified · instant PDF', color: '#40C4AA', action: 'Generate my NOC letter' },
+        { type: 'action', icon: FileText, title: 'Employment Certificate', subtitle: 'Salary included · QR verified', color: '#9D63F6', action: 'Generate my employment certificate' },
+      ]
+    };
+  }
+
   /* ── Smart fallback — check if query relates to anything in the app ── */
 
   // Check if the user is asking about a specific offer by name
@@ -2058,13 +2185,15 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  // Generic fallback for queries not matching anything in the app
+  // Generic fallback — helpful and friendly, never a dead end
   return {
-    content: `I couldn't find anything specific about "${text}" on Ahli Connect. This feature or information isn't currently available in the app.\n\nHere's what I can help you with:\n\n• **Offers & Discounts** — ${OFFERS.length} employee perks\n• **Announcements** — Corporate news & updates\n• **Flights, Rides, Food** — Book with employee discounts\n• **Insurance** — Motor & health via Shory\n• **HR Services** — Salary certs, leave, expenses\n• **Marketplace** — Buy & sell with colleagues\n• **Benefits** — Medical, education, wellness\n• **Events & Activities** — Gaming, sports, training\n\nTry asking about any of these!`,
+    content: `I'm not sure I understood "${text}" — but I'm here to help! Here are the top things I can do for you, ${userName}:\n\n• **Insurance** — Car, Home, Pet & Health (15% off)\n• **Flights, Rides & Food** — Book with IHC discounts\n• **Wallet & Rewards** — Check balance, points, redeem\n• **HR Services** — Salary certs, leave, expenses, NOC\n• **Offers** — ${OFFERS.length} exclusive employee deals\n• **Marketplace** — Buy & sell with colleagues\n• **Events** — Hackathons, sports, wellness, training\n• **Community** — Posts, discussions, networking\n\nTry rephrasing your question, or tap a suggestion below!`,
     cards: [
+      { type: 'booking', icon: Shield, title: 'Insurance Hub', subtitle: 'Car, Home, Pet & Health', color: '#0D9488', action: 'I need insurance' },
       { type: 'action', icon: Gift, title: 'Browse Offers', subtitle: `${OFFERS.length} exclusive employee deals`, color: '#FFBD4C', link: '/offers' },
-      { type: 'action', icon: FileText, title: 'View Announcements', subtitle: 'Latest corporate news', color: '#9D63F6', link: '/announcements' },
+      { type: 'action', icon: Wallet, title: 'My Wallet & Rewards', subtitle: `Balance & ${wallet?.rewardPoints?.toLocaleString() ?? '3,200'} points`, color: '#40C4AA', action: 'Show me my wallet balance and rewards' },
       { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Salary cert, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
+      { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#54B6ED', action: 'I want to book a flight' },
       { type: 'booking', icon: ShoppingBag, title: 'Open Marketplace', subtitle: 'Buy & sell with 45K+ employees', color: '#EA580C', link: '/marketplace' },
     ]
   };
@@ -2091,6 +2220,7 @@ const SUGGESTIONS = [
 
 function ServicesPageContent() {
   const { user } = useAuth();
+  const { balance, rewardPoints, rewardTier, rewardTierNext, rewardProgress } = useWallet();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -2102,6 +2232,7 @@ function ServicesPageContent() {
 
   const userName = user?.name?.split(' ')[0] || 'there';
   const companyId = user?.companyId || 'ihc';
+  const walletInfo: WalletInfo = { balance, rewardPoints, rewardTier, rewardTierNext, rewardProgress };
 
   /* ── Speech Recognition helper ── */
   function createSpeechRecognition(): SpeechRecognition | null {
@@ -2189,7 +2320,7 @@ function ServicesPageContent() {
     setMessages(prev => [...prev, { id: userMsgId, role: 'user', content: msg }]);
     setMessages(prev => [...prev, { id: typingMsgId, role: 'ai', content: '', typing: true }]);
     await new Promise(r => setTimeout(r, 1000 + Math.random() * 800));
-    const response = generateAIResponse(msg, userName, companyId);
+    const response = generateAIResponse(msg, userName, companyId, walletInfo);
     const aiMsgId = nextMsgId();
     setMessages(prev => [
       ...prev.filter(m => !m.typing),
