@@ -2,14 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Users, Sparkles, ShoppingBag, User } from 'lucide-react';
+import { Home, Compass, Sparkles, ShoppingBag } from 'lucide-react';
 
 const TABS = [
   { label: 'Home', href: '/dashboard', icon: Home },
-  { label: 'Community', href: '/community', icon: Users, isNew: true },
+  { label: 'Explore', href: '/explore', icon: Compass },
   { label: 'AI', href: '/services', icon: Sparkles, isAI: true },
   { label: 'Market', href: '/marketplace', icon: ShoppingBag },
-  { label: 'Profile', href: '/profile', icon: User },
 ];
 
 export default function BottomNav() {
@@ -44,7 +43,7 @@ export default function BottomNav() {
           boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
         }}
       >
-        {TABS.map(({ label, href, icon: Icon, isAI, isNew }) => {
+        {TABS.map(({ label, href, icon: Icon, isAI }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
 
           /* ── AI tab — center orb ── */
@@ -87,12 +86,6 @@ export default function BottomNav() {
                   color: active ? '#9D63F6' : '#A4ABB8',
                 }}
               />
-              {isNew && !active && (
-                <span
-                  className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-                  style={{ background: '#9D63F6', boxShadow: '0 0 6px rgba(157,99,246,0.5)' }}
-                />
-              )}
             </Link>
           );
         })}

@@ -434,15 +434,17 @@ export default function DashboardPage() {
           {/* Row 1: Avatar + Name + Bell */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
-              <img
-                src={user.image}
-                alt={user.name}
-                className="w-[48px] h-[48px] rounded-full object-cover shrink-0"
-                style={{
-                  border: '2.5px solid rgba(255,255,255,0.3)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
-                }}
-              />
+              <Link href="/profile" className="shrink-0 active:scale-95 transition-transform">
+                <img
+                  src={user.image}
+                  alt={user.name}
+                  className="w-[48px] h-[48px] rounded-full object-cover"
+                  style={{
+                    border: '2.5px solid rgba(255,255,255,0.3)',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+                  }}
+                />
+              </Link>
               <div className="min-w-0">
                 <p className="text-white/60 text-[11px] font-medium tracking-wide">{greeting}</p>
                 <p className="text-white text-[16px] font-bold leading-tight truncate">{user.name.split(' ')[0]}</p>

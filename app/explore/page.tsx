@@ -442,6 +442,99 @@ function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => v
 }
 
 /* ═══════════════════════════════════════════
+   GENERIC ITEM DETAIL MODAL
+   ═══════════════════════════════════════════ */
+
+interface GenericDetailItem {
+  title: string;
+  desc: string;
+  image: string;
+  color: string;
+  icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
+  category?: string;
+  highlights?: { label: string; value: string }[];
+  details?: string;
+  cta?: string;
+  ctaHref?: string;
+}
+
+function ItemDetailModal({ item, onClose }: { item: GenericDetailItem; onClose: () => void }) {
+  const [actionTaken, setActionTaken] = useState(false);
+  const Icon = item.icon;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[90vh] overflow-y-auto">
+        {/* Hero */}
+        <div className="relative h-52 overflow-hidden rounded-t-[28px]">
+          <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          <button onClick={onClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+            <ArrowLeft size={18} className="text-white" />
+          </button>
+          <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+            <X size={16} className="text-white" />
+          </button>
+          {item.category && (
+            <div className="absolute top-14 left-4">
+              <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full" style={{ background: item.color }}>{item.category}</span>
+            </div>
+          )}
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                <Icon size={16} className="text-white" strokeWidth={2} />
+              </div>
+            </div>
+            <h2 className="text-lg font-bold text-white leading-snug">{item.title}</h2>
+          </div>
+        </div>
+
+        <div className="p-5 space-y-4">
+          <p className="text-[13px] text-[#666D80] leading-relaxed">{item.desc}</p>
+
+          {item.details && (
+            <div className="bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6] p-4">
+              <p className="text-[13px] text-[#666D80] leading-relaxed">{item.details}</p>
+            </div>
+          )}
+
+          {item.highlights && item.highlights.length > 0 && (
+            <div className="grid grid-cols-2 gap-2">
+              {item.highlights.map(h => (
+                <div key={h.label} className="bg-[#F8F9FB] rounded-[14px] p-3 text-center border border-[#DFE1E6]">
+                  <p className="text-[16px] font-bold" style={{ color: item.color }}>{h.value}</p>
+                  <p className="text-[10px] text-[#A4ABB8] font-medium mt-0.5">{h.label}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="space-y-2 pb-4">
+            {!actionTaken ? (
+              <button onClick={() => setActionTaken(true)}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[14px] text-sm font-bold text-white transition-all active:scale-[0.98]"
+                style={{ background: item.color }}>
+                {item.cta || 'Interested'} <ArrowRight size={15} />
+              </button>
+            ) : (
+              <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-[14px] px-4 py-3">
+                <CheckCircle2 size={18} className="text-green-600 shrink-0" />
+                <p className="text-xs font-bold text-green-700">Done! Details sent to your email.</p>
+              </div>
+            )}
+            <button onClick={onClose} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
    BENTO GRID COMPONENT
    ═══════════════════════════════════════════ */
 
@@ -697,10 +790,11 @@ export default function ExplorePage() {
   const [activeFilter, setActiveFilter] = useState('For You');
   const [selectedEvent, setSelectedEvent] = useState<CompanyEvent | null>(null);
   const [selectedBento, setSelectedBento] = useState<BentoItem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<GenericDetailItem | null>(null);
   const [heroIdx, setHeroIdx] = useState(0);
   const [showMap, setShowMap] = useState(false);
 
-  useBodyScrollLock(!!selectedEvent || !!selectedBento || showMap);
+  useBodyScrollLock(!!selectedEvent || !!selectedBento || !!selectedItem || showMap);
 
   if (!user) return null;
 
@@ -720,8 +814,8 @@ export default function ExplorePage() {
                 {TRENDING_ITEMS.map((item, i) => {
                   const TIcon = item.icon;
                   return (
-                    <Link key={item.id} href={item.href}
-                      className={`card-rise card-rise-${i + 1} flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] active:scale-[0.98] transition-all`}
+                    <button key={item.id} onClick={() => setSelectedItem({ title: item.title, desc: item.desc, image: item.image, color: item.color, icon: item.icon, category: item.tag, highlights: [{ label: 'Engagement', value: item.engagement }, { label: 'Status', value: item.tag }], cta: 'View Details' })}
+                      className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] active:scale-[0.98] transition-all`}
                       style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
                       <div className="relative w-[72px] h-[72px] rounded-[14px] overflow-hidden shrink-0">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
@@ -745,7 +839,7 @@ export default function ExplorePage() {
                         <p className="text-[10px] text-[#A4ABB8] mt-0.5 truncate">{item.desc}</p>
                       </div>
                       <ChevronRight size={16} className="text-[#D1D5DB] shrink-0 self-center" />
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
@@ -827,8 +921,8 @@ export default function ExplorePage() {
                 {WELLNESS_ITEMS.map((item, i) => {
                   const WIcon = item.icon;
                   return (
-                    <Link key={item.id} href={item.href}
-                      className={`card-rise card-rise-${i + 1} flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all`}>
+                    <button key={item.id} onClick={() => setSelectedItem({ title: item.title, desc: item.desc, image: item.image, color: item.color, icon: item.icon, category: 'Wellness', highlights: [{ label: 'Schedule', value: item.date }, { label: 'Location', value: item.location }, { label: 'Availability', value: item.spots }], cta: 'Join Now' })}
+                      className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all`}>
                       <div className="relative w-[72px] h-[72px] rounded-[14px] overflow-hidden shrink-0">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
                         <div className="absolute inset-0 bg-black/15" />
@@ -847,7 +941,7 @@ export default function ExplorePage() {
                         </div>
                       </div>
                       <ChevronRight size={16} className="text-[#D1D5DB] shrink-0 self-center" />
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
@@ -891,8 +985,8 @@ export default function ExplorePage() {
                 {OFFERS_DATA.map((offer, i) => {
                   const OIcon = offer.icon;
                   return (
-                    <Link key={offer.id} href="/offers"
-                      className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all`}>
+                    <button key={offer.id} onClick={() => setSelectedItem({ title: offer.title, desc: offer.desc, image: offer.image, color: offer.color, icon: offer.icon, category: offer.category, highlights: [{ label: 'Discount', value: offer.discount }, { label: 'Valid', value: offer.valid }, { label: 'Redeemed', value: offer.redeemed }, { label: 'Category', value: offer.category }], cta: 'Redeem Offer' })}
+                      className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left`}>
                       <div className="relative h-[100px]">
                         <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -913,7 +1007,7 @@ export default function ExplorePage() {
                           <span className="text-[8px] text-[#A4ABB8]">{offer.redeemed} used</span>
                         </div>
                       </div>
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
@@ -1000,8 +1094,8 @@ export default function ExplorePage() {
                 ].map((course, i) => {
                   const CIcon = course.icon;
                   return (
-                    <Link key={course.title} href="/services?prompt=Show+me+available+courses"
-                      className={`card-rise card-rise-${i + 1} flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all`}>
+                    <button key={course.title} onClick={() => setSelectedItem({ title: course.title, desc: `${course.provider} · ${course.duration}`, image: course.image, color: course.color, icon: course.icon, category: 'Learning', highlights: [{ label: 'Duration', value: course.duration }, { label: 'Level', value: course.level }, { label: 'Provider', value: course.provider }, { label: 'Budget', value: 'AED 15K/yr' }], cta: 'Enroll Now' })}
+                      className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all`}>
                       <div className="relative w-[72px] h-[72px] rounded-[14px] overflow-hidden shrink-0">
                         <img src={course.image} alt={course.title} className="w-full h-full object-cover" loading="lazy" />
                         <div className="absolute inset-0 bg-black/15" />
@@ -1020,7 +1114,7 @@ export default function ExplorePage() {
                         </div>
                       </div>
                       <ChevronRight size={16} className="text-[#D1D5DB] shrink-0 self-center" />
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
@@ -1057,8 +1151,8 @@ export default function ExplorePage() {
                 ].map((sport, i) => {
                   const SIcon = sport.icon;
                   return (
-                    <Link key={sport.title} href="/services?prompt=Show+me+gaming+tournaments"
-                      className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all`}>
+                    <button key={sport.title} onClick={() => setSelectedItem({ title: sport.title, desc: sport.desc, image: sport.image, color: sport.color, icon: sport.icon, category: 'Sports', highlights: [{ label: 'Status', value: sport.status }, { label: 'Type', value: 'Tournament' }], cta: 'Register Now' })}
+                      className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left`}>
                       <div className="relative h-[90px]">
                         <img src={sport.image} alt={sport.title} className="w-full h-full object-cover" loading="lazy" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -1073,15 +1167,15 @@ export default function ExplorePage() {
                         <p className="text-[12px] font-bold text-[#15161E] truncate">{sport.title}</p>
                         <p className="text-[9px] text-[#A4ABB8] mt-0.5">{sport.desc}</p>
                       </div>
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
             </section>
             <section>
               <SectionHeader title="Gym & Fitness" />
-              <Link href="/offers"
-                className="card-rise flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all">
+              <button onClick={() => setSelectedItem({ title: 'Palms Sports Membership', desc: '8 locations across Abu Dhabi & Dubai. Corporate rate AED 150/month — 60% off regular pricing. Full gym access, group classes, swimming pool, and more.', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', color: '#EA580C', icon: Dumbbell, category: 'Fitness', highlights: [{ label: 'Discount', value: '60% off' }, { label: 'Price', value: 'AED 150/mo' }, { label: 'Locations', value: '8 gyms' }, { label: 'Access', value: 'Full' }], cta: 'Activate Now' })}
+                className="card-rise w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all">
                 <div className="w-14 h-14 rounded-[14px] flex items-center justify-center shrink-0" style={{ background: '#EA580C12' }}>
                   <Dumbbell size={24} className="text-[#EA580C]" strokeWidth={1.5} />
                 </div>
@@ -1091,7 +1185,7 @@ export default function ExplorePage() {
                   <p className="text-[10px] font-semibold text-[#EA580C] mt-1">Activate Now</p>
                 </div>
                 <ChevronRight size={16} className="text-[#D1D5DB] shrink-0 self-center" />
-              </Link>
+              </button>
             </section>
           </>
         );
@@ -1226,22 +1320,22 @@ export default function ExplorePage() {
                     </div>
                   </div>
                 </button>
-                <Link href="/services?prompt=Show+me+gaming+tournaments" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
+                <button onClick={() => setSelectedItem({ title: 'FIFA League Season 3', desc: 'Registration closing soon — 64 teams max. Cross-subsidiary tournament with prizes worth AED 50,000. Form your team and compete!', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=600&h=400&fit=crop', color: '#DC2626', icon: Gamepad2, category: 'Gaming', highlights: [{ label: 'Teams', value: '64 max' }, { label: 'Players', value: '890' }, { label: 'Prize', value: 'AED 50K' }, { label: 'Status', value: 'Open' }], cta: 'Register Team' })} className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all text-left">
                   <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=200&fit=crop" alt="FIFA" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
                   <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
                     <Gamepad2 size={14} className="text-white" strokeWidth={2} />
                     <p className="text-[11px] font-bold text-white">FIFA League</p>
                   </div>
-                </Link>
-                <Link href="/services?prompt=Show+me+gaming+tournaments" className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all">
+                </button>
+                <button onClick={() => setSelectedItem({ title: 'Padel Cup 2026', desc: 'Doubles tournament — April 30 registration deadline. All skill levels welcome. Equipment provided at Yas Sports Complex.', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&h=400&fit=crop', color: '#FFBD4C', icon: Trophy, category: 'Sports', highlights: [{ label: 'Format', value: 'Doubles' }, { label: 'Deadline', value: 'Apr 30' }, { label: 'Location', value: 'Yas Sports' }, { label: 'Status', value: 'Open' }], cta: 'Register Now' })} className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all text-left">
                   <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=300&h=200&fit=crop" alt="Padel" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
                   <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
                     <Trophy size={14} className="text-white" strokeWidth={2} />
                     <p className="text-[11px] font-bold text-white">Padel Cup</p>
                   </div>
-                </Link>
+                </button>
               </div>
             </section>
 
@@ -1337,6 +1431,7 @@ export default function ExplorePage() {
 
       {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
       {selectedBento && <BentoDetailModal item={selectedBento} onClose={() => setSelectedBento(null)} />}
+      {selectedItem && <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
     </AppShell>
   );
 }
