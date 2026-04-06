@@ -54,7 +54,8 @@ interface ActionCard {
    ═══════════════════════════════════════════ */
 
 function InsuranceFlow() {
-  const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete'>('plate');
+  const [insuranceType, setInsuranceType] = useState<'choose' | 'car' | 'home' | 'pet' | 'health'>('choose');
+  const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete' | 'form' | 'reviewing' | 'confirmed'>('plate');
   const [emirate, setEmirate] = useState('Abu Dhabi');
   const [plateNum, setPlateNum] = useState('');
   const [selectedPlan, setSelectedPlan] = useState('');
@@ -64,11 +65,49 @@ function InsuranceFlow() {
 
   const EMIRATES = ['Abu Dhabi', 'Dubai', 'Sharjah', 'Ajman'];
   const VEHICLE = { make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White', vin: 'JTMHY7AJ5N...' };
-  const PLANS = [
+
+  const CAR_PLANS = [
     { id: 'tp', name: 'Third Party', price: 799, discounted: 679, features: ['Basic liability', 'Legal requirement', 'Third party damage'] },
     { id: 'comp', name: 'Comprehensive', price: 1499, discounted: 1274, features: ['Full coverage', 'Own damage', 'Theft & fire', 'Roadside assist'], popular: true },
     { id: 'flexi', name: 'Flexi', price: 2199, discounted: 1869, features: ['Agency repair', 'Replacement car', 'Zero depreciation', 'GCC coverage'] },
   ];
+  const HOME_PLANS = [
+    { id: 'basic', name: 'Home Basic', price: 499, discounted: 424, features: ['Building cover', 'Fire & flood', 'Third party liability'] },
+    { id: 'plus', name: 'Home Plus', price: 899, discounted: 764, features: ['Building + contents', 'Theft protection', 'Water damage', 'Temp accommodation'], popular: true },
+    { id: 'premium', name: 'Home Premium', price: 1399, discounted: 1189, features: ['All-risk cover', 'Valuables cover', 'Domestic help', 'Worldwide contents'] },
+  ];
+  const PET_PLANS = [
+    { id: 'essential', name: 'Pet Essential', price: 599, discounted: 509, features: ['Vet visits', 'Accidents', 'Basic illness'] },
+    { id: 'complete', name: 'Pet Complete', price: 999, discounted: 849, features: ['All vet care', 'Surgery', 'Dental', 'Vaccinations'], popular: true },
+    { id: 'vip', name: 'Pet VIP', price: 1599, discounted: 1359, features: ['Unlimited vet', 'Wellness checks', 'Boarding cover', 'Travel cover'] },
+  ];
+  const HEALTH_PLANS = [
+    { id: 'individual', name: 'Individual', price: 2499, discounted: 2124, features: ['Outpatient', 'Inpatient', 'Pharmacy', 'Emergency'] },
+    { id: 'family', name: 'Family', price: 4999, discounted: 4249, features: ['Spouse + 3 kids', 'Maternity', 'Dental', 'Optical'], popular: true },
+    { id: 'executive', name: 'Executive', price: 7999, discounted: 6799, features: ['Global coverage', 'Private rooms', 'Second opinion', 'Wellness program'] },
+  ];
+
+  const INSURANCE_TYPES = [
+    { id: 'car' as const, icon: Car, label: 'Car Insurance', desc: 'Motor & vehicle cover', color: '#7C3AED', bg: 'linear-gradient(135deg, #7C3AED, #9D63F6)' },
+    { id: 'home' as const, icon: Building2, label: 'Home Insurance', desc: 'Property & contents', color: '#059669', bg: 'linear-gradient(135deg, #059669, #34D399)' },
+    { id: 'pet' as const, icon: Heart, label: 'Pet Insurance', desc: 'Vet care & wellness', color: '#EA580C', bg: 'linear-gradient(135deg, #EA580C, #FB923C)' },
+    { id: 'health' as const, icon: Shield, label: 'Health Insurance', desc: 'Medical & dental', color: '#2563EB', bg: 'linear-gradient(135deg, #2563EB, #60A5FA)' },
+  ];
+
+  const getPlans = () => {
+    if (insuranceType === 'car') return CAR_PLANS;
+    if (insuranceType === 'home') return HOME_PLANS;
+    if (insuranceType === 'pet') return PET_PLANS;
+    if (insuranceType === 'health') return HEALTH_PLANS;
+    return CAR_PLANS;
+  };
+  const getColor = () => INSURANCE_TYPES.find(t => t.id === insuranceType)?.color || '#7C3AED';
+  const getGradient = () => INSURANCE_TYPES.find(t => t.id === insuranceType)?.bg || 'linear-gradient(135deg, #7C3AED, #9D63F6)';
+  const getLabel = () => INSURANCE_TYPES.find(t => t.id === insuranceType)?.label || 'Insurance';
+
+  const PLANS = getPlans();
+  const chosen = PLANS.find(p => p.id === selectedPlan);
+  const accentColor = getColor();
 
   useEffect(() => {
     if (phase === 'fetching') {
@@ -79,27 +118,61 @@ function InsuranceFlow() {
       const t = setTimeout(() => setPhase('complete'), 2500);
       return () => clearTimeout(t);
     }
+    if (phase === 'reviewing') {
+      const t = setTimeout(() => setPhase('confirmed'), 2000);
+      return () => clearTimeout(t);
+    }
   }, [phase]);
-
-  const chosen = PLANS.find(p => p.id === selectedPlan);
 
   return (
     <div className="mt-2 rounded-[20px] overflow-hidden border border-[#DFE1E6] bg-white shadow-sm">
       {/* Header */}
-      <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
+      <div className="p-4 flex items-center gap-3" style={{ background: insuranceType === 'choose' ? 'linear-gradient(135deg, #1B1D3A 0%, #312E81 50%, #4C1D95 100%)' : getGradient() }}>
         <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
           <Shield size={18} className="text-white" />
         </div>
         <div>
-          <p className="text-[14px] font-bold text-white">Shory Motor Insurance</p>
+          <p className="text-[14px] font-bold text-white">{insuranceType === 'choose' ? 'Shory Insurance Hub' : `Shory ${getLabel()}`}</p>
           <p className="text-[11px] text-white/70">Powered by Shory · IHC 15% discount</p>
         </div>
       </div>
 
       <div className="p-4">
-        {/* Phase: Plate Entry */}
-        {phase === 'plate' && (
+
+        {/* ═══ Step 0: Choose insurance type ═══ */}
+        {insuranceType === 'choose' && (
+          <div className="space-y-3">
+            <p className="text-[13px] text-[#4B5563] font-medium">What type of insurance do you need?</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              {INSURANCE_TYPES.map(type => {
+                const TIcon = type.icon;
+                return (
+                  <button key={type.id} onClick={() => { setInsuranceType(type.id); setPhase(type.id === 'car' ? 'plate' : 'form'); }}
+                    className="text-left p-4 rounded-[16px] border-2 border-[#DFE1E6] hover:border-transparent transition-all active:scale-[0.96] group relative overflow-hidden"
+                    style={{ background: '#FAFBFC' }}>
+                    <div className="w-10 h-10 rounded-[12px] flex items-center justify-center mb-2.5 transition-transform group-active:scale-110" style={{ background: type.color + '15' }}>
+                      <TIcon size={20} style={{ color: type.color }} strokeWidth={2} />
+                    </div>
+                    <p className="text-[13px] font-bold text-[#15161E]">{type.label}</p>
+                    <p className="text-[10px] text-[#A4ABB8] mt-0.5">{type.desc}</p>
+                    <ChevronRight size={14} className="absolute top-4 right-3 text-[#D1D5DB]" />
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2.5 rounded-[12px] bg-[#F0FDF4] border border-green-100">
+              <CheckCircle2 size={14} className="text-green-600 shrink-0" />
+              <p className="text-[10px] text-green-700 font-medium">All IHC employees get <span className="font-bold">15% off</span> every plan</p>
+            </div>
+          </div>
+        )}
+
+        {/* ═══ CAR: Plate Entry ═══ */}
+        {insuranceType === 'car' && phase === 'plate' && (
           <div className="space-y-4">
+            <button onClick={() => { setInsuranceType('choose'); setSelectedPlan(''); }} className="flex items-center gap-1 text-[11px] text-[#A4ABB8] font-semibold active:scale-95 transition-all">
+              <ArrowLeft size={12} /> Change insurance type
+            </button>
             <p className="text-[13px] text-[#4B5563]">Enter your vehicle plate number to get started</p>
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Emirate</label>
@@ -107,7 +180,7 @@ function InsuranceFlow() {
                 {EMIRATES.map(e => (
                   <button key={e} onClick={() => setEmirate(e)}
                     className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
-                    style={{ background: emirate === e ? '#7C3AED' : '#F8F9FB', color: emirate === e ? '#fff' : '#666D80', border: emirate === e ? 'none' : '1px solid #DFE1E6' }}>
+                    style={{ background: emirate === e ? accentColor : '#F8F9FB', color: emirate === e ? '#fff' : '#666D80', border: emirate === e ? 'none' : '1px solid #DFE1E6' }}>
                     {e}
                   </button>
                 ))}
@@ -116,27 +189,127 @@ function InsuranceFlow() {
             <div>
               <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Plate Number</label>
               <input type="text" value={plateNum} onChange={e => setPlateNum(e.target.value)} placeholder="e.g. 12345"
-                className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none focus:border-[#7C3AED] transition-colors text-center tracking-[0.3em]" />
+                className="w-full mt-2 bg-white border-2 border-[#DFE1E6] rounded-[14px] px-4 py-3 text-[16px] font-bold text-[#15161E] outline-none transition-colors text-center tracking-[0.3em]"
+                style={{ borderColor: undefined }} />
             </div>
             <button onClick={() => { if (plateNum.trim()) setPhase('fetching'); }}
               className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: plateNum.trim() ? 'linear-gradient(135deg, #7C3AED, #9D63F6)' : '#DFE1E6', boxShadow: plateNum.trim() ? '0 4px 16px rgba(124,58,237,0.3)' : 'none' }}>
+              style={{ background: plateNum.trim() ? getGradient() : '#DFE1E6', boxShadow: plateNum.trim() ? `0 4px 16px ${accentColor}40` : 'none' }}>
               <Search size={14} className="inline mr-1.5" />Look Up Vehicle
             </button>
           </div>
         )}
 
-        {/* Phase: Fetching */}
+        {/* ═══ HOME / PET / HEALTH: Info Form ═══ */}
+        {insuranceType !== 'car' && insuranceType !== 'choose' && phase === 'form' && (
+          <div className="space-y-4">
+            <button onClick={() => { setInsuranceType('choose'); setSelectedPlan(''); }} className="flex items-center gap-1 text-[11px] text-[#A4ABB8] font-semibold active:scale-95 transition-all">
+              <ArrowLeft size={12} /> Change insurance type
+            </button>
+            <p className="text-[13px] text-[#4B5563]">
+              {insuranceType === 'home' ? 'Tell us about your property to get the best quote' :
+               insuranceType === 'pet' ? 'Tell us about your pet to find the perfect plan' :
+               'Let us know your needs for a personalized quote'}
+            </p>
+
+            {insuranceType === 'home' && (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Property Type</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['Apartment', 'Villa', 'Townhouse', 'Studio'].map(t => (
+                      <button key={t} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Location</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['Abu Dhabi', 'Dubai', 'Sharjah', 'Al Ain'].map(l => (
+                      <button key={l} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{l}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Estimated Value (AED)</label>
+                  <input type="text" placeholder="e.g. 1,500,000" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
+                </div>
+              </div>
+            )}
+
+            {insuranceType === 'pet' && (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Pet Type</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['Dog', 'Cat', 'Bird', 'Other'].map(t => (
+                      <button key={t} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{t}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Breed</label>
+                  <input type="text" placeholder="e.g. Golden Retriever" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Age</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['< 1 year', '1-3 years', '3-7 years', '7+ years'].map(a => (
+                      <button key={a} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{a}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {insuranceType === 'health' && (
+              <div className="space-y-3">
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Coverage For</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['Just Me', 'Me + Spouse', 'Family', 'Parents'].map(c => (
+                      <button key={c} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{c}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Your Age</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['18-30', '31-40', '41-50', '51-60', '60+'].map(a => (
+                      <button key={a} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{a}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Priority</label>
+                  <div className="flex gap-2 mt-2 flex-wrap">
+                    {['Dental', 'Optical', 'Maternity', 'Chronic care'].map(p => (
+                      <button key={p} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{p}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <button onClick={() => setPhase('plans')}
+              className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
+              style={{ background: getGradient(), boxShadow: `0 4px 16px ${accentColor}40` }}>
+              View {getLabel()} Plans
+            </button>
+          </div>
+        )}
+
+        {/* ═══ CAR: Fetching ═══ */}
         {phase === 'fetching' && (
           <div className="py-8 text-center space-y-3">
-            <Loader2 size={32} className="text-[#7C3AED] mx-auto animate-spin" />
+            <Loader2 size={32} style={{ color: accentColor }} className="mx-auto animate-spin" />
             <p className="text-[14px] font-semibold text-[#15161E]">Looking up vehicle...</p>
             <p className="text-[12px] text-[#A4ABB8]">{emirate} · Plate {plateNum}</p>
           </div>
         )}
 
-        {/* Phase: Vehicle Found */}
-        {phase === 'vehicle' && (
+        {/* ═══ CAR: Vehicle Found ═══ */}
+        {insuranceType === 'car' && phase === 'vehicle' && (
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[#059669]">
               <CheckCircle2 size={16} /> <p className="text-[13px] font-semibold">Vehicle Found</p>
@@ -151,28 +324,28 @@ function InsuranceFlow() {
             </div>
             <button onClick={() => setPhase('plans')}
               className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+              style={{ background: getGradient(), boxShadow: `0 4px 16px ${accentColor}40` }}>
               View Insurance Plans
             </button>
           </div>
         )}
 
-        {/* Phase: Plan Selection */}
+        {/* ═══ ALL: Plan Selection ═══ */}
         {phase === 'plans' && (
           <div className="space-y-3">
-            <p className="text-[13px] text-[#4B5563]">Choose your insurance plan</p>
+            <p className="text-[13px] text-[#4B5563]">Choose your {getLabel().toLowerCase()} plan</p>
             {PLANS.map(plan => (
               <button key={plan.id} onClick={() => setSelectedPlan(plan.id)}
                 className="w-full text-left p-3.5 rounded-[16px] border-2 transition-all active:scale-[0.98]"
-                style={{ borderColor: selectedPlan === plan.id ? '#7C3AED' : '#DFE1E6', background: selectedPlan === plan.id ? '#F5F0FF' : '#fff' }}>
+                style={{ borderColor: selectedPlan === plan.id ? accentColor : '#DFE1E6', background: selectedPlan === plan.id ? accentColor + '08' : '#fff' }}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <p className="text-[14px] font-bold text-[#15161E]">{plan.name}</p>
-                    {plan.popular && <span className="text-[9px] font-bold text-white px-2 py-0.5 rounded-full bg-[#7C3AED]">Popular</span>}
+                    {plan.popular && <span className="text-[9px] font-bold text-white px-2 py-0.5 rounded-full" style={{ background: accentColor }}>{insuranceType === 'health' ? 'Recommended' : 'Popular'}</span>}
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] text-[#A4ABB8] line-through">AED {plan.price}</p>
-                    <p className="text-[16px] font-extrabold text-[#7C3AED]">AED {plan.discounted}</p>
+                    <p className="text-[16px] font-extrabold" style={{ color: accentColor }}>AED {plan.discounted}</p>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -185,20 +358,20 @@ function InsuranceFlow() {
             {selectedPlan && (
               <button onClick={() => setPhase('payment')}
                 className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-                style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                style={{ background: getGradient(), boxShadow: `0 4px 16px ${accentColor}40` }}>
                 Continue to Payment
               </button>
             )}
           </div>
         )}
 
-        {/* Phase: Payment */}
+        {/* ═══ ALL: Payment ═══ */}
         {phase === 'payment' && chosen && (
           <div className="space-y-4">
             <div className="p-3 rounded-[14px] bg-[#F8F9FB] flex items-center justify-between">
               <div>
                 <p className="text-[11px] text-[#A4ABB8]">{chosen.name} Plan</p>
-                <p className="text-[18px] font-extrabold text-[#7C3AED]">AED {chosen.discounted}</p>
+                <p className="text-[18px] font-extrabold" style={{ color: accentColor }}>AED {chosen.discounted}</p>
               </div>
               <span className="text-[10px] font-bold text-[#059669] bg-[#F0FDF4] px-2 py-1 rounded-full">15% IHC discount</span>
             </div>
@@ -206,39 +379,39 @@ function InsuranceFlow() {
               <div>
                 <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Card Number</label>
                 <input type="text" value={cardNum} onChange={e => setCardNum(e.target.value)} placeholder="4242 4242 4242 4242"
-                  className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
+                  className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none transition-colors" />
               </div>
               <div className="flex gap-3">
                 <div className="flex-1">
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Expiry</label>
                   <input type="text" value={expiry} onChange={e => setExpiry(e.target.value)} placeholder="MM/YY"
-                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
+                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none transition-colors" />
                 </div>
                 <div className="w-24">
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">CVV</label>
                   <input type="text" value={cvv} onChange={e => setCvv(e.target.value)} placeholder="123"
-                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none focus:border-[#7C3AED] transition-colors" />
+                    className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] placeholder:text-[#A4ABB8] outline-none transition-colors" />
                 </div>
               </div>
             </div>
             <button onClick={() => setPhase('processing')}
               className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+              style={{ background: getGradient(), boxShadow: `0 4px 16px ${accentColor}40` }}>
               Pay AED {chosen.discounted}
             </button>
           </div>
         )}
 
-        {/* Phase: Processing */}
+        {/* ═══ ALL: Processing ═══ */}
         {phase === 'processing' && (
           <div className="py-8 text-center space-y-3">
-            <Loader2 size={32} className="text-[#7C3AED] mx-auto animate-spin" />
+            <Loader2 size={32} style={{ color: accentColor }} className="mx-auto animate-spin" />
             <p className="text-[14px] font-semibold text-[#15161E]">Processing payment...</p>
             <p className="text-[12px] text-[#A4ABB8]">Generating your digital policy</p>
           </div>
         )}
 
-        {/* Phase: Complete */}
+        {/* ═══ ALL: Complete ═══ */}
         {phase === 'complete' && chosen && (
           <div className="space-y-4">
             <div className="text-center py-2">
@@ -249,8 +422,8 @@ function InsuranceFlow() {
               <p className="text-[12px] text-[#A4ABB8]">Policy activated instantly</p>
             </div>
             {/* Digital Policy Card */}
-            <div className="rounded-[18px] p-5 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4C1D95 100%)' }}>
-              <div className="absolute top-0 right-0 w-32 h-32 rounded-full" style={{ background: 'radial-gradient(circle, rgba(157,99,246,0.2) 0%, transparent 70%)' }} />
+            <div className="rounded-[18px] p-5 text-white relative overflow-hidden" style={{ background: insuranceType === 'car' ? 'linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4C1D95 100%)' : insuranceType === 'home' ? 'linear-gradient(135deg, #064E3B 0%, #059669 100%)' : insuranceType === 'pet' ? 'linear-gradient(135deg, #7C2D12 0%, #EA580C 100%)' : 'linear-gradient(135deg, #1E3A5F 0%, #2563EB 100%)' }}>
+              <div className="absolute top-0 right-0 w-32 h-32 rounded-full" style={{ background: `radial-gradient(circle, ${accentColor}30 0%, transparent 70%)` }} />
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Shield size={16} className="text-[#FFBD4C]" />
@@ -261,12 +434,15 @@ function InsuranceFlow() {
               <p className="text-[13px] font-bold">{chosen.name} Plan</p>
               <p className="text-[11px] text-white/60 mt-0.5">Policy #SHR-2026-{Math.floor(Math.random() * 90000 + 10000)}</p>
               <div className="flex gap-4 mt-3 text-[10px] text-white/50">
-                <div><p>Vehicle</p><p className="text-white font-semibold">Toyota Land Cruiser 2023</p></div>
+                <div>
+                  <p>{insuranceType === 'car' ? 'Vehicle' : insuranceType === 'home' ? 'Property' : insuranceType === 'pet' ? 'Pet' : 'Coverage'}</p>
+                  <p className="text-white font-semibold">{insuranceType === 'car' ? 'Toyota Land Cruiser 2023' : insuranceType === 'home' ? 'Villa, Abu Dhabi' : insuranceType === 'pet' ? 'Golden Retriever' : 'Family Plan'}</p>
+                </div>
                 <div><p>Valid Until</p><p className="text-white font-semibold">Apr 2027</p></div>
               </div>
             </div>
             <div className="flex gap-2">
-              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#7C3AED] bg-[#F5F0FF] border border-[#E9DEFF] active:scale-95 transition-all">
+              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold bg-[#F5F0FF] border active:scale-95 transition-all" style={{ color: accentColor, borderColor: accentColor + '30' }}>
                 <Download size={13} className="inline mr-1" />PDF
               </button>
               <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
@@ -1525,9 +1701,37 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('insurance') || t.includes('motor') || t.includes('car insurance') || t.includes('shory') || t.includes('vehicle') || t.includes('plate')) {
+  if (t.includes('home insurance') || t.includes('property insurance')) {
+    return {
+      content: `Great choice! **Shory Home Insurance** protects your property and belongings. IHC employees get an exclusive **15% corporate discount**. Let me find you the best plan:`,
+      flowType: 'insurance',
+    };
+  }
+
+  if (t.includes('pet insurance') || (t.includes('insurance') && t.includes('pet'))) {
+    return {
+      content: `I love that you're looking after your furry friend! **Shory Pet Insurance** covers vet visits, surgeries, and wellness. IHC employees get **15% off** all plans:`,
+      flowType: 'insurance',
+    };
+  }
+
+  if (t.includes('health insurance') && !t.includes('benefit')) {
+    return {
+      content: `Let's find you the perfect health plan! **Shory Health Insurance** offers comprehensive medical, dental, and optical coverage. IHC employees get **15% off**:`,
+      flowType: 'insurance',
+    };
+  }
+
+  if (t.includes('car insurance') || t.includes('motor insurance') || t.includes('vehicle insurance') || (t.includes('shory') && !t.includes('home') && !t.includes('pet') && !t.includes('health'))) {
     return {
       content: `I can help you get car insurance through **Shory** — IHC's digital insurance platform. IHC employees get an exclusive **15% corporate discount** on all plans. Let's get started:`,
+      flowType: 'insurance',
+    };
+  }
+
+  if (t.includes('insurance') || t.includes('motor') || t.includes('plate')) {
+    return {
+      content: `I can help you with insurance through **Shory** — IHC's digital insurance platform. We offer **4 types of coverage**, all with an exclusive **15% IHC employee discount**. Which type of insurance are you looking for?`,
       flowType: 'insurance',
     };
   }
@@ -1847,7 +2051,7 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
         { type: 'action', icon: Gift, title: `Employee Offers (${OFFERS.length})`, subtitle: 'Discounts, perks & exclusive deals', color: '#FFBD4C', link: '/offers' },
         { type: 'action', icon: FileText, title: 'Latest Announcements', subtitle: 'Corporate news & updates', color: '#9D63F6', link: '/announcements' },
         { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#54B6ED', action: 'I want to book a flight' },
-        { type: 'booking', icon: Shield, title: 'Motor Insurance', subtitle: 'Shory · 15% IHC discount', color: '#0D9488', action: 'I need car insurance' },
+        { type: 'booking', icon: Shield, title: 'Insurance Hub', subtitle: 'Car, Home, Pet & Health · 15% off', color: '#0D9488', action: 'I need insurance' },
         { type: 'action', icon: ShoppingBag, title: 'Marketplace', subtitle: 'Buy & sell with colleagues', color: '#EA580C', link: '/marketplace' },
         { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Salary cert, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
       ]
@@ -1876,7 +2080,7 @@ const SUGGESTIONS = [
   { icon: HelpCircle, label: 'Need Help', prompt: 'I need help with something', color: '#54B6ED', bg: '#EBF6FF' },
   { icon: Gift, label: 'Find Offers', prompt: 'Show me the best offers', color: '#FFBD4C', bg: '#FFF8EB' },
   { icon: Plane, label: 'Book Flight', prompt: 'I want to book a flight', color: '#7C3AED', bg: '#F0EAFF' },
-  { icon: Shield, label: 'Insurance', prompt: 'I need motor insurance', color: '#0D9488', bg: '#EDFCFA' },
+  { icon: Shield, label: 'Insurance', prompt: 'I need insurance', color: '#0D9488', bg: '#EDFCFA' },
   { icon: ShoppingBag, label: 'Marketplace', prompt: 'Take me to the marketplace', color: '#EA580C', bg: '#FFF4EC' },
   { icon: Briefcase, label: 'HR Services', prompt: 'I need HR help', color: '#6366F1', bg: '#EEEEFF' },
 ];
