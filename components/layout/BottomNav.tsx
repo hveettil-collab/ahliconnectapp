@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Sparkles, ShoppingBag, User } from 'lucide-react';
@@ -13,9 +14,23 @@ const TABS = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const [hidden, setHidden] = useState(false);
+
+  // Hide nav when any modal/overlay (fixed inset-0 z-30+/z-50+) is open
+  useEffect(() => {
+    const check = () => {
+      const overlays = document.querySelectorAll('.fixed.inset-0, [data-modal-overlay]');
+      setHidden(overlays.length > 0);
+    };
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Hide bottom nav on AI page
   if (pathname === '/services') return null;
+  if (hidden) return null;
 
   return (
     <div

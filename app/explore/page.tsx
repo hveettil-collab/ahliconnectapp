@@ -1117,23 +1117,6 @@ export default function ExplorePage() {
               </div>
             </section>
 
-            {/* Quick Actions */}
-            <section>
-              <div className="grid grid-cols-3 gap-2">
-                {QUICK_ACTIONS.map((action, i) => {
-                  const AIcon = action.icon;
-                  return (
-                    <Link key={action.label} href={action.href} className={`card-rise card-rise-${i} flex flex-col items-center gap-1.5 py-3 rounded-[16px] active:scale-95 transition-transform`}>
-                      <div className="w-11 h-11 rounded-[14px] flex items-center justify-center" style={{ background: action.color + '10' }}>
-                        <AIcon size={20} style={{ color: action.color }} strokeWidth={1.7} />
-                      </div>
-                      <span className="text-[10px] font-semibold text-[#666D80]">{action.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-
             {/* Lifestyle */}
             <section>
               <SectionHeader title="Lifestyle" href="/offers" />
