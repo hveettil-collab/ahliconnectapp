@@ -569,7 +569,12 @@ function CommentSheet({ post, user, onClose, onAddComment }: {
   const [likedComments, setLikedComments] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { setTimeout(() => inputRef.current?.focus(), 300); }, []);
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 300);
+    /* Lock background scroll while comments are open */
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   function handleSend() {
     if (!newComment.trim()) return;
@@ -578,9 +583,9 @@ function CommentSheet({ post, user, onClose, onAddComment }: {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ touchAction: 'none' }}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[75vh] flex flex-col scale-in">
+      <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[75vh] flex flex-col scale-in" style={{ touchAction: 'pan-y' }}>
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#F0F1F3]">
           <div>
@@ -593,7 +598,7 @@ function CommentSheet({ post, user, onClose, onAddComment }: {
         </div>
 
         {/* Comments list */}
-        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+        <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4" style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
           {post.comments.length === 0 && (
             <div className="text-center py-8">
               <MessageCircle size={32} className="text-[#DFE1E6] mx-auto mb-2" />
