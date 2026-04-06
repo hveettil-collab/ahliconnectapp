@@ -140,7 +140,7 @@ export default function DashboardPage() {
               </div>
 
               <p className="text-[11px] text-[#A4ABB8] mb-6">
-                Or open <span className="font-semibold text-[#9D63F6]">ahli-connect.vercel.app</span> on your mobile browser
+                Or open <span className="font-semibold text-[#9D63F6]">ahliconnectapp.vercel.app</span> on your mobile browser
               </p>
 
               {/* Dismiss button */}
