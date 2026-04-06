@@ -2099,7 +2099,7 @@ function ServicesPageContent() {
             }} />
             {/* Lottie chatbot animation */}
             <div className="ahli-orb-float" style={{ width: 200, height: 200 }}>
-              <DotLottieReact src="/lottie-ai-chatbot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
+              <DotLottieReact src="/lottie-ai-robot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
 
