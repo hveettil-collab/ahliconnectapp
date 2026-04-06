@@ -469,7 +469,7 @@ export default function DashboardPage() {
               <Footprints size={13} className="text-[#40C4AA]" />
               <span className="text-[12px] font-bold text-white">7,432</span>
             </Link>
-            <Link href="/offers" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+            <Link href="/rewards" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
               style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
               <Star size={14} className="text-[#FFBD4C]" fill="#FFBD4C" strokeWidth={0} />
               <span className="text-[12px] font-bold text-white">2,450</span>

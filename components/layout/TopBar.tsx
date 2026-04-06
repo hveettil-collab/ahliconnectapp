@@ -1,12 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { Bell, Search, MessageCircle, Menu } from 'lucide-react';
+import { Bell, Search, MessageCircle, Menu, ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useNotifications } from '@/context/NotificationContext';
 import Avatar from '@/components/ui/Avatar';
 import { COMPANIES } from '@/lib/mockData';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import SmartSearch from '@/components/ui/SmartSearch';
+
+const MAIN_PAGES = ['/dashboard', '/explore', '/marketplace', '/community', '/services'];
 
 interface TopBarProps {
   title: string;
@@ -19,18 +22,31 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
   const { unreadCount, togglePanel } = useNotifications();
   const company = COMPANIES.find(c => c.id === user?.companyId);
   const [searchOpen, setSearchOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const isSubPage = !MAIN_PAGES.includes(pathname);
 
   return (
     <>
       <header className="h-14 md:h-16 bg-white border-b border-[#DFE1E6] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
-        {/* Hamburger - mobile only */}
-        <button
-          onClick={onMenuToggle}
-          className="md:hidden p-2 -ml-1 rounded-[10px] text-[#666D80] hover:bg-[#F8F9FB] transition-colors shrink-0"
-          aria-label="Open menu"
-        >
-          <Menu size={20} strokeWidth={1.8} />
-        </button>
+        {/* Back button on sub-pages, Hamburger on main pages - mobile only */}
+        {isSubPage ? (
+          <button
+            onClick={() => router.back()}
+            className="md:hidden p-2 -ml-1 rounded-[10px] text-[#666D80] hover:bg-[#F8F9FB] transition-colors shrink-0 active:scale-95"
+            aria-label="Go back"
+          >
+            <ArrowLeft size={20} strokeWidth={1.8} />
+          </button>
+        ) : (
+          <button
+            onClick={onMenuToggle}
+            className="md:hidden p-2 -ml-1 rounded-[10px] text-[#666D80] hover:bg-[#F8F9FB] transition-colors shrink-0"
+            aria-label="Open menu"
+          >
+            <Menu size={20} strokeWidth={1.8} />
+          </button>
+        )}
 
         {/* Title */}
         <div className="flex-1 min-w-0">
