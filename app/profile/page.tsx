@@ -6,7 +6,7 @@ import { useWallet } from '@/context/WalletContext';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
-import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard } from 'lucide-react';
+import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
    COUNTDOWN HOOK
@@ -347,20 +347,9 @@ function WalletSection() {
    ═══════════════════════════════════════════ */
 
 function MyAssetsSection() {
-  // Insurance expiry: 47 days from now
-  const insuranceExpiry = new Date();
-  insuranceExpiry.setDate(insuranceExpiry.getDate() + 47);
-  const countdown = useCountdown(insuranceExpiry);
-  const isUrgent = countdown.days <= 30;
-
   const CAR_DATA = {
     make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White',
     plate: 'Abu Dhabi · 12345', vin: 'JTMHY7AJ5N5...', regExpiry: 'Dec 2026',
-  };
-
-  const HOME_DATA = {
-    type: 'Apartment', building: 'Saadiyat Beach Residences', unit: 'Tower B · Unit 1804',
-    area: 'Saadiyat Island, Abu Dhabi', size: '2 BR · 1,450 sq ft', parking: '2 spots',
   };
 
   return (
@@ -396,111 +385,100 @@ function MyAssetsSection() {
         </div>
       </div>
 
-      {/* ── Home Details ── */}
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
-        <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' }}>
-          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-            <Home size={18} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <p className="text-[14px] font-bold text-white">My Home</p>
-            <p className="text-[11px] text-white/60">{HOME_DATA.area}</p>
-          </div>
-        </div>
-        <div className="p-4">
-          <div className="grid grid-cols-2 gap-2.5">
-            {[
-              { label: 'Property Type', value: HOME_DATA.type },
-              { label: 'Building', value: HOME_DATA.building },
-              { label: 'Unit', value: HOME_DATA.unit },
-              { label: 'Area', value: HOME_DATA.area.split(',')[0] },
-              { label: 'Size', value: HOME_DATA.size },
-              { label: 'Parking', value: HOME_DATA.parking },
-            ].map(item => (
-              <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-                <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
-                <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Insurance with Countdown ── */}
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
-        <div className="p-4 flex items-center gap-3" style={{ background: isUrgent ? 'linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)' : 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
-          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-            <Shield size={18} className="text-white" />
-          </div>
-          <div className="flex-1">
-            <p className="text-[14px] font-bold text-white">Motor Insurance</p>
-            <p className="text-[11px] text-white/60">Shory · Comprehensive Plan</p>
-          </div>
-          <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-white/15 text-white">Active</span>
-        </div>
-
-        <div className="p-4 space-y-4">
-          {/* Policy info */}
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Policy Number</p>
-              <p className="text-[14px] font-bold text-[#15161E]">SHR-2025-78432</p>
+      {/* ── Car Insurance ── */}
+      <Link href="/insurance" className="block no-underline">
+        <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+          <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 100%)' }}>
+            <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+              <Shield size={18} className="text-white" />
             </div>
-            <div className="text-right">
-              <p className="text-[10px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Coverage</p>
-              <p className="text-[14px] font-bold text-[#7C3AED]">Comprehensive</p>
+            <div className="flex-1">
+              <p className="text-[14px] font-bold text-white">Car Insurance</p>
+              <p className="text-[11px] text-white/60">Comprehensive Plan</p>
             </div>
+            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-white">Active</span>
           </div>
-
-          {/* Active Countdown */}
-          <div className="rounded-[16px] p-4 relative overflow-hidden" style={{ background: isUrgent ? 'linear-gradient(135deg, #FEF2F2, #FFF1F2)' : 'linear-gradient(135deg, #F5F0FF, #EDE8FF)' }}>
-            <div className="flex items-center gap-2 mb-3">
-              {isUrgent ? <AlertTriangle size={14} className="text-[#DC2626]" /> : <Clock size={14} className="text-[#7C3AED]" />}
-              <p className="text-[12px] font-bold" style={{ color: isUrgent ? '#DC2626' : '#7C3AED' }}>
-                {isUrgent ? 'Expiring Soon!' : 'Policy Expires In'}
-              </p>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
+          <div className="p-4 space-y-3">
+            <div className="grid grid-cols-2 gap-2.5">
               {[
-                { value: String(countdown.days).padStart(2, '0'), label: 'Days' },
-                { value: String(countdown.hours).padStart(2, '0'), label: 'Hours' },
-                { value: String(countdown.minutes).padStart(2, '0'), label: 'Min' },
-                { value: String(countdown.seconds).padStart(2, '0'), label: 'Sec' },
-              ].map(unit => (
-                <div key={unit.label} className="text-center">
-                  <div className="rounded-[12px] py-2.5 font-mono" style={{ background: isUrgent ? '#DC262610' : '#7C3AED10' }}>
-                    <p className="text-[22px] font-extrabold tabular-nums" style={{ color: isUrgent ? '#DC2626' : '#7C3AED' }}>{unit.value}</p>
-                  </div>
-                  <p className="text-[9px] text-[#A4ABB8] font-semibold mt-1 uppercase">{unit.label}</p>
+                { label: 'Policy No.', value: 'SHR-2025-78432' },
+                { label: 'Vehicle', value: 'Toyota Land Cruiser' },
+                { label: 'Premium', value: 'AED 1,274/yr' },
+                { label: 'Expiry', value: 'May 22, 2026' },
+              ].map(item => (
+                <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                  <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                  <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
                 </div>
               ))}
             </div>
-            <p className="text-[11px] text-[#666D80] mt-3 text-center">
-              Expires on {insuranceExpiry.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </p>
-          </div>
-
-          {/* Quick details */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <div className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-              <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Vehicle</p>
-              <p className="text-[12px] font-bold text-[#15161E]">Toyota Land Cruiser</p>
-            </div>
-            <div className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-              <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">Premium</p>
-              <p className="text-[12px] font-bold text-[#15161E]">AED 1,274/yr</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#059669]">
+                <Shield size={13} /> Manage Policy <ChevronRight size={13} />
+              </div>
+              <p className="text-[9px] text-[#A4ABB8] font-semibold">Powered by <span className="text-[#059669] font-bold">Shory</span></p>
             </div>
           </div>
-
-          {/* Renew CTA */}
-          <Link href="/services?prompt=I+need+to+renew+my+motor+insurance"
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-[13px] font-bold text-white active:scale-[0.97] transition-all"
-            style={{ background: isUrgent ? 'linear-gradient(135deg, #DC2626, #B91C1C)' : 'linear-gradient(135deg, #7C3AED, #9D63F6)', boxShadow: isUrgent ? '0 4px 16px rgba(220,38,38,0.3)' : '0 4px 16px rgba(124,58,237,0.3)' }}>
-            <Shield size={15} /> {isUrgent ? 'Renew Now' : 'Manage Policy'}
-            <ChevronRight size={14} />
-          </Link>
         </div>
-      </div>
+      </Link>
+
+      {/* ── Health Insurance ── */}
+      <Link href="/insurance" className="block no-underline">
+        <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+          <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
+            <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+              <Heart size={18} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <p className="text-[14px] font-bold text-white">Health Insurance</p>
+              <p className="text-[11px] text-white/60">Gold Family Plan · Daman</p>
+            </div>
+            <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-white">Active</span>
+          </div>
+          <div className="p-4 space-y-3">
+            <div className="grid grid-cols-2 gap-2.5">
+              {[
+                { label: 'Network', value: 'Enhanced' },
+                { label: 'Annual Limit', value: 'AED 500,000' },
+                { label: 'Copay', value: '20%' },
+                { label: 'Expiry', value: 'Dec 31, 2026' },
+              ].map(item => (
+                <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                  <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                  <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Dependents */}
+            <div className="rounded-[14px] px-3 py-2.5" style={{ background: '#F5F0FF' }}>
+              <div className="flex items-center gap-1.5 mb-2">
+                <Users size={12} className="text-[#7C3AED]" />
+                <p className="text-[10px] font-bold text-[#7C3AED]">Dependents</p>
+              </div>
+              <div className="flex gap-2">
+                {[
+                  { name: 'Fatima A.', relation: 'Spouse' },
+                  { name: 'Omar A.', relation: 'Child' },
+                  { name: 'Sara A.', relation: 'Child' },
+                ].map(dep => (
+                  <div key={dep.name} className="flex items-center gap-1.5 px-2 py-1.5 rounded-[8px] bg-white/80">
+                    <div className="w-5 h-5 rounded-full bg-[#9D63F6] flex items-center justify-center text-[8px] font-bold text-white">{dep.name[0]}</div>
+                    <p className="text-[10px] font-semibold text-[#15161E]">{dep.name}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-[12px] font-bold text-[#7C3AED]">
+                <Heart size={13} /> View Details <ChevronRight size={13} />
+              </div>
+              <p className="text-[9px] text-[#A4ABB8] font-semibold">Powered by <span className="text-[#059669] font-bold">Shory</span></p>
+            </div>
+          </div>
+        </div>
+      </Link>
     </div>
   );
 }
