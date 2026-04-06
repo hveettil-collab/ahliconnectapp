@@ -143,12 +143,11 @@ export default function DashboardPage() {
                 Or open <span className="font-semibold text-[#9D63F6]">ahliconnectapp.vercel.app</span> on your mobile browser
               </p>
 
-              {/* Dismiss button */}
+              {/* Close link */}
               <button
                 onClick={() => { setShowDesktopModal(false); sessionStorage.setItem('ahli_desktop_modal_dismissed', '1'); }}
-                className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white transition-all active:scale-[0.98]"
-                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
-                Continue on Desktop
+                className="text-[12px] font-medium text-[#A4ABB8] hover:text-[#666D80] transition-colors">
+                Dismiss
               </button>
             </div>
           </div>
