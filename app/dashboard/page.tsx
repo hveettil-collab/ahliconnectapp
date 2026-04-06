@@ -173,7 +173,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
         {/* ── Slide 1: Upcoming Event ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
           <Link href="/explore" className="block">
-            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&h=500&fit=crop" alt="Sports Day"
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
@@ -208,7 +208,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
         {/* ── Slide 2: Corporate Announcements ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
           <Link href={`/news?id=${news.id}`} className="block">
-            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src={news.image} alt={news.title}
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
@@ -239,7 +239,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
         {/* ── Slide 3: Offers ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
           <button onClick={onOfferClick} className="block w-full text-left">
-            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src={topOffers[0]?.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop'} alt="Offers"
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
@@ -270,7 +270,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
         {/* ── Slide 4: Community ── */}
         <div className="shrink-0 w-full" style={{ scrollSnapAlign: 'start' }}>
           <Link href="/community" className="block">
-            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop" alt="Community"
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
@@ -450,18 +450,27 @@ export default function DashboardPage() {
                 <p className="text-white text-[16px] font-bold leading-tight truncate">{user.name.split(' ')[0]}</p>
               </div>
             </div>
-            {/* Notification Bell */}
-            <button onClick={togglePanel} className="relative shrink-0 ml-3">
-              <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
-                style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
-                <Bell size={18} className="text-white" />
+            <div className="flex items-center gap-2.5 shrink-0 ml-auto">
+              {/* Weather */}
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+                style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+                <Sun size={14} className="text-yellow-300" />
+                <span className="text-[11px] font-semibold text-white/90">36°</span>
+                <span className="text-[9px] text-white/50">Abu Dhabi</span>
               </div>
+              {/* Notification Bell */}
+              <button onClick={togglePanel} className="relative shrink-0">
+                <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
+                  style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
+                  <Bell size={18} className="text-white" />
+                </div>
               {unreadCount > 0 && (
                 <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#DF1C41] flex items-center justify-center px-1 shadow-md">
                   <span className="text-[9px] font-bold text-white">{unreadCount}</span>
                 </div>
               )}
-            </button>
+              </button>
+            </div>
           </div>
           {/* Row 2: Steps + Points badges */}
           <div className="flex items-center gap-2 mt-3">
@@ -634,27 +643,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════
-          QUICK ACCESS BENTO
-          ═══════════════════════════════════════ */}
-      <div className="px-4 pt-4 pb-1">
-        <div className="grid grid-cols-4 gap-2">
-          {[
-            { icon: Gift, label: 'Benefits', href: '/offers', bg: '#F7F1FF', color: '#9D63F6' },
-            { icon: Compass, label: 'Explore', href: '/explore', bg: '#E7FEF8', color: '#40C4AA' },
-            { icon: UtensilsCrossed, label: 'Market', href: '/marketplace', bg: '#FFF6E0', color: '#FFBD4C' },
-            { icon: Users, label: 'Chat', href: '/chat', bg: '#EBF5FF', color: '#54B6ED' },
-          ].map(({ icon: Icon, label, href, bg, color }) => (
-            <Link key={label} href={href}
-              className="flex flex-col items-center gap-1.5 py-3 rounded-[16px] border border-[#DFE1E6] bg-white hover:shadow-md transition-all active:scale-[0.96]">
-              <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: bg }}>
-                <Icon size={20} style={{ color }} strokeWidth={1.8} />
-              </div>
-              <p className="text-[10px] font-semibold text-[#15161E]">{label}</p>
-            </Link>
-          ))}
-        </div>
-      </div>
 
       {/* ── Rest of dashboard content ── */}
       <div className="px-4 space-y-3 pb-4 pt-2">
