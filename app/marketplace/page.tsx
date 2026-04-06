@@ -639,7 +639,7 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
 
       {/* ── Sticky bottom CTA — glassmorphism ── */}
       {!showChat && !showOffer && !showSellerProfile && !showCallSheet && !showBuyConfirm && (
-        <div className="shrink-0 px-4 py-3 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
+        <div className="shrink-0 px-4 pt-3 pb-24 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
           <div className="flex gap-2">
             <button onClick={() => setShowChat(true)}
               className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
