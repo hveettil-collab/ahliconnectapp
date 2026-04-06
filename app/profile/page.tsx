@@ -883,11 +883,11 @@ export default function ProfilePage() {
               ═══════════════════════════════════════ */}
           <div className="relative">
             {[
-              { title: 'Wallet & Rewards', subtitle: `AED ${(5600).toLocaleString()}`, icon: Wallet, gradient: 'linear-gradient(135deg, #1B1D3A 0%, #2D1B69 100%)', textColor: '#fff', accentColor: '#9D63F6' },
-              { title: 'Your Benefits', subtitle: '4 active benefits', icon: Gift, gradient: 'linear-gradient(135deg, #065F46 0%, #047857 100%)', textColor: '#fff', accentColor: '#34D399' },
-              { title: 'My Insurance', subtitle: 'Car · Health', icon: Shield, gradient: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)', textColor: '#fff', accentColor: '#5EEAD4' },
-              { title: 'Saved Offers', subtitle: `${savedOffers.length} saved`, icon: Tag, gradient: 'linear-gradient(135deg, #92400E 0%, #B45309 100%)', textColor: '#fff', accentColor: '#FCD34D' },
-              { title: 'My Listings', subtitle: `${myListings.length} active`, icon: ShoppingBag, gradient: 'linear-gradient(135deg, #7C2D12 0%, #C2410C 100%)', textColor: '#fff', accentColor: '#FB923C' },
+              { title: 'Wallet & Rewards', subtitle: `AED ${(5600).toLocaleString()}`, icon: Wallet, gradient: 'linear-gradient(135deg, #1B1D3A 0%, #3B1F8E 50%, #6D28D9 100%)', textColor: '#fff', accentColor: '#C4B5FD', glowColor: 'rgba(109,40,217,0.35)' },
+              { title: 'Your Benefits', subtitle: '4 active benefits', icon: Gift, gradient: 'linear-gradient(135deg, #064E3B 0%, #059669 50%, #34D399 100%)', textColor: '#fff', accentColor: '#6EE7B7', glowColor: 'rgba(5,150,105,0.35)' },
+              { title: 'My Insurance', subtitle: 'Car · Health', icon: Shield, gradient: 'linear-gradient(135deg, #134E4A 0%, #0D9488 50%, #2DD4BF 100%)', textColor: '#fff', accentColor: '#99F6E4', glowColor: 'rgba(13,148,136,0.35)' },
+              { title: 'Saved Offers', subtitle: `${savedOffers.length} saved`, icon: Tag, gradient: 'linear-gradient(135deg, #78350F 0%, #D97706 50%, #FBBF24 100%)', textColor: '#fff', accentColor: '#FDE68A', glowColor: 'rgba(217,119,6,0.35)' },
+              { title: 'My Listings', subtitle: `${myListings.length} active`, icon: ShoppingBag, gradient: 'linear-gradient(135deg, #7C2D12 0%, #EA580C 50%, #FB923C 100%)', textColor: '#fff', accentColor: '#FDBA74', glowColor: 'rgba(234,88,12,0.35)' },
             ].map((card, idx) => {
               const isExpanded = expandedCard === idx;
               const CardIcon = card.icon;
@@ -897,7 +897,7 @@ export default function ProfilePage() {
                   key={card.title}
                   className="transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
                   style={{
-                    marginTop: expandedCard === null && idx > 0 ? -52 : (idx > 0 ? 8 : 0),
+                    marginTop: expandedCard === null && idx > 0 ? -44 : (idx > 0 ? 8 : 0),
                     position: 'relative',
                     zIndex: isExpanded ? 30 : expandedCard === null ? (10 + idx) : (idx > (expandedCard ?? 0) ? 5 : 10 + idx),
                   }}
@@ -905,30 +905,34 @@ export default function ProfilePage() {
                   {/* Card Header — always visible, tappable */}
                   <button
                     onClick={() => toggleCard(idx)}
-                    className="w-full rounded-t-[20px] px-5 py-4 flex items-center justify-between active:scale-[0.99] transition-transform"
+                    className="w-full px-5 py-5 flex items-center justify-between active:scale-[0.99] transition-transform relative overflow-hidden"
                     style={{
                       background: card.gradient,
                       borderRadius: isExpanded ? '20px 20px 0 0' : '20px',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)',
+                      boxShadow: `0 8px 32px ${card.glowColor}, 0 2px 8px rgba(0,0,0,0.12)`,
+                      minHeight: 72,
                     }}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
-                        <CardIcon size={18} style={{ color: card.accentColor }} />
+                    {/* Shine overlay */}
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.08) 100%)' }} />
+                    <div className="flex items-center gap-3.5 relative z-[1]">
+                      <div className="w-11 h-11 rounded-[14px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.18)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                        <CardIcon size={20} style={{ color: card.accentColor }} />
                       </div>
                       <div className="text-left">
-                        <p className="text-[14px] font-bold" style={{ color: card.textColor }}>{card.title}</p>
-                        <p className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>{card.subtitle}</p>
+                        <p className="text-[15px] font-bold tracking-[-0.01em]" style={{ color: card.textColor }}>{card.title}</p>
+                        <p className="text-[12px] font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>{card.subtitle}</p>
                       </div>
                     </div>
                     <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300"
+                      className="w-9 h-9 rounded-full flex items-center justify-center transition-transform duration-300 relative z-[1]"
                       style={{
-                        background: 'rgba(255,255,255,0.1)',
+                        background: 'rgba(255,255,255,0.12)',
+                        border: '1px solid rgba(255,255,255,0.1)',
                         transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
                       }}
                     >
-                      <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.6)' }} />
+                      <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.7)' }} />
                     </div>
                   </button>
 

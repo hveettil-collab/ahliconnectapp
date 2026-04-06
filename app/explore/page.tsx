@@ -558,10 +558,10 @@ const MAP_LOCATIONS: MapLocation[] = [
 
 const TRENDING_ITEMS = [
   { id: 't1', title: 'IHC Innovation Hackathon', desc: '97/120 spots filled — 3 days left to register!', tag: 'Hot', tagColor: '#DC2626', icon: Trophy, color: '#7C3AED', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop', engagement: '2.4K interested', href: '/explore' },
-  { id: 't2', title: 'Palms Sports Membership', desc: '340 employees signed up this week', tag: 'Trending', tagColor: '#FFBD4C', icon: Dumbbell, color: '#40C4AA', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', engagement: '1.8K members', href: '/services?prompt=I+want+to+join+Palms+Sports+gym' },
+  { id: 't2', title: 'Palms Sports Membership', desc: '340 employees signed up this week', tag: 'Trending', tagColor: '#FFBD4C', icon: Dumbbell, color: '#40C4AA', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', engagement: '1.8K members', href: '/offers' },
   { id: 't3', title: 'FIFA Tournament Season 3', desc: 'Registration closing soon — 64 teams max', tag: 'Popular', tagColor: '#9D63F6', icon: Gamepad2, color: '#DC2626', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=600&h=400&fit=crop', engagement: '890 players', href: '/services?prompt=Show+me+gaming+tournaments' },
   { id: 't4', title: 'New: AI Expense Claims', desc: '98% accuracy — scan receipts with your camera', tag: 'New', tagColor: '#059669', icon: Receipt, color: '#FFBD4C', image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&h=400&fit=crop', engagement: '12K claims/mo', href: '/automations/expense-claim' },
-  { id: 't5', title: 'Yas Island Employee Pass', desc: 'Most redeemed offer this quarter', tag: 'Top', tagColor: '#7C3AED', icon: Ticket, color: '#9D63F6', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop', engagement: '5.6K redeemed', href: '/services?prompt=I+want+Yas+Island+tickets' },
+  { id: 't5', title: 'Yas Island Employee Pass', desc: 'Most redeemed offer this quarter', tag: 'Top', tagColor: '#7C3AED', icon: Ticket, color: '#9D63F6', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop', engagement: '5.6K redeemed', href: '/offers' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -571,9 +571,9 @@ const TRENDING_ITEMS = [
 const WELLNESS_ITEMS = [
   { id: 'w1', title: 'Employee Wellness Week', desc: 'Free health screenings, yoga & nutrition talks', date: 'Apr 25–29', location: 'PureHealth HQ', color: '#059669', icon: Heart, image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop', spots: '187 spots left', href: '/explore' },
   { id: 'w2', title: 'Mental Health Support', desc: '24/7 counseling — 100% confidential & free', date: 'Always available', location: 'Virtual', color: '#7C3AED', icon: Shield, image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=400&fit=crop', spots: 'Unlimited', href: '/services?prompt=I+need+mental+health+support' },
-  { id: 'w3', title: 'Palms Sports Gym', desc: 'Corporate rate AED 150/mo — 60% off', date: 'Ongoing', location: '8 locations', color: '#EA580C', icon: Dumbbell, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', spots: 'Open enrollment', href: '/services?prompt=I+want+to+join+Palms+Sports+gym' },
-  { id: 'w4', title: 'Nutrition Consultation', desc: 'Free monthly session with certified dietitian', date: 'Monthly', location: 'PureHealth clinics', color: '#40C4AA', icon: Heart, image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop', spots: 'Book anytime', href: '/services?prompt=Book+nutrition+consultation' },
-  { id: 'w5', title: 'Yoga & Meditation', desc: 'Weekly sessions at all major offices', date: 'Every Wednesday', location: 'All offices', color: '#9D63F6', icon: Sparkles, image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&h=400&fit=crop', spots: '30/class', href: '/services?prompt=Join+yoga+class' },
+  { id: 'w3', title: 'Palms Sports Gym', desc: 'Corporate rate AED 150/mo — 60% off', date: 'Ongoing', location: '8 locations', color: '#EA580C', icon: Dumbbell, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', spots: 'Open enrollment', href: '/offers' },
+  { id: 'w4', title: 'Nutrition Consultation', desc: 'Free monthly session with certified dietitian', date: 'Monthly', location: 'PureHealth clinics', color: '#40C4AA', icon: Heart, image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop', spots: 'Book anytime', href: '/offers' },
+  { id: 'w5', title: 'Yoga & Meditation', desc: 'Weekly sessions at all major offices', date: 'Every Wednesday', location: 'All offices', color: '#9D63F6', icon: Sparkles, image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&h=400&fit=crop', spots: '30/class', href: '/offers' },
 ];
 
 /* ═══════════════════════════════════════════
@@ -891,7 +891,7 @@ export default function ExplorePage() {
                 {OFFERS_DATA.map((offer, i) => {
                   const OIcon = offer.icon;
                   return (
-                    <Link key={offer.id} href={`/services?prompt=${encodeURIComponent(offer.title)}`}
+                    <Link key={offer.id} href="/offers"
                       className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all`}>
                       <div className="relative h-[100px]">
                         <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
@@ -1080,7 +1080,7 @@ export default function ExplorePage() {
             </section>
             <section>
               <SectionHeader title="Gym & Fitness" />
-              <Link href="/services?prompt=I+want+to+join+Palms+Sports+gym"
+              <Link href="/offers"
                 className="card-rise flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all">
                 <div className="w-14 h-14 rounded-[14px] flex items-center justify-center shrink-0" style={{ background: '#EA580C12' }}>
                   <Dumbbell size={24} className="text-[#EA580C]" strokeWidth={1.5} />
