@@ -262,7 +262,7 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary\nCertificate',
-              lottie: 'https://lottie.host/6c2e8a56-63c2-471e-bf86-a2c3cce61114/W86HnJD41s.lottie',
+              lottie: '/lottie-salary.lottie',
               icon: null,
               gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
@@ -272,8 +272,8 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart\nLeave',
-              lottie: null,
-              icon: Calendar,
+              lottie: '/lottie-leave.lottie',
+              icon: null,
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
@@ -282,8 +282,8 @@ export default function DashboardPage() {
             },
             {
               title: 'Expense\nClaim',
-              lottie: null,
-              icon: Receipt,
+              lottie: '/lottie-expense.lottie',
+              icon: null,
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
               statLabel: 'accuracy',
