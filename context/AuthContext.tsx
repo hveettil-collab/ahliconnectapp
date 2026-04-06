@@ -1,5 +1,6 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { MOCK_USERS } from '@/lib/mockData';
 import { STORAGE_KEYS } from '@/lib/constants';
 
@@ -18,6 +19,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User>(null);
   const [pendingEmail, setPendingEmail] = useState('');
   const [pendingCompany, setPendingCompany] = useState('');
@@ -42,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
+    router.push('/');
   };
 
   return (
