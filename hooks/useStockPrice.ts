@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export interface StockData {
   ticker: string;
@@ -21,32 +21,52 @@ const REFRESH_INTERVAL = 60_000; // 60 seconds
 
 /**
  * Hook that fetches live IHC stock data and auto-refreshes every 60s.
+ * Uses requestIdleCallback to avoid blocking initial render.
  * Falls back to MARKET_DATA from mockData if the API is unreachable.
  */
 export function useStockPrice() {
   const [stock, setStock] = useState<StockData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
 
   const fetchStock = useCallback(async () => {
     try {
       const res = await fetch('/api/stock', { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data: StockData = await res.json();
-      setStock(data);
-      setError(null);
+      if (mountedRef.current) {
+        setStock(data);
+        setError(null);
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch');
-      // Don't clear existing stock data on refresh failure
+      if (mountedRef.current) {
+        setError(err instanceof Error ? err.message : 'Failed to fetch');
+      }
     } finally {
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchStock();
-    const id = setInterval(fetchStock, REFRESH_INTERVAL);
-    return () => clearInterval(id);
+    mountedRef.current = true;
+
+    // Defer initial fetch so it doesn't block first paint
+    const scheduleId = typeof requestIdleCallback !== 'undefined'
+      ? requestIdleCallback(() => fetchStock())
+      : setTimeout(() => fetchStock(), 100);
+
+    const intervalId = setInterval(fetchStock, REFRESH_INTERVAL);
+
+    return () => {
+      mountedRef.current = false;
+      if (typeof cancelIdleCallback !== 'undefined' && typeof scheduleId === 'number') {
+        cancelIdleCallback(scheduleId);
+      } else {
+        clearTimeout(scheduleId as ReturnType<typeof setTimeout>);
+      }
+      clearInterval(intervalId);
+    };
   }, [fetchStock]);
 
   return { stock, loading, error, refetch: fetchStock };

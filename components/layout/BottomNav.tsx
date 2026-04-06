@@ -18,34 +18,12 @@ export default function BottomNav() {
   if (pathname === '/services') return null;
 
   return (
-    <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 flex justify-center hide-on-keyboard">
-      {/* Inline keyframes for AI orb animation */}
-      <style>{`
-        @keyframes ai-orb-glow {
-          0%, 100% {
-            box-shadow: 0 6px 18px 0 rgba(157, 99, 246, 0.25);
-          }
-          50% {
-            box-shadow: 0 8px 24px 0 rgba(255, 189, 76, 0.35), 0 0 12px 2px rgba(255, 189, 76, 0.15);
-          }
-        }
-        @keyframes ai-icon-rock {
-          0% { transform: rotate(0deg) scale(1); }
-          25% { transform: rotate(6deg) scale(1.08); }
-          50% { transform: rotate(0deg) scale(1); }
-          75% { transform: rotate(-6deg) scale(1.08); }
-          100% { transform: rotate(0deg) scale(1); }
-        }
-        .ai-orb-glow {
-          animation: ai-orb-glow 2.4s ease-in-out infinite;
-        }
-        .ai-icon-rock {
-          animation: ai-icon-rock 3s ease-in-out infinite;
-        }
-      `}</style>
-
+    <div
+      className="md:hidden fixed bottom-4 left-4 right-4 flex justify-center hide-on-keyboard"
+      style={{ zIndex: 100, pointerEvents: 'auto' }}
+    >
       <nav
-        className="flex items-center gap-1.5 rounded-full px-1.5 py-1.5"
+        className="flex items-center gap-1 rounded-full px-1.5 py-1.5"
         style={{
           background: '#FFFFFF',
           boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
@@ -61,6 +39,7 @@ export default function BottomNav() {
                 key={href}
                 href={href}
                 className="relative shrink-0 flex items-center justify-center"
+                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
               >
                 <div
                   className="ai-orb-glow w-[52px] h-[52px] rounded-full flex items-center justify-center"
@@ -79,9 +58,11 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200 relative"
+              className="shrink-0 flex flex-col items-center justify-center w-[56px] h-[56px] rounded-full transition-all duration-200 relative"
               style={{
                 background: active ? '#F8F9FB' : 'transparent',
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
               }}
             >
               <Icon

@@ -297,6 +297,7 @@ export default function DashboardPage() {
                   src={card.image}
                   alt={card.title.replace('\n', ' ')}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0" style={{
                   background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)',
@@ -412,7 +413,7 @@ export default function DashboardPage() {
             {relevantOffers.map(offer => (
               <button key={offer.id} onClick={() => router.push('/offers')} className="shrink-0 w-48 bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden text-left active:scale-[0.97] transition-all hover:shadow-md" style={{ scrollSnapAlign: 'start' }}>
                 <div className="relative h-24">
-                  <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" />
+                  <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   <span className="absolute top-2 left-2 text-[9px] font-bold text-white px-2 py-0.5 rounded-full" style={{ background: offer.color }}>
                     {offer.company}

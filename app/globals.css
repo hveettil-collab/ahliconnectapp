@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* ── Prevent horizontal scroll on mobile ── */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* ── Mobile touch performance ── */
+a, button, [role="button"], input, textarea, select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Ensure text is always visible in form inputs — force dark text on light input backgrounds */
 input, textarea, select {
   color: #15161E !important;
@@ -348,3 +361,18 @@ input:focus, textarea:focus, select:focus {
 .double-tap-heart { animation: double-tap-heart 0.8s ease-out forwards; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Bottom Nav animations (moved from inline <style>) ── */
+@keyframes ai-orb-glow {
+  0%, 100% { box-shadow: 0 6px 18px 0 rgba(157, 99, 246, 0.25); }
+  50% { box-shadow: 0 8px 24px 0 rgba(255, 189, 76, 0.35), 0 0 12px 2px rgba(255, 189, 76, 0.15); }
+}
+@keyframes ai-icon-rock {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(6deg) scale(1.08); }
+  50% { transform: rotate(0deg) scale(1); }
+  75% { transform: rotate(-6deg) scale(1.08); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+.ai-orb-glow { animation: ai-orb-glow 2.4s ease-in-out infinite; }
+.ai-icon-rock { animation: ai-icon-rock 3s ease-in-out infinite; }

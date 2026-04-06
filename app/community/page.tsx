@@ -324,23 +324,25 @@ function StoryCircle({ community, isActive, hasUnread, onClick }: {
    CREATE POST COMPOSER (Full-screen modal)
    ═══════════════════════════════════════════ */
 
-function CreatePostComposer({ user, communities, onPost, onClose }: {
+function CreatePostComposer({ user, communities, onPost, onClose, initialImage }: {
   user: { name: string; avatar: string; company?: string; title?: string };
   communities: Community[];
   onPost: (post: { content: string; communityId: string; type: PostType; image?: string; tags: string[] }) => void;
   onClose: () => void;
+  initialImage?: string | null;
 }) {
   const [content, setContent] = useState('');
   const [selectedCommunity, setSelectedCommunity] = useState(communities.find(c => c.isJoined)?.id || communities[0]?.id || '');
   const [postType, setPostType] = useState<PostType>('discussion');
   const [showCommunityPicker, setShowCommunityPicker] = useState(false);
   const [showTypePicker, setShowTypePicker] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(initialImage || null);
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [tagInput, setTagInput] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [posting, setPosting] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const composerFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { textareaRef.current?.focus(); }, []);
 
@@ -512,17 +514,37 @@ function CreatePostComposer({ user, communities, onPost, onClose }: {
             <button onClick={handleAddTag} className="text-[11px] font-bold text-[#9D63F6]">Add</button>
           )}
         </div>
+        {/* Hidden file input for image upload inside composer */}
+        <input
+          ref={composerFileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = () => setSelectedImage(reader.result as string);
+              reader.readAsDataURL(file);
+            }
+            e.target.value = '';
+          }}
+        />
         <div className="flex items-center gap-1">
+          <button onClick={() => composerFileInputRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all"
+            style={{ touchAction: 'manipulation' }}>
+            <Camera size={16} className="text-[#9D63F6]" />
+            <span className="text-[11px] font-semibold text-[#666D80]">Camera</span>
+          </button>
           <button onClick={() => setShowImagePicker(!showImagePicker)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all"
+            style={{ touchAction: 'manipulation' }}>
             <ImageIcon size={16} className="text-[#40C4AA]" />
-            <span className="text-[11px] font-semibold text-[#666D80]">Photo</span>
+            <span className="text-[11px] font-semibold text-[#666D80]">Gallery</span>
           </button>
-          <button className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]">
-            <MapPin size={16} className="text-[#DF1C41]" />
-            <span className="text-[11px] font-semibold text-[#666D80]">Location</span>
-          </button>
-          <button className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]">
+          <button className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]"
+            style={{ touchAction: 'manipulation' }}>
             <AtSign size={16} className="text-[#54B6ED]" />
             <span className="text-[11px] font-semibold text-[#666D80]">Mention</span>
           </button>
@@ -932,10 +954,12 @@ export default function CommunityPage() {
   const [postLikes, setPostLikes] = useState<Set<string>>(new Set());
   const [rewardToast, setRewardToast] = useState<string | null>(null);
   const [showComposer, setShowComposer] = useState(false);
+  const [composerInitialImage, setComposerInitialImage] = useState<string | null>(null);
   const [commentingPostId, setCommentingPostId] = useState<string | null>(null);
   const [sharingPostId, setSharingPostId] = useState<string | null>(null);
   const [postSuccess, setPostSuccess] = useState(false);
   const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
+  const feedFileInputRef = useRef<HTMLInputElement>(null);
 
   if (!user) return null;
 
@@ -1171,23 +1195,54 @@ export default function CommunityPage() {
         /* FEED VIEW */
         <div className="space-y-0 -mx-4">
           {/* Create post bar */}
-          <button onClick={() => setShowComposer(true)}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-white border-b border-[#F0F1F3] active:bg-[#F8F9FB] transition-colors text-left">
-            <div className="w-9 h-9 rounded-full bg-[#9D63F6]/10 flex items-center justify-center">
+          {/* Hidden file input for camera/image upload */}
+          <input
+            ref={feedFileInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  setComposerInitialImage(reader.result as string);
+                  setShowComposer(true);
+                };
+                reader.readAsDataURL(file);
+              }
+              e.target.value = '';
+            }}
+          />
+          <div className="w-full flex items-center gap-3 px-4 py-3 bg-white border-b border-[#F0F1F3]">
+            <div className="w-9 h-9 rounded-full bg-[#9D63F6]/10 flex items-center justify-center shrink-0">
               <span className="text-[11px] font-bold text-[#9D63F6]">{currentUser.avatar || currentUser.name?.split(' ').map(w => w[0]).join('')}</span>
             </div>
-            <div className="flex-1 py-2 px-3.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6]">
+            <button
+              onClick={() => { setComposerInitialImage(null); setShowComposer(true); }}
+              className="flex-1 py-2 px-3.5 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] text-left active:bg-[#F0F1F3] transition-colors"
+              style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
+            >
               <p className="text-[12px] text-[#A4ABB8]">What&apos;s happening in your community?</p>
-            </div>
-            <div className="flex gap-1.5">
-              <div className="w-9 h-9 rounded-full bg-[#40C4AA]/10 flex items-center justify-center">
+            </button>
+            <div className="flex gap-1.5 shrink-0">
+              <button
+                onClick={() => { setComposerInitialImage(null); setShowComposer(true); }}
+                className="w-10 h-10 rounded-full bg-[#40C4AA]/10 flex items-center justify-center active:scale-90 transition-transform"
+                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
+              >
                 <ImageIcon size={16} className="text-[#40C4AA]" />
-              </div>
-              <div className="w-9 h-9 rounded-full bg-[#9D63F6]/10 flex items-center justify-center">
+              </button>
+              <button
+                onClick={() => feedFileInputRef.current?.click()}
+                className="w-10 h-10 rounded-full bg-[#9D63F6]/10 flex items-center justify-center active:scale-90 transition-transform"
+                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
+              >
                 <Camera size={16} className="text-[#9D63F6]" />
-              </div>
+              </button>
             </div>
-          </button>
+          </div>
 
           {/* Top Contributors */}
           <div className="bg-white border-b border-[#F0F1F3] px-4 py-3">
@@ -1276,7 +1331,8 @@ export default function CommunityPage() {
       {/* Modals */}
       {showComposer && (
         <CreatePostComposer user={{ name: currentUser.name, avatar: currentUser.avatar || currentUser.name.split(' ').map(w => w[0]).join(''), company: currentUser.company, title: currentUser.title }}
-          communities={communities} onPost={handleCreatePost} onClose={() => setShowComposer(false)} />
+          communities={communities} onPost={handleCreatePost} onClose={() => { setShowComposer(false); setComposerInitialImage(null); }}
+          initialImage={composerInitialImage} />
       )}
 
       {commentingPost && (

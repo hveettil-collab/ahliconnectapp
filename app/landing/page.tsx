@@ -183,7 +183,7 @@ export default function LandingPage() {
   const satisfaction = useCountUp(98);
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg)' }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: 'var(--bg)' }}>
 
       {/* ==================== HEADER ==================== */}
       <header

@@ -1901,7 +1901,7 @@ function ServicesPageContent() {
   /* ── Chat mode ── */
   if (messages.length > 0) {
     return (
-      <div className="flex flex-col h-screen-safe bg-[#F8F9FB]">
+      <div className="flex flex-col h-screen-safe bg-[#F8F9FB] overflow-x-hidden">
         {/* Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 shrink-0 z-10 bg-white" style={{ borderBottom: '1px solid #DFE1E6' }}>
           <button onClick={() => setMessages([])} className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
