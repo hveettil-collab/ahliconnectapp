@@ -2090,16 +2090,16 @@ function ServicesPageContent() {
           </div>
 
           {/* ═══ ANIMATED CHATBOT ═══ */}
-          <div className="relative flex items-center justify-center my-6 ahli-fade-d1" style={{ width: 240, height: 240 }}>
+          <div className="relative flex items-center justify-center my-4 ahli-fade-d1" style={{ width: 280, height: 280 }}>
             {/* Ambient glow behind the chatbot */}
             <div className="absolute ahli-orb-glow" style={{
-              width: 280, height: 280, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(157,99,246,0.15) 0%, rgba(157,99,246,0.04) 45%, transparent 65%)',
+              width: 320, height: 320, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 65%)',
               left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
             }} />
             {/* Lottie chatbot animation */}
-            <div className="ahli-orb-float" style={{ width: 200, height: 200 }}>
-              <DotLottieReact src="/lottie-ai-robot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
+            <div className="ahli-orb-float" style={{ width: 260, height: 260 }}>
+              <DotLottieReact src="/lottie-ai-bot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
 
