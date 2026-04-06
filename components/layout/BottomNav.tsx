@@ -2,13 +2,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Compass, Sparkles, ShoppingBag } from 'lucide-react';
+import { LayoutGrid, Compass, Sparkles, Users, Store } from 'lucide-react';
 
 const TABS = [
-  { label: 'Home', href: '/dashboard', icon: Home },
+  { label: 'Home', href: '/dashboard', icon: LayoutGrid },
   { label: 'Explore', href: '/explore', icon: Compass },
   { label: 'AI', href: '/services', icon: Sparkles, isAI: true },
-  { label: 'Market', href: '/marketplace', icon: ShoppingBag },
+  { label: 'Community', href: '/community', icon: Users },
+  { label: 'Market', href: '/marketplace', icon: Store },
 ];
 
 export default function BottomNav() {
@@ -72,20 +73,26 @@ export default function BottomNav() {
             <Link
               key={href}
               href={href}
-              className="shrink-0 flex flex-col items-center justify-center w-[56px] h-[56px] rounded-full transition-all duration-200 relative"
+              className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200 relative"
               style={{
-                background: active ? '#F8F9FB' : 'transparent',
+                background: active ? 'rgba(157,99,246,0.08)' : 'transparent',
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
               }}
             >
               <Icon
-                size={22}
-                strokeWidth={active ? 2.2 : 1.6}
+                size={20}
+                strokeWidth={active ? 2.2 : 1.5}
                 style={{
                   color: active ? '#9D63F6' : '#A4ABB8',
                 }}
               />
+              <span
+                className="text-[8px] font-semibold mt-0.5 leading-none"
+                style={{ color: active ? '#9D63F6' : '#A4ABB8' }}
+              >
+                {label}
+              </span>
             </Link>
           );
         })}

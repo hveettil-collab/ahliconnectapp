@@ -136,7 +136,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
 
   const news = CORPORATE_NEWS[0];
   const topOffers = offers.slice(0, 3);
-  const SLIDE_LABELS = ['Events', 'News', 'Offers', 'Community'];
+  const SLIDE_LABELS = ['Events', 'News', 'Offers', 'Trending'];
 
   return (
     <div>
@@ -267,39 +267,29 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
           </button>
         </div>
 
-        {/* ── Slide 4: Community ── */}
+        {/* ── Slide 4: Trending Deal ── */}
         <div className="shrink-0 w-full" style={{ scrollSnapAlign: 'start' }}>
-          <Link href="/community" className="block">
+          <Link href="/explore" className="block">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
-              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop" alt="Community"
+              <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop" alt="Dining"
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
-              {/* Tags */}
               <div className="absolute top-3 left-3 flex gap-1.5">
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Community</span>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Social</span>
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Trending</span>
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Dining</span>
               </div>
-              {/* Activity badge */}
-              <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(157,99,246,0.2)', backdropFilter: 'blur(8px)' }}>
-                <MessageCircle size={10} className="text-[#9D63F6]" />
-                <span className="text-[9px] font-bold text-[#9D63F6]">20 new</span>
+              <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(255,189,76,0.2)', backdropFilter: 'blur(8px)' }}>
+                <UtensilsCrossed size={10} className="text-[#FFBD4C]" />
+                <span className="text-[9px] font-bold text-[#FFBD4C]">25% off</span>
               </div>
-              {/* Bottom content */}
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  {[
-                    { name: 'IHC Group', img: '/logos/ihc.svg' },
-                    { name: 'Shory', img: '/logos/shory.svg' },
-                    { name: 'Palms Sports', img: '/logos/palms-sports.svg' },
-                  ].map(c => (
-                    <div key={c.name} className="w-6 h-6 rounded-full overflow-hidden border-2 border-white/20 -ml-1 first:ml-0">
-                      <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                  <span className="text-[10px] text-white/60 font-medium ml-1">3 communities</span>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: 'rgba(255,189,76,0.7)' }}>Zuma</span>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: 'rgba(255,189,76,0.7)' }}>Nobu</span>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: 'rgba(255,189,76,0.7)' }}>+38 more</span>
                 </div>
-                <p className="text-[17px] font-extrabold text-white leading-tight">Your Communities</p>
-                <p className="text-[11px] text-white/60 mt-0.5">20 new posts today across IHC Group</p>
+                <p className="text-[17px] font-extrabold text-white leading-tight">Dining at 40+ Restaurants</p>
+                <p className="text-[11px] text-white/60 mt-0.5">Exclusive IHC employee rates · 8.2K redeemed</p>
               </div>
             </div>
           </Link>
@@ -651,6 +641,43 @@ export default function DashboardPage() {
             THE LATEST — 4-SLIDE AUTO-SCROLL CAROUSEL
             ══════════════════════════════════════════ */}
         <LatestCarousel offers={relevantOffers} onOfferClick={() => router.push('/offers')} />
+
+        {/* ── Communities ── */}
+        <div>
+          <div className="flex items-center justify-between mb-2.5">
+            <h3 className="text-[15px] font-extrabold text-[#15161E]">Communities</h3>
+            <Link href="/community" className="text-[11px] font-bold text-[#9D63F6]">See all</Link>
+          </div>
+          <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
+            {[
+              { name: 'IHC Group', members: '20K', posts: 12, color: '#1B3A6B', logo: '/logos/ihc.svg', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop' },
+              { name: 'Shory', members: '2.8K', posts: 5, color: '#0D9488', logo: '/logos/shory.svg', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&h=200&fit=crop' },
+              { name: 'Palms Sports', members: '4.5K', posts: 3, color: '#EA580C', logo: '/logos/palms-sports.svg', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=200&fit=crop' },
+              { name: 'PureHealth', members: '8.9K', posts: 8, color: '#059669', logo: '/logos/purehealth.svg', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=300&h=200&fit=crop' },
+              { name: 'Aldar', members: '5.2K', posts: 2, color: '#C8973A', logo: '/logos/aldar.svg', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=200&fit=crop' },
+            ].map(c => (
+              <Link key={c.name} href="/community" className="shrink-0 w-[130px] rounded-[16px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all">
+                <div className="relative h-[72px]">
+                  <img src={c.image} alt={c.name} className="w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  {c.posts > 0 && (
+                    <div className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1" style={{ background: c.color }}>
+                      <span className="text-[8px] font-bold text-white">{c.posts}</span>
+                    </div>
+                  )}
+                  <div className="absolute bottom-2 left-2.5 flex items-center gap-1.5">
+                    <img src={c.logo} alt="" className="w-5 h-5 rounded-[4px]" />
+                    <span className="text-[10px] font-bold text-white leading-tight">{c.name}</span>
+                  </div>
+                </div>
+                <div className="px-2.5 py-2 flex items-center justify-between">
+                  <span className="text-[9px] text-[#A4ABB8] flex items-center gap-1"><Users size={9} /> {c.members}</span>
+                  <span className="text-[9px] font-semibold" style={{ color: c.color }}>Open</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* ── Network ── */}
         <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
