@@ -167,6 +167,7 @@ const TESTIMONIALS = [
    ═══════════════════════════════════════════ */
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showDemoVideo, setShowDemoVideo] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [activeAI, setActiveAI] = useState(0);
 
@@ -392,9 +393,9 @@ export default function LandingPage() {
                     Join the IHC Family
                     <ArrowRight size={18} />
                   </Link>
-                  <Link
-                    href="/login"
-                    className="inline-flex items-center justify-center gap-2 font-medium px-6 py-3.5 rounded-xl text-sm border w-full sm:w-auto no-underline transition-all"
+                  <button
+                    onClick={() => setShowDemoVideo(true)}
+                    className="inline-flex items-center justify-center gap-2 font-medium px-6 py-3.5 rounded-xl text-sm border w-full sm:w-auto transition-all active:scale-[0.97]"
                     style={{
                       color: 'var(--text-primary)',
                       backgroundColor: 'var(--bg-card)',
@@ -403,7 +404,7 @@ export default function LandingPage() {
                   >
                     <Play size={14} style={{ color: 'var(--accent)' }} />
                     Watch Demo
-                  </Link>
+                  </button>
                 </div>
 
                 {/* Micro social proof */}
@@ -1066,6 +1067,28 @@ export default function LandingPage() {
           to { transform: translateX(0); }
         }
       `}</style>
+
+      {/* ═══════════════════════════════════════
+          DEMO VIDEO MODAL
+          ═══════════════════════════════════════ */}
+      {showDemoVideo && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(12px)' }} onClick={() => setShowDemoVideo(false)}>
+          <div className="relative w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowDemoVideo(false)} className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-10 active:scale-95 transition-transform">
+              <X size={20} className="text-white" />
+            </button>
+            <div className="rounded-[20px] overflow-hidden bg-black shadow-2xl" style={{ aspectRatio: '9/16' }}>
+              <iframe
+                src="https://app.heygen.com/embed/ahli-connect-video-f500efcd7aec47e29c63ea09d3723534"
+                className="w-full h-full"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+                style={{ border: 'none' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

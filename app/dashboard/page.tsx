@@ -331,9 +331,8 @@ export default function DashboardPage() {
   const [stockConfirmed, setStockConfirmed] = useState(false);
   const [showEventDetail, setShowEventDetail] = useState<number | null>(null);
   const [showDesktopModal, setShowDesktopModal] = useState(false);
-  const [showDemoVideo, setShowDemoVideo] = useState(false);
 
-  useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal || showDemoVideo);
+  useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal);
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
@@ -651,20 +650,6 @@ export default function DashboardPage() {
       {/* ── Rest of dashboard content ── */}
       <div className="px-4 space-y-3 pb-4 pt-2">
 
-        {/* ── Watch Demo CTA ── */}
-        <button onClick={() => setShowDemoVideo(true)}
-          className="w-full rounded-[18px] p-4 flex items-center gap-3 active:scale-[0.98] transition-all"
-          style={{ background: 'linear-gradient(135deg, #1E2030 0%, #2A2D45 100%)' }}>
-          <div className="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)' }}>
-            <Play size={20} className="text-white ml-0.5" fill="white" />
-          </div>
-          <div className="flex-1 text-left">
-            <p className="text-[14px] font-bold text-white">Watch Demo</p>
-            <p className="text-[11px] text-white/50">See how Ahli Connect works</p>
-          </div>
-          <ChevronRight size={16} className="text-white/30" />
-        </button>
-
         {/* ══════════════════════════════════════════
             THE LATEST — 4-SLIDE AUTO-SCROLL CAROUSEL
             ══════════════════════════════════════════ */}
@@ -833,30 +818,6 @@ export default function DashboardPage() {
         </div>
 
       </div>
-
-      {/* ═══════════════════════════════════════
-          DEMO VIDEO MODAL
-          ═══════════════════════════════════════ */}
-      {showDemoVideo && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)' }} onClick={() => setShowDemoVideo(false)}>
-          <div className="relative w-full max-w-md mx-4" onClick={e => e.stopPropagation()}>
-            {/* Close button */}
-            <button onClick={() => setShowDemoVideo(false)} className="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center z-10">
-              <X size={20} className="text-white" />
-            </button>
-            {/* Video container */}
-            <div className="rounded-[20px] overflow-hidden bg-black" style={{ aspectRatio: '9/16' }}>
-              <iframe
-                src="https://app.heygen.com/embed/ahli-connect-video-f500efcd7aec47e29c63ea09d3723534"
-                className="w-full h-full"
-                allow="autoplay; fullscreen"
-                allowFullScreen
-                style={{ border: 'none' }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ═══════════════════════════════════════
           STOCK TRADE BOTTOM SHEET
