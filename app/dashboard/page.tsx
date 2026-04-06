@@ -339,19 +339,23 @@ export default function DashboardPage() {
 
         {/* ── Featured Event Banner ── */}
         <Link href="/explore" className="block">
-          <div className="relative bg-[#15161E] rounded-[20px] p-4 overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{
-              background: 'radial-gradient(circle, #9D63F6, transparent)',
-            }} />
-            <div className="flex items-center gap-1.5 mb-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <p className="text-[10px] text-white/40 font-medium">Upcoming Event</p>
-            </div>
-            <p className="text-[15px] font-bold text-white leading-snug">Sports Day Yas Island</p>
-            <div className="flex items-center gap-3 mt-2">
-              <p className="text-[22px] font-bold text-white leading-none">22 May</p>
-              <div className="w-px h-6 bg-white/15" />
-              <p className="text-[11px] text-white/40">Yas Sports Complex</p>
+          <div className="relative bg-[#1E2030] rounded-[20px] p-4 overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E2030 0%, #2A2D45 50%, #1E2030 100%)' }}>
+            <div className="flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <p className="text-[10px] text-white/40 font-medium">Upcoming Event</p>
+                </div>
+                <p className="text-[15px] font-bold text-white leading-snug">Sports Day Yas Island</p>
+                <div className="flex items-center gap-3 mt-2">
+                  <p className="text-[22px] font-bold text-white leading-none">22 May</p>
+                  <div className="w-px h-6 bg-white/15" />
+                  <p className="text-[11px] text-white/40">Yas Sports Complex</p>
+                </div>
+              </div>
+              <div className="w-[90px] h-[90px] shrink-0 -mr-1">
+                <DotLottieReact src="/lottie-ai-assistant.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
+              </div>
             </div>
           </div>
         </Link>
