@@ -172,39 +172,26 @@ export default function DashboardPage() {
         }} />
 
         {/* Top bar */}
-        <div className="relative z-20 flex items-start justify-between px-5 pt-5">
-          <div className="flex items-center gap-3">
-            <img
-              src={user.image}
-              alt={user.name}
-              className="w-[48px] h-[48px] rounded-full object-cover"
-              style={{
-                border: '2.5px solid rgba(255,255,255,0.3)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
-              }}
-            />
-            <div>
-              <p className="text-white/60 text-[11px] font-medium tracking-wide">{greeting}</p>
-              <p className="text-white text-[16px] font-bold leading-tight">{user.name.split(' ')[0]}</p>
+        <div className="relative z-20 px-5 pt-5">
+          {/* Row 1: Avatar + Name + Bell */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 min-w-0">
+              <img
+                src={user.image}
+                alt={user.name}
+                className="w-[48px] h-[48px] rounded-full object-cover shrink-0"
+                style={{
+                  border: '2.5px solid rgba(255,255,255,0.3)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.15)',
+                }}
+              />
+              <div className="min-w-0">
+                <p className="text-white/60 text-[11px] font-medium tracking-wide">{greeting}</p>
+                <p className="text-white text-[16px] font-bold leading-tight truncate">{user.name.split(' ')[0]}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Steps Counter */}
-            <Link href="/steps" className="flex items-center gap-1.5 px-3 py-2 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
-              <Footprints size={13} className="text-[#40C4AA]" />
-              <span className="text-[12px] font-bold text-white">7,432</span>
-            </Link>
-            {/* Reward Points */}
-            <Link href="/offers" className="flex items-center gap-1.5 px-3 py-2 rounded-full"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
-              <Star size={14} className="text-[#FFBD4C]" fill="#FFBD4C" strokeWidth={0} />
-              <span className="text-[12px] font-bold text-white">2,450</span>
-              <span className="text-[9px] text-white/50 font-medium">pts</span>
-            </Link>
-
             {/* Notification Bell */}
-            <button onClick={togglePanel} className="relative">
+            <button onClick={togglePanel} className="relative shrink-0 ml-3">
               <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
                 style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
                 <Bell size={18} className="text-white" />
@@ -215,6 +202,20 @@ export default function DashboardPage() {
                 </div>
               )}
             </button>
+          </div>
+          {/* Row 2: Steps + Points badges */}
+          <div className="flex items-center gap-2 mt-3">
+            <Link href="/steps" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+              <Footprints size={13} className="text-[#40C4AA]" />
+              <span className="text-[12px] font-bold text-white">7,432</span>
+            </Link>
+            <Link href="/offers" className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+              <Star size={14} className="text-[#FFBD4C]" fill="#FFBD4C" strokeWidth={0} />
+              <span className="text-[12px] font-bold text-white">2,450</span>
+              <span className="text-[9px] text-white/50 font-medium">pts</span>
+            </Link>
           </div>
         </div>
 
