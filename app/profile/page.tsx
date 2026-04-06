@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
@@ -8,35 +8,7 @@ import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users, GraduationCap, Plane } from 'lucide-react';
-
-/* ═══════════════════════════════════════════
-   COUNTDOWN HOOK
-   ═══════════════════════════════════════════ */
-
-function useCountdown(targetDate: Date) {
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft(targetDate));
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(getTimeLeft(targetDate));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [targetDate]);
-
-  return timeLeft;
-}
-
-function getTimeLeft(target: Date) {
-  const now = new Date();
-  const diff = target.getTime() - now.getTime();
-  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0, expired: true };
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-  return { days, hours, minutes, seconds, expired: false };
-}
+import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Copy, Check, Car, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users, GraduationCap, Plane } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
    WALLET & REWARDS SECTION
@@ -82,9 +54,9 @@ function WalletSection() {
   const visibleTx = showAllTx ? wallet.transactions : wallet.transactions.slice(0, 5);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* ── Wallet Balance Card ── */}
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+      <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
         <div className="p-5" style={{ background: 'linear-gradient(135deg, #15161E 0%, #1E3A5F 50%, #2D1B69 100%)' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -153,7 +125,7 @@ function WalletSection() {
       </div>
 
       {/* ── Reward Points Card ── */}
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+      <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
         <div className="p-5" style={{ background: `linear-gradient(135deg, ${wallet.rewardTierColor}15 0%, ${wallet.rewardTierColor}08 100%)` }}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -365,43 +337,35 @@ function BenefitsSection() {
 
   return (
     <>
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
-        <div className="px-5 py-4 border-b border-[#F8F9FB]">
-          <div className="flex items-center gap-2">
-            <Gift size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
-            <p className="text-sm font-bold text-[#15161E]">Your Benefits</p>
-          </div>
-        </div>
-        <div className="p-4">
-          {/* Medical Insurance Feature Card */}
-          <button onClick={() => setShowBenefitDetail('medical')} className="w-full mb-3 rounded-[16px] p-4 text-left active:scale-[0.98] transition-all" style={{ background: 'linear-gradient(135deg, #FFF1F2 0%, #FECDD3 100%)' }}>
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-[14px] bg-white/70 flex items-center justify-center">
-                <Heart size={20} className="text-red-500" />
-              </div>
-              <div className="flex-1">
-                <p className="text-[14px] font-bold text-[#15161E]">Medical Insurance</p>
-                <p className="text-[11px] text-[#666D80] mt-0.5">Daman Enhanced · Family Plan</p>
-              </div>
-              <div className="text-right">
-                <p className="text-[14px] font-bold text-red-600">AED 85K</p>
-                <p className="text-[10px] text-[#A4ABB8]">Annual value</p>
-              </div>
+      <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden p-4">
+        {/* Medical Insurance Feature Card */}
+        <button onClick={() => setShowBenefitDetail('medical')} className="w-full mb-3 rounded-[16px] p-4 text-left active:scale-[0.98] transition-all" style={{ background: 'linear-gradient(135deg, #FFF1F2 0%, #FECDD3 100%)' }}>
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-[14px] bg-white/70 flex items-center justify-center">
+              <Heart size={20} className="text-red-500" />
             </div>
-          </button>
-
-          {/* 3-column grid: Education, Flights, Life Cover */}
-          <div className="grid grid-cols-3 gap-2">
-            {benefits.filter(b => b.key !== 'medical').map(b => (
-              <button key={b.key} onClick={() => setShowBenefitDetail(b.key)} className="rounded-[14px] p-3 text-center active:scale-[0.96] transition-all bg-[#F8F9FB]">
-                <div className={`w-9 h-9 rounded-[10px] ${b.bg} flex items-center justify-center mx-auto mb-2`}>
-                  <b.icon size={16} style={{ color: b.color }} />
-                </div>
-                <p className="text-[11px] font-bold text-[#15161E]">{b.label}</p>
-                <p className="text-[9px] text-[#A4ABB8] mt-0.5">{b.value}</p>
-              </button>
-            ))}
+            <div className="flex-1">
+              <p className="text-[14px] font-bold text-[#15161E]">Medical Insurance</p>
+              <p className="text-[11px] text-[#666D80] mt-0.5">Daman Enhanced · Family Plan</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[14px] font-bold text-red-600">AED 85K</p>
+              <p className="text-[10px] text-[#A4ABB8]">Annual value</p>
+            </div>
           </div>
+        </button>
+
+        {/* 3-column grid: Education, Flights, Life Cover */}
+        <div className="grid grid-cols-3 gap-2">
+          {benefits.filter(b => b.key !== 'medical').map(b => (
+            <button key={b.key} onClick={() => setShowBenefitDetail(b.key)} className="rounded-[14px] p-3 text-center active:scale-[0.96] transition-all bg-[#F8F9FB]">
+              <div className={`w-9 h-9 rounded-[10px] ${b.bg} flex items-center justify-center mx-auto mb-2`}>
+                <b.icon size={16} style={{ color: b.color }} />
+              </div>
+              <p className="text-[11px] font-bold text-[#15161E]">{b.label}</p>
+              <p className="text-[9px] text-[#A4ABB8] mt-0.5">{b.value}</p>
+            </button>
+          ))}
         </div>
       </div>
 
@@ -555,9 +519,9 @@ function MyAssetsSection() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* ── Car Details ── */}
-      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+      <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
         <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #15161E 0%, #2D1B69 100%)' }}>
           <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.1)' }}>
             <Car size={18} className="text-white" />
@@ -589,7 +553,7 @@ function MyAssetsSection() {
 
       {/* ── Car Insurance ── */}
       <Link href="/insurance" className="block no-underline">
-        <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+        <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
           <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 100%)' }}>
             <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
               <Shield size={18} className="text-white" />
@@ -626,7 +590,7 @@ function MyAssetsSection() {
 
       {/* ── Health Insurance ── */}
       <Link href="/insurance" className="block no-underline">
-        <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
+        <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
           <div className="p-4 flex items-center gap-3" style={{ background: 'linear-gradient(135deg, #7C3AED 0%, #9D63F6 100%)' }}>
             <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
               <Heart size={18} className="text-white" />
@@ -688,13 +652,15 @@ function MyAssetsSection() {
 export default function ProfilePage() {
   const { user, logout } = useAuth();
   const [showLogout, setShowLogout] = useState(false);
-  const [cardFlipped, setCardFlipped] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
-  const [locationVisible, setLocationVisible] = useState(true);
-  const [locationMode, setLocationMode] = useState<'off' | 'nearby' | 'company' | 'all'>('nearby');
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   useBodyScrollLock(showLogout || showShareSheet);
+
+  const toggleCard = (idx: number) => {
+    setExpandedCard(prev => prev === idx ? null : idx);
+  };
 
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
@@ -892,7 +858,7 @@ export default function ProfilePage() {
                     <button key={label} onClick={() => {
                       if (label === 'Email') { window.location.href = `mailto:?subject=Business Card - ${user?.name || 'IHC Employee'}&body=View my digital business card at Ahli Connect`; setShowShareSheet(false); }
                       else if (label === 'Copy Link') { navigator.clipboard.writeText(`https://ahliconnect.ihcgroup.ae/card/${user?.employeeId || '10234'}`); setShowShareSheet(false); }
-                      else if (label === 'QR Code') { setShowShareSheet(false); setCardFlipped(true); }
+                      else if (label === 'QR Code') { setShowShareSheet(false); }
                       else { if (navigator.share) navigator.share({ title: `${user?.name} - Business Card`, url: `https://ahliconnect.ihcgroup.ae/card/${user?.employeeId || '10234'}` }); setShowShareSheet(false); }
                     }} className="flex flex-col items-center gap-2 py-3 rounded-[14px] hover:bg-[#F8F9FB] transition-colors active:scale-[0.95]">
                       <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: bg }}>
@@ -913,76 +879,121 @@ export default function ProfilePage() {
           )}
 
           {/* ═══════════════════════════════════════
-              WALLET & REWARDS
+              STACKED CARDS
               ═══════════════════════════════════════ */}
-          <WalletSection />
+          <div className="relative">
+            {[
+              { title: 'Wallet & Rewards', subtitle: `AED ${(5600).toLocaleString()}`, icon: Wallet, gradient: 'linear-gradient(135deg, #1B1D3A 0%, #2D1B69 100%)', textColor: '#fff', accentColor: '#9D63F6' },
+              { title: 'Your Benefits', subtitle: '4 active benefits', icon: Gift, gradient: 'linear-gradient(135deg, #065F46 0%, #047857 100%)', textColor: '#fff', accentColor: '#34D399' },
+              { title: 'My Insurance', subtitle: 'Car · Health', icon: Shield, gradient: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)', textColor: '#fff', accentColor: '#5EEAD4' },
+              { title: 'Saved Offers', subtitle: `${savedOffers.length} saved`, icon: Tag, gradient: 'linear-gradient(135deg, #92400E 0%, #B45309 100%)', textColor: '#fff', accentColor: '#FCD34D' },
+              { title: 'My Listings', subtitle: `${myListings.length} active`, icon: ShoppingBag, gradient: 'linear-gradient(135deg, #7C2D12 0%, #C2410C 100%)', textColor: '#fff', accentColor: '#FB923C' },
+            ].map((card, idx) => {
+              const isExpanded = expandedCard === idx;
+              const CardIcon = card.icon;
 
-          {/* ═══════════════════════════════════════
-              YOUR BENEFITS
-              ═══════════════════════════════════════ */}
-          <BenefitsSection />
-
-          {/* ═══════════════════════════════════════
-              MY ASSETS — Car, Home & Insurance
-              ═══════════════════════════════════════ */}
-          <MyAssetsSection />
-
-          {/* Location & Privacy */}
-          <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
-            <div className="px-5 py-4 border-b border-[#F8F9FB]">
-              <div className="flex items-center gap-2">
-                <MapPin size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
-                <p className="text-sm font-bold text-[#15161E]">Location & Privacy</p>
-              </div>
-            </div>
-            <div className="px-5 py-4 border-b border-[#F8F9FB]">
-              <div className="flex items-center justify-between mb-1">
-                <div>
-                  <p className="text-sm font-medium text-[#15161E]">Show me on People Map</p>
-                  <p className="text-xs text-[#A4ABB8]">Nearby IHC colleagues can see your location</p>
-                </div>
-                <button
-                  onClick={() => setLocationVisible(!locationVisible)}
-                  className="relative w-[44px] h-[24px] rounded-full transition-colors duration-200"
-                  style={{ background: locationVisible ? '#9D63F6' : '#DFE1E6' }}
+              return (
+                <div
+                  key={card.title}
+                  className="transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                  style={{
+                    marginTop: expandedCard === null && idx > 0 ? -52 : (idx > 0 ? 8 : 0),
+                    position: 'relative',
+                    zIndex: isExpanded ? 30 : expandedCard === null ? (10 + idx) : (idx > (expandedCard ?? 0) ? 5 : 10 + idx),
+                  }}
                 >
-                  <div className="absolute top-[2px] w-[20px] h-[20px] rounded-full bg-white shadow-sm transition-transform duration-200"
-                    style={{ transform: locationVisible ? 'translateX(22px)' : 'translateX(2px)' }} />
-                </button>
-              </div>
-              {locationVisible && (
-                <div className="mt-3 flex gap-2 flex-wrap">
-                  {[
-                    { id: 'nearby' as const, label: 'Nearby only' },
-                    { id: 'company' as const, label: 'Same company' },
-                    { id: 'all' as const, label: 'All IHC employees' },
-                  ].map(opt => (
-                    <button key={opt.id} onClick={() => setLocationMode(opt.id)}
-                      className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                  {/* Card Header — always visible, tappable */}
+                  <button
+                    onClick={() => toggleCard(idx)}
+                    className="w-full rounded-t-[20px] px-5 py-4 flex items-center justify-between active:scale-[0.99] transition-transform"
+                    style={{
+                      background: card.gradient,
+                      borderRadius: isExpanded ? '20px 20px 0 0' : '20px',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)',
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                        <CardIcon size={18} style={{ color: card.accentColor }} />
+                      </div>
+                      <div className="text-left">
+                        <p className="text-[14px] font-bold" style={{ color: card.textColor }}>{card.title}</p>
+                        <p className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>{card.subtitle}</p>
+                      </div>
+                    </div>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300"
                       style={{
-                        background: locationMode === opt.id ? '#9D63F6' : '#F8F9FB',
-                        color: locationMode === opt.id ? '#fff' : '#666D80',
-                        border: locationMode === opt.id ? 'none' : '1px solid #DFE1E6',
-                      }}>
-                      {opt.label}
-                    </button>
-                  ))}
+                        background: 'rgba(255,255,255,0.1)',
+                        transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                      }}
+                    >
+                      <ChevronRight size={16} style={{ color: 'rgba(255,255,255,0.6)' }} />
+                    </div>
+                  </button>
+
+                  {/* Expanded Content */}
+                  <div
+                    className="overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
+                    style={{
+                      maxHeight: isExpanded ? 2000 : 0,
+                      opacity: isExpanded ? 1 : 0,
+                    }}
+                  >
+                    <div className="bg-[#F3F4F6] rounded-b-[20px] p-3">
+                      {/* Wallet */}
+                      {idx === 0 && <WalletSection />}
+                      {/* Benefits */}
+                      {idx === 1 && <BenefitsSection />}
+                      {/* Insurance */}
+                      {idx === 2 && <MyAssetsSection />}
+                      {/* Saved Offers */}
+                      {idx === 3 && (
+                        <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
+                          <div className="p-4 space-y-2.5">
+                            {savedOffers.map(offer => (
+                              <Link href="/offers" key={offer.id} className="flex items-center gap-3 p-3 bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6] active:scale-[0.98] transition-all">
+                                <div className="w-10 h-10 rounded-[12px] flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ background: offer.color }}>
+                                  {offer.company.slice(0, 2).toUpperCase()}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-semibold text-[#15161E] truncate">{offer.title}</p>
+                                  <p className="text-[11px] font-medium" style={{ color: offer.color }}>{offer.value}</p>
+                                </div>
+                                <ChevronRight size={14} className="text-[#A4ABB8] shrink-0" />
+                              </Link>
+                            ))}
+                            <Link href="/offers" className="block text-center text-[12px] font-bold text-[#9D63F6] py-2">
+                              View All Offers
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                      {/* My Listings */}
+                      {idx === 4 && (
+                        <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
+                          <div className="p-4 space-y-2.5">
+                            {myListings.map(listing => (
+                              <Link href="/marketplace" key={listing.id} className="flex items-center gap-3 p-3 bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6] active:scale-[0.98] transition-all">
+                                <img src={listing.image} alt={listing.title} className="w-11 h-11 rounded-[12px] object-cover shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-semibold text-[#15161E] truncate">{listing.title}</p>
+                                  <p className="text-[13px] font-bold text-[#9D63F6]">{listing.price}</p>
+                                </div>
+                                <span className="text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full shrink-0">Active</span>
+                              </Link>
+                            ))}
+                            <Link href="/marketplace?tab=my" className="block text-center text-[12px] font-bold text-[#9D63F6] py-2">
+                              View All Listings
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
-              )}
-              {!locationVisible && (
-                <p className="text-xs text-[#A4ABB8] mt-2 italic">You won&apos;t appear on the People Map when this is off.</p>
-              )}
-            </div>
-            <Link href="/people-map" className="w-full flex items-center gap-3 px-5 py-3.5 hover:bg-[#F8F9FB] transition-colors text-left">
-              <div className="w-9 h-9 rounded-[10px] bg-[#F5F0FF] flex items-center justify-center shrink-0">
-                <MapPin size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-[#15161E]">Open People Map</p>
-                <p className="text-xs text-[#A4ABB8]">See nearby IHC colleagues</p>
-              </div>
-              <ChevronRight size={14} className="text-[#A4ABB8]" />
-            </Link>
+              );
+            })}
           </div>
 
           {/* Settings */}
@@ -1013,53 +1024,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Right: Activity */}
-        <div className="space-y-4">
-          {/* Saved Offers */}
-          <div className="bg-white rounded-[20px] border border-[#DFE1E6] p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Tag size={16} className="text-[#9D63F6]" strokeWidth={1.8} />
-              <h3 className="text-sm font-bold text-[#15161E]">Saved Offers</h3>
-            </div>
-            <div className="space-y-3">
-              {savedOffers.map(offer => (
-                <div key={offer.id} className="flex items-center gap-3 p-3 bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6]">
-                  <div className="w-10 h-10 rounded-[12px] flex items-center justify-center text-white text-xs font-bold shrink-0" style={{ background: offer.color }}>
-                    {offer.company.slice(0, 2).toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#15161E] truncate">{offer.title}</p>
-                    <p className="text-xs font-medium" style={{ color: offer.color }}>{offer.value}</p>
-                  </div>
-                  <span className="text-xs text-[#A4ABB8] shrink-0">{offer.company}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* My Listings */}
-          <div className="bg-white rounded-[20px] border border-[#DFE1E6] p-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <ShoppingBag size={16} className="text-[#9D63F6]" strokeWidth={1.8} />
-                <h3 className="text-sm font-bold text-[#15161E]">My Listings</h3>
-              </div>
-              <span className="text-xs text-[#A4ABB8] bg-[#F8F9FB] px-2.5 py-1 rounded-full">{myListings.length} active</span>
-            </div>
-            <div className="space-y-3">
-              {myListings.map(listing => (
-                <div key={listing.id} className="flex items-center gap-3 p-3 bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6]">
-                  <img src={listing.image} alt={listing.title} className="w-11 h-11 rounded-[12px] object-cover shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#15161E] truncate">{listing.title}</p>
-                    <p className="text-sm font-bold text-[#9D63F6]">{listing.price}</p>
-                  </div>
-                  <span className="text-[10px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full shrink-0">Active</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Logout bottom sheet */}

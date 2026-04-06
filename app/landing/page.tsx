@@ -168,8 +168,18 @@ const TESTIMONIALS = [
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showDemoVideo, setShowDemoVideo] = useState(false);
+  const [showDesktopModal, setShowDesktopModal] = useState(false);
   const { theme, toggleTheme } = useTheme();
   const [activeAI, setActiveAI] = useState(0);
+
+  // Show "Install the App" modal on desktop after 5 seconds
+  useEffect(() => {
+    const isDesktop = window.innerWidth >= 768;
+    if (isDesktop) {
+      const timer = setTimeout(() => setShowDesktopModal(true), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Rotate AI capabilities showcase
   useEffect(() => {
@@ -185,6 +195,50 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden" style={{ backgroundColor: 'var(--bg)' }}>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP MODAL — Install PWA (dismissable, 5s delay)
+          ══════════════════════════════════════════ */}
+      {showDesktopModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+          <div className="absolute inset-0 bg-black/60" onClick={() => setShowDesktopModal(false)} />
+          <div className="relative bg-white rounded-[28px] shadow-2xl max-w-[420px] w-full mx-4 overflow-hidden"
+            style={{ animation: 'card-pop 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
+            {/* Close button */}
+            <button onClick={() => setShowDesktopModal(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10 hover:bg-[#DFE1E6] transition-colors">
+              <X size={16} className="text-[#666D80]" />
+            </button>
+            {/* Top gradient accent */}
+            <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #9D63F6 0%, #7C3AED 50%, #40C4AA 100%)' }} />
+
+            <div className="px-8 pt-8 pb-8 flex flex-col items-center text-center">
+              {/* Icon */}
+              <div className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-5" style={{ background: 'linear-gradient(135deg, #F3EEFF, #E8DBFE)' }}>
+                <Sparkles size={28} className="text-[#9D63F6]" strokeWidth={1.8} />
+              </div>
+
+              <h2 className="text-[22px] font-bold text-[#15161E] leading-tight mb-2">
+                Install the App
+              </h2>
+              <p className="text-[14px] text-[#666D80] leading-relaxed mb-6">
+                Ahli Connect works best as a mobile app. Scan the QR code to install it directly on your phone — no app store needed.
+              </p>
+
+              {/* QR Code */}
+              <div className="bg-[#F8F9FB] rounded-[20px] p-5 border border-[#DFE1E6] mb-5">
+                <img src="/qr-mobile.png" alt="Scan to install Ahli Connect" className="w-[180px] h-[180px] mx-auto" />
+              </div>
+
+              <p className="text-[12px] text-[#666D80] leading-relaxed mb-1">
+                Open on your phone, then tap <span className="font-bold text-[#15161E]">&quot;Add to Home Screen&quot;</span>
+              </p>
+              <p className="text-[11px] text-[#A4ABB8]">
+                <span className="font-semibold text-[#9D63F6]">ahliconnectapp.vercel.app</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ==================== HEADER ==================== */}
       <header

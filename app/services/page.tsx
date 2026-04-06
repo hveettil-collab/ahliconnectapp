@@ -4,13 +4,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
+import { SERVICES, OFFERS, COLLEAGUES, COMPANIES, CORPORATE_NEWS, IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import AppShell from '@/components/layout/AppShell';
 import Link from 'next/link';
 import {
   Sparkles, Send, ArrowRight, Plane, Car, Gamepad2,
-  Heart, Shield, GraduationCap, Gift, MapPin, Users,
+  Heart, Shield, GraduationCap, Gift, MapPin, Users, Tag,
   Calendar, FileText, Clock, CheckCircle2, CreditCard,
   Palmtree, ShoppingBag, UtensilsCrossed, Ticket, Globe,
   HelpCircle, TrendingUp, Briefcase, DollarSign, Monitor,
@@ -1675,13 +1675,71 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
-  if (t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('save') || t.includes('promo')) {
+  if (t.includes('offer') || t.includes('discount') || t.includes('deal') || t.includes('promo') || t.includes('perks') || t.includes('employee offer')) {
+    // Group offers by category for a clean summary
+    const categories = [...new Set(OFFERS.map(o => o.category))];
+    const summary = categories.map(cat => {
+      const catOffers = OFFERS.filter(o => o.category === cat);
+      return `• **${cat}** — ${catOffers.length} offers (${catOffers.slice(0, 2).map(o => o.company).join(', ')})`;
+    }).join('\n');
     return {
-      content: `Best employee offers right now:\n\n• **Aldar** — 15% off Yas Island residences\n• **Shory** — Motor insurance from AED 799/year\n• **PureHealth** — Health screening AED 299\n• **Ghitha** — 25% meal subsidy`,
-      cards: OFFERS.slice(0, 3).map(offer => ({
-        type: 'offer' as const, icon: Gift, title: offer.title,
-        subtitle: `${offer.company} · ${offer.value}`, color: offer.color || '#FFBD4C', image: offer.image, link: '/offers',
-      })),
+      content: `Here are all **${OFFERS.length} employee offers** available to you, ${userName}!\n\n${summary}\n\nTap any offer below for full details, or go to the Offers page to browse by category:`,
+      cards: [
+        ...OFFERS.filter(o => o.featured).slice(0, 4).map(offer => ({
+          type: 'offer' as const, icon: Gift, title: offer.title,
+          subtitle: `${offer.company} · ${offer.value}`, color: offer.color || '#FFBD4C', image: offer.image, link: '/offers',
+        })),
+        { type: 'action' as const, icon: Tag, title: `View All ${OFFERS.length} Offers`, subtitle: 'Browse by category — Property, Insurance, Healthcare & more', color: '#9D63F6', link: '/offers' },
+      ],
+    };
+  }
+
+  /* ── Announcements / Corporate News ── */
+  if (t.includes('announcement') || t.includes('news') || t.includes('corporate news') || t.includes('update') || t.includes('company news') || t.includes('latest news') || t.includes('what\'s new') || t.includes('whats new')) {
+    // Combine IHC announcements + corporate news
+    const allAnnouncements = [
+      ...IHC_ANNOUNCEMENTS.map(a => ({ ...a, source: 'IHC Group' })),
+      ...CORPORATE_NEWS.map(n => ({ id: n.id, title: n.title, summary: n.summary, date: n.date, source: 'Corporate News', type: 'corporate' as const, tag: n.tags?.[0] || 'News', category: 'News', urgent: false })),
+    ];
+    // Get company-specific announcements if user has a company
+    const companyAnns = companyId && COMPANY_ANNOUNCEMENTS[companyId] ? COMPANY_ANNOUNCEMENTS[companyId] : [];
+
+    const newsList = CORPORATE_NEWS.slice(0, 3).map(n => `• **${n.title}** — ${n.date}`).join('\n');
+    const annList = IHC_ANNOUNCEMENTS.slice(0, 2).map(a => `• **${a.title}** — ${a.date}`).join('\n');
+    const compList = companyAnns.length > 0 ? '\n\n**Your Company:**\n' + companyAnns.slice(0, 2).map((a: { title: string; date: string }) => `• **${a.title}** — ${a.date}`).join('\n') : '';
+
+    return {
+      content: `Here are the latest announcements and news, ${userName}:\n\n**Corporate News:**\n${newsList}\n\n**Group Announcements:**\n${annList}${compList}\n\nTap below for full details:`,
+      cards: [
+        ...CORPORATE_NEWS.slice(0, 3).map(n => ({
+          type: 'info' as const, icon: FileText, title: n.title,
+          subtitle: `${n.author} · ${n.date} · ${n.readTime}`, color: '#9D63F6', link: `/news?id=${n.id}`,
+        })),
+        ...IHC_ANNOUNCEMENTS.slice(0, 2).map(a => ({
+          type: 'info' as const, icon: Building2, title: a.title,
+          subtitle: `${a.tag} · ${a.date}${a.urgent ? ' · Urgent' : ''}`, color: a.urgent ? '#DC2626' : '#40C4AA', link: '/announcements',
+        })),
+        ...(companyAnns.length > 0 ? companyAnns.slice(0, 1).map((a: { title: string; tag: string; date: string }) => ({
+          type: 'info' as const, icon: Building2, title: a.title,
+          subtitle: `${a.tag} · ${a.date}`, color: '#FFBD4C', link: '/announcements',
+        })) : []),
+      ],
+    };
+  }
+
+  /* ── Marketplace — show actual listings ── */
+  if (t.includes('marketplace') || t.includes('buy') || t.includes('listing') || t.includes('browse')) {
+    const listingSummary = MARKETPLACE_LISTINGS.slice(0, 3).map(l => `• **${l.title}** — ${l.price}`).join('\n');
+    return {
+      content: `The IHC Marketplace connects **45,000+ employees**!\n\n**Trending Listings:**\n${listingSummary}\n\nThere are **${MARKETPLACE_LISTINGS.length}** items available right now:`,
+      cards: [
+        ...MARKETPLACE_LISTINGS.slice(0, 3).map(l => ({
+          type: 'info' as const, icon: ShoppingBag, title: l.title,
+          subtitle: `${l.price} · ${l.condition}`, color: '#FFBD4C', image: l.image, link: '/marketplace',
+        })),
+        { type: 'action' as const, icon: ShoppingBag, title: 'Open Marketplace', subtitle: `${MARKETPLACE_LISTINGS.length} items from verified employees`, color: '#FFBD4C', link: '/marketplace' },
+        { type: 'action' as const, icon: Star, title: 'Sell Something', subtitle: 'AI writes your listing from details', color: '#40C4AA', action: 'I want to sell something on the marketplace' },
+      ]
     };
   }
 
@@ -1703,16 +1761,6 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     return {
       content: `Let's list your item on the IHC Marketplace! AI will help you create a professional listing in seconds:`,
       flowType: 'sell',
-    };
-  }
-
-  if (t.includes('marketplace') || t.includes('buy') || t.includes('listing') || t.includes('browse')) {
-    return {
-      content: `The IHC Marketplace connects 45,000+ employees!\n\n• **Active listings**: 234 items\n• **Trending**: Cars, electronics, furniture`,
-      cards: [
-        { type: 'action', icon: ShoppingBag, title: 'Open Marketplace', subtitle: '234 items from verified employees', color: '#FFBD4C', link: '/marketplace' },
-        { type: 'action', icon: Star, title: 'Sell Something', subtitle: 'AI writes your listing from a photo', color: '#40C4AA', action: 'I want to sell something on the marketplace' },
-      ]
     };
   }
 
@@ -1749,13 +1797,71 @@ function generateAIResponse(text: string, userName: string, companyId: string): 
     };
   }
 
+  /* ── Smart fallback — check if query relates to anything in the app ── */
+
+  // Check if the user is asking about a specific offer by name
+  const matchedOffer = OFFERS.find(o => t.includes(o.company.toLowerCase()) || t.includes(o.title.toLowerCase().slice(0, 15)));
+  if (matchedOffer) {
+    return {
+      content: `Here's what I found for **${matchedOffer.company}**:\n\n• **${matchedOffer.title}**\n• Value: ${matchedOffer.value}\n• ${matchedOffer.description}\n• Expires: ${matchedOffer.expires}`,
+      cards: [
+        { type: 'offer' as const, icon: Gift, title: matchedOffer.title, subtitle: `${matchedOffer.company} · ${matchedOffer.value}`, color: matchedOffer.color, image: matchedOffer.image, link: '/offers' },
+        { type: 'action' as const, icon: Tag, title: `View All ${OFFERS.length} Offers`, subtitle: 'Browse all employee offers', color: '#9D63F6', link: '/offers' },
+      ],
+    };
+  }
+
+  // Check if user is asking about a specific company
+  const matchedCompany = COMPANIES.find(c => t.includes(c.name.toLowerCase()) || t.includes(c.short.toLowerCase()));
+  if (matchedCompany) {
+    const companyOffers = OFFERS.filter(o => o.companyId === matchedCompany.id);
+    const companyAnns = COMPANY_ANNOUNCEMENTS[matchedCompany.id] || [];
+    const hasContent = companyOffers.length > 0 || companyAnns.length > 0;
+
+    if (hasContent) {
+      let content = `Here's what's available from **${matchedCompany.name}** on Ahli Connect:\n\n`;
+      if (companyOffers.length > 0) content += `**Offers (${companyOffers.length}):**\n${companyOffers.slice(0, 3).map(o => `• ${o.title} — ${o.value}`).join('\n')}\n\n`;
+      if (companyAnns.length > 0) content += `**Announcements:**\n${companyAnns.slice(0, 2).map((a: { title: string }) => `• ${a.title}`).join('\n')}`;
+
+      return {
+        content,
+        cards: [
+          ...companyOffers.slice(0, 2).map(o => ({
+            type: 'offer' as const, icon: Gift, title: o.title,
+            subtitle: `${o.company} · ${o.value}`, color: o.color, image: o.image, link: '/offers',
+          })),
+          ...(companyAnns.length > 0 ? [{ type: 'info' as const, icon: Building2, title: `${matchedCompany.name} Announcements`, subtitle: `${companyAnns.length} announcements`, color: '#40C4AA', link: '/announcements' }] : []),
+        ],
+      };
+    }
+  }
+
+  // Check if query has at least some meaningful words (not just "hi" or "hello")
+  const greetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening', 'assalamu', 'salam', 'marhaba'];
+  const isGreeting = greetings.some(g => t.includes(g));
+
+  if (isGreeting) {
+    return {
+      content: `Hello ${userName}! 👋 I'm your Ahli Connect AI assistant. I can help you with anything available on the platform — offers, announcements, insurance, flights, HR services, marketplace, and more.\n\nWhat would you like to explore?`,
+      cards: [
+        { type: 'action', icon: Gift, title: `Employee Offers (${OFFERS.length})`, subtitle: 'Discounts, perks & exclusive deals', color: '#FFBD4C', link: '/offers' },
+        { type: 'action', icon: FileText, title: 'Latest Announcements', subtitle: 'Corporate news & updates', color: '#9D63F6', link: '/announcements' },
+        { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#54B6ED', action: 'I want to book a flight' },
+        { type: 'booking', icon: Shield, title: 'Motor Insurance', subtitle: 'Shory · 15% IHC discount', color: '#0D9488', action: 'I need car insurance' },
+        { type: 'action', icon: ShoppingBag, title: 'Marketplace', subtitle: 'Buy & sell with colleagues', color: '#EA580C', link: '/marketplace' },
+        { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Salary cert, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
+      ]
+    };
+  }
+
+  // Generic fallback for queries not matching anything in the app
   return {
-    content: `I'm your AI assistant for everything at IHC! I can help with:\n\n• Book flights with employee discounts\n• Book rides via Careem\n• Order food from Noon\n• Get motor insurance via Shory\n• View benefits, offers & discounts\n\nJust ask me anything, ${userName}!`,
+    content: `I couldn't find anything specific about "${text}" on Ahli Connect. This feature or information isn't currently available in the app.\n\nHere's what I can help you with:\n\n• **Offers & Discounts** — ${OFFERS.length} employee perks\n• **Announcements** — Corporate news & updates\n• **Flights, Rides, Food** — Book with employee discounts\n• **Insurance** — Motor & health via Shory\n• **HR Services** — Salary certs, leave, expenses\n• **Marketplace** — Buy & sell with colleagues\n• **Benefits** — Medical, education, wellness\n• **Events & Activities** — Gaming, sports, training\n\nTry asking about any of these!`,
     cards: [
-      { type: 'booking', icon: Plane, title: 'Book a Flight', subtitle: 'Employee-discounted rates', color: '#9D63F6', action: 'I want to book a flight' },
-      { type: 'booking', icon: Car, title: 'Book a Ride', subtitle: 'Careem · 30% IHC discount', color: '#40C4AA', action: 'I need to book a ride' },
-      { type: 'booking', icon: UtensilsCrossed, title: 'Order Food', subtitle: 'Noon Food · Free delivery', color: '#FFBD4C', action: 'I want to order food' },
-      { type: 'booking', icon: Shield, title: 'Motor Insurance', subtitle: 'Shory · 15% IHC discount', color: '#7C3AED', action: 'I need car insurance' },
+      { type: 'action', icon: Gift, title: 'Browse Offers', subtitle: `${OFFERS.length} exclusive employee deals`, color: '#FFBD4C', link: '/offers' },
+      { type: 'action', icon: FileText, title: 'View Announcements', subtitle: 'Latest corporate news', color: '#9D63F6', link: '/announcements' },
+      { type: 'action', icon: Zap, title: 'HR Services', subtitle: 'Salary cert, leave, expenses', color: '#40C4AA', action: 'I need HR help' },
+      { type: 'booking', icon: ShoppingBag, title: 'Open Marketplace', subtitle: 'Buy & sell with 45K+ employees', color: '#EA580C', link: '/marketplace' },
     ]
   };
 }
