@@ -1381,42 +1381,6 @@ export default function ExplorePage() {
               <BentoGrid items={BENTO_LIFESTYLE} onSelect={setSelectedBento} />
             </section>
 
-            {/* My Benefits */}
-            <section>
-              <SectionHeader title="My Benefits" />
-              <div className="grid grid-cols-2 gap-2.5">
-                {[
-                  { title: 'Medical Coverage', value: '100%', desc: 'Daman Enhanced · Full family', color: '#059669', icon: Shield, image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop' },
-                  { title: 'Education Budget', value: 'AED 15K', desc: 'Annual learning allowance', color: '#9D63F6', icon: GraduationCap, image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=400&h=300&fit=crop' },
-                  { title: 'Gym Membership', value: '60% off', desc: 'Palms Sports · 8 locations', color: '#EA580C', icon: Dumbbell, image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop' },
-                  { title: 'Flight Discounts', value: 'Up to 50%', desc: 'Etihad staff fares', color: '#7C3AED', icon: Plane, image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=400&h=300&fit=crop' },
-                ].map((benefit, i) => {
-                  const BIcon = benefit.icon;
-                  return (
-                    <button key={benefit.title} onClick={() => setSelectedItem({ title: benefit.title, desc: benefit.desc, image: benefit.image, color: benefit.color, icon: benefit.icon, category: 'Benefit', highlights: [{ label: 'Value', value: benefit.value }, { label: 'Status', value: 'Active' }], cta: 'View Benefit' })}
-                      className={`card-rise card-rise-${i + 1} rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left`}>
-                      <div className="relative h-[90px]">
-                        <img src={benefit.image} alt={benefit.title} className="w-full h-full object-cover" loading="lazy" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-bold text-white" style={{ background: benefit.color }}>
-                          {benefit.value}
-                        </div>
-                        <div className="absolute bottom-2 left-2">
-                          <div className="w-6 h-6 rounded-[6px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-                            <BIcon size={12} className="text-white" strokeWidth={2} />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="p-2.5">
-                        <p className="text-[12px] font-bold text-[#15161E] leading-snug truncate">{benefit.title}</p>
-                        <p className="text-[9px] text-[#A4ABB8] mt-0.5 truncate">{benefit.desc}</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
             {/* Upcoming Events */}
             <section>
               <SectionHeader title="Upcoming Events" count={EVENTS.length} />
