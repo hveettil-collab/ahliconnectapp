@@ -1037,10 +1037,15 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
   const [saves, setSaves] = useState(0);
 
   const CATEGORIES = [
-    { id: 'cars', label: 'Cars', icon: '🚗' },
+    { id: 'cars', label: 'Cars & Vehicles', icon: '🚗' },
     { id: 'electronics', label: 'Electronics', icon: '📱' },
     { id: 'furniture', label: 'Furniture', icon: '🛋️' },
     { id: 'property', label: 'Property', icon: '🏠' },
+    { id: 'fashion', label: 'Fashion & Accessories', icon: '👜' },
+    { id: 'sports', label: 'Sports & Fitness', icon: '⚽' },
+    { id: 'books', label: 'Books & Education', icon: '📚' },
+    { id: 'kids', label: 'Kids & Baby', icon: '🧸' },
+    { id: 'services', label: 'Services', icon: '🔧' },
     { id: 'other', label: 'Other', icon: '📦' },
   ];
 
@@ -1055,6 +1060,11 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
     electronics: { title: 'Sell Electronics', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #54B6ED 0%, #2563EB 100%)' },
     furniture: { title: 'Sell Furniture', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #FFBD4C 0%, #F59E0B 100%)' },
     property: { title: 'List Property', subtitle: 'AI listing · 45K+ employees', gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' },
+    fashion: { title: 'Sell Fashion', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)' },
+    sports: { title: 'Sell Sports & Fitness', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #F97316 0%, #EA580C 100%)' },
+    books: { title: 'Sell Books & Education', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)' },
+    kids: { title: 'Sell Kids & Baby Items', subtitle: 'AI listing · 45K+ buyers', gradient: 'linear-gradient(135deg, #F472B6 0%, #EC4899 100%)' },
+    services: { title: 'Offer a Service', subtitle: 'AI listing · 45K+ employees', gradient: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)' },
     other: { title: 'Sell on Marketplace', subtitle: 'AI-powered listing · 45K+ employees', gradient: 'linear-gradient(135deg, #40C4AA 0%, #059669 100%)' },
   };
   const hdr = headerConfig[category] || headerConfig.other;
@@ -1078,6 +1088,16 @@ function SellFlow({ initialCategory }: { initialCategory?: string }) {
       desc = `${condition} ${title} for sale.${furnMaterial ? ` Material: ${furnMaterial}.` : ''}${furnDimensions ? ` Dimensions: ${furnDimensions}.` : ''} Asking AED ${parseInt(price || '0').toLocaleString()}. Pick-up available. Contact me through the app.`;
     } else if (category === 'property') {
       desc = `${propType}${propBedrooms ? ` — ${propBedrooms} bedroom(s)` : ''} available${propLocation ? ` in ${propLocation}` : ''}. ${propArea ? `Area: ${propArea} sq ft. ` : ''}Asking AED ${parseInt(price || '0').toLocaleString()}. Contact through Ahli Connect for viewing.`;
+    } else if (category === 'fashion') {
+      desc = `${condition} ${title} for sale. Asking AED ${parseInt(price || '0').toLocaleString()}. Authentic item in ${condition.toLowerCase()} condition. Contact me through the Ahli Connect app.`;
+    } else if (category === 'sports') {
+      desc = `${condition} ${title} for sale. Asking AED ${parseInt(price || '0').toLocaleString()}. Perfect for fitness enthusiasts. Contact me through the Ahli Connect app.`;
+    } else if (category === 'books') {
+      desc = `${title} for sale. Asking AED ${parseInt(price || '0').toLocaleString()}. ${condition} condition. Great for students and professionals. Contact through the app.`;
+    } else if (category === 'kids') {
+      desc = `${condition} ${title} for sale. Asking AED ${parseInt(price || '0').toLocaleString()}. Safe and well-maintained. Contact me through the Ahli Connect app.`;
+    } else if (category === 'services') {
+      desc = `Professional service: ${title}. Rate: AED ${parseInt(price || '0').toLocaleString()}. Available for IHC employees. Contact me through the Ahli Connect app for booking.`;
     } else {
       desc = `${condition} item for sale: ${title}. Asking AED ${parseInt(price || '0').toLocaleString()}. Contact me through the app for more details. Quick sale preferred.`;
     }
@@ -1686,6 +1706,46 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     };
   }
 
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('fashion') || t.includes('clothes') || t.includes('clothing') || t.includes('bag') || t.includes('handbag') || t.includes('shoes') || t.includes('watch') || t.includes('jewel') || t.includes('accessori'))) {
+    return {
+      content: `Let's list your fashion item! Fill in the brand, item type, size, condition, and price — AI will create a stylish listing for **45K+ potential buyers**.`,
+      flowType: 'sell',
+      sellCategory: 'fashion',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('sport') || t.includes('gym equipment') || t.includes('bicycle') || t.includes('bike') || t.includes('treadmill') || t.includes('dumbbell') || t.includes('fitness equipment') || t.includes('racket') || t.includes('golf'))) {
+    return {
+      content: `Great — let's list your sports & fitness item! Provide the item name, brand, condition, and price. AI will write a listing that reaches **45K+ fitness enthusiasts**.`,
+      flowType: 'sell',
+      sellCategory: 'sports',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('book') || t.includes('textbook') || t.includes('novel') || t.includes('course material') || t.includes('study') || t.includes('education material'))) {
+    return {
+      content: `Let's list your books or study materials! Just provide the title, author/course, condition, and price — perfect for students and professionals in the IHC network.`,
+      flowType: 'sell',
+      sellCategory: 'books',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post')) && (t.includes('kid') || t.includes('baby') || t.includes('toy') || t.includes('stroller') || t.includes('crib') || t.includes('child') || t.includes('toddler') || t.includes('pram'))) {
+    return {
+      content: `Let's list your kids & baby item! Provide the item name, age range, condition, and price. AI will craft a parent-friendly listing for the IHC community.`,
+      flowType: 'sell',
+      sellCategory: 'kids',
+    };
+  }
+
+  if ((t.includes('sell') || t.includes('list') || t.includes('post') || t.includes('offer')) && (t.includes('service') || t.includes('tutor') || t.includes('freelance') || t.includes('repair') || t.includes('cleaning') || t.includes('moving') || t.includes('handyman') || t.includes('photography') || t.includes('design service'))) {
+    return {
+      content: `I can help you offer your service to the IHC community! Just describe what you offer, your rate, and availability — I'll create a professional service listing.`,
+      flowType: 'sell',
+      sellCategory: 'services',
+    };
+  }
+
   /* ═══════════════════════════════════════════
      BOOKING & SERVICE INTENTS
      ═══════════════════════════════════════════ */
@@ -2117,11 +2177,31 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     };
   }
 
-  /* ── Generic sell (no specific category detected) ── */
+  /* ── Sell "something else" / "other" — goes straight to sell flow ── */
+  if ((t.includes('sell') || t.includes('list')) && (t.includes('something else') || t.includes('other item') || t.includes('other thing'))) {
+    return {
+      content: `No problem! Let's list your item on the IHC Marketplace. Just provide the item name, condition, and price — AI will create a professional listing for you.`,
+      flowType: 'sell',
+      sellCategory: 'other',
+    };
+  }
+
+  /* ── Generic sell (no specific category detected) — show category chooser ── */
   if (t.includes('sell') || t.includes('list something') || t.includes('create listing') || t.includes('sell something')) {
     return {
-      content: `Let's list your item on the IHC Marketplace! AI will help you create a professional listing in seconds:`,
-      flowType: 'sell',
+      content: `I'd love to help you sell on the IHC Marketplace, ${userName}! We have **45,000+ potential buyers** across the network.\n\nWhat would you like to sell? Pick a category below:`,
+      cards: [
+        { type: 'action', icon: Car, title: '🚗 Cars & Vehicles', subtitle: 'Sell your car, SUV, or motorcycle', color: '#9D63F6', action: 'I want to sell my car' },
+        { type: 'action', icon: Monitor, title: '📱 Electronics', subtitle: 'Phones, laptops, tablets, gadgets', color: '#54B6ED', action: 'I want to sell electronics' },
+        { type: 'action', icon: Briefcase, title: '🛋️ Furniture', subtitle: 'Sofas, desks, chairs, beds', color: '#FFBD4C', action: 'I want to sell furniture' },
+        { type: 'action', icon: Building2, title: '🏠 Property', subtitle: 'Apartments, villas, offices', color: '#40C4AA', action: 'I want to sell property' },
+        { type: 'action', icon: ShoppingBag, title: '👜 Fashion & Accessories', subtitle: 'Clothes, bags, watches, shoes', color: '#EC4899', action: 'I want to sell fashion items' },
+        { type: 'action', icon: Trophy, title: '⚽ Sports & Fitness', subtitle: 'Equipment, gear, bikes, rackets', color: '#EA580C', action: 'I want to sell sports equipment' },
+        { type: 'action', icon: GraduationCap, title: '📚 Books & Education', subtitle: 'Textbooks, novels, courses', color: '#8B5CF6', action: 'I want to sell books' },
+        { type: 'action', icon: Heart, title: '🧸 Kids & Baby', subtitle: 'Toys, strollers, cribs, clothes', color: '#F472B6', action: 'I want to sell kids items' },
+        { type: 'action', icon: Zap, title: '🔧 Services', subtitle: 'Tutoring, repairs, freelance', color: '#0EA5E9', action: 'I want to offer a service' },
+        { type: 'action', icon: Package, title: '📦 Other', subtitle: 'Anything else you want to sell', color: '#6B7280', action: 'I want to sell something else' },
+      ],
     };
   }
 
