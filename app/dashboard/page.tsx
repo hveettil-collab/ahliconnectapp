@@ -89,11 +89,10 @@ export default function DashboardPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  /* Show "use mobile" modal only on desktop screens */
+  /* Show "use mobile" modal only on desktop screens — cannot be dismissed */
   useEffect(() => {
     const isDesktop = window.innerWidth >= 768;
-    const dismissed = sessionStorage.getItem('ahli_desktop_modal_dismissed');
-    if (isDesktop && !dismissed) setShowDesktopModal(true);
+    if (isDesktop) setShowDesktopModal(true);
   }, []);
 
   const sd = stock ?? {
@@ -114,14 +113,14 @@ export default function DashboardPage() {
           DESKTOP MODAL — Scan QR for mobile experience
           ══════════════════════════════════════════ */}
       {showDesktopModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
-          <div className="absolute inset-0 bg-black/50" onClick={() => { setShowDesktopModal(false); sessionStorage.setItem('ahli_desktop_modal_dismissed', '1'); }} />
+        <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+          <div className="absolute inset-0 bg-black/60" />
           <div className="relative bg-white rounded-[28px] shadow-2xl max-w-[420px] w-full mx-4 overflow-hidden"
             style={{ animation: 'card-pop 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
             {/* Top gradient accent */}
             <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #9D63F6 0%, #7C3AED 50%, #40C4AA 100%)' }} />
 
-            <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
+            <div className="px-8 pt-8 pb-8 flex flex-col items-center text-center">
               {/* Icon */}
               <div className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-5" style={{ background: 'linear-gradient(135deg, #F3EEFF, #E8DBFE)' }}>
                 <Sparkles size={28} className="text-[#9D63F6]" strokeWidth={1.8} />
@@ -139,16 +138,9 @@ export default function DashboardPage() {
                 <img src="/qr-mobile.png" alt="Scan to open on mobile" className="w-[180px] h-[180px] mx-auto" />
               </div>
 
-              <p className="text-[11px] text-[#A4ABB8] mb-6">
+              <p className="text-[11px] text-[#A4ABB8]">
                 Or open <span className="font-semibold text-[#9D63F6]">ahliconnectapp.vercel.app</span> on your mobile browser
               </p>
-
-              {/* Close link */}
-              <button
-                onClick={() => { setShowDesktopModal(false); sessionStorage.setItem('ahli_desktop_modal_dismissed', '1'); }}
-                className="text-[12px] font-medium text-[#A4ABB8] hover:text-[#666D80] transition-colors">
-                Dismiss
-              </button>
             </div>
           </div>
         </div>
