@@ -258,7 +258,7 @@ export default function DashboardPage() {
           <span className="text-[10px] font-semibold text-[#9D63F6] bg-[#9D63F6]/8 px-2.5 py-1 rounded-full">AI-Powered</span>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2.5">
           {[
             {
               title: 'Salary\nCertificate',
@@ -296,17 +296,19 @@ export default function DashboardPage() {
                   transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
                 }}>
                 {/* Visual — Lottie animation on gradient */}
-                <div className="relative w-full flex flex-col items-center justify-center overflow-hidden" style={{ height: '100px', background: card.gradient }}>
-                  <div className="w-[70px] h-[70px]">
-                    <DotLottieReact src={card.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
+                <div className="relative w-full overflow-hidden" style={{ aspectRatio: '1 / 1.05', background: card.gradient }}>
+                  <div className="absolute inset-0 flex items-center justify-center" style={{ paddingBottom: '28px' }}>
+                    <div className="w-[62px] h-[62px]">
+                      <DotLottieReact src={card.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
+                    </div>
                   </div>
-                  <div className="absolute bottom-2 left-2.5 right-2">
-                    <p className="text-[11px] font-bold leading-tight whitespace-pre-line" style={{ color: card.accent }}>{card.title}</p>
+                  <div className="absolute bottom-0 left-0 right-0 px-2.5 pb-2">
+                    <p className="text-[11px] font-bold leading-[1.2] whitespace-pre-line" style={{ color: card.accent }}>{card.title}</p>
                   </div>
                 </div>
                 {/* Stat */}
                 <div className="px-2.5 py-2 bg-white">
-                  <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
+                  <p className="text-[15px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
                   <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
                 </div>
               </Link>

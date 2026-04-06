@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import AppShell from '@/components/layout/AppShell';
@@ -2088,124 +2089,17 @@ function ServicesPageContent() {
             </h1>
           </div>
 
-          {/* ═══ ANIMATED ORB ═══ */}
+          {/* ═══ ANIMATED CHATBOT ═══ */}
           <div className="relative flex items-center justify-center my-6 ahli-fade-d1" style={{ width: 240, height: 240 }}>
-
-            {/* Ambient glow */}
+            {/* Ambient glow behind the chatbot */}
             <div className="absolute ahli-orb-glow" style={{
-              width: 300, height: 300, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(157,99,246,0.2) 0%, rgba(157,99,246,0.06) 40%, transparent 65%)',
+              width: 280, height: 280, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(157,99,246,0.15) 0%, rgba(157,99,246,0.04) 45%, transparent 65%)',
               left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
             }} />
-
-            {/* Orbit ring 1 */}
-            <div className="absolute ahli-orb-ring" style={{
-              width: 230, height: 230, borderRadius: '50%',
-              border: '1px solid rgba(157,99,246,0.08)',
-              left: '50%', top: '50%', marginLeft: -115, marginTop: -115,
-            }}>
-              <div className="absolute -top-[3px] left-1/2 -translate-x-1/2 w-[6px] h-[6px] rounded-full" style={{ background: 'rgba(177,130,248,0.5)' }} />
-            </div>
-
-            {/* Orbit ring 2 */}
-            <div className="absolute ahli-orb-ring-rev" style={{
-              width: 200, height: 200, borderRadius: '50%',
-              border: '1px dashed rgba(157,99,246,0.06)',
-              left: '50%', top: '50%', marginLeft: -100, marginTop: -100,
-            }}>
-              <div className="absolute top-1/2 -right-[3px] -translate-y-1/2 w-[5px] h-[5px] rounded-full" style={{ background: 'rgba(255,189,76,0.45)' }} />
-            </div>
-
-            {/* Floating particles */}
-            <div className="absolute ahli-p1" style={{ top: '8%', left: '18%' }}>
-              <div className="w-[7px] h-[7px] rounded-full" style={{ background: 'rgba(157,99,246,0.35)' }} />
-            </div>
-            <div className="absolute ahli-p2" style={{ top: '18%', right: '14%' }}>
-              <div className="w-[5px] h-[5px] rounded-full" style={{ background: 'rgba(84,182,237,0.4)' }} />
-            </div>
-            <div className="absolute ahli-p3" style={{ bottom: '12%', left: '14%' }}>
-              <div className="w-[4px] h-[4px] rounded-full" style={{ background: 'rgba(255,189,76,0.45)' }} />
-            </div>
-
-            {/* ── THE ORB ── */}
-            <div className="ahli-orb-float relative" style={{ width: 150, height: 150 }}>
-              <svg width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute top-0 left-0">
-                <defs>
-                  <radialGradient id="wo-main" cx="0.4" cy="0.35" r="0.65" fx="0.35" fy="0.3">
-                    <stop offset="0%" stopColor="#F0ECFF" />
-                    <stop offset="20%" stopColor="#DDD2FF" />
-                    <stop offset="45%" stopColor="#B88DF8" />
-                    <stop offset="70%" stopColor="#9D63F6" />
-                    <stop offset="100%" stopColor="#7247C4" />
-                  </radialGradient>
-                  <radialGradient id="wo-hi" cx="0.33" cy="0.27" r="0.38" fx="0.28" fy="0.23">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.9" />
-                    <stop offset="35%" stopColor="white" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0" />
-                  </radialGradient>
-                  <radialGradient id="wo-rim" cx="0.73" cy="0.58" r="0.32">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.25" />
-                    <stop offset="100%" stopColor="white" stopOpacity="0" />
-                  </radialGradient>
-                  <radialGradient id="wo-depth" cx="0.5" cy="0.72" r="0.45">
-                    <stop offset="0%" stopColor="#5B2FB0" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#5B2FB0" stopOpacity="0" />
-                  </radialGradient>
-                  <filter id="wo-noise" x="0" y="0" width="100%" height="100%">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" stitchTiles="stitch" result="n" />
-                    <feColorMatrix type="saturate" values="0" in="n" result="gn" />
-                    <feBlend in="SourceGraphic" in2="gn" mode="overlay" result="noisy" />
-                    <feComposite in="noisy" in2="SourceGraphic" operator="in" />
-                  </filter>
-                  <filter id="wo-blur" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2.5" />
-                  </filter>
-                  <filter id="wo-shadow" x="-30%" y="-20%" width="160%" height="170%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="14" />
-                    <feOffset dx="0" dy="10" />
-                    <feColorMatrix values="0 0 0 0 0.38 0 0 0 0 0.24 0 0 0 0 0.76 0 0 0 0.18 0" />
-                    <feMerge><feMergeNode /><feMergeNode in="SourceGraphic" /></feMerge>
-                  </filter>
-                </defs>
-                <g filter="url(#wo-shadow)">
-                  <circle cx="75" cy="75" r="67" fill="url(#wo-main)" />
-                  <circle cx="75" cy="75" r="67" fill="url(#wo-main)" filter="url(#wo-noise)" opacity="0.55" />
-                  <circle cx="75" cy="75" r="67" fill="url(#wo-depth)" />
-                  <circle cx="75" cy="75" r="67" fill="url(#wo-hi)" />
-                  <circle cx="75" cy="75" r="67" fill="url(#wo-rim)" />
-                  <ellipse cx="54" cy="44" rx="16" ry="11" fill="white" opacity="0.18" filter="url(#wo-blur)" />
-                </g>
-              </svg>
-
-              {/* Rotating inner conic glow */}
-              <div className="absolute inset-0" style={{
-                width: 150, height: 150, borderRadius: '50%',
-                background: 'conic-gradient(from 0deg, rgba(157,99,246,0) 0%, rgba(177,130,248,0.12) 25%, rgba(255,255,255,0.08) 50%, rgba(157,99,246,0) 75%)',
-                mixBlendMode: 'overlay',
-                clipPath: 'circle(44% at 50% 50%)',
-                animation: 'ahli-orb-rotate 10s linear infinite',
-              }} />
-
-              {/* Drifting highlight */}
-              <div className="absolute ahli-orb-highlight" style={{
-                width: 55, height: 55, borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(255,255,255,0.55) 0%, transparent 70%)',
-                top: '12%', left: '18%', filter: 'blur(10px)',
-              }} />
-
-              {/* Shimmer particle */}
-              <div className="absolute ahli-shimmer" style={{
-                width: 5, height: 5, borderRadius: '50%',
-                background: 'rgba(255,255,255,0.75)',
-                top: '50%', left: '50%', marginTop: -2.5, marginLeft: -2.5,
-                filter: 'blur(0.5px)',
-              }} />
-
-              {/* Minimal abstract "face" — two tiny eye marks */}
-              <div className="absolute flex gap-[14px] items-center justify-center" style={{ top: '43%', left: '50%', transform: 'translateX(-50%)' }}>
-                <div className="w-[3px] h-[10px] rounded-full bg-white/40" />
-                <div className="w-[3px] h-[10px] rounded-full bg-white/40" />
-              </div>
+            {/* Lottie chatbot animation */}
+            <div className="ahli-orb-float" style={{ width: 200, height: 200 }}>
+              <DotLottieReact src="/lottie-ai-chatbot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
             </div>
           </div>
 
