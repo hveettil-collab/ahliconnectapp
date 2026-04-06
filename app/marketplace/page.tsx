@@ -3,6 +3,7 @@ import { useState, useRef, useEffect, useMemo, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
 import { MARKETPLACE_LISTINGS } from '@/lib/mockData';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
 import {
@@ -703,8 +704,8 @@ function MarketplaceContent() {
         <button onClick={() => router.push('/services?prompt=I+want+to+sell+something+on+the+marketplace')} className="spatial-rise d1 w-full flex items-center gap-2.5 p-3 rounded-[18px] active:scale-[0.98] transition-all overflow-hidden relative"
           style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 90% 50%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
-          <div className="relative z-10 w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
-            <Camera size={18} className="text-white" />
+          <div className="relative z-10 w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
+            <DotLottieReact src="/lottie-sell.lottie" loop autoplay style={{ width: 28, height: 28 }} />
           </div>
           <div className="relative z-10 flex-1 text-left min-w-0">
             <p className="text-[13px] font-bold text-white">Sell to Colleagues</p>
