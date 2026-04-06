@@ -81,12 +81,20 @@ export default function DashboardPage() {
   const [stockShares, setStockShares] = useState('');
   const [stockConfirmed, setStockConfirmed] = useState(false);
   const [showEventDetail, setShowEventDetail] = useState<number | null>(null);
+  const [showDesktopModal, setShowDesktopModal] = useState(false);
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
   const benefitsVal = useCountUp(85, 2000, 1000);
 
   useEffect(() => { setMounted(true); }, []);
+
+  /* Show "use mobile" modal only on desktop screens */
+  useEffect(() => {
+    const isDesktop = window.innerWidth >= 768;
+    const dismissed = sessionStorage.getItem('ahli_desktop_modal_dismissed');
+    if (isDesktop && !dismissed) setShowDesktopModal(true);
+  }, []);
 
   const sd = stock ?? {
     ...MARKET_DATA, live: false, updatedAt: '',
@@ -101,6 +109,51 @@ export default function DashboardPage() {
 
   return (
     <AppShell title="Home" subtitle={time} hideTopBar>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP MODAL — Scan QR for mobile experience
+          ══════════════════════════════════════════ */}
+      {showDesktopModal && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)' }}>
+          <div className="absolute inset-0 bg-black/50" onClick={() => { setShowDesktopModal(false); sessionStorage.setItem('ahli_desktop_modal_dismissed', '1'); }} />
+          <div className="relative bg-white rounded-[28px] shadow-2xl max-w-[420px] w-full mx-4 overflow-hidden"
+            style={{ animation: 'card-pop 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
+            {/* Top gradient accent */}
+            <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #9D63F6 0%, #7C3AED 50%, #40C4AA 100%)' }} />
+
+            <div className="px-8 pt-8 pb-6 flex flex-col items-center text-center">
+              {/* Icon */}
+              <div className="w-16 h-16 rounded-[20px] flex items-center justify-center mb-5" style={{ background: 'linear-gradient(135deg, #F3EEFF, #E8DBFE)' }}>
+                <Sparkles size={28} className="text-[#9D63F6]" strokeWidth={1.8} />
+              </div>
+
+              <h2 className="text-[22px] font-bold text-[#15161E] leading-tight mb-2">
+                Best on Mobile
+              </h2>
+              <p className="text-[14px] text-[#666D80] leading-relaxed mb-6">
+                Ahli Connect is designed for mobile. Scan the QR code below to open it on your phone for the best experience.
+              </p>
+
+              {/* QR Code */}
+              <div className="bg-[#F8F9FB] rounded-[20px] p-5 border border-[#DFE1E6] mb-5">
+                <img src="/qr-mobile.png" alt="Scan to open on mobile" className="w-[180px] h-[180px] mx-auto" />
+              </div>
+
+              <p className="text-[11px] text-[#A4ABB8] mb-6">
+                Or open <span className="font-semibold text-[#9D63F6]">ahli-connect.vercel.app</span> on your mobile browser
+              </p>
+
+              {/* Dismiss button */}
+              <button
+                onClick={() => { setShowDesktopModal(false); sessionStorage.setItem('ahli_desktop_modal_dismissed', '1'); }}
+                className="w-full py-3.5 rounded-[14px] text-[14px] font-bold text-white transition-all active:scale-[0.98]"
+                style={{ background: 'linear-gradient(135deg, #9D63F6, #7C3AED)', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                Continue on Desktop
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ══════════════════════════════════════════
           HERO — Immersive gradient with greeting

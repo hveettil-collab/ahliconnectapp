@@ -93,19 +93,19 @@ export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
               </li>
             );
           })}
+
+          {/* Sign Out — below About */}
+          <li className="pt-2 mt-2 border-t border-[#F8F9FB]">
+            <button
+              onClick={() => { logout(); onClose?.(); }}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium text-red-400 hover:bg-red-50 hover:text-red-500 transition-all duration-150 w-full"
+            >
+              <LogOut size={17} strokeWidth={1.8} />
+              <span className="flex-1 text-left">Sign Out</span>
+            </button>
+          </li>
         </ul>
       </nav>
-
-      {/* Logout */}
-      <div className="px-3 py-4 border-t border-[#F8F9FB]">
-        <button
-          onClick={() => { logout(); onClose?.(); }}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-[12px] text-sm font-medium text-[#A4ABB8] hover:bg-red-50 hover:text-red-500 transition-all duration-150 w-full"
-        >
-          <LogOut size={17} strokeWidth={1.8} />
-          Sign Out
-        </button>
-      </div>
     </>
   );
 
