@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, useMemo, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useAuth } from '@/context/AuthContext';
@@ -199,6 +200,8 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
     { id: '1', from: 'seller', text: `Hi! Thanks for your interest in the ${listing.title}. Feel free to ask me anything.`, time: '2:30 PM' },
   ]);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useBodyScrollLock(showChat || showOffer || showSellerProfile || showCallSheet || showBuyConfirm);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -686,6 +689,8 @@ function MarketplaceContent() {
   const [selectedListing, setSelectedListing] = useState<EnrichedListing | null>(null);
   const [showMyListings, setShowMyListings] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useBodyScrollLock(!!selectedListing || showSort || showAISuggestions || showMyListings);
 
   // Handle ?tab=my from sell flow redirect
   useEffect(() => {

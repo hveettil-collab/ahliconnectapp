@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import AppShell from '@/components/layout/AppShell';
 import Avatar from '@/components/ui/Avatar';
 import { COMPANIES, COLLEAGUES } from '@/lib/mockData';
@@ -970,6 +971,8 @@ export default function CommunityPage() {
   const [postSuccess, setPostSuccess] = useState(false);
   const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
   const feedFileInputRef = useRef<HTMLInputElement>(null);
+
+  useBodyScrollLock(!!selectedCommunity || showComposer || !!commentingPostId || !!sharingPostId);
 
   if (!user) return null;
 

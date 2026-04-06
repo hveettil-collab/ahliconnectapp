@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
@@ -50,6 +51,8 @@ function WalletSection() {
   const [showAllTx, setShowAllTx] = useState(false);
   const [fundSuccess, setFundSuccess] = useState(false);
   const [redeemSuccess, setRedeemSuccess] = useState(false);
+
+  useBodyScrollLock(showFund || showRedeem || showAllTx);
 
   const REWARD_CATEGORIES: Record<string, { icon: typeof Star; color: string; bg: string }> = {
     performance: { icon: TrendingUp, color: '#9D63F6', bg: '#F7F1FF' },
@@ -350,6 +353,8 @@ function WalletSection() {
 function BenefitsSection() {
   const [showBenefitDetail, setShowBenefitDetail] = useState<string | null>(null);
   const router = useRouter();
+
+  useBodyScrollLock(!!showBenefitDetail);
 
   const benefits = [
     { key: 'medical', label: 'Medical', icon: Heart, color: '#EF4444', bg: 'bg-red-50', value: 'AED 85,000' },
@@ -688,6 +693,8 @@ export default function ProfilePage() {
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [locationVisible, setLocationVisible] = useState(true);
   const [locationMode, setLocationMode] = useState<'off' | 'nearby' | 'company' | 'all'>('nearby');
+
+  useBodyScrollLock(showLogout || showShareSheet);
 
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);

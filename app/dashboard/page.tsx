@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import AppShell from '@/components/layout/AppShell';
 import {
   IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, OFFERS,
@@ -82,6 +83,8 @@ export default function DashboardPage() {
   const [stockConfirmed, setStockConfirmed] = useState(false);
   const [showEventDetail, setShowEventDetail] = useState<number | null>(null);
   const [showDesktopModal, setShowDesktopModal] = useState(false);
+
+  useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal);
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);

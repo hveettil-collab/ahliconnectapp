@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import AppShell from '@/components/layout/AppShell';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -30,6 +31,8 @@ const DEPENDENTS: Dependent[] = [
 export default function InsurancePage() {
   const router = useRouter();
   const [selectedDep, setSelectedDep] = useState<Dependent | null>(null);
+
+  useBodyScrollLock(!!selectedDep);
 
   return (
     <AppShell title="Insurance" subtitle="" hideTopBar>

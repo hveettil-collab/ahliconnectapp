@@ -1,6 +1,7 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import AppShell from '@/components/layout/AppShell';
 import Avatar from '@/components/ui/Avatar';
 import { SERVICES, COLLEAGUES, COMPANIES } from '@/lib/mockData';
@@ -698,6 +699,8 @@ export default function ExplorePage() {
   const [selectedBento, setSelectedBento] = useState<BentoItem | null>(null);
   const [heroIdx, setHeroIdx] = useState(0);
   const [showMap, setShowMap] = useState(false);
+
+  useBodyScrollLock(!!selectedEvent || !!selectedBento || showMap);
 
   if (!user) return null;
 

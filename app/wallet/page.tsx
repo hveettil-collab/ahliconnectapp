@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import AppShell from '@/components/layout/AppShell';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { useWallet } from '@/context/WalletContext';
 import { useRouter } from 'next/navigation';
 import {
@@ -18,6 +19,8 @@ export default function WalletPage() {
   const [paymentMethod, setPaymentMethod] = useState<'apple' | 'bank' | null>(null);
   const [fundSuccess, setFundSuccess] = useState(false);
   const [processing, setProcessing] = useState(false);
+
+  useBodyScrollLock(showFund);
 
   const handleFund = () => {
     const amount = parseFloat(fundAmount);

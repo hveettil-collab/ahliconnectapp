@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import AppShell from '@/components/layout/AppShell';
+import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { OFFERS } from '@/lib/mockData';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
@@ -30,6 +31,8 @@ export default function OffersPage() {
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [selectedOffer, setSelectedOffer] = useState<typeof OFFERS[0] | null>(null);
   const [claimSuccess, setClaimSuccess] = useState(false);
+
+  useBodyScrollLock(!!selectedOffer);
 
   const filtered = OFFERS.filter(o => cat === 'All' || o.category === cat);
   const featured = filtered.filter(o => o.featured);
