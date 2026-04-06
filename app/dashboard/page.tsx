@@ -261,7 +261,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-3 gap-2.5">
           {[
             {
-              title: 'Salary\nCertificate',
+              title: 'Salary Certificate',
               lottie: '/lottie-salary.lottie',
               gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
@@ -270,7 +270,7 @@ export default function DashboardPage() {
               href: '/automations/salary-certificate',
             },
             {
-              title: 'Smart\nLeave',
+              title: 'Smart Leave',
               lottie: '/lottie-leave.lottie',
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
@@ -279,7 +279,7 @@ export default function DashboardPage() {
               href: '/automations/leave-request',
             },
             {
-              title: 'Expense\nClaim',
+              title: 'ExpenseClaim',
               lottie: '/lottie-expense.lottie',
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
@@ -296,15 +296,11 @@ export default function DashboardPage() {
                   transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
                 }}>
                 {/* Visual — Lottie animation on gradient */}
-                <div className="relative w-full overflow-hidden" style={{ aspectRatio: '1 / 1.05', background: card.gradient }}>
-                  <div className="absolute inset-0 flex items-center justify-center" style={{ paddingBottom: '28px' }}>
-                    <div className="w-[62px] h-[62px]">
-                      <DotLottieReact src={card.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
-                    </div>
+                <div className="w-full flex flex-col items-center pt-4 pb-2 overflow-hidden" style={{ background: card.gradient }}>
+                  <div className="w-[56px] h-[56px] mb-2">
+                    <DotLottieReact src={card.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 px-2.5 pb-2">
-                    <p className="text-[11px] font-bold leading-[1.2] whitespace-pre-line" style={{ color: card.accent }}>{card.title}</p>
-                  </div>
+                  <p className="text-[11px] font-bold leading-none text-center" style={{ color: card.accent }}>{card.title}</p>
                 </div>
                 {/* Stat */}
                 <div className="px-2.5 py-2 bg-white">
