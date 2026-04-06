@@ -686,8 +686,13 @@ function ShareSheet({ post, onClose }: { post: Post; onClose: () => void }) {
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-lg bg-white rounded-t-[28px] scale-in pb-8">
-        <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mt-3 mb-4" />
-        <p className="text-[15px] font-bold text-[#15161E] text-center mb-4">Share Post</p>
+        <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mt-3 mb-2" />
+        <div className="flex items-center justify-between px-4 mb-3">
+          <p className="text-[15px] font-bold text-[#15161E]">Share Post</p>
+          <button onClick={onClose} className="w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center">
+            <X size={16} className="text-[#666D80]" />
+          </button>
+        </div>
         <div className="px-4 space-y-1">
           {shareOptions.map(opt => {
             const Icon = opt.icon;

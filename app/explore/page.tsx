@@ -10,7 +10,7 @@ import {
   FileText, Monitor, BookOpen, Receipt, Plane, Briefcase, Star,
   ArrowRight, UserPlus, Share2, CheckCircle2, Bell, MessageCircle,
   Tag, ShoppingBag, Flame, UtensilsCrossed, Gamepad2, Car, Palmtree,
-  Coffee, Dumbbell, Ticket, TrendingUp, Gift, Bookmark,
+  Coffee, Dumbbell, Ticket, TrendingUp, Gift, Bookmark, ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -250,10 +250,13 @@ function EventDetailModal({ event, onClose }: { event: CompanyEvent; onClose: ()
         <div className="relative h-52 overflow-hidden rounded-t-[28px]">
           <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center">
+          <button onClick={onClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+            <ArrowLeft size={18} className="text-white" />
+          </button>
+          <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
             <X size={16} className="text-white" />
           </button>
-          <div className="absolute top-4 left-4 flex items-center gap-2">
+          <div className="absolute top-14 left-4 flex items-center gap-2">
             <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full" style={{ background: event.color }}>{event.category}</span>
             {event.spotsLeft < 100 && (
               <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-red-500/90 flex items-center gap-1">
@@ -379,7 +382,10 @@ function BentoDetailModal({ item, onClose }: { item: BentoItem; onClose: () => v
         <div className="relative h-48 overflow-hidden rounded-t-[28px]">
           <img src={item.image} alt={item.label} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center">
+          <button onClick={onClose} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+            <ArrowLeft size={18} className="text-white" />
+          </button>
+          <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
             <X size={16} className="text-white" />
           </button>
           <div className="absolute bottom-4 left-4 right-4">
