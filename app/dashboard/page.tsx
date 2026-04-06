@@ -207,7 +207,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
 
         {/* ── Slide 2: Corporate Announcements ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
-          <Link href="/explore" className="block">
+          <Link href={`/news?id=${news.id}`} className="block">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
               <img src={news.image} alt={news.title}
                 className="absolute inset-0 w-full h-full object-cover" />
