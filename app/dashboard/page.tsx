@@ -326,7 +326,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart Leave',
-              lottie: '/lottie-leave.lottie',
+              lottie: '/lottie-leave-v2.lottie',
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
@@ -335,7 +335,7 @@ export default function DashboardPage() {
             },
             {
               title: 'ExpenseClaim',
-              lottie: '/lottie-expense.lottie',
+              lottie: '/lottie-expense-new.lottie',
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
               statLabel: 'accuracy',
