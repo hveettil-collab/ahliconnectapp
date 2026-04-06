@@ -43,6 +43,49 @@ export const MOCK_USERS: Record<string, {
   },
 };
 
+export const CORPORATE_NEWS = [
+  {
+    id: 'cn001',
+    title: 'IHC Chairman Addresses Future of UAE Investment at ADGM',
+    summary: 'His Excellency outlines IHC\'s vision for sustainable growth and regional expansion at the Abu Dhabi Global Market annual summit.',
+    date: '06 Apr 2026',
+    readTime: '3 min read',
+    tags: ['ADGM', 'Leadership'],
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=500&fit=crop',
+    author: 'IHC Communications',
+  },
+  {
+    id: 'cn002',
+    title: 'IHC Group Reports Record Q1 2026 — Revenue Up 22%',
+    summary: 'Group revenue reaches AED 14.8 billion driven by strong performance across healthcare, real estate, and technology verticals.',
+    date: '03 Apr 2026',
+    readTime: '2 min read',
+    tags: ['Financial', 'Quarterly'],
+    image: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=800&h=500&fit=crop',
+    author: 'Investor Relations',
+  },
+  {
+    id: 'cn003',
+    title: 'CEO Town Hall: Building the Next Chapter Together',
+    summary: 'Group CEO shares strategic priorities for 2026 including AI transformation, employee wellness, and market expansion into Southeast Asia.',
+    date: '01 Apr 2026',
+    readTime: '4 min read',
+    tags: ['CEO', 'Strategy'],
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=500&fit=crop&crop=face',
+    author: 'Office of the CEO',
+  },
+  {
+    id: 'cn004',
+    title: 'IHC Signs MoU with Hub71 to Accelerate Startup Ecosystem',
+    summary: 'Strategic partnership aims to support 50+ UAE-based startups with funding, mentorship and access to IHC\'s network of companies.',
+    date: '28 Mar 2026',
+    readTime: '2 min read',
+    tags: ['Hub71', 'Innovation'],
+    image: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=500&fit=crop',
+    author: 'IHC Ventures',
+  },
+];
+
 export const IHC_ANNOUNCEMENTS = [
   {
     id: 'ann001', type: 'group', tag: 'IHC Group',

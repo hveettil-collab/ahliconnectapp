@@ -1,11 +1,11 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import AppShell from '@/components/layout/AppShell';
 import {
-  IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, OFFERS,
+  IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, OFFERS, CORPORATE_NEWS,
   MARKET_DATA, COMPANIES, COLLEAGUES
 } from '@/lib/mockData';
 import {
@@ -15,6 +15,7 @@ import {
   Plane, Users, UtensilsCrossed,
   Timer, Receipt, Award, X, ExternalLink,
   CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight, MapPin, Footprints,
+  Clock, Newspaper, MessageCircle, Tag,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -64,6 +65,253 @@ function useCountUp(target: number, duration = 1800, delay = 300) {
     return () => clearTimeout(timeout);
   }, [target, duration, delay]);
   return value;
+}
+
+/* ════════════════ THE LATEST — CAROUSEL ════════════════ */
+
+interface OfferItem { id: string; title: string; image: string; company: string; color: string; value: string; }
+
+function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOfferClick: () => void }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchStartX = useRef(0);
+  const TOTAL_SLIDES = 4;
+  const AUTO_INTERVAL = 5000;
+
+  const goTo = useCallback((idx: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const w = el.offsetWidth;
+    el.scrollTo({ left: idx * w, behavior: 'smooth' });
+    setActiveSlide(idx);
+  }, []);
+
+  // Auto-play
+  useEffect(() => {
+    autoPlayRef.current = setInterval(() => {
+      setActiveSlide(prev => {
+        const next = (prev + 1) % TOTAL_SLIDES;
+        const el = scrollRef.current;
+        if (el) el.scrollTo({ left: next * el.offsetWidth, behavior: 'smooth' });
+        return next;
+      });
+    }, AUTO_INTERVAL);
+    return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
+  }, []);
+
+  const resetAutoPlay = useCallback(() => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setActiveSlide(prev => {
+        const next = (prev + 1) % TOTAL_SLIDES;
+        const el = scrollRef.current;
+        if (el) el.scrollTo({ left: next * el.offsetWidth, behavior: 'smooth' });
+        return next;
+      });
+    }, AUTO_INTERVAL);
+  }, []);
+
+  // Sync active dot on manual scroll
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const w = el.offsetWidth;
+    const idx = Math.round(el.scrollLeft / w);
+    if (idx !== activeSlide && idx >= 0 && idx < TOTAL_SLIDES) {
+      setActiveSlide(idx);
+      resetAutoPlay();
+    }
+  }, [activeSlide, resetAutoPlay]);
+
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      const next = diff > 0 ? Math.min(activeSlide + 1, TOTAL_SLIDES - 1) : Math.max(activeSlide - 1, 0);
+      goTo(next);
+      resetAutoPlay();
+    }
+  };
+
+  const news = CORPORATE_NEWS[0];
+  const topOffers = offers.slice(0, 3);
+  const SLIDE_LABELS = ['Events', 'News', 'Offers', 'Community'];
+
+  return (
+    <div>
+      {/* Header + dots */}
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-[16px] font-extrabold text-[#15161E]">The Latest</h3>
+        <div className="flex items-center gap-1.5">
+          {SLIDE_LABELS.map((label, i) => (
+            <button key={label} onClick={() => { goTo(i); resetAutoPlay(); }}
+              className="transition-all duration-300"
+              style={{
+                width: activeSlide === i ? 20 : 6,
+                height: 6,
+                borderRadius: 3,
+                background: activeSlide === i ? '#9D63F6' : '#DFE1E6',
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Carousel track */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="flex overflow-x-auto scrollbar-hide"
+        style={{
+          scrollSnapType: 'x mandatory',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        {/* ── Slide 1: Upcoming Event ── */}
+        <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
+          <Link href="/explore" className="block">
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+              <img src="https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=800&h=500&fit=crop" alt="Sports Day"
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
+              {/* Tags */}
+              <div className="absolute top-3 left-3 flex gap-1.5">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Yas Island</span>
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Sports</span>
+              </div>
+              {/* Live badge */}
+              <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(64,196,170,0.2)', backdropFilter: 'blur(8px)' }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#40C4AA] animate-pulse" />
+                <span className="text-[9px] font-bold text-[#40C4AA]">Upcoming</span>
+              </div>
+              {/* Bottom content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-1 text-white/60">
+                    <Calendar size={10} />
+                    <span className="text-[10px] font-medium">22 May 2026</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-white/60">
+                    <MapPin size={10} />
+                    <span className="text-[10px] font-medium">Yas Sports Complex</span>
+                  </div>
+                </div>
+                <p className="text-[17px] font-extrabold text-white leading-tight">IHC Group Sports Day</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* ── Slide 2: Corporate Announcements ── */}
+        <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
+          <Link href="/explore" className="block">
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+              <img src={news.image} alt={news.title}
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
+              {/* Tags */}
+              <div className="absolute top-3 left-3 flex gap-1.5">
+                {news.tags.map(tag => (
+                  <span key={tag} className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>{tag}</span>
+                ))}
+              </div>
+              {/* Bottom content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center gap-1 text-white/60">
+                    <Clock size={10} />
+                    <span className="text-[10px] font-medium">{news.readTime}</span>
+                  </div>
+                  <div className="flex items-center gap-1 text-white/60">
+                    <Calendar size={10} />
+                    <span className="text-[10px] font-medium">{news.date}</span>
+                  </div>
+                </div>
+                <p className="text-[16px] font-extrabold text-white leading-tight line-clamp-2">{news.title}</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* ── Slide 3: Offers ── */}
+        <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
+          <button onClick={onOfferClick} className="block w-full text-left">
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+              <img src={topOffers[0]?.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop'} alt="Offers"
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
+              {/* Tags */}
+              <div className="absolute top-3 left-3 flex gap-1.5">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Exclusive</span>
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Offers</span>
+              </div>
+              {/* Count badge */}
+              <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(255,189,76,0.2)', backdropFilter: 'blur(8px)' }}>
+                <Tag size={10} className="text-[#FFBD4C]" />
+                <span className="text-[9px] font-bold text-[#FFBD4C]">{offers.length} deals</span>
+              </div>
+              {/* Bottom content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  {topOffers.slice(0, 3).map(o => (
+                    <span key={o.id} className="px-2 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: o.color + 'CC' }}>{o.company}</span>
+                  ))}
+                </div>
+                <p className="text-[17px] font-extrabold text-white leading-tight">Exclusive Employee Perks</p>
+                <p className="text-[11px] text-white/60 mt-0.5">Special deals from {topOffers[0]?.company || 'partners'} & more</p>
+              </div>
+            </div>
+          </button>
+        </div>
+
+        {/* ── Slide 4: Community ── */}
+        <div className="shrink-0 w-full" style={{ scrollSnapAlign: 'start' }}>
+          <Link href="/community" className="block">
+            <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=500&fit=crop" alt="Community"
+                className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 50%, transparent 100%)' }} />
+              {/* Tags */}
+              <div className="absolute top-3 left-3 flex gap-1.5">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Community</span>
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Social</span>
+              </div>
+              {/* Activity badge */}
+              <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(157,99,246,0.2)', backdropFilter: 'blur(8px)' }}>
+                <MessageCircle size={10} className="text-[#9D63F6]" />
+                <span className="text-[9px] font-bold text-[#9D63F6]">20 new</span>
+              </div>
+              {/* Bottom content */}
+              <div className="absolute bottom-0 left-0 right-0 p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  {[
+                    { name: 'IHC Group', img: '/logos/ihc.svg' },
+                    { name: 'Shory', img: '/logos/shory.svg' },
+                    { name: 'Palms Sports', img: '/logos/palms-sports.svg' },
+                  ].map(c => (
+                    <div key={c.name} className="w-6 h-6 rounded-full overflow-hidden border-2 border-white/20 -ml-1 first:ml-0">
+                      <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                  <span className="text-[10px] text-white/60 font-medium ml-1">3 communities</span>
+                </div>
+                <p className="text-[17px] font-extrabold text-white leading-tight">Your Communities</p>
+                <p className="text-[11px] text-white/60 mt-0.5">20 new posts today across IHC Group</p>
+              </div>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Slide label */}
+      <div className="flex items-center justify-center mt-2">
+        <span className="text-[10px] font-semibold text-[#A4ABB8]">{SLIDE_LABELS[activeSlide]}</span>
+      </div>
+    </div>
+  );
 }
 
 /* ════════════════ DASHBOARD ════════════════ */
@@ -402,55 +650,10 @@ export default function DashboardPage() {
       {/* ── Rest of dashboard content ── */}
       <div className="px-4 space-y-3 pb-4 pt-2">
 
-        {/* ── Featured Event Banner ── */}
-        <Link href="/explore" className="block">
-          <div className="relative bg-[#1E2030] rounded-[20px] p-4 overflow-hidden" style={{ background: 'linear-gradient(135deg, #1E2030 0%, #2A2D45 50%, #1E2030 100%)' }}>
-            <div className="flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                  <p className="text-[10px] text-white/40 font-medium">Upcoming Event</p>
-                </div>
-                <p className="text-[15px] font-bold text-white leading-snug">Sports Day Yas Island</p>
-                <div className="flex items-center gap-3 mt-2">
-                  <p className="text-[22px] font-bold text-white leading-none">22 May</p>
-                  <div className="w-px h-6 bg-white/15" />
-                  <p className="text-[11px] text-white/40">Yas Sports Complex</p>
-                </div>
-              </div>
-              <div className="w-[90px] h-[90px] shrink-0 -mr-1">
-                <DotLottieReact src="/lottie-ai-assistant.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
-              </div>
-            </div>
-          </div>
-        </Link>
-
-        {/* ── Exclusive Offers scroll ── */}
-        <div>
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="text-[15px] font-bold text-[#15161E]">Exclusive Offers</h3>
-            <Link href="/offers" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
-              See more
-            </Link>
-          </div>
-          <div className="flex gap-2.5 overflow-x-auto pb-1" style={{ scrollSnapType: 'x mandatory' }}>
-            {relevantOffers.map(offer => (
-              <button key={offer.id} onClick={() => router.push('/offers')} className="shrink-0 w-48 bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden text-left active:scale-[0.97] transition-all hover:shadow-md" style={{ scrollSnapAlign: 'start' }}>
-                <div className="relative h-24">
-                  <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                  <span className="absolute top-2 left-2 text-[9px] font-bold text-white px-2 py-0.5 rounded-full" style={{ background: offer.color }}>
-                    {offer.company}
-                  </span>
-                </div>
-                <div className="p-3">
-                  <p className="text-xs font-bold text-[#15161E] line-clamp-1 mb-1">{offer.title}</p>
-                  <p className="text-[11px] font-bold" style={{ color: offer.color }}>{offer.value}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* ══════════════════════════════════════════
+            THE LATEST — 4-SLIDE AUTO-SCROLL CAROUSEL
+            ══════════════════════════════════════════ */}
+        <LatestCarousel offers={relevantOffers} onOfferClick={() => router.push('/offers')} />
 
         {/* ── Network ── */}
         <div className="bg-white rounded-[18px] border border-[#DFE1E6] p-4">
@@ -488,43 +691,6 @@ export default function DashboardPage() {
             <ChevronRight size={14} className="text-[#9D63F6] shrink-0" />
           </Link>
         </div>
-
-        {/* ── Community Quick Widget ── */}
-        <Link href="/community" className="no-underline block">
-          <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-[14px] flex items-center justify-center" style={{ background: '#9D63F6' + '12' }}>
-                    <Users size={18} style={{ color: '#9D63F6' }} />
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-bold text-[#15161E]">My Communities</p>
-                    <p className="text-[10px] text-[#A4ABB8]">3 active · 20 new posts today</p>
-                  </div>
-                </div>
-                <ChevronRight size={16} className="text-[#A4ABB8]" />
-              </div>
-              <div className="flex gap-2">
-                {[
-                  { name: 'IHC Group', color: '#1B3A6B', unread: 12, image: '/logos/ihc.svg' },
-                  { name: 'Shory', color: '#0D9488', unread: 5, image: '/logos/shory.svg' },
-                  { name: 'Palms Sports', color: '#EA580C', unread: 3, image: '/logos/palms-sports.svg' },
-                ].map(c => (
-                  <div key={c.name} className="flex-1 flex items-center gap-2 px-2.5 py-2 rounded-[12px] border border-[#DFE1E6]">
-                    <div className="w-7 h-7 rounded-[8px] overflow-hidden shrink-0">
-                      <img src={c.image} alt="" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[10px] font-bold text-[#15161E] truncate">{c.name}</p>
-                      {c.unread > 0 && <p className="text-[8px] font-semibold" style={{ color: '#DF1C41' }}>{c.unread} new</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </Link>
 
         {/* ── IHC Stock Trading Card — Live ── */}
         <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
