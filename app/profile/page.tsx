@@ -724,17 +724,9 @@ export default function ProfilePage() {
               DIGITAL BUSINESS CARD — Redesigned
               ═══════════════════════════════════════ */}
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <QrCode size={15} className="text-[#9D63F6]" strokeWidth={2} />
-                <h3 className="text-[15px] font-bold text-[#15161E]">Digital Business Card</h3>
-              </div>
-              <button
-                onClick={() => setShowShareSheet(true)}
-                className="flex items-center gap-1.5 bg-[#9D63F6] text-white text-[11px] font-bold px-3.5 py-2 rounded-full hover:bg-[#7C3AED] transition-colors active:scale-95"
-              >
-                <Share2 size={12} /> Share
-              </button>
+            <div className="flex items-center gap-2 mb-3">
+              <QrCode size={15} className="text-[#9D63F6]" strokeWidth={2} />
+              <h3 className="text-[15px] font-bold text-[#15161E]">Digital Business Card</h3>
             </div>
 
             {/* Card — front only */}
@@ -897,7 +889,7 @@ export default function ProfilePage() {
                   key={card.title}
                   className="transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]"
                   style={{
-                    marginTop: expandedCard === null && idx > 0 ? -44 : (idx > 0 ? 8 : 0),
+                    marginTop: expandedCard === null && idx > 0 ? -38 : (idx > 0 ? 8 : 0),
                     position: 'relative',
                     zIndex: isExpanded ? 30 : expandedCard === null ? (10 + idx) : (idx > (expandedCard ?? 0) ? 5 : 10 + idx),
                   }}
@@ -905,12 +897,12 @@ export default function ProfilePage() {
                   {/* Card Header — always visible, tappable */}
                   <button
                     onClick={() => toggleCard(idx)}
-                    className="w-full px-5 py-5 flex items-center justify-between active:scale-[0.99] transition-transform relative overflow-hidden"
+                    className="w-full px-5 py-6 flex items-center justify-between active:scale-[0.99] transition-transform relative overflow-hidden"
                     style={{
                       background: card.gradient,
                       borderRadius: isExpanded ? '20px 20px 0 0' : '20px',
                       boxShadow: `0 8px 32px ${card.glowColor}, 0 2px 8px rgba(0,0,0,0.12)`,
-                      minHeight: 72,
+                      minHeight: 82,
                     }}
                   >
                     {/* Shine overlay */}
