@@ -16,6 +16,7 @@ import {
   Timer, Receipt, Award, X, ExternalLink,
   CreditCard, Building2, Briefcase, Wallet, Star, ChevronRight, MapPin, Footprints,
   Clock, Newspaper, MessageCircle, Tag, Play,
+  ArrowLeft, CheckCircle2, Trophy, Dumbbell, Send, UserPlus, Share2, Search, Flame,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -71,7 +72,7 @@ function useCountUp(target: number, duration = 1800, delay = 300) {
 
 interface OfferItem { id: string; title: string; image: string; company: string; color: string; value: string; }
 
-function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOfferClick: () => void }) {
+function LatestCarousel({ offers, onSlideClick }: { offers: OfferItem[]; onSlideClick: (slide: 'sports' | 'news' | 'offers' | 'dining') => void }) {
   const [activeSlide, setActiveSlide] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -172,22 +173,19 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
       >
         {/* ── Slide 1: Upcoming Event ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
-          <Link href="/explore" className="block">
+          <button onClick={() => onSlideClick('sports')} className="block w-full text-left">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&h=500&fit=crop" alt="Sports Day"
                 className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
-              {/* Tags */}
               <div className="absolute top-3 left-3 flex gap-1.5">
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Yas Island</span>
                 <span className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white" style={{ background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)' }}>Sports</span>
               </div>
-              {/* Live badge */}
               <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full" style={{ background: 'rgba(64,196,170,0.2)', backdropFilter: 'blur(8px)' }}>
                 <div className="w-1.5 h-1.5 rounded-full bg-[#40C4AA] animate-pulse" />
                 <span className="text-[9px] font-bold text-[#40C4AA]">Upcoming</span>
               </div>
-              {/* Bottom content */}
               <div className="absolute bottom-0 left-0 right-0 p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="flex items-center gap-1 text-white/60">
@@ -202,12 +200,12 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
                 <p className="text-[17px] font-extrabold text-white leading-tight">IHC Group Sports Day</p>
               </div>
             </div>
-          </Link>
+          </button>
         </div>
 
         {/* ── Slide 2: Corporate Announcements ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
-          <Link href={`/news?id=${news.id}`} className="block">
+          <button onClick={() => onSlideClick('news')} className="block w-full text-left">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src={news.image} alt={news.title}
                 className="absolute inset-0 w-full h-full object-cover" />
@@ -233,12 +231,12 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
                 <p className="text-[16px] font-extrabold text-white leading-tight line-clamp-2">{news.title}</p>
               </div>
             </div>
-          </Link>
+          </button>
         </div>
 
         {/* ── Slide 3: Offers ── */}
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
-          <button onClick={onOfferClick} className="block w-full text-left">
+          <button onClick={() => onSlideClick('offers')} className="block w-full text-left">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src={topOffers[0]?.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop'} alt="Offers"
                 className="absolute inset-0 w-full h-full object-cover" />
@@ -269,7 +267,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
 
         {/* ── Slide 4: Trending Deal ── */}
         <div className="shrink-0 w-full" style={{ scrollSnapAlign: 'start' }}>
-          <Link href="/explore" className="block">
+          <button onClick={() => onSlideClick('dining')} className="block w-full text-left">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 240 }}>
               <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop" alt="Dining"
                 className="absolute inset-0 w-full h-full object-cover" />
@@ -292,7 +290,7 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
                 <p className="text-[11px] text-white/60 mt-0.5">Exclusive IHC employee rates · 8.2K redeemed</p>
               </div>
             </div>
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -321,8 +319,10 @@ export default function DashboardPage() {
   const [stockConfirmed, setStockConfirmed] = useState(false);
   const [showEventDetail, setShowEventDetail] = useState<number | null>(null);
   const [showDesktopModal, setShowDesktopModal] = useState(false);
+  const [showCarouselDetail, setShowCarouselDetail] = useState<'sports' | 'news' | 'offers' | 'dining' | null>(null);
+  const [carouselRegistered, setCarouselRegistered] = useState(false);
 
-  useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal);
+  useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal || !!showCarouselDetail);
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
@@ -346,6 +346,8 @@ export default function DashboardPage() {
   const company = COMPANIES.find(c => c.id === user.companyId);
   const relevantOffers = OFFERS.filter(o => o.relevantFor.includes(user.companyId)).slice(0, 6);
   const onlineColleagues = COLLEAGUES.filter(c => c.online);
+  const topNews = CORPORATE_NEWS[0];
+  const topOffers = relevantOffers.slice(0, 3);
 
   return (
     <AppShell title="Home" subtitle={time} hideTopBar>
@@ -640,7 +642,7 @@ export default function DashboardPage() {
         {/* ══════════════════════════════════════════
             THE LATEST — 4-SLIDE AUTO-SCROLL CAROUSEL
             ══════════════════════════════════════════ */}
-        <LatestCarousel offers={relevantOffers} onOfferClick={() => router.push('/offers')} />
+        <LatestCarousel offers={relevantOffers} onSlideClick={(slide) => setShowCarouselDetail(slide)} />
 
         {/* ── Communities ── */}
         <div>
@@ -903,6 +905,247 @@ export default function DashboardPage() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════
+          CAROUSEL DETAIL BOTTOM SHEET
+          ═══════════════════════════════════════ */}
+      {showCarouselDetail && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} />
+          <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[92vh] overflow-y-auto" style={{ animation: 'slideUp 0.3s ease-out' }}>
+
+            {/* ── Sports Day Detail ── */}
+            {showCarouselDetail === 'sports' && (
+              <>
+                <div className="relative h-52 overflow-hidden rounded-t-[28px]">
+                  <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&h=500&fit=crop" alt="Sports Day" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <button onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <ArrowLeft size={18} className="text-white" />
+                  </button>
+                  <button onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <X size={16} className="text-white" />
+                  </button>
+                  <div className="absolute top-14 left-4 flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-[#DC2626]">Sports</span>
+                    <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-red-500/90 flex items-center gap-1">
+                      <Flame size={10} /> 88 spots left
+                    </span>
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h2 className="text-lg font-bold text-white leading-snug mb-1">IHC Group Sports Day</h2>
+                    <div className="flex items-center gap-3 text-white/80 text-[11px]">
+                      <span className="flex items-center gap-1"><Calendar size={11} /> 22 May 2026</span>
+                      <span className="flex items-center gap-1"><MapPin size={11} /> Yas Sports Complex</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-5 space-y-5">
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { icon: Clock, label: 'Time', value: '7 AM – 4 PM' },
+                      { icon: Users, label: 'Capacity', value: '71% Full' },
+                      { icon: Building2, label: 'By', value: 'Palms Sports' },
+                    ].map(({ icon: IC, label, value }) => (
+                      <div key={label} className="bg-[#F8F9FB] rounded-[14px] p-3 text-center border border-[#DFE1E6]">
+                        <IC size={15} className="mx-auto text-[#666D80] mb-1" />
+                        <p className="text-[10px] text-[#A4ABB8]">{label}</p>
+                        <p className="text-[11px] font-bold text-[#15161E] truncate">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['Sports', 'Teams', 'Family', 'Yas Island'].map(tag => (
+                      <span key={tag} className="text-[10px] font-semibold px-2.5 py-1 rounded-full border" style={{ color: '#DC2626', borderColor: '#DC262630', background: '#DC262608' }}>{tag}</span>
+                    ))}
+                  </div>
+                  <div className="bg-white rounded-[14px] border border-[#DFE1E6] p-4">
+                    <h3 className="text-xs font-bold text-[#15161E] mb-1.5">About this event</h3>
+                    <p className="text-xs text-[#666D80] leading-relaxed">The biggest sporting event of the year! Football, basketball, padel, and volleyball tournaments across all IHC subsidiaries. Register as a team or as an individual — we&apos;ll match you with a team. Open to all employees and their families.</p>
+                  </div>
+                  <div className="bg-[#F8F9FB] rounded-[16px] border border-[#DFE1E6] p-4">
+                    <h3 className="text-xs font-bold text-[#15161E] mb-3">Schedule</h3>
+                    <div className="space-y-2.5">
+                      {[
+                        { time: '7:00 AM', item: 'Registration & warm-up' },
+                        { time: '8:00 AM', item: 'Opening ceremony' },
+                        { time: '9:00 AM', item: 'Group matches begin' },
+                        { time: '1:00 PM', item: 'Semi-finals & finals' },
+                        { time: '3:30 PM', item: 'Awards ceremony' },
+                      ].map((item, i) => (
+                        <div key={i} className="flex gap-3 items-start">
+                          <div className="w-2 h-2 rounded-full mt-1.5 shrink-0 bg-[#DC2626]" />
+                          <div className="flex-1">
+                            <p className="text-[10px] font-bold text-[#DC2626]">{item.time}</p>
+                            <p className="text-xs text-[#15161E]">{item.item}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2 pb-4">
+                    {!carouselRegistered ? (
+                      <button onClick={() => setCarouselRegistered(true)} className="w-full py-3 rounded-[14px] text-sm font-bold text-white transition-all active:scale-[0.98] bg-[#DC2626]">
+                        Register for Sports Day
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-[14px] px-4 py-3">
+                        <CheckCircle2 size={18} className="text-green-600 shrink-0" />
+                        <div className="flex-1">
+                          <p className="text-xs font-bold text-green-700">You&apos;re registered!</p>
+                          <p className="text-[10px] text-green-600">Confirmation sent to {user.email}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ── News Detail ── */}
+            {showCarouselDetail === 'news' && (
+              <>
+                <div className="relative h-52 overflow-hidden rounded-t-[28px]">
+                  <img src={topNews.image} alt={topNews.title} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <ArrowLeft size={18} className="text-white" />
+                  </button>
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <X size={16} className="text-white" />
+                  </button>
+                  <div className="absolute top-14 left-4 flex items-center gap-2">
+                    {topNews.tags.map((tag: string) => (
+                      <span key={tag} className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-[#9D63F6]">{tag}</span>
+                    ))}
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h2 className="text-lg font-bold text-white leading-snug">{topNews.title}</h2>
+                  </div>
+                </div>
+                <div className="p-5 space-y-4">
+                  <div className="flex items-center gap-4 text-[11px] text-[#A4ABB8]">
+                    <span className="flex items-center gap-1"><Calendar size={11} /> {topNews.date}</span>
+                    <span className="flex items-center gap-1"><Clock size={11} /> {topNews.readTime}</span>
+                    <span className="flex items-center gap-1"><Building2 size={11} /> {topNews.author}</span>
+                  </div>
+                  <div className="bg-white rounded-[14px] border border-[#DFE1E6] p-4">
+                    <p className="text-[13px] text-[#666D80] leading-relaxed">{topNews.summary}</p>
+                  </div>
+                  <div className="space-y-2 pb-4">
+                    <Link href="/explore" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#9D63F6]">
+                      View All Announcements <ArrowRight size={15} />
+                    </Link>
+                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ── Offers Detail ── */}
+            {showCarouselDetail === 'offers' && (
+              <>
+                <div className="relative h-48 overflow-hidden rounded-t-[28px]">
+                  <img src={topOffers[0]?.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop'} alt="Offers" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <ArrowLeft size={18} className="text-white" />
+                  </button>
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <X size={16} className="text-white" />
+                  </button>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h2 className="text-lg font-bold text-white leading-snug">Exclusive Employee Perks</h2>
+                    <p className="text-[11px] text-white/70 mt-1">{relevantOffers.length} offers available for you</p>
+                  </div>
+                </div>
+                <div className="p-5 space-y-3">
+                  {relevantOffers.slice(0, 5).map(offer => (
+                    <div key={offer.id} className="flex items-center gap-3 p-3 rounded-[14px] border border-[#DFE1E6] bg-[#FAFBFC]">
+                      <div className="w-12 h-12 rounded-[10px] overflow-hidden shrink-0">
+                        <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[12px] font-bold text-[#15161E] truncate">{offer.title}</p>
+                        <p className="text-[10px] text-[#A4ABB8]">{offer.company} · {offer.value}</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: (offer.color || '#FFBD4C') + '15' }}>
+                        <Gift size={14} style={{ color: offer.color || '#FFBD4C' }} />
+                      </div>
+                    </div>
+                  ))}
+                  <div className="space-y-2 pt-2 pb-4">
+                    <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
+                      View All {relevantOffers.length} Offers <ArrowRight size={15} />
+                    </Link>
+                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* ── Dining Detail ── */}
+            {showCarouselDetail === 'dining' && (
+              <>
+                <div className="relative h-52 overflow-hidden rounded-t-[28px]">
+                  <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop" alt="Dining" className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <ArrowLeft size={18} className="text-white" />
+                  </button>
+                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                    <X size={16} className="text-white" />
+                  </button>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className="w-8 h-8 rounded-[10px] flex items-center justify-center bg-[#FFBD4C]/20">
+                        <UtensilsCrossed size={16} className="text-[#FFBD4C]" />
+                      </div>
+                      <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Dining Program</span>
+                    </div>
+                    <h2 className="text-lg font-bold text-white leading-snug">Dining at 40+ Restaurants</h2>
+                  </div>
+                </div>
+                <div className="p-5 space-y-4">
+                  <p className="text-[13px] font-semibold text-[#FFBD4C]">25% off at premium restaurants across the UAE</p>
+                  <p className="text-[13px] text-[#666D80] leading-relaxed">Enjoy exclusive IHC employee discounts at over 40 premium restaurants including Zuma, Nobu, La Petite Maison, and many more. Simply show your Ahli Connect digital card at participating venues. New restaurants added weekly.</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { label: 'Restaurants', value: '40+' },
+                      { label: 'Max Discount', value: '25%' },
+                      { label: 'Redeemed', value: '8.2K' },
+                      { label: 'Valid Until', value: 'Dec 2026' },
+                    ].map(h => (
+                      <div key={h.label} className="bg-[#F8F9FB] rounded-[14px] p-3 text-center border border-[#DFE1E6]">
+                        <p className="text-[16px] font-bold text-[#FFBD4C]">{h.value}</p>
+                        <p className="text-[10px] text-[#A4ABB8] font-medium mt-0.5">{h.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="bg-[#F8F9FB] rounded-[14px] border border-[#DFE1E6] p-4">
+                    <h3 className="text-xs font-bold text-[#15161E] mb-2">Featured Restaurants</h3>
+                    <div className="space-y-2">
+                      {['Zuma — Japanese fine dining · 25% off', 'Nobu — Modern Japanese · 20% off', 'La Petite Maison — French bistro · 25% off', 'Hakkasan — Cantonese · 20% off'].map(r => (
+                        <div key={r} className="flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-[#FFBD4C]" />
+                          <p className="text-[11px] text-[#4B5563]">{r}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2 pb-4">
+                    <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
+                      Browse Dining Offers <ArrowRight size={15} />
+                    </Link>
+                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
+                  </div>
+                </div>
+              </>
+            )}
+
           </div>
         </div>
       )}
