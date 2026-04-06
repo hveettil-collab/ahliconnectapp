@@ -637,22 +637,22 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
         </div>
       )}
 
-      {/* ── Sticky bottom CTA — glassmorphism ── */}
-      {!showChat && !showOffer && !showSellerProfile && !showCallSheet && !showBuyConfirm && (
+      {/* ── Sticky bottom CTA ── */}
+      {!showChat && !showSellerProfile && !showCallSheet && (
         <div className="shrink-0 px-4 pt-3 pb-24 z-20" style={{ background: 'rgba(250,250,248,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderTop: '1px solid rgba(232,226,217,0.5)' }}>
           <div className="flex gap-2">
+            <button onClick={() => setShowCallSheet(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
+              <PhoneCall size={14} /> Call
+            </button>
+            <button onClick={() => setShowSellerProfile(true)}
+              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
+              <Eye size={14} /> Profile
+            </button>
             <button onClick={() => setShowChat(true)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
-              <MessageCircle size={14} /> Chat
-            </button>
-            <button onClick={() => setShowOffer(true)}
-              className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-[#15161E] bg-white border border-[#DFE1E6] active:scale-[0.97] transition-all shadow-sm">
-              <Tag size={14} /> Offer
-            </button>
-            <button onClick={() => setShowBuyConfirm(true)}
               className="flex-[1.4] flex items-center justify-center gap-1.5 py-3 rounded-[16px] text-[12px] font-bold text-white active:scale-[0.97] transition-all"
-              style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 100%)', boxShadow: '0 4px 16px rgba(5,150,105,0.3)' }}>
-              <Wallet size={14} /> Buy Now
+              style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 100%)', boxShadow: '0 4px 16px rgba(27,58,107,0.3)' }}>
+              <MessageCircle size={14} /> Chat
             </button>
           </div>
         </div>
