@@ -317,7 +317,7 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary Certificate',
-              lottie: '/lottie-salary-v2.lottie',
+              lottie: '/lottie-salary-v3.lottie',
               gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
               statLabel: 'avg. time',
@@ -326,7 +326,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart Leave',
-              lottie: '/lottie-leave-v3.lottie',
+              lottie: '/lottie-leave-v4.lottie',
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
@@ -335,7 +335,7 @@ export default function DashboardPage() {
             },
             {
               title: 'ExpenseClaim',
-              lottie: '/lottie-expense-new.lottie',
+              lottie: '/lottie-expense-v2.lottie',
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
               statLabel: 'accuracy',

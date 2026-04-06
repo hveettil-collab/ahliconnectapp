@@ -581,36 +581,16 @@ export default function ProfilePage() {
                 <QrCode size={15} className="text-[#9D63F6]" strokeWidth={2} />
                 <h3 className="text-[15px] font-bold text-[#15161E]">Digital Business Card</h3>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setCardFlipped(!cardFlipped)}
-                  className="w-8 h-8 rounded-full bg-[#F8F9FB] border border-[#DFE1E6] flex items-center justify-center hover:bg-[#F7F1FF] transition-colors active:scale-90"
-                >
-                  <RotateCcw size={13} className="text-[#666D80]" />
-                </button>
-                <button
-                  onClick={() => setShowShareSheet(true)}
-                  className="flex items-center gap-1.5 bg-[#9D63F6] text-white text-[11px] font-bold px-3.5 py-2 rounded-full hover:bg-[#7C3AED] transition-colors active:scale-95"
-                >
-                  <Share2 size={12} /> Share
-                </button>
-              </div>
+              <button
+                onClick={() => setShowShareSheet(true)}
+                className="flex items-center gap-1.5 bg-[#9D63F6] text-white text-[11px] font-bold px-3.5 py-2 rounded-full hover:bg-[#7C3AED] transition-colors active:scale-95"
+              >
+                <Share2 size={12} /> Share
+              </button>
             </div>
 
-            {/* Card container with 3D flip — fixed alignment */}
-            <div className="relative w-full" style={{ perspective: '1200px', aspectRatio: '1.7/1' }}>
-              <div
-                className="w-full h-full transition-transform duration-700 ease-in-out"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: cardFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                }}
-              >
-                {/* ── FRONT SIDE ── */}
-                <div
-                  className="absolute inset-0 w-full h-full rounded-[20px] overflow-hidden shadow-lg"
-                  style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
-                >
+            {/* Card — front only */}
+            <div className="relative w-full rounded-[20px] overflow-hidden shadow-lg" style={{ aspectRatio: '1.7/1' }}>
                   {/* Premium gradient background */}
                   <div className="absolute inset-0" style={{
                     background: 'linear-gradient(145deg, #0F0F1A 0%, #1B1340 35%, #3B1F8E 70%, #7C3AED 100%)',
@@ -688,58 +668,6 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   </div>
-                </div>
-
-                {/* ── BACK SIDE ── */}
-                <div
-                  className="absolute inset-0 w-full h-full rounded-[20px] overflow-hidden shadow-lg"
-                  style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-                >
-                  {/* Gradient background matching front */}
-                  <div className="absolute inset-0" style={{
-                    background: 'linear-gradient(145deg, #0F0F1A 0%, #1B1340 35%, #3B1F8E 70%, #7C3AED 100%)',
-                  }}>
-                    <div className="absolute" style={{ top: '-15%', left: '-10%', width: '50%', height: '50%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(64,196,170,0.15) 0%, transparent 70%)' }} />
-                    <div className="absolute" style={{ bottom: '-10%', right: '-10%', width: '45%', height: '45%', borderRadius: '50%', background: 'radial-gradient(circle, rgba(157,99,246,0.2) 0%, transparent 70%)' }} />
-                    <div className="absolute inset-0 opacity-[0.04]" style={{
-                      backgroundImage: 'radial-gradient(rgba(255,255,255,0.8) 1px, transparent 1px)',
-                      backgroundSize: '16px 16px',
-                    }} />
-                  </div>
-
-                  <div className="relative z-10 h-full flex flex-col items-center justify-center px-6">
-                    {/* QR Code with real image */}
-                    <div className="w-[100px] h-[100px] rounded-[14px] p-2 bg-white shadow-lg mb-3">
-                      <img src="/qr-mobile.png" alt="QR Code" className="w-full h-full object-contain" />
-                    </div>
-
-                    <p className="text-white text-[15px] font-bold">Scan to connect</p>
-                    <p className="text-white/40 text-[10px] mt-0.5 font-medium">Ahli Connect · {user.employeeId}</p>
-
-                    {/* Contact action buttons */}
-                    <div className="flex items-center gap-3 mt-4">
-                      {[
-                        { icon: Mail, label: 'Email', action: () => window.open(`mailto:${user.email}`) },
-                        { icon: Phone, label: 'Call', action: () => window.open('tel:+971500000000') },
-                        { icon: Link2, label: 'Link', action: () => navigator.clipboard?.writeText(`https://ahliconnect.ihcgroup.ae/card/${user.employeeId}`) },
-                        { icon: Globe, label: 'Web', action: () => window.open('https://ihcgroup.ae') },
-                      ].map(({ icon: Icon, label, action }) => (
-                        <button key={label} onClick={action}
-                          className="w-10 h-10 rounded-full flex items-center justify-center transition-all active:scale-90"
-                          style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.12)' }}>
-                          <Icon size={15} className="text-white/70" strokeWidth={1.6} />
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* NFC indicator */}
-                    <div className="flex items-center gap-1.5 mt-3 px-2.5 py-1 rounded-full" style={{ background: 'rgba(64,196,170,0.15)', border: '1px solid rgba(64,196,170,0.2)' }}>
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#40C4AA] animate-pulse" />
-                      <span className="text-[8px] text-[#40C4AA] font-bold tracking-wide">NFC ENABLED</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Quick share actions */}
