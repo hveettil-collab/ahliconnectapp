@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import Avatar from '@/components/ui/Avatar';
 import { useStockPrice } from '@/hooks/useStockPrice';
 import { useNotifications } from '@/context/NotificationContext';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 /* ──── Helpers ──── */
 
@@ -261,7 +262,9 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary\nCertificate',
-              image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=300&fit=crop',
+              lottie: 'https://lottie.host/6c2e8a56-63c2-471e-bf86-a2c3cce61114/W86HnJD41s.lottie',
+              icon: null,
+              gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
               statLabel: 'avg. time',
               accent: '#9D63F6',
@@ -269,7 +272,9 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart\nLeave',
-              image: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=300&fit=crop',
+              lottie: null,
+              icon: Calendar,
+              gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
               accent: '#40C4AA',
@@ -277,42 +282,47 @@ export default function DashboardPage() {
             },
             {
               title: 'Expense\nClaim',
-              image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop',
+              lottie: null,
+              icon: Receipt,
+              gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
               statLabel: 'accuracy',
               accent: '#FFBD4C',
               href: '/automations/expense-claim',
             },
-          ].map((card, i) => (
-            <Link key={card.title} href={card.href}
-              className="block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
-              style={{
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? 'translateY(0)' : 'translateY(16px)',
-                transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
-              }}>
-              {/* Real photo with gradient overlay */}
-              <div className="relative w-full overflow-hidden" style={{ height: '100px' }}>
-                <img
-                  src={card.image}
-                  alt={card.title.replace('\n', ' ')}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0" style={{
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)',
-                }} />
-                <div className="absolute bottom-2 left-2.5 right-2">
-                  <p className="text-[11px] font-bold text-white leading-tight whitespace-pre-line drop-shadow-sm">{card.title}</p>
+          ].map((card, i) => {
+            const IconComp = card.icon;
+            return (
+              <Link key={card.title} href={card.href}
+                className="block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
+                style={{
+                  opacity: mounted ? 1 : 0,
+                  transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+                  transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
+                }}>
+                {/* Visual — Lottie or icon on gradient */}
+                <div className="relative w-full flex flex-col items-center justify-center overflow-hidden" style={{ height: '100px', background: card.gradient }}>
+                  {card.lottie ? (
+                    <div className="w-[70px] h-[70px]">
+                      <DotLottieReact src={card.lottie} loop autoplay style={{ width: '100%', height: '100%' }} />
+                    </div>
+                  ) : IconComp ? (
+                    <div className="w-14 h-14 rounded-[16px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(8px)' }}>
+                      <IconComp size={28} style={{ color: card.accent }} strokeWidth={1.6} />
+                    </div>
+                  ) : null}
+                  <div className="absolute bottom-2 left-2.5 right-2">
+                    <p className="text-[11px] font-bold leading-tight whitespace-pre-line" style={{ color: card.accent }}>{card.title}</p>
+                  </div>
                 </div>
-              </div>
-              {/* Stat */}
-              <div className="px-2.5 py-2 bg-white">
-                <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
-                <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
-              </div>
-            </Link>
-          ))}
+                {/* Stat */}
+                <div className="px-2.5 py-2 bg-white">
+                  <p className="text-[16px] font-bold leading-none" style={{ color: card.accent }}>{card.stat}</p>
+                  <p className="text-[9px] text-[#A4ABB8] mt-0.5">{card.statLabel}</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
