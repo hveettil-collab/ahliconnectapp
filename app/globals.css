@@ -8,6 +8,13 @@ html, body {
   overscroll-behavior: none;
   overscroll-behavior-y: none;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Lock all main containers to vertical-only scroll */
+.h-screen-safe {
+  overflow-x: hidden;
+  touch-action: pan-y pinch-zoom;
 }
 
 /* ── Mobile touch performance ── */
