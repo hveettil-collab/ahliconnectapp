@@ -76,7 +76,7 @@ export default function DashboardPage() {
   const { stock, loading: stockLoading } = useStockPrice();
   const { unreadCount, togglePanel } = useNotifications();
   const [mounted, setMounted] = useState(false);
-  const [showBenefitDetail, setShowBenefitDetail] = useState<string | null>(null);
+
   const [showStockAction, setShowStockAction] = useState<'buy' | 'sell' | null>(null);
   const [stockShares, setStockShares] = useState('');
   const [stockConfirmed, setStockConfirmed] = useState(false);
@@ -421,47 +421,6 @@ export default function DashboardPage() {
           </div>
         </Link>
 
-        {/* ── Benefits Highlight ── */}
-        <div>
-          <div className="flex items-center justify-between mb-2.5">
-            <h3 className="text-[15px] font-bold text-[#15161E]">Your Benefits</h3>
-            <Link href="/offers" className="text-[11px] font-bold text-white bg-[#15161E] px-3 py-1.5 rounded-full">
-              See more
-            </Link>
-          </div>
-          <button onClick={() => setShowBenefitDetail('medical')} className="w-full text-left bg-gradient-to-br from-[#FFBD4C]/10 to-[#FFBD4C]/5 rounded-[18px] border border-[#FFBD4C]/20 p-4 mb-2.5 active:scale-[0.98] transition-all">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-[14px] bg-red-50 flex items-center justify-center shrink-0">
-                <Heart size={22} className="text-red-500" strokeWidth={2} />
-              </div>
-              <div className="flex-1">
-                <p className="text-xs font-bold text-[#15161E]">Medical Insurance</p>
-                <p className="text-[11px] font-semibold text-[#FFBD4C]">Daman Enhanced · Family</p>
-                <p className="text-[10px] text-[#A4ABB8]">Full coverage for you + dependents</p>
-              </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-[#FFBD4C]">AED 85K</p>
-                <p className="text-[9px] text-[#A4ABB8]">Total value/yr</p>
-              </div>
-            </div>
-          </button>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { icon: GraduationCap, color: '#FFBD4C', bg: '#FEF3C7', title: 'Education', value: 'AED 20K/yr', detail: 'education' },
-              { icon: Plane, color: '#40C4AA', bg: '#D1FAE5', title: 'Flights', value: 'Return home', detail: 'flights' },
-              { icon: Shield, color: '#7C3AED', bg: '#EDE9FE', title: 'Life Cover', value: '24x salary', detail: 'life' },
-            ].map(({ icon: Icon, color, bg, title, value, detail }) => (
-              <button key={title} onClick={() => setShowBenefitDetail(detail)} className="rounded-[14px] p-3 bg-white border border-[#DFE1E6] text-center active:scale-[0.95] transition-all hover:shadow-sm">
-                <div className="w-9 h-9 rounded-[10px] flex items-center justify-center mx-auto mb-2" style={{ background: bg }}>
-                  <Icon size={16} style={{ color }} strokeWidth={2} />
-                </div>
-                <p className="text-[11px] font-bold text-[#15161E]">{title}</p>
-                <p className="text-[10px] font-semibold mt-0.5" style={{ color }}>{value}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* ── Exclusive Offers scroll ── */}
         <div>
           <div className="flex items-center justify-between mb-2.5">
@@ -689,140 +648,6 @@ export default function DashboardPage() {
         </div>
 
       </div>
-
-      {/* ═══════════════════════════════════════
-          BENEFIT DETAIL BOTTOM SHEET
-          ═══════════════════════════════════════ */}
-      {showBenefitDetail && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowBenefitDetail(null)}>
-          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl max-h-[85vh] overflow-y-auto relative" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
-            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
-            <button onClick={() => setShowBenefitDetail(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
-            {showBenefitDetail === 'medical' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-[14px] bg-red-50 flex items-center justify-center"><Heart size={22} className="text-red-500" /></div>
-                  <div>
-                    <p className="text-[16px] font-bold text-[#15161E]">Medical Insurance</p>
-                    <p className="text-[12px] text-[#FFBD4C] font-semibold">Daman Enhanced · Family Plan</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: 'Annual Value', value: 'AED 85,000' },
-                    { label: 'Provider', value: 'Daman Health' },
-                    { label: 'Coverage', value: 'Employee + Family' },
-                    { label: 'Network', value: 'Enhanced (All UAE)' },
-                    { label: 'Dental', value: 'Included' },
-                    { label: 'Optical', value: 'AED 1,500/yr' },
-                    { label: 'Maternity', value: 'Full coverage' },
-                    { label: 'Wellness', value: 'Annual checkup free' },
-                  ].map(item => (
-                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
-                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+medical+insurance+benefits'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
-                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
-                </button>
-              </div>
-            )}
-            {showBenefitDetail === 'education' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-[14px] bg-[#FEF3C7] flex items-center justify-center"><GraduationCap size={22} className="text-[#FFBD4C]" /></div>
-                  <div>
-                    <p className="text-[16px] font-bold text-[#15161E]">Education Allowance</p>
-                    <p className="text-[12px] text-[#FFBD4C] font-semibold">AED 20,000 per year</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: 'Annual Limit', value: 'AED 20,000' },
-                    { label: 'Used This Year', value: 'AED 5,200' },
-                    { label: 'Remaining', value: 'AED 14,800' },
-                    { label: 'Covers', value: 'Tuition + books' },
-                    { label: 'Children', value: 'Up to 3 children' },
-                    { label: 'Age Limit', value: 'Up to 18 years' },
-                  ].map(item => (
-                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
-                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="w-full bg-[#F8F9FB] rounded-full h-2.5 overflow-hidden">
-                  <div className="h-full rounded-full bg-[#FFBD4C]" style={{ width: '26%' }} />
-                </div>
-                <p className="text-[11px] text-[#A4ABB8] text-center">26% used · AED 14,800 remaining</p>
-                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=How+do+I+claim+my+education+allowance'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
-                  <Sparkles size={14} className="inline mr-1.5" />Claim via AI
-                </button>
-              </div>
-            )}
-            {showBenefitDetail === 'flights' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-[14px] bg-[#D1FAE5] flex items-center justify-center"><Plane size={22} className="text-[#40C4AA]" /></div>
-                  <div>
-                    <p className="text-[16px] font-bold text-[#15161E]">Annual Flight Benefit</p>
-                    <p className="text-[12px] text-[#40C4AA] font-semibold">Return flight home for you + family</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: 'Entitlement', value: 'Annual return' },
-                    { label: 'Class', value: 'Economy (upgradeable)' },
-                    { label: 'Coverage', value: 'Employee + family' },
-                    { label: 'This Year', value: 'Not yet used' },
-                    { label: 'Etihad Discount', value: '15% off' },
-                    { label: 'Emirates Discount', value: '10% off' },
-                  ].map(item => (
-                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
-                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=I+want+to+book+a+flight'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#40C4AA] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(64,196,170,0.3)' }}>
-                  <Plane size={14} className="inline mr-1.5" />Book Flight with AI
-                </button>
-              </div>
-            )}
-            {showBenefitDetail === 'life' && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-[14px] bg-[#EDE9FE] flex items-center justify-center"><Shield size={22} className="text-[#7C3AED]" /></div>
-                  <div>
-                    <p className="text-[16px] font-bold text-[#15161E]">Life Insurance</p>
-                    <p className="text-[12px] text-[#7C3AED] font-semibold">24x monthly salary coverage</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { label: 'Coverage', value: '24x salary' },
-                    { label: 'Provider', value: 'IHC Group Life' },
-                    { label: 'Type', value: 'Term life' },
-                    { label: 'Beneficiary', value: 'As per HR file' },
-                    { label: 'Accidental Death', value: '48x salary' },
-                    { label: 'Status', value: 'Active' },
-                  ].map(item => (
-                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
-                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
-                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+life+insurance+coverage'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#7C3AED] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
-                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* ═══════════════════════════════════════
           STOCK TRADE BOTTOM SHEET

@@ -6,7 +6,8 @@ import { useWallet } from '@/context/WalletContext';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
-import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Globe, Link2, Copy, Check, RotateCcw, Car, Home, Clock, AlertTriangle, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users, GraduationCap, Plane } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
    COUNTDOWN HOOK
@@ -339,6 +340,202 @@ function WalletSection() {
         </div>
       )}
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   YOUR BENEFITS SECTION
+   ═══════════════════════════════════════════ */
+
+function BenefitsSection() {
+  const [showBenefitDetail, setShowBenefitDetail] = useState<string | null>(null);
+  const router = useRouter();
+
+  const benefits = [
+    { key: 'medical', label: 'Medical', icon: Heart, color: '#EF4444', bg: 'bg-red-50', value: 'AED 85,000' },
+    { key: 'education', label: 'Education', icon: GraduationCap, color: '#FFBD4C', bg: 'bg-[#FEF3C7]', value: 'AED 20,000' },
+    { key: 'flights', label: 'Flights', icon: Plane, color: '#40C4AA', bg: 'bg-[#D1FAE5]', value: 'Annual return' },
+    { key: 'life', label: 'Life Cover', icon: Shield, color: '#7C3AED', bg: 'bg-[#EDE9FE]', value: '24x salary' },
+  ];
+
+  return (
+    <>
+      <div className="bg-white rounded-[20px] border border-[#DFE1E6] overflow-hidden">
+        <div className="px-5 py-4 border-b border-[#F8F9FB]">
+          <div className="flex items-center gap-2">
+            <Gift size={15} className="text-[#9D63F6]" strokeWidth={1.8} />
+            <p className="text-sm font-bold text-[#15161E]">Your Benefits</p>
+          </div>
+        </div>
+        <div className="p-4">
+          {/* Medical Insurance Feature Card */}
+          <button onClick={() => setShowBenefitDetail('medical')} className="w-full mb-3 rounded-[16px] p-4 text-left active:scale-[0.98] transition-all" style={{ background: 'linear-gradient(135deg, #FFF1F2 0%, #FECDD3 100%)' }}>
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-[14px] bg-white/70 flex items-center justify-center">
+                <Heart size={20} className="text-red-500" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[14px] font-bold text-[#15161E]">Medical Insurance</p>
+                <p className="text-[11px] text-[#666D80] mt-0.5">Daman Enhanced · Family Plan</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[14px] font-bold text-red-600">AED 85K</p>
+                <p className="text-[10px] text-[#A4ABB8]">Annual value</p>
+              </div>
+            </div>
+          </button>
+
+          {/* 3-column grid: Education, Flights, Life Cover */}
+          <div className="grid grid-cols-3 gap-2">
+            {benefits.filter(b => b.key !== 'medical').map(b => (
+              <button key={b.key} onClick={() => setShowBenefitDetail(b.key)} className="rounded-[14px] p-3 text-center active:scale-[0.96] transition-all bg-[#F8F9FB]">
+                <div className={`w-9 h-9 rounded-[10px] ${b.bg} flex items-center justify-center mx-auto mb-2`}>
+                  <b.icon size={16} style={{ color: b.color }} />
+                </div>
+                <p className="text-[11px] font-bold text-[#15161E]">{b.label}</p>
+                <p className="text-[9px] text-[#A4ABB8] mt-0.5">{b.value}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Benefit Detail Bottom Sheet */}
+      {showBenefitDetail && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(2px)' }} onClick={() => setShowBenefitDetail(null)}>
+          <div className="bg-white w-full max-w-md rounded-t-[28px] p-5 shadow-2xl max-h-[85vh] overflow-y-auto relative" onClick={e => e.stopPropagation()} style={{ animation: 'slideUp 0.3s ease-out' }}>
+            <div className="w-10 h-1 bg-[#DFE1E6] rounded-full mx-auto mb-4" />
+            <button onClick={() => setShowBenefitDetail(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10"><X size={16} className="text-[#666D80]" /></button>
+
+            {showBenefitDetail === 'medical' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-red-50 flex items-center justify-center"><Heart size={22} className="text-red-500" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Medical Insurance</p>
+                    <p className="text-[12px] text-[#FFBD4C] font-semibold">Daman Enhanced · Family Plan</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Annual Value', value: 'AED 85,000' },
+                    { label: 'Provider', value: 'Daman Health' },
+                    { label: 'Coverage', value: 'Employee + Family' },
+                    { label: 'Network', value: 'Enhanced (All UAE)' },
+                    { label: 'Dental', value: 'Included' },
+                    { label: 'Optical', value: 'AED 1,500/yr' },
+                    { label: 'Maternity', value: 'Full coverage' },
+                    { label: 'Wellness', value: 'Annual checkup free' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+medical+insurance+benefits'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
+                </button>
+              </div>
+            )}
+
+            {showBenefitDetail === 'education' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#FEF3C7] flex items-center justify-center"><GraduationCap size={22} className="text-[#FFBD4C]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Education Allowance</p>
+                    <p className="text-[12px] text-[#FFBD4C] font-semibold">AED 20,000 per year</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Annual Limit', value: 'AED 20,000' },
+                    { label: 'Used This Year', value: 'AED 5,200' },
+                    { label: 'Remaining', value: 'AED 14,800' },
+                    { label: 'Covers', value: 'Tuition + books' },
+                    { label: 'Children', value: 'Up to 3 children' },
+                    { label: 'Age Limit', value: 'Up to 18 years' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="w-full bg-[#F8F9FB] rounded-full h-2.5 overflow-hidden">
+                  <div className="h-full rounded-full bg-[#FFBD4C]" style={{ width: '26%' }} />
+                </div>
+                <p className="text-[11px] text-[#A4ABB8] text-center">26% used · AED 14,800 remaining</p>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=How+do+I+claim+my+education+allowance'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#9D63F6] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(157,99,246,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Claim via AI
+                </button>
+              </div>
+            )}
+
+            {showBenefitDetail === 'flights' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#D1FAE5] flex items-center justify-center"><Plane size={22} className="text-[#40C4AA]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Annual Flight Benefit</p>
+                    <p className="text-[12px] text-[#40C4AA] font-semibold">Return flight home for you + family</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Entitlement', value: 'Annual return' },
+                    { label: 'Class', value: 'Economy (upgradeable)' },
+                    { label: 'Coverage', value: 'Employee + family' },
+                    { label: 'This Year', value: 'Not yet used' },
+                    { label: 'Etihad Discount', value: '15% off' },
+                    { label: 'Emirates Discount', value: '10% off' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=I+want+to+book+a+flight'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#40C4AA] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(64,196,170,0.3)' }}>
+                  <Plane size={14} className="inline mr-1.5" />Book Flight with AI
+                </button>
+              </div>
+            )}
+
+            {showBenefitDetail === 'life' && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-[14px] bg-[#EDE9FE] flex items-center justify-center"><Shield size={22} className="text-[#7C3AED]" /></div>
+                  <div>
+                    <p className="text-[16px] font-bold text-[#15161E]">Life Insurance</p>
+                    <p className="text-[12px] text-[#7C3AED] font-semibold">24x monthly salary coverage</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Coverage', value: '24x salary' },
+                    { label: 'Provider', value: 'IHC Group Life' },
+                    { label: 'Type', value: 'Term life' },
+                    { label: 'Beneficiary', value: 'As per HR file' },
+                    { label: 'Accidental Death', value: '48x salary' },
+                    { label: 'Status', value: 'Active' },
+                  ].map(item => (
+                    <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                      <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                      <p className="text-[12px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => { setShowBenefitDetail(null); router.push('/services?prompt=Tell+me+about+my+life+insurance+coverage'); }} className="w-full py-3 rounded-[14px] text-[13px] font-bold text-white bg-[#7C3AED] active:scale-[0.97] transition-all" style={{ boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}>
+                  <Sparkles size={14} className="inline mr-1.5" />Ask AI for Details
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -712,6 +909,11 @@ export default function ProfilePage() {
               WALLET & REWARDS
               ═══════════════════════════════════════ */}
           <WalletSection />
+
+          {/* ═══════════════════════════════════════
+              YOUR BENEFITS
+              ═══════════════════════════════════════ */}
+          <BenefitsSection />
 
           {/* ═══════════════════════════════════════
               MY ASSETS — Car, Home & Insurance
