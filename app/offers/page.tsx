@@ -60,25 +60,6 @@ export default function OffersPage() {
     <AppShell title="Offers" subtitle="Exclusive benefits">
       <div className="space-y-5">
 
-        {/* ═══ WALLET BANNER ═══ */}
-        <Link href="/profile" className="no-underline block">
-          <div className="rounded-[18px] p-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #15161E 0%, #2D1B69 100%)' }}>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(157,99,246,0.2)' }}>
-                <Wallet size={16} className="text-white" />
-              </div>
-              <div>
-                <p className="text-[10px] text-white/40 font-medium">Pay with Ahli Wallet</p>
-                <p className="text-[16px] font-bold text-white">AED {wallet.balance.toLocaleString()}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: `${wallet.rewardTierColor}25` }}>
-              <Star size={10} style={{ color: wallet.rewardTierColor }} />
-              <span className="text-[10px] font-bold" style={{ color: wallet.rewardTierColor }}>{wallet.rewardPoints.toLocaleString()} pts</span>
-            </div>
-          </div>
-        </Link>
-
         {/* ═══ CATEGORY CHIPS ═══ */}
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
           {CATEGORIES.map(c => {
