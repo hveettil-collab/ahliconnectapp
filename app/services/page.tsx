@@ -34,6 +34,7 @@ interface ChatMessage {
   typing?: boolean;
   flowType?: 'insurance' | 'rides' | 'food' | 'flights' | 'sell' | 'vacation' | 'gaming';
   sellCategory?: string;
+  insuranceType?: 'car' | 'home' | 'pet' | 'health';
 }
 
 let _msgId = 0;
@@ -54,9 +55,9 @@ interface ActionCard {
    INLINE FLOW: INSURANCE (Shory)
    ═══════════════════════════════════════════ */
 
-function InsuranceFlow() {
-  const [insuranceType, setInsuranceType] = useState<'choose' | 'car' | 'home' | 'pet' | 'health'>('choose');
-  const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete' | 'form' | 'reviewing' | 'confirmed'>('plate');
+function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' | 'health' }) {
+  const [insuranceType, setInsuranceType] = useState<'choose' | 'car' | 'home' | 'pet' | 'health'>(initialType || 'choose');
+  const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete' | 'form' | 'reviewing' | 'confirmed'>(initialType === 'car' ? 'plate' : initialType ? 'form' : 'plate');
   const [emirate, setEmirate] = useState('Abu Dhabi');
   const [plateNum, setPlateNum] = useState('');
   const [selectedPlan, setSelectedPlan] = useState('');
@@ -1644,7 +1645,7 @@ interface WalletInfo {
   rewardProgress: number;
 }
 
-function generateAIResponse(text: string, userName: string, companyId: string, wallet?: WalletInfo): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType']; sellCategory?: string } {
+function generateAIResponse(text: string, userName: string, companyId: string, wallet?: WalletInfo): { content: string; cards?: ActionCard[]; flowType?: ChatMessage['flowType']; sellCategory?: string; insuranceType?: ChatMessage['insuranceType'] } {
   const t = text.toLowerCase();
 
   /* ═══════════════════════════════════════════
@@ -1712,15 +1713,17 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
 
   if (t.includes('home insurance') || t.includes('property insurance')) {
     return {
-      content: `Great choice! **Shory Home Insurance** protects your property and belongings. IHC employees get an exclusive **15% corporate discount**. Let me find you the best plan:`,
+      content: `Great choice! **Shory Home Insurance** protects your property and belongings. IHC employees get an exclusive **15% corporate discount**. Tell me about your property:`,
       flowType: 'insurance',
+      insuranceType: 'home',
     };
   }
 
   if (t.includes('pet insurance') || (t.includes('insurance') && t.includes('pet'))) {
     return {
-      content: `I love that you're looking after your furry friend! **Shory Pet Insurance** covers vet visits, surgeries, and wellness. IHC employees get **15% off** all plans:`,
+      content: `I love that you're looking after your furry friend! **Shory Pet Insurance** covers vet visits, surgeries, and wellness. IHC employees get **15% off** all plans. Tell me about your pet:`,
       flowType: 'insurance',
+      insuranceType: 'pet',
     };
   }
 
@@ -1728,13 +1731,15 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     return {
       content: `Let's find you the perfect health plan! **Shory Health Insurance** offers comprehensive medical, dental, and optical coverage. IHC employees get **15% off**:`,
       flowType: 'insurance',
+      insuranceType: 'health',
     };
   }
 
   if (t.includes('car insurance') || t.includes('motor insurance') || t.includes('vehicle insurance') || (t.includes('shory') && !t.includes('home') && !t.includes('pet') && !t.includes('health'))) {
     return {
-      content: `I can help you get car insurance through **Shory** — IHC's digital insurance platform. IHC employees get an exclusive **15% corporate discount** on all plans. Let's get started:`,
+      content: `I can help you get car insurance through **Shory** — IHC's digital insurance platform. IHC employees get an exclusive **15% corporate discount** on all plans. Enter your plate number below:`,
       flowType: 'insurance',
+      insuranceType: 'car',
     };
   }
 
@@ -2324,7 +2329,7 @@ function ServicesPageContent() {
     const aiMsgId = nextMsgId();
     setMessages(prev => [
       ...prev.filter(m => !m.typing),
-      { id: aiMsgId, role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType, sellCategory: response.sellCategory },
+      { id: aiMsgId, role: 'ai', content: response.content, cards: response.cards, flowType: response.flowType, sellCategory: response.sellCategory, insuranceType: response.insuranceType },
     ]);
   };
 
@@ -2395,7 +2400,7 @@ function ServicesPageContent() {
                     </div>
 
                     {/* Inline Interactive Flows */}
-                    {msg.flowType === 'insurance' && <InsuranceFlow />}
+                    {msg.flowType === 'insurance' && <InsuranceFlow initialType={msg.insuranceType} />}
                     {msg.flowType === 'rides' && <RidesFlow />}
                     {msg.flowType === 'food' && <FoodFlow />}
                     {msg.flowType === 'flights' && <FlightsFlow />}
