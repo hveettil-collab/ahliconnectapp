@@ -7,6 +7,7 @@ import { WalletProvider } from '@/context/WalletContext';
 import { ListingsProvider } from '@/context/ListingsContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import KeyboardManager from '@/components/layout/KeyboardManager';
+import ServiceWorkerRegister from '@/components/layout/ServiceWorkerRegister';
 
 export const metadata: Metadata = {
   title: 'Ahli Connect — IHC Employee Platform',
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ListingsProvider>
                   <ErrorBoundary>
                     <KeyboardManager />
+                    <ServiceWorkerRegister />
                     {children}
                   </ErrorBoundary>
                 </ListingsProvider>
