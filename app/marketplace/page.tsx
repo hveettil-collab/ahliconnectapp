@@ -796,7 +796,7 @@ function MarketplaceContent() {
           style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 60%, #9D63F6 100%)' }}>
           <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 90% 50%, rgba(200,151,58,0.2) 0%, transparent 50%)' }} />
           <div className="relative z-10 w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.15)' }}>
-            <DotLottieReact src="/lottie-sell.lottie" loop autoplay style={{ width: 28, height: 28 }} />
+            <DotLottieReact src="/lottie-sell-v2.lottie" loop autoplay style={{ width: 28, height: 28 }} />
           </div>
           <div className="relative z-10 flex-1 text-left min-w-0">
             <p className="text-[13px] font-bold text-white">Sell to Colleagues</p>
