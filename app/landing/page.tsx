@@ -1079,9 +1079,10 @@ export default function LandingPage() {
             </button>
             <div className="rounded-[20px] overflow-hidden bg-black shadow-2xl" style={{ aspectRatio: '9/16' }}>
               <iframe
-                src="https://app.heygen.com/embed/ahli-connect-video-f500efcd7aec47e29c63ea09d3723534"
+                src="https://app.heygen.com/embeds/f500efcd7aec47e29c63ea09d3723534"
+                title="Ahli Connect Video"
                 className="w-full h-full"
-                allow="autoplay; fullscreen"
+                allow="encrypted-media; fullscreen"
                 allowFullScreen
                 style={{ border: 'none' }}
               />

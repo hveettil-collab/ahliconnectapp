@@ -174,8 +174,12 @@ function LatestCarousel({ offers, onOfferClick }: { offers: OfferItem[]; onOffer
         <div className="shrink-0 w-full pr-2" style={{ scrollSnapAlign: 'start' }}>
           <Link href="/explore" className="block">
             <div className="relative rounded-[20px] overflow-hidden" style={{ height: 200 }}>
-              <img src="https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=800&h=500&fit=crop" alt="Sports Day"
-                className="absolute inset-0 w-full h-full object-cover" />
+              <video
+                src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
+                autoPlay muted loop playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+                poster="https://images.unsplash.com/photo-1461896836934-bd45ba8fcf9b?w=800&h=500&fit=crop"
+              />
               <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 50%, transparent 100%)' }} />
               {/* Tags */}
               <div className="absolute top-3 left-3 flex gap-1.5">
