@@ -188,17 +188,28 @@ export default function DashboardPage() {
               <p className="text-white text-[16px] font-bold leading-tight">{user.name.split(' ')[0]}</p>
             </div>
           </div>
-          <button onClick={togglePanel} className="relative">
-            <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
-              <Bell size={18} className="text-white" />
-            </div>
-            {unreadCount > 0 && (
-              <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#DF1C41] flex items-center justify-center px-1 shadow-md">
-                <span className="text-[9px] font-bold text-white">{unreadCount}</span>
+          <div className="flex items-center gap-2">
+            {/* Reward Points */}
+            <Link href="/offers" className="flex items-center gap-1.5 px-3 py-2 rounded-full"
+              style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}>
+              <Star size={14} className="text-[#FFBD4C]" fill="#FFBD4C" strokeWidth={0} />
+              <span className="text-[12px] font-bold text-white">2,450</span>
+              <span className="text-[9px] text-white/50 font-medium">pts</span>
+            </Link>
+
+            {/* Notification Bell */}
+            <button onClick={togglePanel} className="relative">
+              <div className="w-[44px] h-[44px] rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(12px)' }}>
+                <Bell size={18} className="text-white" />
               </div>
-            )}
-          </button>
+              {unreadCount > 0 && (
+                <div className="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] rounded-full bg-[#DF1C41] flex items-center justify-center px-1 shadow-md">
+                  <span className="text-[9px] font-bold text-white">{unreadCount}</span>
+                </div>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Hero tagline */}
