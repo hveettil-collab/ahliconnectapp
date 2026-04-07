@@ -583,7 +583,7 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        <div className="flex gap-2.5 overflow-x-auto scrollbar-hide px-4" style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
+        <div className="grid grid-cols-3 gap-2.5 px-4">
           {[
             {
               title: 'Salary Certificate',
@@ -641,11 +641,8 @@ export default function DashboardPage() {
             },
           ].map((card, i) => (
               <Link key={card.title} href={card.href}
-                className="shrink-0 block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
+                className="block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
                 style={{
-                  width: 'calc((100% - 20px) / 3)',
-                  minWidth: '105px',
-                  scrollSnapAlign: 'start',
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? 'translateY(0)' : 'translateY(16px)',
                   transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.08}s`,
@@ -664,8 +661,6 @@ export default function DashboardPage() {
                 </div>
               </Link>
           ))}
-          {/* Right padding spacer for scroll */}
-          <div className="shrink-0 w-1" />
         </div>
       </div>
 
