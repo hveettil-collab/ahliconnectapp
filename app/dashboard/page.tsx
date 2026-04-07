@@ -932,9 +932,6 @@ export default function DashboardPage() {
                   <button onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
                   </button>
-                  <button onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <X size={16} className="text-white" />
-                  </button>
                   <div className="absolute top-14 left-4 flex items-center gap-2">
                     <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-[#DC2626]">Sports</span>
                     <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full bg-red-500/90 flex items-center gap-1">
@@ -1020,9 +1017,6 @@ export default function DashboardPage() {
                   <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
                   </button>
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <X size={16} className="text-white" />
-                  </button>
                   <div className="absolute bottom-4 left-4 right-4">
                     <h2 className="text-lg font-bold text-white leading-snug">Exclusive Employee Perks</h2>
                     <p className="text-[11px] text-white/70 mt-1">{relevantOffers.length} offers available for you</p>
@@ -1047,7 +1041,6 @@ export default function DashboardPage() {
                     <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
                       View All {relevantOffers.length} Offers <ArrowRight size={15} />
                     </Link>
-                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
                   </div>
                 </div>
               </>
@@ -1061,9 +1054,6 @@ export default function DashboardPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
-                  </button>
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
-                    <X size={16} className="text-white" />
                   </button>
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center gap-2 mb-1.5">
@@ -1106,7 +1096,6 @@ export default function DashboardPage() {
                     <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
                       Browse Dining Offers <ArrowRight size={15} />
                     </Link>
-                    <button onClick={() => setShowCarouselDetail(null)} className="w-full py-2.5 rounded-[14px] text-xs font-semibold text-[#A4ABB8]">Close</button>
                   </div>
                 </div>
               </>
