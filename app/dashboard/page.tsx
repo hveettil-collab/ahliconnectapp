@@ -570,18 +570,20 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          SMART AUTOMATIONS — 1×3 Bento Grid
+          SMART AUTOMATIONS — Scrollable 9-card row
           ═══════════════════════════════════════ */}
-      <div className="px-4 -mt-1 pb-1">
-        <div className="flex items-center justify-between mb-3">
+      <div className="-mt-1 pb-1">
+        <div className="flex items-center justify-between mb-3 px-4">
           <div className="flex items-center gap-2">
             <Zap size={15} className="text-[#FFBD4C]" strokeWidth={2.5} />
             <h3 className="text-[15px] font-bold text-[#15161E]">Smart Automations</h3>
           </div>
-          <span className="text-[10px] font-semibold text-[#9D63F6] bg-[#9D63F6]/8 px-2.5 py-1 rounded-full">AI-Powered</span>
+          <Link href="/services" className="text-[11px] font-semibold text-[#9D63F6] no-underline active:opacity-70 transition-opacity">
+            View All →
+          </Link>
         </div>
 
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="flex gap-2.5 overflow-x-auto scrollbar-hide px-4" style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
           {[
             {
               title: 'Salary Certificate',
@@ -602,7 +604,7 @@ export default function DashboardPage() {
               href: '/automations/leave-request',
             },
             {
-              title: 'ExpenseClaim',
+              title: 'Expense Claim',
               lottie: '/lottie-expense-v2.lottie',
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
@@ -610,13 +612,70 @@ export default function DashboardPage() {
               accent: '#FFBD4C',
               href: '/automations/expense-claim',
             },
+            {
+              title: 'Insurance',
+              lottie: '/lottie-salary-v3.lottie',
+              gradient: 'linear-gradient(135deg, #EDFCFA 0%, #CCFBF1 50%, #99F6E4 100%)',
+              stat: '15%',
+              statLabel: 'discount',
+              accent: '#0D9488',
+              href: '/services?prompt=I+need+insurance',
+            },
+            {
+              title: 'Book Flight',
+              lottie: '/lottie-leave-v4.lottie',
+              gradient: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%)',
+              stat: '50+',
+              statLabel: 'airlines',
+              accent: '#3B82F6',
+              href: '/services?prompt=I+want+to+book+a+flight',
+            },
+            {
+              title: 'Book Ride',
+              lottie: '/lottie-expense-v2.lottie',
+              gradient: 'linear-gradient(135deg, #F0EAFF 0%, #E4D5FE 50%, #D4BFFC 100%)',
+              stat: '5 min',
+              statLabel: 'avg. pickup',
+              accent: '#7C3AED',
+              href: '/services?prompt=I+need+a+ride',
+            },
+            {
+              title: 'Order Food',
+              lottie: '/lottie-salary-v3.lottie',
+              gradient: 'linear-gradient(135deg, #FEF2F2 0%, #FECACA 50%, #FCA5A5 100%)',
+              stat: '200+',
+              statLabel: 'restaurants',
+              accent: '#EF4444',
+              href: '/services?prompt=I+want+to+order+food',
+            },
+            {
+              title: 'Sell Item',
+              lottie: '/lottie-sell-v2.lottie',
+              gradient: 'linear-gradient(135deg, #FFF4EC 0%, #FFE4CC 50%, #FFD4AA 100%)',
+              stat: '45K+',
+              statLabel: 'buyers',
+              accent: '#EA580C',
+              href: '/services?prompt=I+want+to+sell+something',
+            },
+            {
+              title: 'Plan Vacation',
+              lottie: '/lottie-leave-v4.lottie',
+              gradient: 'linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 50%, #A5F3FC 100%)',
+              stat: '30+',
+              statLabel: 'destinations',
+              accent: '#06B6D4',
+              href: '/services?prompt=Help+me+plan+a+vacation',
+            },
           ].map((card, i) => (
               <Link key={card.title} href={card.href}
-                className="block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
+                className="shrink-0 block rounded-[18px] overflow-hidden border border-[#DFE1E6] bg-white hover:shadow-lg transition-all active:scale-[0.96]"
                 style={{
+                  width: 'calc((100% - 20px) / 3)',
+                  minWidth: '105px',
+                  scrollSnapAlign: 'start',
                   opacity: mounted ? 1 : 0,
                   transform: mounted ? 'translateY(0)' : 'translateY(16px)',
-                  transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.12}s`,
+                  transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${0.9 + i * 0.08}s`,
                 }}>
                 {/* Visual — Lottie animation on gradient */}
                 <div className="w-full flex flex-col items-center pt-4 pb-2 overflow-hidden" style={{ background: card.gradient }}>
@@ -632,6 +691,8 @@ export default function DashboardPage() {
                 </div>
               </Link>
           ))}
+          {/* Right padding spacer for scroll */}
+          <div className="shrink-0 w-1" />
         </div>
       </div>
 
