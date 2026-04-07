@@ -476,46 +476,27 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Hero tagline + IHC Logo */}
-        <div className="relative z-20 px-5 mt-6 flex items-center justify-between">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-white leading-[1.1] tracking-tight"
-              style={{
-                fontSize: 'clamp(28px, 7vw, 36px)',
-                fontWeight: 800,
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
-              }}>
-              Your work life,{'\n'}
-              <span style={{ color: '#000000' }}>supercharged.</span>
-            </h1>
-            <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[280px]"
-              style={{
-                opacity: mounted ? 1 : 0,
-                transform: mounted ? 'translateY(0)' : 'translateY(16px)',
-                transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
-              }}>
-              AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
-            </p>
-          </div>
-          {/* IHC Logo */}
-          <div className="shrink-0 ml-3 flex flex-col items-center"
+        {/* Hero tagline */}
+        <div className="relative z-20 px-5 mt-6">
+          <h1 className="text-white leading-[1.1] tracking-tight"
+            style={{
+              fontSize: 'clamp(28px, 7vw, 36px)',
+              fontWeight: 800,
+              opacity: mounted ? 1 : 0,
+              transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+            }}>
+            Your work life,{'\n'}
+            <span style={{ color: '#000000' }}>supercharged.</span>
+          </h1>
+          <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[280px]"
             style={{
               opacity: mounted ? 1 : 0,
-              transform: mounted ? 'scale(1)' : 'scale(0.85)',
-              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s',
+              transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
             }}>
-            <img
-              src="/ihc-logo.png"
-              alt="IHC"
-              className="block"
-              style={{ width: 'clamp(65px, 18vw, 90px)', height: 'auto' }}
-            />
-            <p className="text-[8px] text-white/70 font-medium tracking-wide mt-1 text-center whitespace-nowrap">
-              Disciplined. Resilient. Together
-            </p>
-          </div>
+            AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
+          </p>
         </div>
 
         {/* USP Stats Strip */}
