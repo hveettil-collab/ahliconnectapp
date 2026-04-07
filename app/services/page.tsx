@@ -1819,7 +1819,7 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
 
   /* ── Feeling unwell / sick — empathetic, proactive medical support (must come before leave & gaming) ── */
   const isSickLeaveOnly = (t.includes('sick') && (t.includes('leave') || t.includes('day off'))) || t.includes('sick leave') || t.includes('sick day') || t.includes('medical leave');
-  const isFeelingSick = t.includes('not feeling well') || t.includes('feeling sick') || t.includes('feel sick') || t.includes('unwell') || t.includes('i am sick') || t.includes('i\'m sick') || t.includes('im sick') || t.includes('not well') || t.includes('feeling unwell') || t.includes('feel unwell') || t.includes('under the weather') || t.includes('headache') || t.includes('migraine') || t.includes('fever') || t.includes('temperature') || t.includes('stomach') || t.includes('nausea') || t.includes('vomit') || t.includes('dizzy') || t.includes('dizziness') || t.includes('pain') || t.includes('sore throat') || t.includes('cold') && (t.includes('feel') || t.includes('caught') || t.includes('have a')) || t.includes('flu') || t.includes('cough') || t.includes('body ache') || t.includes('chest pain') || t.includes('back pain') || t.includes('tooth') || t.includes('dental') || t.includes('allergy') || t.includes('allergic') || t.includes('injury') || t.includes('injured') || t.includes('hurt') || t.includes('accident') || t.includes('broken') && (t.includes('bone') || t.includes('arm') || t.includes('leg') || t.includes('hand')) || t.includes('bleeding') || t.includes('breathing') || t.includes('asthma') || t.includes('faint') || t.includes('tired') && (t.includes('very') || t.includes('so') || t.includes('extremely')) || t.includes('exhausted') || t.includes('burn') && (t.includes('feel') || t.includes('got'));
+  const isFeelingSick = t.includes('not feeling well') || t.includes('feeling sick') || t.includes('feel sick') || t.includes('unwell') || t.includes('i am sick') || t.includes('i\'m sick') || t.includes('im sick') || t.includes('iam sick') || t.includes('i m sick') || t.includes('am sick') || /\bsick\b/.test(t) || t.includes('not well') || t.includes('feeling unwell') || t.includes('feel unwell') || t.includes('not okay') || t.includes('not ok') || t.includes('feel bad') || t.includes('feeling bad') || t.includes('under the weather') || t.includes('headache') || t.includes('migraine') || t.includes('fever') || t.includes('temperature') || t.includes('stomach') || t.includes('nausea') || t.includes('vomit') || t.includes('throwing up') || t.includes('dizzy') || t.includes('dizziness') || t.includes('pain') || t.includes('sore throat') || (t.includes('cold') && (t.includes('feel') || t.includes('caught') || t.includes('have a'))) || t.includes('flu') || t.includes('cough') || t.includes('body ache') || t.includes('chest pain') || t.includes('back pain') || t.includes('tooth') || t.includes('dental') || t.includes('allergy') || t.includes('allergic') || t.includes('injury') || t.includes('injured') || t.includes('hurt myself') || t.includes('got hurt') || t.includes('accident') || (t.includes('broken') && (t.includes('bone') || t.includes('arm') || t.includes('leg') || t.includes('hand'))) || t.includes('bleeding') || t.includes('can\'t breathe') || t.includes('hard to breathe') || t.includes('breathing') || t.includes('asthma') || t.includes('faint') || t.includes('feeling weak') || t.includes('feel weak') || (t.includes('tired') && (t.includes('very') || t.includes('so') || t.includes('extremely'))) || t.includes('exhausted') || (t.includes('burn') && (t.includes('feel') || t.includes('got'))) || t.includes('food poison') || t.includes('rash') || t.includes('swollen') || t.includes('infection') || t.includes('virus') || t.includes('covid') || t.includes('doctor') || t.includes('hospital') || t.includes('clinic') || t.includes('emergency') || t.includes('ambulance');
 
   if (isSickLeaveOnly) {
     return {
@@ -1842,30 +1842,38 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     const isAllergy = t.includes('allergy') || t.includes('allergic');
     const isFeverFlu = t.includes('fever') || t.includes('flu') || t.includes('temperature') || t.includes('cold') || t.includes('cough') || t.includes('sore throat');
 
-    let empathyMsg = `I'm really sorry to hear that, ${userName}. Your health comes first — let me help you right away.`;
-    let detailMsg = '';
+    let empathyMsg = `I'm really sorry to hear that, ${userName}. Your health always comes first — please take care of yourself.`;
+    let adviceMsg = '';
+    let actionMsg = '';
 
     if (isEmergency) {
-      empathyMsg = `${userName}, that sounds serious. Please don't delay — your health is the priority right now.`;
-      detailMsg = `\n\n**If this is an emergency, call 998 immediately.** Abu Dhabi ambulance service is free and will reach you within minutes.\n\n`;
+      empathyMsg = `${userName}, that sounds serious — please don't wait.`;
+      adviceMsg = `\n\n**If this is an emergency, call 998 right now.** Abu Dhabi ambulance service is free and will reach you within minutes.`;
+      actionMsg = `\n\nI've listed emergency resources and the nearest hospitals below. Your **Daman Enhanced** insurance covers everything — you won't need to worry about costs.`;
     } else if (isDental) {
-      detailMsg = `\n\nFor dental issues, your **Daman Enhanced** plan covers dental visits. I've listed the nearest dental clinics below.\n\n`;
+      adviceMsg = `\n\nDental pain can be really uncomfortable. The good news is your **Daman Enhanced** plan fully covers dental visits — I've listed the nearest dental clinics below.`;
+      actionMsg = `\n\nIf you need time off, you have **10 sick leave days** available and I can submit the request for you instantly.`;
     } else if (isHeadache) {
-      detailMsg = `\n\nFor persistent headaches or migraines, it's best to see a doctor. Your **Daman Enhanced** plan covers GP and specialist visits with zero co-pay at network hospitals.\n\n`;
+      adviceMsg = `\n\nIf the headache is persistent or severe, I'd recommend seeing a doctor. Your **Daman Enhanced** plan covers GP and specialist visits with zero co-pay at all network hospitals.`;
+      actionMsg = `\n\nIn the meantime, here are nearby hospitals and a pharmacy. I can also submit sick leave for you if you need to rest.`;
     } else if (isStomach) {
-      detailMsg = `\n\nStomach issues can be tough — stay hydrated and rest. If symptoms persist, your **Daman Enhanced** insurance covers walk-in consultations at all network hospitals.\n\n`;
+      adviceMsg = `\n\nPlease try to stay hydrated and get some rest. If it gets worse or lasts more than a day, it's best to visit a doctor — your **Daman Enhanced** insurance covers walk-in consultations at all network hospitals.`;
+      actionMsg = `\n\nHere are the nearest hospitals and a pharmacy. Want me to submit sick leave too?`;
     } else if (isAllergy) {
-      detailMsg = `\n\nFor allergic reactions, visit the nearest pharmacy or hospital. Your **Daman Enhanced** plan covers allergy treatments and prescribed medications.\n\n`;
+      adviceMsg = `\n\nFor allergic reactions, the nearest pharmacy can help with antihistamines, or visit a hospital if it's more serious. Your **Daman Enhanced** plan covers allergy treatments and all prescribed medications.`;
+      actionMsg = `\n\nI've listed the nearest pharmacy and hospitals below.`;
     } else if (isFeverFlu) {
-      detailMsg = `\n\nMake sure to rest and stay hydrated. If your temperature exceeds 39°C or symptoms last more than 2 days, please see a doctor. Your **Daman Enhanced** insurance covers everything.\n\n`;
+      adviceMsg = `\n\nMake sure to rest, stay hydrated, and monitor your temperature. If it goes above 39°C or symptoms last more than 2 days, please see a doctor.`;
+      actionMsg = `\n\nYour **Daman Enhanced** insurance covers everything — GP visits, medications, and specialist referrals. Here are the nearest options:`;
     } else {
-      detailMsg = `\n\nYour **Daman Enhanced** medical plan covers GP visits, specialists, medications, and emergency care — so don't hesitate to seek help.\n\n`;
+      adviceMsg = `\n\nYour **Daman Enhanced** medical plan covers GP visits, specialists, medications, and emergency care — so please don't hesitate to seek help.`;
+      actionMsg = `\n\nI can help you find the nearest hospital, submit sick leave, or connect you with medical support:`;
     }
 
-    const benefitsMsg = `**Your Medical Benefits:**\n• **Insurance**: Daman Enhanced (Family) — zero co-pay at network hospitals\n• **Sick Leave**: 10 days available (90 days max under UAE law)\n• **Mental Health**: 6 free counseling sessions/year\n• **Emergency**: Call 998 (free ambulance)`;
+    const benefitsMsg = `\n\n**Your Medical Benefits at a Glance:**\n• **Insurance**: Daman Enhanced (Family) — zero co-pay at network hospitals\n• **Sick Leave**: 10 days available (up to 90 days under UAE law)\n• **Mental Health**: 6 free confidential counseling sessions/year\n• **Emergency**: Call 998 — free ambulance service`;
 
     return {
-      content: `${empathyMsg}${detailMsg}${benefitsMsg}\n\nHere's what I can do for you right now:`,
+      content: `${empathyMsg}${adviceMsg}${actionMsg}${benefitsMsg}`,
       cards: [
         ...(isEmergency ? [
           { type: 'action' as const, icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance · Free · Arrives in minutes', color: '#DC2626', action: 'Show me emergency contacts' },
