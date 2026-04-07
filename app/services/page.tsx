@@ -1817,15 +1817,71 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     };
   }
 
-  /* ── Sick leave — proactive medical support (must come before gaming) ── */
-  if (t.includes('sick leave') || t.includes('sick day') || t.includes('not feeling well') || t.includes('unwell') || t.includes('feeling sick') || t.includes('medical leave') || (t.includes('sick') && (t.includes('leave') || t.includes('day off') || t.includes('rest')))) {
+  /* ── Feeling unwell / sick — empathetic, proactive medical support (must come before leave & gaming) ── */
+  const isSickLeaveOnly = (t.includes('sick') && (t.includes('leave') || t.includes('day off'))) || t.includes('sick leave') || t.includes('sick day') || t.includes('medical leave');
+  const isFeelingSick = t.includes('not feeling well') || t.includes('feeling sick') || t.includes('feel sick') || t.includes('unwell') || t.includes('i am sick') || t.includes('i\'m sick') || t.includes('im sick') || t.includes('not well') || t.includes('feeling unwell') || t.includes('feel unwell') || t.includes('under the weather') || t.includes('headache') || t.includes('migraine') || t.includes('fever') || t.includes('temperature') || t.includes('stomach') || t.includes('nausea') || t.includes('vomit') || t.includes('dizzy') || t.includes('dizziness') || t.includes('pain') || t.includes('sore throat') || t.includes('cold') && (t.includes('feel') || t.includes('caught') || t.includes('have a')) || t.includes('flu') || t.includes('cough') || t.includes('body ache') || t.includes('chest pain') || t.includes('back pain') || t.includes('tooth') || t.includes('dental') || t.includes('allergy') || t.includes('allergic') || t.includes('injury') || t.includes('injured') || t.includes('hurt') || t.includes('accident') || t.includes('broken') && (t.includes('bone') || t.includes('arm') || t.includes('leg') || t.includes('hand')) || t.includes('bleeding') || t.includes('breathing') || t.includes('asthma') || t.includes('faint') || t.includes('tired') && (t.includes('very') || t.includes('so') || t.includes('extremely')) || t.includes('exhausted') || t.includes('burn') && (t.includes('feel') || t.includes('got'));
+
+  if (isSickLeaveOnly) {
     return {
-      content: `I'm sorry to hear that, ${userName}. I can help you submit a sick leave request right away. Your line manager will be notified and you'll get an update once it's reviewed.\n\nYou have **10 sick leave days** available. Under UAE labour law, you're entitled to up to **90 days** of medical leave per year.\n\nHere are some resources that may help:`,
+      content: `I'm really sorry to hear you're not feeling well, ${userName}. Let me help you with your sick leave right away.\n\nYou have **10 sick leave days** available. Under UAE labour law, you're entitled to up to **90 days** of medical leave per year. Your line manager will be notified automatically once submitted.\n\nIf you need medical attention, I've also listed the nearest hospitals below — your **Daman Enhanced** insurance covers all visits.`,
       cards: [
-        { type: 'action', icon: Zap, title: 'Submit Sick Leave', subtitle: 'Your manager will be notified for review', color: '#DC2626', link: '/automations/leave-request' },
-        { type: 'info', icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km away · Open 24/7', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
-        { type: 'info', icon: Heart, title: 'Mediclinic Al Noor', subtitle: '3.4 km away · Open 24/7', color: '#059669', action: 'Show me directions to Mediclinic' },
-        { type: 'info', icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services', color: '#DC2626', action: 'Show me emergency contacts' },
+        { type: 'action', icon: Zap, title: 'Submit Sick Leave Now', subtitle: 'Manager notified automatically · Instant', color: '#DC2626', link: '/automations/leave-request' },
+        { type: 'info', icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km away · Open 24/7 · Daman covered', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
+        { type: 'info', icon: Heart, title: 'Mediclinic Al Noor Hospital', subtitle: '3.4 km away · Open 24/7 · Daman covered', color: '#059669', action: 'Show me directions to Mediclinic' },
+        { type: 'info', icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services · Free', color: '#DC2626', action: 'Show me emergency contacts' },
+      ]
+    };
+  }
+
+  if (isFeelingSick) {
+    // Detect severity for more empathetic response
+    const isEmergency = t.includes('chest pain') || t.includes('breathing') || t.includes('accident') || t.includes('bleeding') || t.includes('faint') || t.includes('broken');
+    const isDental = t.includes('tooth') || t.includes('dental');
+    const isHeadache = t.includes('headache') || t.includes('migraine');
+    const isStomach = t.includes('stomach') || t.includes('nausea') || t.includes('vomit');
+    const isAllergy = t.includes('allergy') || t.includes('allergic');
+    const isFeverFlu = t.includes('fever') || t.includes('flu') || t.includes('temperature') || t.includes('cold') || t.includes('cough') || t.includes('sore throat');
+
+    let empathyMsg = `I'm really sorry to hear that, ${userName}. Your health comes first — let me help you right away.`;
+    let detailMsg = '';
+
+    if (isEmergency) {
+      empathyMsg = `${userName}, that sounds serious. Please don't delay — your health is the priority right now.`;
+      detailMsg = `\n\n**If this is an emergency, call 998 immediately.** Abu Dhabi ambulance service is free and will reach you within minutes.\n\n`;
+    } else if (isDental) {
+      detailMsg = `\n\nFor dental issues, your **Daman Enhanced** plan covers dental visits. I've listed the nearest dental clinics below.\n\n`;
+    } else if (isHeadache) {
+      detailMsg = `\n\nFor persistent headaches or migraines, it's best to see a doctor. Your **Daman Enhanced** plan covers GP and specialist visits with zero co-pay at network hospitals.\n\n`;
+    } else if (isStomach) {
+      detailMsg = `\n\nStomach issues can be tough — stay hydrated and rest. If symptoms persist, your **Daman Enhanced** insurance covers walk-in consultations at all network hospitals.\n\n`;
+    } else if (isAllergy) {
+      detailMsg = `\n\nFor allergic reactions, visit the nearest pharmacy or hospital. Your **Daman Enhanced** plan covers allergy treatments and prescribed medications.\n\n`;
+    } else if (isFeverFlu) {
+      detailMsg = `\n\nMake sure to rest and stay hydrated. If your temperature exceeds 39°C or symptoms last more than 2 days, please see a doctor. Your **Daman Enhanced** insurance covers everything.\n\n`;
+    } else {
+      detailMsg = `\n\nYour **Daman Enhanced** medical plan covers GP visits, specialists, medications, and emergency care — so don't hesitate to seek help.\n\n`;
+    }
+
+    const benefitsMsg = `**Your Medical Benefits:**\n• **Insurance**: Daman Enhanced (Family) — zero co-pay at network hospitals\n• **Sick Leave**: 10 days available (90 days max under UAE law)\n• **Mental Health**: 6 free counseling sessions/year\n• **Emergency**: Call 998 (free ambulance)`;
+
+    return {
+      content: `${empathyMsg}${detailMsg}${benefitsMsg}\n\nHere's what I can do for you right now:`,
+      cards: [
+        ...(isEmergency ? [
+          { type: 'action' as const, icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance · Free · Arrives in minutes', color: '#DC2626', action: 'Show me emergency contacts' },
+        ] : []),
+        { type: 'info' as const, icon: Heart, title: 'Cleveland Clinic Abu Dhabi', subtitle: '2.1 km · Open 24/7 · Daman network', color: '#059669', action: 'Show me directions to Cleveland Clinic' },
+        { type: 'info' as const, icon: Heart, title: 'Mediclinic Al Noor Hospital', subtitle: '3.4 km · Open 24/7 · Daman network', color: '#059669', action: 'Show me directions to Mediclinic' },
+        { type: 'info' as const, icon: Heart, title: 'NMC Royal Hospital', subtitle: '4.8 km · Open 24/7 · Daman network', color: '#059669', action: 'Show me directions to NMC Royal' },
+        ...(isDental ? [
+          { type: 'info' as const, icon: Heart, title: 'Dr. Joy Dental Clinic', subtitle: '1.5 km · Open today · Daman covered', color: '#40C4AA', action: 'Show me dental clinics nearby' },
+        ] : []),
+        { type: 'action' as const, icon: Zap, title: 'Submit Sick Leave', subtitle: '10 days available · Manager notified instantly', color: '#DC2626', link: '/automations/leave-request' },
+        { type: 'info' as const, icon: MapPin, title: 'Nearest Pharmacy', subtitle: 'ADNOC Pharmacy · 0.4 km · Open now', color: '#40C4AA', action: 'Show me the nearest pharmacy' },
+        ...(!isEmergency ? [
+          { type: 'info' as const, icon: Shield, title: 'Emergency: Call 998', subtitle: 'Ambulance & emergency services · Free', color: '#DC2626', action: 'Show me emergency contacts' },
+        ] : []),
+        { type: 'info' as const, icon: Heart, title: 'Mental Health Support', subtitle: '6 free sessions/year · Confidential', color: '#9D63F6', action: 'Tell me about mental health support' },
       ]
     };
   }
