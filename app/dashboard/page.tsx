@@ -357,13 +357,9 @@ export default function DashboardPage() {
           ══════════════════════════════════════════ */}
       {showDesktopModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
-          <div className="absolute inset-0 bg-black/60" onClick={() => setShowDesktopModal(false)} />
+          <div className="absolute inset-0 bg-black/60" />
           <div className="relative bg-white rounded-[28px] shadow-2xl max-w-[420px] w-full mx-4 overflow-hidden"
             style={{ animation: 'card-pop 0.4s cubic-bezier(0.16,1,0.3,1) both' }}>
-            {/* Close button */}
-            <button onClick={() => setShowDesktopModal(false)} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#F8F9FB] flex items-center justify-center z-10 hover:bg-[#DFE1E6] transition-colors">
-              <X size={16} className="text-[#666D80]" />
-            </button>
             {/* Top gradient accent */}
             <div className="h-2 w-full" style={{ background: 'linear-gradient(90deg, #9D63F6 0%, #7C3AED 50%, #40C4AA 100%)' }} />
 
