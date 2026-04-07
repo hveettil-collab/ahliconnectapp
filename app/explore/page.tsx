@@ -1037,6 +1037,162 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
 }
 
 /* ═══════════════════════════════════════════
+   FULL-SCREEN MAP WITH BUILT-IN DETAIL
+   ═══════════════════════════════════════════ */
+
+function FullScreenMap({ locations, onClose }: { locations: MapLocation[]; onClose: () => void }) {
+  const [mapDetailItem, setMapDetailItem] = useState<MapLocation['modalData'] | null>(null);
+  const [detailActionTaken, setDetailActionTaken] = useState(false);
+
+  const handleViewDetail = (data: MapLocation['modalData']) => {
+    if (data) {
+      setMapDetailItem(data);
+      setDetailActionTaken(false);
+    }
+  };
+
+  const closeDetail = () => {
+    setMapDetailItem(null);
+    setDetailActionTaken(false);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#F7F8FA' }}>
+      {/* Header bar */}
+      <div className="shrink-0 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3"
+        style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(223,225,230,0.5)' }}>
+        <div className="flex items-center gap-2">
+          <MapPin size={18} className="text-[#9D63F6]" strokeWidth={2.5} />
+          <div>
+            <h2 className="text-[16px] font-bold text-[#15161E]">Explore Map</h2>
+            <p className="text-[10px] text-[#A4ABB8]">{locations.length} locations across UAE</p>
+          </div>
+        </div>
+        <button
+          onClick={onClose}
+          className="w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-all"
+          style={{ background: '#F1F2F4' }}
+        >
+          <X size={18} className="text-[#666D80]" strokeWidth={2} />
+        </button>
+      </div>
+
+      {/* Full-screen map */}
+      <div className="flex-1 relative">
+        <MapView locations={locations} onSelectItem={handleViewDetail} />
+      </div>
+
+      {/* ── Rich detail panel (slides up from bottom, map stays behind) ── */}
+      {mapDetailItem && (() => {
+        const DIcon = mapDetailItem.icon;
+        return (
+          <div className="absolute inset-0 z-30 flex items-end justify-center">
+            {/* Backdrop — tapping it closes the detail */}
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={closeDetail} />
+
+            {/* Detail sheet */}
+            <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[85vh] overflow-y-auto"
+              style={{ animation: 'card-rise 0.3s ease-out both' }}>
+
+              {/* Hero image */}
+              <div className="relative h-56 overflow-hidden rounded-t-[28px]">
+                <img src={mapDetailItem.image} alt={mapDetailItem.title} className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                {/* Close & back buttons */}
+                <button onClick={closeDetail} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <ArrowLeft size={18} className="text-white" />
+                </button>
+                <button onClick={closeDetail} className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <X size={16} className="text-white" />
+                </button>
+
+                {/* Category badge */}
+                <div className="absolute top-14 left-4">
+                  <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full" style={{ background: mapDetailItem.color }}>
+                    {mapDetailItem.category}
+                  </span>
+                </div>
+
+                {/* Title area on hero */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="w-9 h-9 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+                      <DIcon size={18} className="text-white" strokeWidth={2} />
+                    </div>
+                  </div>
+                  <h2 className="text-[20px] font-bold text-white leading-snug">{mapDetailItem.title}</h2>
+                </div>
+              </div>
+
+              {/* Content body */}
+              <div className="p-5 space-y-4">
+                {/* Description */}
+                <p className="text-[14px] text-[#666D80] leading-relaxed">{mapDetailItem.desc}</p>
+
+                {/* Highlights grid */}
+                {mapDetailItem.highlights && mapDetailItem.highlights.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {mapDetailItem.highlights.map(h => (
+                      <div key={h.label} className="rounded-[16px] p-3.5 text-center border border-[#DFE1E6]" style={{ background: '#F8F9FB' }}>
+                        <p className="text-[18px] font-bold" style={{ color: mapDetailItem.color }}>{h.value}</p>
+                        <p className="text-[10px] text-[#A4ABB8] font-medium mt-1">{h.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Quick info bar */}
+                <div className="flex items-center gap-3 p-3 rounded-[14px] border border-[#DFE1E6]" style={{ background: mapDetailItem.color + '08' }}>
+                  <MapPin size={16} style={{ color: mapDetailItem.color }} strokeWidth={2} />
+                  <div className="flex-1">
+                    <p className="text-[11px] font-semibold text-[#15161E]">Available for IHC Group employees</p>
+                    <p className="text-[10px] text-[#A4ABB8]">Show your Ahli Connect digital card to redeem</p>
+                  </div>
+                </div>
+
+                {/* Action buttons */}
+                <div className="space-y-2 pb-6">
+                  {!detailActionTaken ? (
+                    <button onClick={() => setDetailActionTaken(true)}
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-[16px] text-[15px] font-bold text-white transition-all active:scale-[0.98]"
+                      style={{ background: mapDetailItem.color, boxShadow: `0 4px 16px ${mapDetailItem.color}40` }}>
+                      {mapDetailItem.cta || 'Interested'} <ArrowRight size={16} />
+                    </button>
+                  ) : (
+                    <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-[16px] px-4 py-3.5">
+                      <CheckCircle2 size={20} className="text-green-600 shrink-0" />
+                      <div>
+                        <p className="text-[13px] font-bold text-green-700">Done! Details sent to your email.</p>
+                        <p className="text-[10px] text-green-600/70">Check your inbox for confirmation</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Share & Save row */}
+                  <div className="flex gap-2">
+                    <button className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[14px] text-[12px] font-semibold text-[#666D80] border border-[#DFE1E6] active:scale-[0.97] transition-all">
+                      <Share2 size={14} /> Share
+                    </button>
+                    <button className="flex-1 flex items-center justify-center gap-1.5 py-3 rounded-[14px] text-[12px] font-semibold text-[#666D80] border border-[#DFE1E6] active:scale-[0.97] transition-all">
+                      <Bookmark size={14} /> Save
+                    </button>
+                  </div>
+
+                  <button onClick={closeDetail} className="w-full py-2.5 rounded-[14px] text-[12px] font-semibold text-[#A4ABB8]">
+                    Back to Map
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
    MAIN EXPLORE PAGE
    ═══════════════════════════════════════════ */
 
@@ -1778,36 +1934,10 @@ export default function ExplorePage() {
 
       {/* ═══ FULL-SCREEN MAP OVERLAY ═══ */}
       {showMap && (
-        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#F7F8FA' }}>
-          {/* Header bar */}
-          <div className="shrink-0 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3"
-            style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(223,225,230,0.5)' }}>
-            <div className="flex items-center gap-2">
-              <MapPin size={18} className="text-[#9D63F6]" strokeWidth={2.5} />
-              <div>
-                <h2 className="text-[16px] font-bold text-[#15161E]">Explore Map</h2>
-                <p className="text-[10px] text-[#A4ABB8]">{MAP_LOCATIONS.length} locations across UAE</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowMap(false)}
-              className="w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-all"
-              style={{ background: '#F1F2F4' }}
-            >
-              <X size={18} className="text-[#666D80]" strokeWidth={2} />
-            </button>
-          </div>
-
-          {/* Full-screen map */}
-          <div className="flex-1 relative">
-            <MapView locations={MAP_LOCATIONS} onSelectItem={(data) => {
-              if (data) {
-                setShowMap(false);
-                setTimeout(() => setSelectedItem(data), 200);
-              }
-            }} />
-          </div>
-        </div>
+        <FullScreenMap
+          locations={MAP_LOCATIONS}
+          onClose={() => setShowMap(false)}
+        />
       )}
     </AppShell>
   );
