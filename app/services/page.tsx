@@ -2496,14 +2496,34 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
    ═══════════════════════════════════════════ */
 
 const SUGGESTIONS = [
+  // Selling & Marketplace
   { icon: Car, label: 'Sell My Car', prompt: 'I want to sell my car', color: '#9D63F6', bg: '#F3EEFF' },
-  { icon: Monitor, label: 'Post Electronics', prompt: 'I want to post electronics for sale', color: '#40C4AA', bg: '#EDFAF6' },
-  { icon: HelpCircle, label: 'Need Help', prompt: 'I need help with something', color: '#54B6ED', bg: '#EBF6FF' },
-  { icon: Gift, label: 'Find Offers', prompt: 'Show me the best offers', color: '#FFBD4C', bg: '#FFF8EB' },
+  { icon: ShoppingBag, label: 'Sell Something', prompt: 'I want to sell something', color: '#EA580C', bg: '#FFF4EC' },
+  { icon: ShoppingCart, label: 'Browse Market', prompt: 'Show me the marketplace', color: '#F97316', bg: '#FFF4EC' },
+  // Insurance
+  { icon: Shield, label: 'Car Insurance', prompt: 'I need car insurance', color: '#0D9488', bg: '#EDFCFA' },
+  { icon: Heart, label: 'Health Insurance', prompt: 'I need health insurance', color: '#EC4899', bg: '#FDF2F8' },
+  // Travel & Bookings
   { icon: Plane, label: 'Book Flight', prompt: 'I want to book a flight', color: '#7C3AED', bg: '#F0EAFF' },
-  { icon: Shield, label: 'Insurance', prompt: 'I need insurance', color: '#0D9488', bg: '#EDFCFA' },
-  { icon: ShoppingBag, label: 'Marketplace', prompt: 'Take me to the marketplace', color: '#EA580C', bg: '#FFF4EC' },
+  { icon: Navigation, label: 'Book a Ride', prompt: 'I need a ride', color: '#3B82F6', bg: '#EFF6FF' },
+  { icon: UtensilsCrossed, label: 'Order Food', prompt: 'I want to order food', color: '#EF4444', bg: '#FEF2F2' },
+  // HR & Work
+  { icon: FileText, label: 'Salary Certificate', prompt: 'I need a salary certificate', color: '#6366F1', bg: '#EEEEFF' },
+  { icon: Calendar, label: 'Apply Leave', prompt: 'I want to apply for leave', color: '#10B981', bg: '#ECFDF5' },
+  { icon: Receipt, label: 'Expense Claim', prompt: 'I want to submit an expense claim', color: '#8B5CF6', bg: '#F5F3FF' },
   { icon: Briefcase, label: 'HR Services', prompt: 'I need HR help', color: '#6366F1', bg: '#EEEEFF' },
+  // Finance & Rewards
+  { icon: Wallet, label: 'My Wallet', prompt: 'Show me my wallet balance', color: '#40C4AA', bg: '#EDFAF6' },
+  { icon: Trophy, label: 'My Rewards', prompt: 'Show me my rewards and points', color: '#F59E0B', bg: '#FFFBEB' },
+  // Offers & Benefits
+  { icon: Gift, label: 'Best Offers', prompt: 'Show me the best offers', color: '#FFBD4C', bg: '#FFF8EB' },
+  { icon: Tag, label: 'Dining Deals', prompt: 'Show me dining and food offers', color: '#F43F5E', bg: '#FFF1F2' },
+  // Wellness & Events
+  { icon: Palmtree, label: 'Plan Vacation', prompt: 'Help me plan a vacation', color: '#06B6D4', bg: '#ECFEFF' },
+  { icon: GraduationCap, label: 'Learning', prompt: 'Show me learning courses', color: '#8B5CF6', bg: '#F5F3FF' },
+  { icon: Ticket, label: 'Events', prompt: 'What events are coming up?', color: '#D946EF', bg: '#FDF4FF' },
+  // General
+  { icon: HelpCircle, label: 'Need Help', prompt: 'I need help with something', color: '#54B6ED', bg: '#EBF6FF' },
 ];
 
 /* ═══════════════════════════════════════════
