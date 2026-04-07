@@ -476,12 +476,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Hero tagline + Dashboard mockup */}
-        <div className="relative z-20 px-5 mt-6 flex items-center">
+        {/* Hero tagline + IHC Logo */}
+        <div className="relative z-20 px-5 mt-6 flex items-center justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-white leading-[1.1] tracking-tight"
               style={{
-                fontSize: 'clamp(26px, 6.5vw, 34px)',
+                fontSize: 'clamp(28px, 7vw, 36px)',
                 fontWeight: 800,
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(20px)',
@@ -490,7 +490,7 @@ export default function DashboardPage() {
               Your work life,{'\n'}
               <span style={{ color: '#000000' }}>supercharged.</span>
             </h1>
-            <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[200px]"
+            <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[280px]"
               style={{
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? 'translateY(0)' : 'translateY(16px)',
@@ -499,30 +499,22 @@ export default function DashboardPage() {
               AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
             </p>
           </div>
-          {/* Dashboard phone mockup */}
-          <div className="shrink-0 -mr-3 -mb-6"
+          {/* IHC Logo */}
+          <div className="shrink-0 ml-3 flex flex-col items-center"
             style={{
               opacity: mounted ? 1 : 0,
-              transform: mounted ? 'translateY(0) rotate(0deg)' : 'translateY(30px) rotate(3deg)',
-              transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s',
+              transform: mounted ? 'scale(1)' : 'scale(0.85)',
+              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s',
             }}>
-            <div className="relative" style={{ width: 'clamp(120px, 32vw, 150px)' }}>
-              <div className="rounded-[24px] overflow-hidden shadow-2xl"
-                style={{
-                  border: '3px solid rgba(255,255,255,0.25)',
-                  boxShadow: '0 20px 60px rgba(0,0,0,0.25), 0 0 40px rgba(157,99,246,0.15)',
-                }}>
-                <img
-                  src="/dashboard-mockup.png"
-                  alt="Ahli Connect Dashboard"
-                  className="w-full h-auto block"
-                  style={{ aspectRatio: '280/560' }}
-                />
-              </div>
-              {/* Glow effect behind phone */}
-              <div className="absolute -inset-4 -z-10 rounded-[32px] opacity-40"
-                style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)' }} />
-            </div>
+            <img
+              src="/logos/ihc.svg"
+              alt="IHC"
+              className="block"
+              style={{ width: 'clamp(60px, 16vw, 80px)', height: 'auto' }}
+            />
+            <p className="text-[8px] text-white/70 font-medium tracking-wide mt-1 text-center whitespace-nowrap">
+              Disciplined. Resilient. Together
+            </p>
           </div>
         </div>
 
