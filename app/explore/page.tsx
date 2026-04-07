@@ -1344,190 +1344,251 @@ export default function ExplorePage() {
           </>
         );
 
-      /* ──────── FOR YOU (default) ──────── */
+      /* ──────── FOR YOU (default) — short previews of every section ──────── */
       default:
         return (
           <>
-            {/* Featured Hero */}
-            <section className="card-rise">
-              <div className="relative rounded-[24px] overflow-hidden h-[200px] group">
-                <img src={hero.image} alt={hero.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                <div className="absolute inset-0 shimmer-bg pointer-events-none" />
-                <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="text-[10px] font-bold text-white px-2.5 py-1 rounded-full" style={{ background: hero.tagColor }}>{hero.tag}</span>
-                  <span className="text-[10px] font-medium text-white/70 px-2.5 py-1 rounded-full border border-white/20" style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>{hero.countdown}</span>
+            {/* ── Trending Preview ── */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <TrendingUp size={15} className="text-[#DC2626]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Trending</h2>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="text-[18px] font-bold text-white leading-snug mb-1">{hero.title}</h3>
-                  <p className="text-[12px] text-white/75 mb-3 leading-relaxed">{hero.subtitle}</p>
-                  <div className="flex items-center justify-between">
-                    <button onClick={() => setShowRegistration({
-                      title: hero.title,
-                      subtitle: hero.subtitle,
-                      date: hero.countdown,
-                      location: heroIdx === 0 ? 'PureHealth HQ' : 'IHC Tower, Abu Dhabi',
-                      color: hero.tagColor,
-                      image: hero.image,
-                      type: heroIdx === 0 ? 'wellness' : 'hackathon',
-                    })} className="px-5 py-2.5 rounded-full text-[12px] font-bold text-[#15161E] bg-white active:scale-95 transition-transform">{hero.cta}</button>
-                    <span className="text-[10px] text-white/50 font-medium">{hero.spots}</span>
-                  </div>
-                </div>
-                <div className="absolute bottom-5 right-5 flex gap-1.5">
-                  {FEATURED_HEROES.map((_, i) => (
-                    <button key={i} onClick={() => setHeroIdx(i)} className="rounded-full transition-all" style={{ width: i === heroIdx ? 18 : 6, height: 6, background: i === heroIdx ? '#FFFFFF' : 'rgba(255,255,255,0.35)' }} />
-                  ))}
-                </div>
+                <button onClick={() => setActiveFilter('Trending')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
+                </button>
               </div>
-            </section>
-
-            {/* Lifestyle */}
-            <section>
-              <SectionHeader title="Lifestyle" href="/offers" />
-              <BentoGrid items={BENTO_LIFESTYLE} onSelect={setSelectedBento} />
-            </section>
-
-            {/* Upcoming Events */}
-            <section>
-              <SectionHeader title="Upcoming Events" count={EVENTS.length} />
-              <div className="space-y-3">
-                {EVENTS.slice(0, 3).map((event, i) => {
-                  const EIcon = event.icon;
+              <div className="space-y-2">
+                {TRENDING_ITEMS.slice(0, 2).map((item, i) => {
+                  const TIcon = item.icon;
                   return (
-                    <button key={event.id} onClick={() => setSelectedEvent(event)}
-                      className={`card-rise card-rise-${i + 1} w-full text-left flex gap-3.5 p-3 rounded-[18px] border border-[#DFE1E6] active:scale-[0.98] transition-all`}
-                      style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)' }}>
-                      <div className="relative w-[72px] h-[72px] rounded-[14px] overflow-hidden shrink-0">
-                        <img src={event.image} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
-                        <div className="absolute inset-0 bg-black/15" />
-                        <div className="absolute bottom-1.5 left-1.5">
-                          <div className="w-6 h-6 rounded-[6px] flex items-center justify-center" style={{ background: event.color }}>
-                            <EIcon size={12} className="text-white" strokeWidth={2.5} />
+                    <button key={item.id} onClick={() => setSelectedItem({ title: item.title, desc: item.desc, image: item.image, color: item.color, icon: item.icon, category: item.tag, highlights: [{ label: 'Engagement', value: item.engagement }, { label: 'Status', value: item.tag }], cta: 'View Details' })}
+                      className="w-full text-left flex gap-3 p-3 rounded-[16px] border border-[#DFE1E6] active:scale-[0.98] transition-all bg-white">
+                      <div className="relative w-[60px] h-[60px] rounded-[12px] overflow-hidden shrink-0">
+                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute bottom-1 left-1">
+                          <div className="w-5 h-5 rounded-[5px] flex items-center justify-center" style={{ background: item.color }}>
+                            <TIcon size={10} className="text-white" strokeWidth={2.5} />
                           </div>
                         </div>
                       </div>
                       <div className="flex-1 min-w-0 py-0.5">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <span className="text-[9px] font-bold px-2 py-0.5 rounded-full" style={{ background: event.color + '12', color: event.color }}>{event.category}</span>
-                          {event.spotsLeft < 100 && <span className="text-[9px] font-bold text-red-500 flex items-center gap-0.5"><Flame size={9} /> {event.spotsLeft} left</span>}
-                        </div>
-                        <p className="text-[13px] font-bold text-[#15161E] leading-snug truncate">{event.title}</p>
-                        <div className="flex items-center gap-3 mt-1 text-[10px] text-[#A4ABB8]">
-                          <span className="flex items-center gap-1"><Calendar size={10} /> {event.date.split(',')[0]}</span>
-                          <span className="flex items-center gap-1"><MapPin size={10} /> {event.location.split(',')[0]}</span>
-                        </div>
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: item.tagColor }}>{item.tag}</span>
+                        <p className="text-[12px] font-bold text-[#15161E] leading-snug truncate mt-1">{item.title}</p>
                       </div>
-                      <ChevronRight size={16} className="text-[#D1D5DB] shrink-0 self-center" />
+                      <ChevronRight size={14} className="text-[#D1D5DB] shrink-0 self-center" />
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* Communities */}
+            {/* ── Wellness Preview ── */}
             <section>
-              <SectionHeader title="Communities" count={7} href="/community" />
-              <div className="flex gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
-                {[
-                  { name: 'IHC Group', members: '20K', color: '#1B3A6B', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&h=200&fit=crop', logo: '/logos/ihc.svg', unread: 12 },
-                  { name: 'Shory', members: '2.8K', color: '#0D9488', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=300&h=200&fit=crop', logo: '/logos/shory.svg', unread: 5 },
-                  { name: 'Palms Sports', members: '4.5K', color: '#EA580C', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&h=200&fit=crop', logo: '/logos/palms-sports.svg', unread: 3 },
-                  { name: 'Aldar', members: '5.2K', color: '#C8973A', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=200&fit=crop', logo: '/logos/aldar.svg', unread: 0 },
-                  { name: 'PureHealth', members: '8.9K', color: '#059669', image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=300&h=200&fit=crop', logo: '/logos/purehealth.svg', unread: 0 },
-                ].map((c, i) => (
-                  <Link key={c.name} href="/community" className={`card-rise card-rise-${i} shrink-0 w-[140px] rounded-[16px] overflow-hidden border border-[#DFE1E6] active:scale-[0.97] transition-all`}>
-                    <div className="relative h-[80px]">
-                      <img src={c.image} alt={c.name} className="w-full h-full object-cover" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      {c.unread > 0 && <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-[#DF1C41] flex items-center justify-center"><span className="text-[8px] font-bold text-white">{c.unread}</span></div>}
-                      <div className="absolute bottom-2 left-2.5 flex items-center gap-1.5">
-                        <img src={c.logo} alt="" className="w-5 h-5 rounded-[4px]" />
-                        <span className="text-[11px] font-bold text-white">{c.name}</span>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Heart size={15} className="text-[#EC4899]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Wellness</h2>
+                </div>
+                <button onClick={() => setActiveFilter('Wellness')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
+                </button>
+              </div>
+              <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
+                {WELLNESS_ITEMS.slice(0, 3).map((item, i) => {
+                  const WIcon = item.icon;
+                  return (
+                    <button key={item.id} onClick={() => setSelectedItem({ title: item.title, desc: item.desc, image: item.image, color: item.color, icon: item.icon, category: 'Wellness', highlights: [{ label: 'When', value: item.date }, { label: 'Where', value: item.location }], cta: 'Learn More' })}
+                      className="shrink-0 w-[150px] rounded-[16px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left">
+                      <div className="relative h-[85px]">
+                        <img src={item.image} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <div className="absolute bottom-1.5 left-1.5">
+                          <div className="w-5 h-5 rounded-[5px] flex items-center justify-center" style={{ background: item.color }}>
+                            <WIcon size={10} className="text-white" strokeWidth={2.5} />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="px-2.5 py-2 flex items-center justify-between">
-                      <span className="text-[9px] text-[#A4ABB8] flex items-center gap-1"><Users size={9} /> {c.members}</span>
-                      <span className="text-[9px] font-semibold" style={{ color: c.color }}>View</span>
-                    </div>
-                  </Link>
-                ))}
+                      <div className="p-2">
+                        <p className="text-[11px] font-bold text-[#15161E] truncate">{item.title}</p>
+                        <p className="text-[9px] text-[#A4ABB8] mt-0.5 truncate">{item.desc}</p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
-            {/* Business */}
+            {/* ── Offers Preview ── */}
             <section>
-              <SectionHeader title="Business" href="/services" />
-              <BentoGrid items={BENTO_BUSINESS} onSelect={setSelectedBento} />
-            </section>
-
-            {/* Gaming & Activities */}
-            <section>
-              <SectionHeader title="Gaming & Activities" />
-              <div className="grid grid-cols-2 gap-2.5">
-                <button onClick={() => setSelectedEvent(EVENTS[3])}
-                  className="col-span-1 row-span-2 rounded-[20px] text-left flex flex-col justify-between min-h-[210px] active:scale-[0.98] transition-all relative overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1461896836934-bd45ba8b2d36?w=400&h=500&fit=crop" alt="Sports" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/15" />
-                  <div className="relative z-10 p-4 flex flex-col justify-between h-full">
-                    <div className="w-8 h-8 rounded-[10px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-                      <Zap size={16} className="text-white" />
-                    </div>
-                    <div>
-                      <p className="text-[9px] text-white/50 font-semibold uppercase tracking-wider">Event</p>
-                      <p className="text-[13px] font-bold text-white leading-snug mt-0.5">Sports Day<br />Yas Island</p>
-                      <div className="mt-2 inline-block px-2.5 py-1 rounded-[10px]" style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.15)' }}>
-                        <p className="text-[14px] font-bold text-white leading-none">22 May</p>
-                      </div>
-                    </div>
-                  </div>
-                </button>
-                <button onClick={() => setSelectedItem({ title: 'FIFA League Season 3', desc: 'Registration closing soon — 64 teams max. Cross-subsidiary tournament with prizes worth AED 50,000. Form your team and compete!', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=600&h=400&fit=crop', color: '#DC2626', icon: Gamepad2, category: 'Gaming', highlights: [{ label: 'Teams', value: '64 max' }, { label: 'Players', value: '890' }, { label: 'Prize', value: 'AED 50K' }, { label: 'Status', value: 'Open' }], cta: 'Register Team' })} className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all text-left">
-                  <img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=300&h=200&fit=crop" alt="FIFA" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                    <Gamepad2 size={14} className="text-white" strokeWidth={2} />
-                    <p className="text-[11px] font-bold text-white">FIFA League</p>
-                  </div>
-                </button>
-                <button onClick={() => setSelectedItem({ title: 'Padel Cup 2026', desc: 'Doubles tournament — April 30 registration deadline. All skill levels welcome. Equipment provided at Yas Sports Complex.', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&h=400&fit=crop', color: '#FFBD4C', icon: Trophy, category: 'Sports', highlights: [{ label: 'Format', value: 'Doubles' }, { label: 'Deadline', value: 'Apr 30' }, { label: 'Location', value: 'Yas Sports' }, { label: 'Status', value: 'Open' }], cta: 'Register Now' })} className="rounded-[18px] overflow-hidden relative min-h-[100px] active:scale-[0.97] transition-all text-left">
-                  <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=300&h=200&fit=crop" alt="Padel" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10" />
-                  <div className="absolute bottom-0 left-0 right-0 px-3 py-2.5 flex items-center gap-2" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                    <Trophy size={14} className="text-white" strokeWidth={2} />
-                    <p className="text-[11px] font-bold text-white">Padel Cup</p>
-                  </div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Gift size={15} className="text-[#FFBD4C]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Offers</h2>
+                </div>
+                <button onClick={() => setActiveFilter('Offers')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
                 </button>
               </div>
-            </section>
-
-            {/* Companies & People */}
-            <section>
-              <SectionHeader title="Our Companies" href="/about" />
               <div className="grid grid-cols-2 gap-2">
-                {PARTNERS.map(p => (
-                  <div key={p.name} className="flex flex-col items-center gap-2 py-3 rounded-[16px] border border-[#DFE1E6]" style={{ background: 'rgba(255,255,255,0.85)' }}>
-                    <img src={p.logo} alt={p.name} className="w-11 h-11 rounded-[12px]" />
-                    <p className="text-[9px] font-bold text-[#15161E] text-center leading-tight">{p.name}</p>
-                  </div>
-                ))}
+                {OFFERS_DATA.slice(0, 4).map((offer) => {
+                  const OIcon = offer.icon;
+                  return (
+                    <button key={offer.id} onClick={() => setSelectedItem({ title: offer.title, desc: offer.desc, image: offer.image, color: offer.color, icon: offer.icon, category: offer.category, highlights: [{ label: 'Discount', value: offer.discount }, { label: 'Valid', value: offer.valid }], cta: 'Redeem Offer' })}
+                      className="rounded-[14px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left">
+                      <div className="relative h-[80px]">
+                        <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: offer.color }}>{offer.discount}</div>
+                      </div>
+                      <div className="p-2">
+                        <p className="text-[11px] font-bold text-[#15161E] truncate">{offer.title}</p>
+                        <p className="text-[9px] text-[#A4ABB8] mt-0.5 truncate">{offer.desc}</p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 
+            {/* ── Events Preview ── */}
             <section>
-              <SectionHeader title="People" href="/community" />
-              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide">
-                {COLLEAGUES.map(col => (
-                  <Link key={col.id} href="/profile" className="shrink-0 flex flex-col items-center gap-1.5 w-16">
-                    <div className="relative">
-                      <Avatar initials={col.avatar} color="#666D80" size="lg" image={col.image} />
-                      {col.online && <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white" />}
-                    </div>
-                    <p className="text-[10px] font-semibold text-[#15161E] text-center leading-tight truncate w-full">{col.name.split(' ')[0]}</p>
-                    <p className="text-[9px] text-[#A4ABB8] truncate w-full text-center">{col.company.split(' ')[0]}</p>
-                  </Link>
-                ))}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Calendar size={15} className="text-[#9D63F6]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Events</h2>
+                </div>
+                <button onClick={() => setActiveFilter('Events')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
+                </button>
               </div>
+              <div className="space-y-2">
+                {EVENTS.slice(0, 2).map((event) => {
+                  const EIcon = event.icon;
+                  return (
+                    <button key={event.id} onClick={() => setSelectedEvent(event)}
+                      className="w-full text-left flex gap-3 p-3 rounded-[16px] border border-[#DFE1E6] active:scale-[0.98] transition-all bg-white">
+                      <div className="relative w-[60px] h-[60px] rounded-[12px] overflow-hidden shrink-0">
+                        <img src={event.image} alt={event.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute bottom-1 left-1">
+                          <div className="w-5 h-5 rounded-[5px] flex items-center justify-center" style={{ background: event.color }}>
+                            <EIcon size={10} className="text-white" strokeWidth={2.5} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0 py-0.5">
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded-full" style={{ background: event.color + '12', color: event.color }}>{event.category}</span>
+                        <p className="text-[12px] font-bold text-[#15161E] leading-snug truncate mt-1">{event.title}</p>
+                        <div className="flex items-center gap-3 mt-1 text-[9px] text-[#A4ABB8]">
+                          <span className="flex items-center gap-1"><Calendar size={9} /> {event.date.split(',')[0]}</span>
+                          <span className="flex items-center gap-1"><MapPin size={9} /> {event.location.split(',')[0]}</span>
+                        </div>
+                      </div>
+                      <ChevronRight size={14} className="text-[#D1D5DB] shrink-0 self-center" />
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Learning Preview ── */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <GraduationCap size={15} className="text-[#7C3AED]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Learning</h2>
+                </div>
+                <button onClick={() => setActiveFilter('Learning')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
+                </button>
+              </div>
+              <div className="flex gap-2.5 overflow-x-auto scrollbar-hide -mx-1 px-1 pb-1">
+                {[
+                  { title: 'AI & Automation', provider: 'IHC Group', duration: '5 hrs', color: '#9D63F6', icon: Monitor, image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop' },
+                  { title: 'Leadership', provider: 'LinkedIn', duration: '8 hrs', color: '#40C4AA', icon: Star, image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop' },
+                  { title: 'Financial Planning', provider: 'Coursera', duration: '12 hrs', color: '#FFBD4C', icon: TrendingUp, image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop' },
+                ].map((course) => {
+                  const CIcon = course.icon;
+                  return (
+                    <button key={course.title} onClick={() => setSelectedItem({ title: course.title, desc: `${course.provider} · ${course.duration}`, image: course.image, color: course.color, icon: course.icon, category: 'Learning', highlights: [{ label: 'Duration', value: course.duration }, { label: 'Provider', value: course.provider }], cta: 'Enroll Now' })}
+                      className="shrink-0 w-[150px] rounded-[16px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left">
+                      <div className="relative h-[85px]">
+                        <img src={course.image} alt={course.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <div className="absolute bottom-1.5 left-1.5">
+                          <div className="w-5 h-5 rounded-[5px] flex items-center justify-center" style={{ background: course.color }}>
+                            <CIcon size={10} className="text-white" strokeWidth={2.5} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="p-2">
+                        <p className="text-[11px] font-bold text-[#15161E] truncate">{course.title}</p>
+                        <p className="text-[9px] text-[#A4ABB8] mt-0.5">{course.provider} · {course.duration}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Sports Preview ── */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Trophy size={15} className="text-[#DC2626]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Sports</h2>
+                </div>
+                <button onClick={() => setActiveFilter('Sports')} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  See all <ChevronRight size={12} />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { title: 'FIFA League S3', desc: '64 teams · Open', icon: Gamepad2, color: '#DC2626', image: 'https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=400&h=300&fit=crop', status: 'Open' },
+                  { title: 'Padel Cup', desc: 'Doubles · Apr 30', icon: Trophy, color: '#FFBD4C', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400&h=300&fit=crop', status: 'Closing soon' },
+                ].map((sport) => {
+                  const SIcon = sport.icon;
+                  return (
+                    <button key={sport.title} onClick={() => setSelectedItem({ title: sport.title, desc: sport.desc, image: sport.image, color: sport.color, icon: sport.icon, category: 'Sports', highlights: [{ label: 'Status', value: sport.status }], cta: 'Register Now' })}
+                      className="rounded-[14px] overflow-hidden border border-[#DFE1E6] bg-white active:scale-[0.97] transition-all text-left">
+                      <div className="relative h-[80px]">
+                        <img src={sport.image} alt={sport.title} className="w-full h-full object-cover" loading="lazy" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                        <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold text-white" style={{ background: sport.color }}>{sport.status}</div>
+                      </div>
+                      <div className="p-2">
+                        <p className="text-[11px] font-bold text-[#15161E] truncate">{sport.title}</p>
+                        <p className="text-[9px] text-[#A4ABB8] mt-0.5">{sport.desc}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Map Preview ── */}
+            <section>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <MapPin size={15} className="text-[#40C4AA]" strokeWidth={2.5} />
+                  <h2 className="text-[17px] font-bold text-[#15161E]">Nearby</h2>
+                </div>
+                <button onClick={() => setShowMap(true)} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
+                  Open map <ChevronRight size={12} />
+                </button>
+              </div>
+              <button onClick={() => setShowMap(true)} className="w-full rounded-[16px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-all">
+                <div className="relative h-[100px] bg-[#E8F4F8]">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <MapPin size={28} className="text-[#40C4AA] mx-auto mb-1" strokeWidth={1.5} />
+                      <p className="text-[12px] font-bold text-[#15161E]">Discover nearby events & offers</p>
+                      <p className="text-[10px] text-[#A4ABB8] mt-0.5">Tap to open interactive map</p>
+                    </div>
+                  </div>
+                </div>
+              </button>
             </section>
           </>
         );
