@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect, useMemo, Suspense } from 'react';
+import { useModalHistory } from '@/hooks/useModalHistory';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
@@ -675,6 +676,13 @@ function MarketplaceContent() {
 
   useBodyScrollLock(!!selectedListing || showSort || showAISuggestions || showMyListings);
 
+  // ── History integration for iOS back gesture / Android back button ──
+  const closeListingWithHistory = useModalHistory(
+    !!selectedListing,
+    () => setSelectedListing(null),
+    'marketplace-detail'
+  );
+
   // Handle ?tab=my from sell flow redirect
   useEffect(() => {
     if (searchParams.get('tab') === 'my') {
@@ -1070,7 +1078,7 @@ function MarketplaceContent() {
 
       {/* ── Listing Detail Modal ── */}
       {selectedListing && (
-        <ListingDetail listing={selectedListing} onClose={() => setSelectedListing(null)} />
+        <ListingDetail listing={selectedListing} onClose={closeListingWithHistory} />
       )}
     </AppShell>
   );

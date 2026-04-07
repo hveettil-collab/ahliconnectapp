@@ -47,6 +47,9 @@ export default function PWABackNavigator() {
 
     // Push a dummy state so we can intercept the first back press
     const handlePopState = (e: PopStateEvent) => {
+      // If a modal pushed its own history state, let the modal handle it
+      if (e.state?.modalKey) return;
+
       // On a main page in standalone mode → don't let the app close
       if (MAIN_PAGES.includes(pathname)) {
         // Re-push state to prevent app from closing

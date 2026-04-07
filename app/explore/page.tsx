@@ -1,7 +1,8 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+import { useModalHistory } from '@/hooks/useModalHistory';
 import AppShell from '@/components/layout/AppShell';
 import Avatar from '@/components/ui/Avatar';
 import { SERVICES, COLLEAGUES, COMPANIES } from '@/lib/mockData';
@@ -943,6 +944,12 @@ export default function ExplorePage() {
 
   useBodyScrollLock(!!selectedEvent || !!selectedBento || !!selectedItem || showMap || !!showRegistration);
 
+  // History integration for iOS/Android back button on detail modals
+  const closeEvent = useModalHistory(!!selectedEvent, () => setSelectedEvent(null), 'explore-event');
+  const closeBento = useModalHistory(!!selectedBento, () => setSelectedBento(null), 'explore-bento');
+  const closeItem = useModalHistory(!!selectedItem, () => setSelectedItem(null), 'explore-item');
+  const closeRegistration = useModalHistory(!!showRegistration, () => setShowRegistration(null), 'explore-reg');
+
   if (!user) return null;
 
   const hero = FEATURED_HEROES[heroIdx];
@@ -1584,7 +1591,7 @@ export default function ExplorePage() {
 
       </div>
 
-      {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} onRegister={() => {
+      {selectedEvent && <EventDetailModal event={selectedEvent} onClose={closeEvent} onRegister={() => {
         const evtType = selectedEvent.category === 'Hackathon' ? 'hackathon' : selectedEvent.category === 'Wellness' ? 'wellness' : selectedEvent.category === 'Training' ? 'course' : 'event';
         setShowRegistration({
           title: selectedEvent.title,
@@ -1597,7 +1604,7 @@ export default function ExplorePage() {
         });
         setSelectedEvent(null);
       }} />}
-      {selectedBento && <BentoDetailModal item={selectedBento} onClose={() => setSelectedBento(null)} onRegister={() => {
+      {selectedBento && <BentoDetailModal item={selectedBento} onClose={closeBento} onRegister={() => {
         setShowRegistration({
           title: selectedBento.detail.title,
           subtitle: selectedBento.detail.subtitle,
@@ -1609,7 +1616,7 @@ export default function ExplorePage() {
         });
         setSelectedBento(null);
       }} />}
-      {selectedItem && <ItemDetailModal item={selectedItem} onClose={() => setSelectedItem(null)} onRegister={() => {
+      {selectedItem && <ItemDetailModal item={selectedItem} onClose={closeItem} onRegister={() => {
         setShowRegistration({
           title: selectedItem.title,
           subtitle: selectedItem.desc,
@@ -1621,7 +1628,7 @@ export default function ExplorePage() {
         });
         setSelectedItem(null);
       }} />}
-      {showRegistration && user && <RegistrationModal info={showRegistration} user={{ name: user.name, email: user.email, company: COMPANIES.find(c => c.id === user.companyId)?.name || '', title: user.title, department: user.department, employeeId: user.employeeId }} onClose={() => setShowRegistration(null)} />}
+      {showRegistration && user && <RegistrationModal info={showRegistration} user={{ name: user.name, email: user.email, company: COMPANIES.find(c => c.id === user.companyId)?.name || '', title: user.title, department: user.department, employeeId: user.employeeId }} onClose={closeRegistration} />}
     </AppShell>
   );
 }

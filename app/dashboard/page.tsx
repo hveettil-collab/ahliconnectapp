@@ -3,6 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
+import { useModalHistory } from '@/hooks/useModalHistory';
 import AppShell from '@/components/layout/AppShell';
 import {
   IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, OFFERS, CORPORATE_NEWS,
@@ -323,6 +324,9 @@ export default function DashboardPage() {
   const [carouselRegistered, setCarouselRegistered] = useState(false);
 
   useBodyScrollLock(!!showStockAction || showEventDetail !== null || showDesktopModal || !!showCarouselDetail);
+
+  // History integration for iOS/Android back on modals
+  const closeCarouselDetail = useModalHistory(!!showCarouselDetail, () => { setShowCarouselDetail(null); setCarouselRegistered(false); }, 'dashboard-carousel');
 
   const hoursSaved = useCountUp(347, 2000, 600);
   const employees = useCountUp(45, 2000, 800);
@@ -925,7 +929,7 @@ export default function DashboardPage() {
                 <div className="relative h-52 overflow-hidden rounded-t-[28px]">
                   <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&h=500&fit=crop" alt="Sports Day" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <button onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <button onClick={closeCarouselDetail} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
                   </button>
                   <div className="absolute top-14 left-4 flex items-center gap-2">
@@ -1010,7 +1014,7 @@ export default function DashboardPage() {
                 <div className="relative h-48 overflow-hidden rounded-t-[28px]">
                   <img src={topOffers[0]?.image || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop'} alt="Offers" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <button onClick={closeCarouselDetail} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
                   </button>
                   <div className="absolute bottom-4 left-4 right-4">
@@ -1034,7 +1038,7 @@ export default function DashboardPage() {
                     </div>
                   ))}
                   <div className="space-y-2 pt-2 pb-4">
-                    <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
+                    <Link href="/offers" onClick={closeCarouselDetail} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
                       View All {relevantOffers.length} Offers <ArrowRight size={15} />
                     </Link>
                   </div>
@@ -1048,7 +1052,7 @@ export default function DashboardPage() {
                 <div className="relative h-52 overflow-hidden rounded-t-[28px]">
                   <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop" alt="Dining" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                  <button onClick={() => setShowCarouselDetail(null)} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
+                  <button onClick={closeCarouselDetail} className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center z-10 active:scale-95 transition-all" style={{ border: '1px solid rgba(255,255,255,0.2)' }}>
                     <ArrowLeft size={18} className="text-white" />
                   </button>
                   <div className="absolute bottom-4 left-4 right-4">
@@ -1089,7 +1093,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="space-y-2 pb-4">
-                    <Link href="/offers" onClick={() => setShowCarouselDetail(null)} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
+                    <Link href="/offers" onClick={closeCarouselDetail} className="w-full flex items-center justify-center gap-2 py-3 rounded-[14px] text-sm font-bold text-white no-underline transition-all active:scale-[0.98] bg-[#FFBD4C]">
                       Browse Dining Offers <ArrowRight size={15} />
                     </Link>
                   </div>
