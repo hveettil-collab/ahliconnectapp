@@ -596,7 +596,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart Leave',
-              lottie: '/lottie-auto-leave.lottie',
+              lottie: '/lottie-auto-leave2.lottie',
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
