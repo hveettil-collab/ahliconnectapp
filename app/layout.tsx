@@ -33,7 +33,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content" />
         <meta name="theme-color" content="#9D63F6" />
+        <meta name="theme-color" content="#9D63F6" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#1a1a2e" media="(prefers-color-scheme: dark)" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Ahli Connect" />
+        <meta name="application-name" content="Ahli Connect" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-TileColor" content="#9D63F6" />
+        <meta name="msapplication-tap-highlight" content="no" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
       </head>
       <body className="overflow-x-hidden w-full max-w-full">
         <ThemeProvider>

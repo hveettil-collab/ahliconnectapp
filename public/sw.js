@@ -1,4 +1,6 @@
-const CACHE_NAME = 'ahli-connect-v1';
+const CACHE_NAME = 'ahli-connect-v2';
+const OFFLINE_URL = '/offline';
+
 const STATIC_ASSETS = [
   '/',
   '/dashboard',
@@ -9,7 +11,7 @@ const STATIC_ASSETS = [
   '/logo-login.svg',
 ];
 
-// Install — cache static assets
+// Install — cache static assets + offline page
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -39,6 +41,12 @@ self.addEventListener('fetch', (event) => {
   // Skip chrome-extension and other non-http requests
   if (!event.request.url.startsWith('http')) return;
 
+  // Skip Next.js internals and API routes
+  const url = new URL(event.request.url);
+  if (url.pathname.startsWith('/_next/') || url.pathname.startsWith('/api/')) {
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
@@ -55,7 +63,7 @@ self.addEventListener('fetch', (event) => {
         // Offline — serve from cache
         return caches.match(event.request).then((cached) => {
           if (cached) return cached;
-          // For navigation requests, return cached home page
+          // For navigation requests, return cached dashboard
           if (event.request.mode === 'navigate') {
             return caches.match('/dashboard');
           }
