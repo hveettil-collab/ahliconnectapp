@@ -507,10 +507,10 @@ export default function DashboardPage() {
               transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s',
             }}>
             <img
-              src="/logos/ihc.svg"
+              src="/ihc-logo.png"
               alt="IHC"
               className="block"
-              style={{ width: 'clamp(60px, 16vw, 80px)', height: 'auto' }}
+              style={{ width: 'clamp(65px, 18vw, 90px)', height: 'auto' }}
             />
             <p className="text-[8px] text-white/70 font-medium tracking-wide mt-1 text-center whitespace-nowrap">
               Disciplined. Resilient. Together
