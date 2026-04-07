@@ -570,7 +570,7 @@ export default function DashboardPage() {
       </div>
 
       {/* ═══════════════════════════════════════
-          SMART AUTOMATIONS — Scrollable 9-card row
+          SMART AUTOMATIONS — Scrollable 6-card row
           ═══════════════════════════════════════ */}
       <div className="-mt-1 pb-1">
         <div className="flex items-center justify-between mb-3 px-4">
@@ -587,7 +587,7 @@ export default function DashboardPage() {
           {[
             {
               title: 'Salary Certificate',
-              lottie: '/lottie-salary-v3.lottie',
+              lottie: '/lottie-auto-salary.lottie',
               gradient: 'linear-gradient(135deg, #F3EEFF 0%, #E8DBFE 50%, #D4BFFC 100%)',
               stat: '<30s',
               statLabel: 'avg. time',
@@ -596,7 +596,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Smart Leave',
-              lottie: '/lottie-leave-v4.lottie',
+              lottie: '/lottie-auto-leave.lottie',
               gradient: 'linear-gradient(135deg, #E7FEF8 0%, #C6F7E9 50%, #A7F0DA 100%)',
               stat: '1-tap',
               statLabel: 'approval',
@@ -605,7 +605,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Expense Claim',
-              lottie: '/lottie-expense-v2.lottie',
+              lottie: '/lottie-auto-expense.lottie',
               gradient: 'linear-gradient(135deg, #FFF8EB 0%, #FFEFC7 50%, #FFE4A0 100%)',
               stat: '98%',
               statLabel: 'accuracy',
@@ -614,7 +614,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Insurance',
-              lottie: '/lottie-salary-v3.lottie',
+              lottie: '/lottie-auto-insurance.lottie',
               gradient: 'linear-gradient(135deg, #EDFCFA 0%, #CCFBF1 50%, #99F6E4 100%)',
               stat: '15%',
               statLabel: 'discount',
@@ -622,35 +622,8 @@ export default function DashboardPage() {
               href: '/services?prompt=I+need+insurance',
             },
             {
-              title: 'Book Flight',
-              lottie: '/lottie-leave-v4.lottie',
-              gradient: 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 50%, #BFDBFE 100%)',
-              stat: '50+',
-              statLabel: 'airlines',
-              accent: '#3B82F6',
-              href: '/services?prompt=I+want+to+book+a+flight',
-            },
-            {
-              title: 'Book Ride',
-              lottie: '/lottie-expense-v2.lottie',
-              gradient: 'linear-gradient(135deg, #F0EAFF 0%, #E4D5FE 50%, #D4BFFC 100%)',
-              stat: '5 min',
-              statLabel: 'avg. pickup',
-              accent: '#7C3AED',
-              href: '/services?prompt=I+need+a+ride',
-            },
-            {
-              title: 'Order Food',
-              lottie: '/lottie-salary-v3.lottie',
-              gradient: 'linear-gradient(135deg, #FEF2F2 0%, #FECACA 50%, #FCA5A5 100%)',
-              stat: '200+',
-              statLabel: 'restaurants',
-              accent: '#EF4444',
-              href: '/services?prompt=I+want+to+order+food',
-            },
-            {
               title: 'Sell Item',
-              lottie: '/lottie-sell-v2.lottie',
+              lottie: '/lottie-auto-sell.lottie',
               gradient: 'linear-gradient(135deg, #FFF4EC 0%, #FFE4CC 50%, #FFD4AA 100%)',
               stat: '45K+',
               statLabel: 'buyers',
@@ -659,7 +632,7 @@ export default function DashboardPage() {
             },
             {
               title: 'Plan Vacation',
-              lottie: '/lottie-leave-v4.lottie',
+              lottie: '/lottie-auto-vacation.lottie',
               gradient: 'linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 50%, #A5F3FC 100%)',
               stat: '30+',
               statLabel: 'destinations',
