@@ -2148,8 +2148,8 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
     };
   }
 
-  /* ── Marketplace — show actual listings ── */
-  if (t.includes('marketplace') || t.includes('buy') || t.includes('listing') || t.includes('browse')) {
+  /* ── Marketplace — show actual listings (but not if user wants to sell) ── */
+  if ((t.includes('marketplace') || t.includes('buy') || t.includes('listing') || t.includes('browse')) && !t.includes('sell') && !t.includes('post') && !t.includes('list my') && !t.includes('list a')) {
     const listingSummary = MARKETPLACE_LISTINGS.slice(0, 3).map(l => `• **${l.title}** — ${l.price}`).join('\n');
     return {
       content: `The IHC Marketplace connects **45,000+ employees**!\n\n**Trending Listings:**\n${listingSummary}\n\nThere are **${MARKETPLACE_LISTINGS.length}** items available right now:`,
@@ -2159,7 +2159,7 @@ function generateAIResponse(text: string, userName: string, companyId: string, w
           subtitle: `${l.price} · ${l.condition}`, color: '#FFBD4C', image: l.image, link: '/marketplace',
         })),
         { type: 'action' as const, icon: ShoppingBag, title: 'Open Marketplace', subtitle: `${MARKETPLACE_LISTINGS.length} items from verified employees`, color: '#FFBD4C', link: '/marketplace' },
-        { type: 'action' as const, icon: Star, title: 'Sell Something', subtitle: 'AI writes your listing from details', color: '#40C4AA', action: 'I want to sell something on the marketplace' },
+        { type: 'action' as const, icon: Star, title: 'Sell Something', subtitle: 'AI writes your listing from details', color: '#40C4AA', action: 'I want to sell something' },
       ]
     };
   }
