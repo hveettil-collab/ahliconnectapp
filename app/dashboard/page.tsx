@@ -916,7 +916,7 @@ export default function DashboardPage() {
           ═══════════════════════════════════════ */}
       {showCarouselDetail && (
         <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => { setShowCarouselDetail(null); setCarouselRegistered(false); }} />
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div className="relative w-full max-w-lg bg-white rounded-t-[28px] max-h-[92vh] overflow-y-auto" style={{ animation: 'slideUp 0.3s ease-out' }}>
 
             {/* ── Sports Day Detail ── */}
