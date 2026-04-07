@@ -8,6 +8,7 @@ import {
   Hash, Calendar, Fuel, Gauge, CircleDollarSign, Lock, Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 /* ═══════════════════════════════════════════
    SHORY INSURANCE — In-app purchase flow
@@ -88,6 +89,7 @@ type Phase = 'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processin
 
 export default function InsurancePage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>('plate');
   const [plateNumber, setPlateNumber] = useState('');
   const [plateCity, setPlateCity] = useState('Abu Dhabi');
@@ -128,9 +130,9 @@ export default function InsurancePage() {
 
       {/* Header */}
       <div className="flex items-center gap-3 px-4 py-3.5 sticky top-0 z-10 bg-white/90 border-b border-[#DFE1E6]" style={{ backdropFilter: 'blur(12px)' }}>
-        <Link href="/explore" className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
+        <button onClick={() => router.back()} className="p-1.5 rounded-lg text-[#666D80] hover:text-[#15161E] hover:bg-[#F8F9FB] transition-all">
           <ArrowLeft size={20} />
-        </Link>
+        </button>
         <div className="flex items-center gap-2.5 flex-1">
           <div className="w-8 h-8 rounded-full bg-[#7C3AED] flex items-center justify-center shadow-md">
             <Shield size={14} className="text-white" />

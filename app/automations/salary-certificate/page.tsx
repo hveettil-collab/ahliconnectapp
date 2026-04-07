@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -40,6 +41,7 @@ const STEP_STYLES = `
 `;
 
 export default function SalaryCertificatePage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [purpose, setPurpose] = useState('Bank Loan');
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
@@ -175,9 +177,9 @@ export default function SalaryCertificatePage() {
       <div className="space-y-5 max-w-lg mx-auto">
 
         {/* Back link */}
-        <Link href="/automations" className="flex items-center gap-1.5 text-[13px] text-[#666D80] font-medium hover:text-[#9D63F6] transition-colors">
+        <button onClick={() => router.back()} className="flex items-center gap-1.5 text-[13px] text-[#666D80] font-medium hover:text-[#9D63F6] transition-colors">
           <ArrowLeft size={15} /> Back to Automations
-        </Link>
+        </button>
 
         {/* Header card */}
         <div className="rounded-[18px] p-4 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #9D63F6 0%, #2D5AA0 60%, #9D63F6 100%)' }}>
