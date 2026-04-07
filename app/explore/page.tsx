@@ -885,9 +885,7 @@ const MAP_FILTER_LABELS: Record<string, { label: string; icon: typeof MapPin; co
 function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSelectItem: (data: MapLocation['modalData']) => void }) {
   const [selectedPin, setSelectedPin] = useState<MapLocation | null>(null);
   const [filter, setFilter] = useState('all');
-  const [expanded, setExpanded] = useState(false);
   const filtered = filter === 'all' ? locations : locations.filter(l => l.type === filter);
-  const mapHeight = expanded ? 520 : 340;
 
   /* Compute bounding box center & zoom for Google Maps embed */
   const centerLat = 24.46;
@@ -907,7 +905,7 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
   }, []);
 
   return (
-    <div className="relative rounded-[20px] overflow-hidden border border-[#DFE1E6] transition-all duration-300" style={{ height: mapHeight }}>
+    <div className="relative overflow-hidden w-full h-full">
       {/* Google Maps iframe background */}
       <iframe
         src={mapEmbedUrl}
@@ -931,12 +929,6 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
             <span className="text-[11px] font-bold text-[#15161E]">UAE</span>
             <span className="text-[9px] text-[#A4ABB8] ml-1">{filtered.length} places</span>
           </div>
-          {/* Expand / collapse */}
-          <button onClick={() => setExpanded(!expanded)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-[10px] text-[10px] font-semibold transition-all active:scale-95"
-            style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', color: '#666D80', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.6)' }}>
-            {expanded ? 'Collapse' : 'Expand'}
-          </button>
         </div>
 
         {/* Filter pills */}
@@ -1718,29 +1710,7 @@ export default function ExplorePage() {
             );
           })}
 
-          {/* Map toggle */}
-          <button
-            onClick={() => setShowMap(!showMap)}
-            className="shrink-0 flex items-center gap-1.5 px-3.5 py-2 rounded-full text-[12px] font-semibold transition-all active:scale-95"
-            style={{
-              background: showMap ? '#15161E' : 'rgba(255,255,255,0.85)',
-              color: showMap ? '#FFFFFF' : '#666D80',
-              border: showMap ? 'none' : '1px solid #DFE1E6',
-            }}
-          >
-            <MapPin size={13} strokeWidth={showMap ? 2.2 : 1.6} />
-            Map
-          </button>
         </div>
-
-        {/* ═══ MAP VIEW ═══ */}
-        {showMap && (
-          <section className="card-rise">
-            <MapView locations={MAP_LOCATIONS} onSelectItem={(data) => {
-              if (data) setSelectedItem(data);
-            }} />
-          </section>
-        )}
 
         {/* ═══ TAB CONTENT ═══ */}
         {renderTabContent()}
@@ -1785,6 +1755,60 @@ export default function ExplorePage() {
         setSelectedItem(null);
       }} />}
       {showRegistration && user && <RegistrationModal info={showRegistration} user={{ name: user.name, email: user.email, company: COMPANIES.find(c => c.id === user.companyId)?.name || '', title: user.title, department: user.department, employeeId: user.employeeId }} onClose={closeRegistration} />}
+
+      {/* ═══ FLOATING MAP BUTTON — above bottom nav ═══ */}
+      {!showMap && (
+        <button
+          onClick={() => setShowMap(true)}
+          className="fixed z-40 flex items-center gap-2 px-4 py-2.5 rounded-full shadow-xl active:scale-95 transition-all"
+          style={{
+            bottom: 90,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: '#15161E',
+            color: '#FFFFFF',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.08)',
+          }}
+        >
+          <MapPin size={15} strokeWidth={2.5} />
+          <span className="text-[13px] font-bold">Map</span>
+          <span className="text-[10px] font-medium opacity-60">{MAP_LOCATIONS.length}</span>
+        </button>
+      )}
+
+      {/* ═══ FULL-SCREEN MAP OVERLAY ═══ */}
+      {showMap && (
+        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#F7F8FA' }}>
+          {/* Header bar */}
+          <div className="shrink-0 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3"
+            style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(223,225,230,0.5)' }}>
+            <div className="flex items-center gap-2">
+              <MapPin size={18} className="text-[#9D63F6]" strokeWidth={2.5} />
+              <div>
+                <h2 className="text-[16px] font-bold text-[#15161E]">Explore Map</h2>
+                <p className="text-[10px] text-[#A4ABB8]">{MAP_LOCATIONS.length} locations across UAE</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowMap(false)}
+              className="w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-all"
+              style={{ background: '#F1F2F4' }}
+            >
+              <X size={18} className="text-[#666D80]" strokeWidth={2} />
+            </button>
+          </div>
+
+          {/* Full-screen map */}
+          <div className="flex-1 relative">
+            <MapView locations={MAP_LOCATIONS} onSelectItem={(data) => {
+              if (data) {
+                setShowMap(false);
+                setTimeout(() => setSelectedItem(data), 200);
+              }
+            }} />
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
