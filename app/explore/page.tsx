@@ -776,20 +776,60 @@ function SectionHeader({ title, count, href }: { title: string; count?: number; 
    ═══════════════════════════════════════════ */
 
 interface MapLocation {
-  id: string; name: string; type: 'event' | 'offer' | 'wellness' | 'office';
+  id: string; name: string; type: 'event' | 'offer' | 'wellness' | 'sports' | 'learning';
   lat: number; lng: number; address: string; color: string;
   icon: typeof MapPin; detail: string;
+  image?: string;
+  modalData?: {
+    title: string; desc: string; image: string; color: string;
+    icon: typeof MapPin; category: string;
+    highlights: { label: string; value: string }[];
+    cta: string;
+  };
 }
 
 const MAP_LOCATIONS: MapLocation[] = [
-  { id: 'ml1', name: 'IHC Tower', type: 'event', lat: 24.4539, lng: 54.3773, address: 'Al Maryah Island, Abu Dhabi', color: '#7C3AED', icon: Building2, detail: 'Hackathon · Apr 18–20' },
-  { id: 'ml2', name: 'PureHealth HQ', type: 'wellness', lat: 24.4672, lng: 54.3650, address: 'Al Reem Island, Abu Dhabi', color: '#059669', icon: Heart, detail: 'Wellness Week · Apr 25–29' },
-  { id: 'ml3', name: 'Yas Sports Complex', type: 'event', lat: 24.4899, lng: 54.6062, address: 'Yas Island, Abu Dhabi', color: '#DC2626', icon: Trophy, detail: 'Sports Day · May 22' },
-  { id: 'ml4', name: 'Palms Sports', type: 'wellness', lat: 24.4457, lng: 54.4104, address: 'Khalifa City, Abu Dhabi', color: '#EA580C', icon: Dumbbell, detail: 'Gym · AED 150/mo' },
-  { id: 'ml5', name: 'Zuma Restaurant', type: 'offer', lat: 24.4530, lng: 54.3290, address: 'The Galleria, Al Maryah Island', color: '#FFBD4C', icon: UtensilsCrossed, detail: '25% dining discount' },
-  { id: 'ml6', name: 'Yas Waterworld', type: 'offer', lat: 24.4881, lng: 54.6071, address: 'Yas Island, Abu Dhabi', color: '#9D63F6', icon: Palmtree, detail: '40% off entry' },
-  { id: 'ml7', name: '%Arabica Café', type: 'offer', lat: 24.4535, lng: 54.3810, address: 'Al Maryah Island, Abu Dhabi', color: '#92400E', icon: Coffee, detail: 'Free daily coffee' },
-  { id: 'ml8', name: 'Cleveland Clinic', type: 'wellness', lat: 24.4495, lng: 54.3947, address: 'Al Maryah Island, Abu Dhabi', color: '#059669', icon: Shield, detail: 'Free health screening' },
+  /* ── Events ── */
+  { id: 'ml1', name: 'IHC Innovation Hackathon', type: 'event', lat: 24.4539, lng: 54.3773, address: 'IHC Tower, Al Maryah Island', color: '#7C3AED', icon: Trophy, detail: 'Hackathon · Apr 18–20', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&h=300&fit=crop',
+    modalData: { title: 'IHC Innovation Hackathon', desc: '48-hour cross-company AI hackathon — AED 50K prizes', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&h=400&fit=crop', color: '#7C3AED', icon: Trophy, category: 'Event', highlights: [{ label: 'Date', value: 'Apr 18–20' }, { label: 'Spots Left', value: '23' }, { label: 'Prizes', value: 'AED 50K' }, { label: 'Teams', value: '120 max' }], cta: 'Register Now' } },
+  { id: 'ml2', name: 'Employee Wellness Week', type: 'event', lat: 24.4672, lng: 54.3650, address: 'PureHealth HQ, Al Reem Island', color: '#059669', icon: Heart, detail: 'Wellness Week · Apr 25–29', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&h=300&fit=crop',
+    modalData: { title: 'Employee Wellness Week', desc: 'Free health screenings, yoga & nutrition talks', image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=400&fit=crop', color: '#059669', icon: Heart, category: 'Wellness Event', highlights: [{ label: 'Date', value: 'Apr 25–29' }, { label: 'Spots Left', value: '187' }, { label: 'Cost', value: 'Free' }, { label: 'Open To', value: 'All employees' }], cta: 'Register Now' } },
+  { id: 'ml3', name: 'AI & Automation Masterclass', type: 'event', lat: 24.4480, lng: 54.3580, address: 'Virtual (MS Teams)', color: '#9D63F6', icon: Monitor, detail: 'Training · May 5', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
+    modalData: { title: 'AI & Automation Masterclass', desc: 'Hands-on workshop on using AI tools at work', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop', color: '#9D63F6', icon: Monitor, category: 'Training', highlights: [{ label: 'Date', value: 'May 5' }, { label: 'Duration', value: '5 hours' }, { label: 'Format', value: 'Virtual' }, { label: 'Spots', value: '200' }], cta: 'Register Now' } },
+
+  /* ── Offers ── */
+  { id: 'ml4', name: 'Yas Island 40% Off', type: 'offer', lat: 24.4881, lng: 54.6071, address: 'Yas Island, Abu Dhabi', color: '#9D63F6', icon: Palmtree, detail: '40% off entry', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=300&fit=crop',
+    modalData: { title: 'Yas Island 40% Off', desc: 'Ferrari World, Waterworld & Warner Bros.', image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop', color: '#9D63F6', icon: Palmtree, category: 'Entertainment', highlights: [{ label: 'Discount', value: '40%' }, { label: 'Parks', value: '3 parks' }, { label: 'Guests', value: 'Up to 3' }, { label: 'Valid', value: 'Until Dec 2026' }], cta: 'Redeem Offer' } },
+  { id: 'ml5', name: 'Zuma Restaurant', type: 'offer', lat: 24.4530, lng: 54.3290, address: 'The Galleria, Al Maryah Island', color: '#FFBD4C', icon: UtensilsCrossed, detail: '25% dining discount', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop',
+    modalData: { title: 'Dining at 40+ Restaurants', desc: 'Zuma, Nobu, La Petite Maison & more', image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop', color: '#FFBD4C', icon: UtensilsCrossed, category: 'Food & Dining', highlights: [{ label: 'Discount', value: '25%' }, { label: 'Restaurants', value: '40+' }, { label: 'Valid', value: 'Until Dec 2026' }, { label: 'Redeemed', value: '8.2K' }], cta: 'View Offer' } },
+  { id: 'ml6', name: '%Arabica Café', type: 'offer', lat: 24.4535, lng: 54.3810, address: 'Al Maryah Island, Abu Dhabi', color: '#92400E', icon: Coffee, detail: 'Free daily coffee', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop',
+    modalData: { title: 'Free Daily Coffee', desc: 'Starbucks, %Arabica, Tim Hortons', image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=400&fit=crop', color: '#92400E', icon: Coffee, category: 'Café', highlights: [{ label: 'Discount', value: 'Free' }, { label: 'Cafés', value: '25+' }, { label: 'Value', value: 'AED 600/yr' }, { label: 'Method', value: 'QR scan' }], cta: 'View Offer' } },
+  { id: 'ml7', name: 'Etihad Staff Fares', type: 'offer', lat: 24.4430, lng: 54.6510, address: 'Abu Dhabi International Airport', color: '#7C3AED', icon: Plane, detail: '50% off flights', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=400&h=300&fit=crop',
+    modalData: { title: 'Etihad Staff Fares', desc: 'Up to 50% off on all Etihad routes', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=600&h=400&fit=crop', color: '#7C3AED', icon: Plane, category: 'Travel', highlights: [{ label: 'Discount', value: '50%' }, { label: 'Routes', value: 'All' }, { label: 'Valid', value: 'Until Jun 2026' }, { label: 'Redeemed', value: '3.1K' }], cta: 'View Offer' } },
+  { id: 'ml8', name: 'Sharaf DG Electronics', type: 'offer', lat: 24.4260, lng: 54.4750, address: 'Yas Mall, Abu Dhabi', color: '#DC2626', icon: Monitor, detail: '20% off electronics', image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=400&h=300&fit=crop',
+    modalData: { title: 'Electronics Discount', desc: 'Sharaf DG — exclusive corporate pricing', image: 'https://images.unsplash.com/photo-1468495244123-6c6c332eeece?w=600&h=400&fit=crop', color: '#DC2626', icon: Monitor, category: 'Shopping', highlights: [{ label: 'Discount', value: '20%' }, { label: 'Store', value: 'Sharaf DG' }, { label: 'Valid', value: 'Until Sep 2026' }, { label: 'Redeemed', value: '4.7K' }], cta: 'View Offer' } },
+
+  /* ── Wellness ── */
+  { id: 'ml9', name: 'Cleveland Clinic', type: 'wellness', lat: 24.4495, lng: 54.3947, address: 'Al Maryah Island, Abu Dhabi', color: '#059669', icon: Shield, detail: 'Free health screening', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=400&h=300&fit=crop',
+    modalData: { title: 'Free Health Screening', desc: 'Comprehensive health check at Cleveland Clinic Abu Dhabi', image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&h=400&fit=crop', color: '#059669', icon: Shield, category: 'Wellness', highlights: [{ label: 'Cost', value: 'Free' }, { label: 'Includes', value: 'Full checkup' }, { label: 'Location', value: 'Cleveland Clinic' }, { label: 'Booking', value: 'Anytime' }], cta: 'Book Now' } },
+  { id: 'ml10', name: 'Nutrition Consultation', type: 'wellness', lat: 24.4600, lng: 54.3500, address: 'PureHealth Clinic, Al Reem Island', color: '#40C4AA', icon: Heart, detail: 'Free dietitian session', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=300&fit=crop',
+    modalData: { title: 'Nutrition Consultation', desc: 'Free monthly session with certified dietitian', image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop', color: '#40C4AA', icon: Heart, category: 'Wellness', highlights: [{ label: 'Cost', value: 'Free' }, { label: 'Frequency', value: 'Monthly' }, { label: 'Location', value: 'PureHealth clinics' }, { label: 'Duration', value: '45 min' }], cta: 'Book Now' } },
+  { id: 'ml11', name: 'Yoga & Meditation', type: 'wellness', lat: 24.4550, lng: 54.3700, address: 'IHC Tower, Level 3', color: '#9D63F6', icon: Sparkles, detail: 'Weekly · Every Wednesday', image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=400&h=300&fit=crop',
+    modalData: { title: 'Yoga & Meditation', desc: 'Weekly sessions at all major offices', image: 'https://images.unsplash.com/photo-1545389336-cf090694435e?w=600&h=400&fit=crop', color: '#9D63F6', icon: Sparkles, category: 'Wellness', highlights: [{ label: 'Schedule', value: 'Every Wed' }, { label: 'Cost', value: 'Free' }, { label: 'Capacity', value: '30/class' }, { label: 'Location', value: 'All offices' }], cta: 'Join Session' } },
+
+  /* ── Sports ── */
+  { id: 'ml12', name: 'Yas Sports Complex', type: 'sports', lat: 24.4899, lng: 54.6062, address: 'Yas Island, Abu Dhabi', color: '#DC2626', icon: Trophy, detail: 'Sports Day · May 22', image: 'https://images.unsplash.com/photo-1461896836934-bd45ba8b2d36?w=400&h=300&fit=crop',
+    modalData: { title: 'Cross-Company Sports Day', desc: 'Annual inter-subsidiary sports tournament at Yas Island', image: 'https://images.unsplash.com/photo-1461896836934-bd45ba8b2d36?w=600&h=400&fit=crop', color: '#DC2626', icon: Trophy, category: 'Sports', highlights: [{ label: 'Date', value: 'May 22' }, { label: 'Spots Left', value: '88' }, { label: 'Teams', value: '300' }, { label: 'Location', value: 'Yas Island' }], cta: 'Register Team' } },
+  { id: 'ml13', name: 'Palms Sports Gym', type: 'sports', lat: 24.4457, lng: 54.4104, address: 'Khalifa City, Abu Dhabi', color: '#EA580C', icon: Dumbbell, detail: 'Gym · AED 150/mo', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
+    modalData: { title: 'Palms Sports Membership', desc: '8 locations — Corporate rate 60% off', image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&h=400&fit=crop', color: '#EA580C', icon: Dumbbell, category: 'Fitness', highlights: [{ label: 'Discount', value: '60% off' }, { label: 'Price', value: 'AED 150/mo' }, { label: 'Locations', value: '8 gyms' }, { label: 'Access', value: 'Full' }], cta: 'Activate Now' } },
+  { id: 'ml14', name: 'Padel Cup Venue', type: 'sports', lat: 24.4700, lng: 54.3850, address: 'Zayed Sports City, Abu Dhabi', color: '#FFBD4C', icon: Trophy, detail: 'Padel Cup · Apr 30', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400&h=300&fit=crop',
+    modalData: { title: 'Padel Cup', desc: 'Doubles tournament — registration closing soon', image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&h=400&fit=crop', color: '#FFBD4C', icon: Trophy, category: 'Sports', highlights: [{ label: 'Format', value: 'Doubles' }, { label: 'Deadline', value: 'Apr 30' }, { label: 'Type', value: 'Tournament' }, { label: 'Status', value: 'Closing soon' }], cta: 'Register Now' } },
+
+  /* ── Learning ── */
+  { id: 'ml15', name: 'IHC Academy', type: 'learning', lat: 24.4560, lng: 54.3740, address: 'IHC Tower, Level 12', color: '#9D63F6', icon: GraduationCap, detail: '2,000+ courses', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=400&h=300&fit=crop',
+    modalData: { title: 'IHC Academy', desc: 'AED 15,000 annual education budget — 2,000+ courses', image: 'https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=600&h=400&fit=crop', color: '#9D63F6', icon: GraduationCap, category: 'Learning', highlights: [{ label: 'Courses', value: '2,000+' }, { label: 'Budget', value: 'AED 15K/yr' }, { label: 'Certificates', value: 'Included' }, { label: 'Format', value: 'Online + IRL' }], cta: 'Browse Courses' } },
+  { id: 'ml16', name: 'Leadership Workshop', type: 'learning', lat: 24.4520, lng: 54.3900, address: 'Abu Dhabi Business Hub', color: '#40C4AA', icon: Star, detail: 'Leadership · 8hrs', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop',
+    modalData: { title: 'Leadership Essentials', desc: 'LinkedIn Learning — comprehensive leadership program', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop', color: '#40C4AA', icon: Star, category: 'Learning', highlights: [{ label: 'Duration', value: '8 hours' }, { label: 'Level', value: 'All Levels' }, { label: 'Provider', value: 'LinkedIn Learning' }, { label: 'Budget', value: 'AED 15K/yr' }], cta: 'Enroll Now' } },
 ];
 
 /* ═══════════════════════════════════════════
@@ -833,74 +873,125 @@ const OFFERS_DATA = [
    MAP VIEW COMPONENT
    ═══════════════════════════════════════════ */
 
-function MapView({ locations }: { locations: MapLocation[] }) {
+const MAP_FILTER_LABELS: Record<string, { label: string; icon: typeof MapPin; color: string }> = {
+  all: { label: 'All', icon: MapPin, color: '#9D63F6' },
+  event: { label: 'Events', icon: Calendar, color: '#7C3AED' },
+  offer: { label: 'Offers', icon: Gift, color: '#FFBD4C' },
+  wellness: { label: 'Wellness', icon: Heart, color: '#059669' },
+  sports: { label: 'Sports', icon: Trophy, color: '#DC2626' },
+  learning: { label: 'Learning', icon: GraduationCap, color: '#9D63F6' },
+};
+
+function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSelectItem: (data: MapLocation['modalData']) => void }) {
   const [selectedPin, setSelectedPin] = useState<MapLocation | null>(null);
   const [filter, setFilter] = useState('all');
+  const [expanded, setExpanded] = useState(false);
   const filtered = filter === 'all' ? locations : locations.filter(l => l.type === filter);
+  const mapHeight = expanded ? 520 : 340;
 
-  /* Abu Dhabi-centered static map, pins overlaid */
+  /* Compute bounding box center & zoom for Google Maps embed */
+  const centerLat = 24.46;
+  const centerLng = 54.45;
+
+  /* Google Maps embed URL — UAE centered, no API key needed for embed mode */
+  const mapEmbedUrl = `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&center=${centerLat},${centerLng}&zoom=11&maptype=roadmap`;
+
+  /* Project lat/lng to pixel positions on the map */
+  const projectToMap = useCallback((lat: number, lng: number) => {
+    /* These bounds cover the Abu Dhabi ↔ Yas Island area */
+    const minLat = 24.40, maxLat = 24.52;
+    const minLng = 54.28, maxLng = 54.68;
+    const x = ((lng - minLng) / (maxLng - minLng)) * 100;
+    const y = ((maxLat - lat) / (maxLat - minLat)) * 100;
+    return { x: Math.max(5, Math.min(95, x)), y: Math.max(8, Math.min(88, y)) };
+  }, []);
+
   return (
-    <div className="relative rounded-[20px] overflow-hidden border border-[#DFE1E6]" style={{ height: 280 }}>
-      {/* Map background — stylized Abu Dhabi */}
-      <div className="absolute inset-0" style={{
-        background: 'linear-gradient(145deg, #E8EDF5 0%, #D4DCE8 30%, #C9D6E8 50%, #BCCEE0 70%, #D4DCE8 100%)',
-      }}>
-        {/* Water areas */}
-        <div className="absolute" style={{ top: '10%', right: 0, width: '45%', height: '40%', background: 'rgba(96,165,250,0.15)', borderRadius: '0 0 0 60%' }} />
-        <div className="absolute" style={{ bottom: 0, left: 0, width: '30%', height: '25%', background: 'rgba(96,165,250,0.12)', borderRadius: '0 40% 0 0' }} />
-        {/* Island shapes */}
-        <div className="absolute" style={{ top: '25%', left: '20%', width: '55%', height: '50%', background: 'rgba(209,213,219,0.4)', borderRadius: '40% 30% 50% 25%' }} />
-        <div className="absolute" style={{ top: '15%', left: '55%', width: '25%', height: '30%', background: 'rgba(209,213,219,0.3)', borderRadius: '50%' }} />
-        {/* Road lines */}
-        <div className="absolute" style={{ top: '48%', left: '10%', width: '80%', height: 1, background: 'rgba(156,163,175,0.3)' }} />
-        <div className="absolute" style={{ top: '20%', left: '45%', width: 1, height: '60%', background: 'rgba(156,163,175,0.25)' }} />
-        <div className="absolute" style={{ top: '35%', left: '25%', width: '50%', height: 1, background: 'rgba(156,163,175,0.2)', transform: 'rotate(-15deg)' }} />
-      </div>
+    <div className="relative rounded-[20px] overflow-hidden border border-[#DFE1E6] transition-all duration-300" style={{ height: mapHeight }}>
+      {/* Google Maps iframe background */}
+      <iframe
+        src={mapEmbedUrl}
+        className="absolute inset-0 w-full h-full"
+        style={{ border: 0, filter: 'saturate(0.85) brightness(1.02)' }}
+        allowFullScreen
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        title="Abu Dhabi Map"
+      />
 
-      {/* Map label */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1.5 rounded-[10px]" style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(223,225,230,0.6)' }}>
-        <MapPin size={12} className="text-[#9D63F6]" />
-        <span className="text-[10px] font-bold text-[#15161E]">Abu Dhabi</span>
-        <span className="text-[9px] text-[#A4ABB8] ml-1">{filtered.length} locations</span>
-      </div>
+      {/* Semi-transparent overlay for pin visibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/20 pointer-events-none" />
 
-      {/* Filter pills */}
-      <div className="absolute top-3 right-3 z-10 flex gap-1">
-        {(['all', 'event', 'offer', 'wellness'] as const).map(f => (
-          <button key={f} onClick={() => { setFilter(f); setSelectedPin(null); }}
-            className="text-[9px] font-bold px-2 py-1 rounded-full transition-all"
-            style={{
-              background: filter === f ? '#9D63F6' : 'rgba(255,255,255,0.85)',
-              color: filter === f ? '#fff' : '#666D80',
-              border: filter === f ? 'none' : '1px solid rgba(223,225,230,0.6)',
-            }}>
-            {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+      {/* Top controls bar */}
+      <div className="absolute top-0 left-0 right-0 z-20 p-3">
+        <div className="flex items-center justify-between mb-2">
+          {/* Map label */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[12px]" style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.6)' }}>
+            <MapPin size={13} className="text-[#9D63F6]" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-[#15161E]">UAE</span>
+            <span className="text-[9px] text-[#A4ABB8] ml-1">{filtered.length} places</span>
+          </div>
+          {/* Expand / collapse */}
+          <button onClick={() => setExpanded(!expanded)}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-[10px] text-[10px] font-semibold transition-all active:scale-95"
+            style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', color: '#666D80', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid rgba(255,255,255,0.6)' }}>
+            {expanded ? 'Collapse' : 'Expand'}
           </button>
-        ))}
+        </div>
+
+        {/* Filter pills */}
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+          {Object.entries(MAP_FILTER_LABELS).map(([key, { label, icon: FIcon, color }]) => {
+            const isActive = filter === key;
+            const count = key === 'all' ? locations.length : locations.filter(l => l.type === key).length;
+            return (
+              <button key={key} onClick={() => { setFilter(key); setSelectedPin(null); }}
+                className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[9px] font-bold transition-all active:scale-95"
+                style={{
+                  background: isActive ? color : 'rgba(255,255,255,0.88)',
+                  color: isActive ? '#fff' : '#666D80',
+                  backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
+                  boxShadow: isActive ? `0 2px 8px ${color}40` : '0 1px 4px rgba(0,0,0,0.06)',
+                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.6)',
+                }}>
+                <FIcon size={10} strokeWidth={2.5} />
+                {label}
+                <span className="ml-0.5 opacity-70">{count}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Pins positioned on the map */}
-      {filtered.map((loc, i) => {
+      {/* Interactive map pins overlay */}
+      {filtered.map((loc) => {
         const Icon = loc.icon;
-        /* Spread pins across the map area */
-        const positions = [
-          { top: '42%', left: '38%' }, { top: '30%', left: '52%' }, { top: '55%', left: '68%' },
-          { top: '48%', left: '25%' }, { top: '38%', left: '60%' }, { top: '60%', left: '50%' },
-          { top: '35%', left: '30%' }, { top: '45%', left: '48%' },
-        ];
-        const pos = positions[i % positions.length];
+        const pos = projectToMap(loc.lat, loc.lng);
         const isSelected = selectedPin?.id === loc.id;
 
         return (
-          <button key={loc.id} onClick={() => setSelectedPin(isSelected ? null : loc)}
-            className="absolute z-10 transition-all duration-200"
-            style={{ top: pos.top, left: pos.left, transform: isSelected ? 'scale(1.3) translateY(-4px)' : 'scale(1)' }}>
+          <button key={loc.id}
+            onClick={() => setSelectedPin(isSelected ? null : loc)}
+            className="absolute z-10 transition-all duration-300 ease-out"
+            style={{
+              left: `${pos.x}%`, top: `${pos.y}%`,
+              transform: `translate(-50%, -50%) ${isSelected ? 'scale(1.35) translateY(-6px)' : 'scale(1)'}`,
+              zIndex: isSelected ? 15 : 10,
+            }}>
             <div className="relative">
+              {/* Pulse ring for selected */}
               {isSelected && (
-                <div className="absolute -inset-2 rounded-full animate-ping" style={{ background: loc.color + '20' }} />
+                <div className="absolute -inset-3 rounded-full" style={{ background: loc.color + '15', animation: 'pulse-ring 1.5s ease-out infinite' }} />
               )}
-              <div className="w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white" style={{ background: loc.color }}>
-                <Icon size={14} className="text-white" strokeWidth={2} />
+              {/* Pin marker */}
+              <div className="relative">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center border-[2.5px] border-white transition-shadow duration-200"
+                  style={{ background: loc.color, boxShadow: isSelected ? `0 4px 16px ${loc.color}50` : '0 2px 8px rgba(0,0,0,0.2)' }}>
+                  <Icon size={15} className="text-white" strokeWidth={2.5} />
+                </div>
+                {/* Pin tail / bottom pointer */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
+                  style={{ borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: `6px solid ${loc.color}` }} />
               </div>
             </div>
           </button>
@@ -909,19 +1000,44 @@ function MapView({ locations }: { locations: MapLocation[] }) {
 
       {/* Selected pin detail card */}
       {selectedPin && (
-        <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center gap-3 p-3 rounded-[14px] shadow-lg"
-          style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(223,225,230,0.5)' }}>
-          <div className="w-10 h-10 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: selectedPin.color + '15' }}>
-            <selectedPin.icon size={20} style={{ color: selectedPin.color }} strokeWidth={1.8} />
+        <div className="absolute bottom-3 left-3 right-3 z-20 card-rise"
+          style={{ animation: 'card-rise 0.25s ease-out both' }}>
+          <div className="flex items-center gap-3 p-3 rounded-[16px] shadow-xl"
+            style={{ background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.7)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            {/* Thumbnail */}
+            {selectedPin.image ? (
+              <div className="w-14 h-14 rounded-[12px] overflow-hidden shrink-0">
+                <img src={selectedPin.image} alt={selectedPin.name} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+            ) : (
+              <div className="w-14 h-14 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: selectedPin.color + '12' }}>
+                <selectedPin.icon size={24} style={{ color: selectedPin.color }} strokeWidth={1.8} />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white" style={{ background: selectedPin.color }}>
+                  {selectedPin.type.charAt(0).toUpperCase() + selectedPin.type.slice(1)}
+                </span>
+              </div>
+              <p className="text-[12px] font-bold text-[#15161E] truncate leading-tight">{selectedPin.name}</p>
+              <p className="text-[10px] text-[#A4ABB8] truncate">{selectedPin.address}</p>
+              <p className="text-[10px] font-semibold mt-0.5" style={{ color: selectedPin.color }}>{selectedPin.detail}</p>
+            </div>
+            <div className="flex flex-col gap-1.5 shrink-0">
+              {/* View details button */}
+              {selectedPin.modalData && (
+                <button onClick={() => onSelectItem(selectedPin.modalData!)}
+                  className="px-3 py-1.5 rounded-[10px] text-[10px] font-bold text-white transition-all active:scale-95"
+                  style={{ background: selectedPin.color, boxShadow: `0 2px 8px ${selectedPin.color}40` }}>
+                  View
+                </button>
+              )}
+              <button onClick={() => setSelectedPin(null)} className="p-1 rounded-full hover:bg-gray-100 self-center">
+                <X size={12} className="text-[#A4ABB8]" />
+              </button>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[12px] font-bold text-[#15161E] truncate">{selectedPin.name}</p>
-            <p className="text-[10px] text-[#A4ABB8] truncate">{selectedPin.address}</p>
-            <p className="text-[10px] font-semibold mt-0.5" style={{ color: selectedPin.color }}>{selectedPin.detail}</p>
-          </div>
-          <button onClick={() => setSelectedPin(null)} className="p-1.5 rounded-full hover:bg-gray-100">
-            <X size={14} className="text-[#A4ABB8]" />
-          </button>
         </div>
       )}
     </div>
@@ -1567,29 +1683,6 @@ export default function ExplorePage() {
               </div>
             </section>
 
-            {/* ── Map Preview ── */}
-            <section>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <MapPin size={15} className="text-[#40C4AA]" strokeWidth={2.5} />
-                  <h2 className="text-[17px] font-bold text-[#15161E]">Nearby</h2>
-                </div>
-                <button onClick={() => setShowMap(true)} className="text-[11px] font-semibold text-[#9D63F6] flex items-center gap-1">
-                  Open map <ChevronRight size={12} />
-                </button>
-              </div>
-              <button onClick={() => setShowMap(true)} className="w-full rounded-[16px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-all">
-                <div className="relative h-[100px] bg-[#E8F4F8]">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <MapPin size={28} className="text-[#40C4AA] mx-auto mb-1" strokeWidth={1.5} />
-                      <p className="text-[12px] font-bold text-[#15161E]">Discover nearby events & offers</p>
-                      <p className="text-[10px] text-[#A4ABB8] mt-0.5">Tap to open interactive map</p>
-                    </div>
-                  </div>
-                </div>
-              </button>
-            </section>
           </>
         );
     }
@@ -1643,7 +1736,9 @@ export default function ExplorePage() {
         {/* ═══ MAP VIEW ═══ */}
         {showMap && (
           <section className="card-rise">
-            <MapView locations={MAP_LOCATIONS} />
+            <MapView locations={MAP_LOCATIONS} onSelectItem={(data) => {
+              if (data) setSelectedItem(data);
+            }} />
           </section>
         )}
 
