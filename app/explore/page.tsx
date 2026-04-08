@@ -906,10 +906,10 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
 
   return (
     <div className="relative overflow-hidden w-full h-full">
-      {/* Google Maps iframe — light & airy feel */}
+      {/* Google Maps iframe — visual background only, no touch interaction */}
       <iframe
         src={mapEmbedUrl}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ border: 0, filter: 'saturate(0.75) brightness(1.06)' }}
         allowFullScreen
         loading="lazy"
@@ -981,48 +981,70 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
         );
       })}
 
-      {/* Selected pin detail card */}
-      {selectedPin && (
-        <div className="absolute bottom-3 left-3 right-3 z-20 card-rise"
-          style={{ animation: 'card-rise 0.25s ease-out both' }}>
-          <div className="flex items-center gap-3 p-3 rounded-[16px]"
-            style={{ background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
-            {/* Thumbnail */}
-            {selectedPin.image ? (
-              <div className="w-14 h-14 rounded-[12px] overflow-hidden shrink-0">
-                <img src={selectedPin.image} alt={selectedPin.name} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            ) : (
-              <div className="w-14 h-14 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: selectedPin.color + '10' }}>
-                <selectedPin.icon size={24} style={{ color: selectedPin.color }} strokeWidth={1.8} />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 mb-0.5">
-                <span className="px-1.5 py-0.5 rounded-full text-[8px] font-bold text-white" style={{ background: selectedPin.color }}>
-                  {selectedPin.type.charAt(0).toUpperCase() + selectedPin.type.slice(1)}
-                </span>
-              </div>
-              <p className="text-[12px] font-bold text-[#15161E] truncate leading-tight">{selectedPin.name}</p>
-              <p className="text-[10px] text-[#A4ABB8] truncate">{selectedPin.address}</p>
-              <p className="text-[10px] font-semibold mt-0.5" style={{ color: selectedPin.color }}>{selectedPin.detail}</p>
-            </div>
-            <div className="flex flex-col gap-1.5 shrink-0">
-              {/* View details button */}
-              {selectedPin.modalData && (
-                <button onClick={() => onSelectItem(selectedPin.modalData!)}
-                  className="px-3 py-1.5 rounded-[10px] text-[10px] font-bold text-white transition-all active:scale-95"
-                  style={{ background: selectedPin.color, boxShadow: `0 2px 8px ${selectedPin.color}30` }}>
-                  View
-                </button>
+      {/* Selected pin detail card — large */}
+      {selectedPin && (() => {
+        const PinIcon = selectedPin.icon;
+        return (
+          <div className="absolute bottom-3 left-3 right-3 z-20 card-rise"
+            style={{ animation: 'card-rise 0.25s ease-out both' }}>
+            <div className="rounded-[20px] overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }}>
+
+              {/* Image header */}
+              {selectedPin.image && (
+                <div className="relative h-[120px]">
+                  <img src={selectedPin.image} alt={selectedPin.name} className="w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  {/* Category badge */}
+                  <div className="absolute top-2.5 left-2.5">
+                    <span className="text-[9px] font-bold text-white px-2 py-0.5 rounded-full" style={{ background: selectedPin.color }}>
+                      {selectedPin.type.charAt(0).toUpperCase() + selectedPin.type.slice(1)}
+                    </span>
+                  </div>
+                  {/* Close */}
+                  <button onClick={() => setSelectedPin(null)} className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center active:scale-90 transition-all">
+                    <X size={13} className="text-white" />
+                  </button>
+                  {/* Title on image */}
+                  <div className="absolute bottom-2.5 left-3 right-3">
+                    <p className="text-[14px] font-bold text-white leading-snug">{selectedPin.name}</p>
+                  </div>
+                </div>
               )}
-              <button onClick={() => setSelectedPin(null)} className="p-1 rounded-full hover:bg-gray-100 self-center">
-                <X size={12} className="text-[#A4ABB8]" />
-              </button>
+
+              {/* Card body */}
+              <div className="p-3.5">
+                <div className="flex items-start gap-2 mb-2">
+                  <MapPin size={12} className="text-[#A4ABB8] mt-0.5 shrink-0" />
+                  <p className="text-[11px] text-[#666D80] leading-snug">{selectedPin.address}</p>
+                </div>
+                <p className="text-[12px] font-semibold mb-3" style={{ color: selectedPin.color }}>{selectedPin.detail}</p>
+
+                {/* Highlights from modalData */}
+                {selectedPin.modalData?.highlights && (
+                  <div className="flex gap-2 mb-3">
+                    {selectedPin.modalData.highlights.slice(0, 3).map(h => (
+                      <div key={h.label} className="flex-1 rounded-[10px] p-2 text-center" style={{ background: selectedPin.color + '08' }}>
+                        <p className="text-[12px] font-bold" style={{ color: selectedPin.color }}>{h.value}</p>
+                        <p className="text-[8px] text-[#A4ABB8] mt-0.5">{h.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* View details button */}
+                {selectedPin.modalData && (
+                  <button onClick={() => onSelectItem(selectedPin.modalData!)}
+                    className="w-full flex items-center justify-center gap-1.5 py-3 rounded-[12px] text-[12px] font-bold text-white transition-all active:scale-[0.98]"
+                    style={{ background: selectedPin.color, boxShadow: `0 3px 12px ${selectedPin.color}30` }}>
+                    View Details <ArrowRight size={14} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   );
 }
