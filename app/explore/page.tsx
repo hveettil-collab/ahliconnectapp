@@ -906,28 +906,28 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
 
   return (
     <div className="relative overflow-hidden w-full h-full">
-      {/* Google Maps iframe background — dark theme via CSS invert */}
+      {/* Google Maps iframe background — normal mode */}
       <iframe
         src={mapEmbedUrl}
         className="absolute inset-0 w-full h-full"
-        style={{ border: 0, filter: 'invert(92%) hue-rotate(180deg) saturate(0.6) brightness(0.85) contrast(1.1)' }}
+        style={{ border: 0 }}
         allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         title="Abu Dhabi Map"
       />
 
-      {/* Subtle overlay for pin visibility on dark map */}
-      <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(21,22,30,0.25) 0%, transparent 30%, transparent 70%, rgba(21,22,30,0.3) 100%)' }} />
+      {/* Subtle overlay for pin visibility */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.1) 100%)' }} />
 
       {/* Top controls bar */}
       <div className="absolute top-0 left-0 right-0 z-20 p-3">
         <div className="flex items-center justify-between mb-2">
           {/* Map label */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[12px]" style={{ background: 'rgba(21,22,30,0.75)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 2px 12px rgba(0,0,0,0.2)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[12px]" style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', border: '1px solid rgba(223,225,230,0.6)' }}>
             <MapPin size={13} className="text-[#9D63F6]" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-white">UAE</span>
-            <span className="text-[9px] text-white/50 ml-1">{filtered.length} places</span>
+            <span className="text-[11px] font-bold text-[#15161E]">UAE</span>
+            <span className="text-[9px] text-[#A4ABB8] ml-1">{filtered.length} places</span>
           </div>
         </div>
 
@@ -940,11 +940,11 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
               <button key={key} onClick={() => { setFilter(key); setSelectedPin(null); }}
                 className="shrink-0 flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[9px] font-bold transition-all active:scale-95"
                 style={{
-                  background: isActive ? color : 'rgba(21,22,30,0.65)',
-                  color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
+                  background: isActive ? color : 'rgba(255,255,255,0.88)',
+                  color: isActive ? '#fff' : '#666D80',
                   backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)',
-                  boxShadow: isActive ? `0 2px 8px ${color}40` : '0 1px 4px rgba(0,0,0,0.15)',
-                  border: isActive ? 'none' : '1px solid rgba(255,255,255,0.08)',
+                  boxShadow: isActive ? `0 2px 8px ${color}40` : '0 1px 4px rgba(0,0,0,0.06)',
+                  border: isActive ? 'none' : '1px solid rgba(223,225,230,0.6)',
                 }}>
                 <FIcon size={10} strokeWidth={2.5} />
                 {label}
@@ -977,8 +977,8 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
               )}
               {/* Pin marker */}
               <div className="relative">
-                <div className="w-9 h-9 rounded-full flex items-center justify-center border-[2.5px] border-white/90 transition-shadow duration-200"
-                  style={{ background: loc.color, boxShadow: isSelected ? `0 4px 20px ${loc.color}70, 0 0 30px ${loc.color}30` : `0 2px 10px rgba(0,0,0,0.4), 0 0 15px ${loc.color}25` }}>
+                <div className="w-9 h-9 rounded-full flex items-center justify-center border-[2.5px] border-white transition-shadow duration-200"
+                  style={{ background: loc.color, boxShadow: isSelected ? `0 4px 16px ${loc.color}50` : '0 2px 8px rgba(0,0,0,0.2)' }}>
                   <Icon size={15} className="text-white" strokeWidth={2.5} />
                 </div>
                 {/* Pin tail / bottom pointer */}
@@ -995,14 +995,14 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
         <div className="absolute bottom-3 left-3 right-3 z-20 card-rise"
           style={{ animation: 'card-rise 0.25s ease-out both' }}>
           <div className="flex items-center gap-3 p-3 rounded-[16px] shadow-xl"
-            style={{ background: 'rgba(21,22,30,0.88)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+            style={{ background: 'rgba(255,255,255,0.96)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid rgba(223,225,230,0.5)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
             {/* Thumbnail */}
             {selectedPin.image ? (
-              <div className="w-14 h-14 rounded-[12px] overflow-hidden shrink-0 border border-white/10">
+              <div className="w-14 h-14 rounded-[12px] overflow-hidden shrink-0">
                 <img src={selectedPin.image} alt={selectedPin.name} className="w-full h-full object-cover" loading="lazy" />
               </div>
             ) : (
-              <div className="w-14 h-14 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: selectedPin.color + '20' }}>
+              <div className="w-14 h-14 rounded-[12px] flex items-center justify-center shrink-0" style={{ background: selectedPin.color + '12' }}>
                 <selectedPin.icon size={24} style={{ color: selectedPin.color }} strokeWidth={1.8} />
               </div>
             )}
@@ -1012,8 +1012,8 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
                   {selectedPin.type.charAt(0).toUpperCase() + selectedPin.type.slice(1)}
                 </span>
               </div>
-              <p className="text-[12px] font-bold text-white truncate leading-tight">{selectedPin.name}</p>
-              <p className="text-[10px] text-white/50 truncate">{selectedPin.address}</p>
+              <p className="text-[12px] font-bold text-[#15161E] truncate leading-tight">{selectedPin.name}</p>
+              <p className="text-[10px] text-[#A4ABB8] truncate">{selectedPin.address}</p>
               <p className="text-[10px] font-semibold mt-0.5" style={{ color: selectedPin.color }}>{selectedPin.detail}</p>
             </div>
             <div className="flex flex-col gap-1.5 shrink-0">
@@ -1025,8 +1025,8 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
                   View
                 </button>
               )}
-              <button onClick={() => setSelectedPin(null)} className="p-1 rounded-full hover:bg-white/10 self-center">
-                <X size={12} className="text-white/50" />
+              <button onClick={() => setSelectedPin(null)} className="p-1 rounded-full hover:bg-gray-100 self-center">
+                <X size={12} className="text-[#A4ABB8]" />
               </button>
             </div>
           </div>
@@ -1057,23 +1057,23 @@ function FullScreenMap({ locations, onClose }: { locations: MapLocation[]; onClo
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#15161E' }}>
-      {/* Header bar — dark */}
+    <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#F7F8FA' }}>
+      {/* Header bar */}
       <div className="shrink-0 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),12px)] pb-3"
-        style={{ background: 'rgba(21,22,30,0.95)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(223,225,230,0.5)' }}>
         <div className="flex items-center gap-2">
           <MapPin size={18} className="text-[#9D63F6]" strokeWidth={2.5} />
           <div>
-            <h2 className="text-[16px] font-bold text-white">Explore Map</h2>
-            <p className="text-[10px] text-white/40">{locations.length} locations across UAE</p>
+            <h2 className="text-[16px] font-bold text-[#15161E]">Explore Map</h2>
+            <p className="text-[10px] text-[#A4ABB8]">{locations.length} locations across UAE</p>
           </div>
         </div>
         <button
           onClick={onClose}
           className="w-9 h-9 rounded-full flex items-center justify-center active:scale-90 transition-all"
-          style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.06)' }}
+          style={{ background: '#F1F2F4' }}
         >
-          <X size={18} className="text-white/70" strokeWidth={2} />
+          <X size={18} className="text-[#666D80]" strokeWidth={2} />
         </button>
       </div>
 
