@@ -679,6 +679,44 @@ export default function DashboardPage() {
           }
         }} />
 
+        {/* ── Benefits & Offers ── */}
+        <div>
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center gap-2">
+              <Gift size={15} className="text-[#C8973A]" strokeWidth={2} />
+              <h3 className="text-[15px] font-extrabold text-[#15161E]">Benefits & Offers</h3>
+              <span className="text-[9px] font-bold text-[#C8973A] bg-[#C8973A]/10 px-2 py-0.5 rounded-full">{relevantOffers.length} available</span>
+            </div>
+            <Link href="/offers" className="text-[11px] font-bold text-[#9D63F6] flex items-center gap-0.5">
+              See all <ChevronRight size={12} />
+            </Link>
+          </div>
+          <div className="space-y-2">
+            {relevantOffers.filter(o => o.featured).slice(0, 3).map(offer => (
+              <Link key={offer.id} href="/offers"
+                className="flex gap-3 p-2.5 rounded-[16px] border border-[#DFE1E6] bg-white active:scale-[0.98] transition-all">
+                <div className="relative w-[72px] h-[72px] rounded-[12px] overflow-hidden shrink-0">
+                  <img src={offer.image} alt={offer.title} className="w-full h-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute top-1.5 left-1.5">
+                    <span className="text-[8px] font-bold text-white px-1.5 py-0.5 rounded-full" style={{ background: offer.color }}>
+                      {offer.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0 py-0.5">
+                  <p className="text-[10px] text-[#A4ABB8] font-medium">{offer.company}</p>
+                  <p className="text-[12px] font-bold text-[#15161E] leading-snug mt-0.5 line-clamp-1">{offer.title}</p>
+                  <div className="flex items-center justify-between mt-1.5">
+                    <span className="text-[10px] font-bold" style={{ color: offer.color }}>{offer.value}</span>
+                    <span className="text-[9px] text-[#A4ABB8] flex items-center gap-0.5"><Clock size={9} /> {offer.expires}</span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* ── Communities ── */}
         <div>
           <div className="flex items-center justify-between mb-2.5">
