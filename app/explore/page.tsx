@@ -917,17 +917,11 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
         title="Abu Dhabi Map"
       />
 
-      {/* Top controls bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 p-3">
-        <div className="flex items-center justify-between mb-2">
-          {/* Map label — fully transparent, no box */}
-          <div className="flex items-center gap-1.5 px-2 py-1">
-            <MapPin size={13} className="text-[#9D63F6]" strokeWidth={2.5} style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.15))' }} />
-            <span className="text-[11px] font-bold text-[#15161E]" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>UAE</span>
-            <span className="text-[9px] text-[#666D80] ml-0.5" style={{ textShadow: '0 1px 3px rgba(255,255,255,0.8)' }}>{filtered.length} places</span>
-          </div>
-        </div>
+      {/* Cover Google Maps top-left branding */}
+      <div className="absolute top-0 left-0 right-0 z-15 h-[40px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 60%, transparent 100%)' }} />
 
+      {/* Top controls bar */}
+      <div className="absolute top-0 left-0 right-0 z-20 px-3 pt-2 pb-1">
         {/* Filter pills — light glass style */}
         <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
           {Object.entries(MAP_FILTER_LABELS).map(([key, { label, icon: FIcon, color }]) => {
