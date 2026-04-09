@@ -264,7 +264,19 @@ function ListingDetail({ listing, onClose }: { listing: EnrichedListing; onClose
         <button onClick={() => setSaved(!saved)} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] active:scale-95 transition-all">
           <Heart size={16} className={saved ? 'text-red-500 fill-red-500' : 'text-[#A4ABB8]'} />
         </button>
-        <button className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] active:scale-95 transition-all">
+        <button onClick={async () => {
+          const shareData = {
+            title: listing.title,
+            text: `${listing.title} — ${listing.price}\n${listing.description}`,
+            url: window.location.href,
+          };
+          if (navigator.share) {
+            try { await navigator.share(shareData); } catch {}
+          } else {
+            await navigator.clipboard.writeText(`${listing.title} — ${listing.price}\n${listing.description}\n${window.location.href}`);
+            alert('Link copied to clipboard!');
+          }
+        }} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 border border-[#DFE1E6] active:scale-95 transition-all">
           <Share2 size={16} className="text-[#A4ABB8]" />
         </button>
       </div>
