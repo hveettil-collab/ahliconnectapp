@@ -64,6 +64,18 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
   const [cardNum, setCardNum] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
+  // Home insurance selections
+  const [propertyType, setPropertyType] = useState('');
+  const [propertyLocation, setPropertyLocation] = useState('');
+  const [propertyValue, setPropertyValue] = useState('');
+  // Pet insurance selections
+  const [petType, setPetType] = useState('');
+  const [petBreed, setPetBreed] = useState('');
+  const [petAge, setPetAge] = useState('');
+  // Health insurance selections
+  const [coverageFor, setCoverageFor] = useState('');
+  const [yourAge, setYourAge] = useState('');
+  const [priority, setPriority] = useState('');
 
   const EMIRATES = ['Abu Dhabi', 'Dubai', 'Sharjah', 'Ajman'];
   const VEHICLE = { make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White', vin: 'JTMHY7AJ5N...' };
@@ -220,7 +232,9 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Property Type</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['Apartment', 'Villa', 'Townhouse', 'Studio'].map(t => (
-                      <button key={t} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{t}</button>
+                      <button key={t} onClick={() => setPropertyType(t)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: propertyType === t ? accentColor : '#F8F9FB', color: propertyType === t ? '#fff' : '#666D80', border: propertyType === t ? 'none' : '1px solid #DFE1E6' }}>{t}</button>
                     ))}
                   </div>
                 </div>
@@ -228,13 +242,15 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Location</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['Abu Dhabi', 'Dubai', 'Sharjah', 'Al Ain'].map(l => (
-                      <button key={l} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{l}</button>
+                      <button key={l} onClick={() => setPropertyLocation(l)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: propertyLocation === l ? accentColor : '#F8F9FB', color: propertyLocation === l ? '#fff' : '#666D80', border: propertyLocation === l ? 'none' : '1px solid #DFE1E6' }}>{l}</button>
                     ))}
                   </div>
                 </div>
                 <div>
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Estimated Value (AED)</label>
-                  <input type="text" placeholder="e.g. 1,500,000" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
+                  <input type="text" value={propertyValue} onChange={e => setPropertyValue(e.target.value)} placeholder="e.g. 1,500,000" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
                 </div>
               </div>
             )}
@@ -245,19 +261,23 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Pet Type</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['Dog', 'Cat', 'Bird', 'Other'].map(t => (
-                      <button key={t} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{t}</button>
+                      <button key={t} onClick={() => setPetType(t)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: petType === t ? accentColor : '#F8F9FB', color: petType === t ? '#fff' : '#666D80', border: petType === t ? 'none' : '1px solid #DFE1E6' }}>{t}</button>
                     ))}
                   </div>
                 </div>
                 <div>
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Breed</label>
-                  <input type="text" placeholder="e.g. Golden Retriever" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
+                  <input type="text" value={petBreed} onChange={e => setPetBreed(e.target.value)} placeholder="e.g. Golden Retriever" className="w-full mt-1.5 bg-white border-2 border-[#DFE1E6] rounded-[12px] px-4 py-2.5 text-[14px] text-[#15161E] outline-none transition-colors" />
                 </div>
                 <div>
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Age</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['< 1 year', '1-3 years', '3-7 years', '7+ years'].map(a => (
-                      <button key={a} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{a}</button>
+                      <button key={a} onClick={() => setPetAge(a)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: petAge === a ? accentColor : '#F8F9FB', color: petAge === a ? '#fff' : '#666D80', border: petAge === a ? 'none' : '1px solid #DFE1E6' }}>{a}</button>
                     ))}
                   </div>
                 </div>
@@ -270,7 +290,9 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Coverage For</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['Just Me', 'Me + Spouse', 'Family', 'Parents'].map(c => (
-                      <button key={c} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{c}</button>
+                      <button key={c} onClick={() => setCoverageFor(c)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: coverageFor === c ? accentColor : '#F8F9FB', color: coverageFor === c ? '#fff' : '#666D80', border: coverageFor === c ? 'none' : '1px solid #DFE1E6' }}>{c}</button>
                     ))}
                   </div>
                 </div>
@@ -278,7 +300,9 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Your Age</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['18-30', '31-40', '41-50', '51-60', '60+'].map(a => (
-                      <button key={a} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{a}</button>
+                      <button key={a} onClick={() => setYourAge(a)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: yourAge === a ? accentColor : '#F8F9FB', color: yourAge === a ? '#fff' : '#666D80', border: yourAge === a ? 'none' : '1px solid #DFE1E6' }}>{a}</button>
                     ))}
                   </div>
                 </div>
@@ -286,7 +310,9 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
                   <label className="text-[11px] font-semibold text-[#666D80] uppercase tracking-wider">Priority</label>
                   <div className="flex gap-2 mt-2 flex-wrap">
                     {['Dental', 'Optical', 'Maternity', 'Chronic care'].map(p => (
-                      <button key={p} className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95 bg-[#F8F9FB] text-[#666D80]" style={{ border: '1px solid #DFE1E6' }}>{p}</button>
+                      <button key={p} onClick={() => setPriority(p)}
+                        className="px-3 py-2 rounded-[12px] text-[12px] font-semibold transition-all active:scale-95"
+                        style={{ background: priority === p ? accentColor : '#F8F9FB', color: priority === p ? '#fff' : '#666D80', border: priority === p ? 'none' : '1px solid #DFE1E6' }}>{p}</button>
                     ))}
                   </div>
                 </div>
