@@ -368,7 +368,7 @@ export default function DashboardPage() {
     return (
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: '#FFFFFF',
+          background: '#F6F6F6',
           opacity: splashFading ? 0 : 1,
           transition: 'opacity 0.7s ease-out',
         }}>
