@@ -450,7 +450,7 @@ export const MARKETPLACE_LISTINGS = [
     price: 'AED 310,000', seller: 'Hassan M.', sellerCompany: 'IHC Group',
     condition: 'Excellent', posted: '4 days ago', featured: false,
     description: '2022 Land Cruiser VX.R, black, 28,000 km, agency warranty until 2027.',
-    image: '/marketplace/land-cruiser.jpg',
+    image: 'https://images.unsplash.com/photo-1585503418537-88331351ad99?w=500&h=320&fit=crop',
     specs: { year: '2022', km: '28,000 km', color: 'Black', fuel: 'Petrol' },
   },
   {
