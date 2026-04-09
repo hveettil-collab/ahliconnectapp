@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 import { NotificationProvider } from '@/context/NotificationContext';
 import { WalletProvider } from '@/context/WalletContext';
 import { ListingsProvider } from '@/context/ListingsContext';
+import { InsuranceProvider } from '@/context/InsuranceContext';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import KeyboardManager from '@/components/layout/KeyboardManager';
 import ServiceWorkerRegister from '@/components/layout/ServiceWorkerRegister';
@@ -53,12 +54,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <NotificationProvider>
               <WalletProvider>
                 <ListingsProvider>
+                  <InsuranceProvider>
                   <ErrorBoundary>
                     <KeyboardManager />
                     <ServiceWorkerRegister />
                     <PWABackNavigator />
                     {children}
                   </ErrorBoundary>
+                  </InsuranceProvider>
                 </ListingsProvider>
               </WalletProvider>
             </NotificationProvider>

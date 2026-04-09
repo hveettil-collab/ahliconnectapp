@@ -1,13 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import AppShell from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import { useWallet } from '@/context/WalletContext';
+import { useInsurance } from '@/context/InsuranceContext';
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock';
 import { COMPANIES, MARKETPLACE_LISTINGS, OFFERS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle2, MapPin, Mail, Briefcase, Building2, Hash, Edit2, Shield, Tag, ShoppingBag, Settings, Bell, LogOut, Share2, QrCode, Phone, Copy, Check, Car, ChevronRight, Wallet, Plus, ArrowUpRight, ArrowDownLeft, Star, Gift, Sparkles, TrendingUp, Zap, X, CreditCard, Heart, Users, GraduationCap, Plane } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
@@ -512,7 +513,15 @@ function BenefitsSection() {
    MY ASSETS SECTION
    ═══════════════════════════════════════════ */
 
-function MyAssetsSection() {
+function MyAssetsSection({ highlightType }: { highlightType?: string | null }) {
+  const { policies } = useInsurance();
+
+  const INSURANCE_COLORS: Record<string, { gradient: string; color: string; icon: React.ElementType }> = {
+    car: { gradient: 'linear-gradient(135deg, #059669 0%, #047857 100%)', color: '#059669', icon: Car },
+    home: { gradient: 'linear-gradient(135deg, #059669 0%, #34D399 100%)', color: '#059669', icon: Building2 },
+    pet: { gradient: 'linear-gradient(135deg, #EA580C 0%, #FB923C 100%)', color: '#EA580C', icon: Heart },
+    health: { gradient: 'linear-gradient(135deg, #2563EB 0%, #60A5FA 100%)', color: '#2563EB', icon: Shield },
+  };
   const CAR_DATA = {
     make: 'Toyota', model: 'Land Cruiser', year: '2023', color: 'Pearl White',
     plate: 'Abu Dhabi · 12345', vin: 'JTMHY7AJ5N5...', regExpiry: 'Dec 2026',
@@ -588,6 +597,48 @@ function MyAssetsSection() {
         </div>
       </Link>
 
+      {/* ── Purchased Policies from AI ── */}
+      {policies.filter(p => !['car'].includes(p.type)).map(policy => {
+        const config = INSURANCE_COLORS[policy.type] || INSURANCE_COLORS.health;
+        const PolicyIcon = config.icon;
+        const isHighlighted = highlightType === policy.type;
+        return (
+          <div key={policy.id} className={`bg-white rounded-[16px] border overflow-hidden transition-all ${isHighlighted ? 'ring-2 ring-offset-2' : ''}`} style={{ borderColor: isHighlighted ? config.color : '#DFE1E6', '--tw-ring-color': isHighlighted ? config.color : undefined } as React.CSSProperties}>
+            <div className="p-4 flex items-center gap-3" style={{ background: config.gradient }}>
+              <div className="w-10 h-10 rounded-[12px] flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.15)' }}>
+                <PolicyIcon size={18} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <p className="text-[14px] font-bold text-white">{policy.type.charAt(0).toUpperCase() + policy.type.slice(1)} Insurance</p>
+                <p className="text-[11px] text-white/60">{policy.planName} Plan · Shory</p>
+              </div>
+              <span className="text-[9px] font-bold px-2.5 py-1 rounded-full bg-white/15 text-white">Active</span>
+            </div>
+            <div className="p-4 space-y-3">
+              <div className="grid grid-cols-2 gap-2.5">
+                {[
+                  { label: 'Policy No.', value: policy.policyNumber },
+                  { label: 'Details', value: policy.details.description },
+                  { label: 'Premium', value: `AED ${policy.premium.toLocaleString()}/yr` },
+                  { label: 'Expiry', value: policy.expiryDate },
+                ].map(item => (
+                  <div key={item.label} className="px-3 py-2.5 rounded-[12px] bg-[#F8F9FB]">
+                    <p className="text-[9px] text-[#A4ABB8] uppercase tracking-wider font-semibold">{item.label}</p>
+                    <p className="text-[13px] font-bold text-[#15161E] mt-0.5">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[12px] font-bold" style={{ color: config.color }}>
+                  <Shield size={13} /> Manage Policy <ChevronRight size={13} />
+                </div>
+                <p className="text-[9px] text-[#A4ABB8] font-semibold">Powered by <span className="text-[#059669] font-bold">Shory</span></p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
       {/* ── Health Insurance ── */}
       <Link href="/insurance" className="block no-underline">
         <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden active:scale-[0.98] transition-transform">
@@ -649,23 +700,44 @@ function MyAssetsSection() {
   );
 }
 
-export default function ProfilePage() {
+function ProfilePageContent() {
   const { user, logout } = useAuth();
+  const searchParams = useSearchParams();
   const [showLogout, setShowLogout] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [highlightInsurance, setHighlightInsurance] = useState<string | null>(null);
 
   useBodyScrollLock(showLogout || showShareSheet);
+
+  // Auto-open insurance card when coming from wallet success
+  useEffect(() => {
+    const openType = searchParams.get('openInsurance');
+    if (openType) {
+      setExpandedCard(2); // Insurance card is at index 2
+      setHighlightInsurance(openType);
+      const timer = setTimeout(() => setHighlightInsurance(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   const toggleCard = (idx: number) => {
     setExpandedCard(prev => prev === idx ? null : idx);
   };
 
+  const { policies } = useInsurance();
+
   if (!user) return null;
   const company = COMPANIES.find(c => c.id === user.companyId);
   const myListings = MARKETPLACE_LISTINGS.slice(0, 2);
   const savedOffers = OFFERS.slice(0, 3);
+
+  // Dynamic insurance subtitle
+  const baseTypes = ['Car', 'Health'];
+  const purchasedTypes = policies.map(p => p.type.charAt(0).toUpperCase() + p.type.slice(1)).filter(t => !baseTypes.includes(t));
+  const allTypes = [...baseTypes, ...purchasedTypes];
+  const insuranceSubtitle = allTypes.join(' · ');
 
   const SETTINGS = [
     { icon: Bell, label: 'Notification Preferences', desc: 'Manage alerts & emails' },
@@ -877,7 +949,7 @@ export default function ProfilePage() {
             {[
               { title: 'Wallet & Rewards', subtitle: `AED ${(5600).toLocaleString()}`, icon: Wallet, gradient: 'linear-gradient(135deg, #1B1D3A 0%, #3B1F8E 50%, #6D28D9 100%)', textColor: '#fff', accentColor: '#C4B5FD', glowColor: 'rgba(109,40,217,0.35)' },
               { title: 'Your Benefits', subtitle: '4 active benefits', icon: Gift, gradient: 'linear-gradient(135deg, #064E3B 0%, #059669 50%, #34D399 100%)', textColor: '#fff', accentColor: '#6EE7B7', glowColor: 'rgba(5,150,105,0.35)' },
-              { title: 'My Insurance', subtitle: 'Car · Health', icon: Shield, gradient: 'linear-gradient(135deg, #134E4A 0%, #0D9488 50%, #2DD4BF 100%)', textColor: '#fff', accentColor: '#99F6E4', glowColor: 'rgba(13,148,136,0.35)' },
+              { title: 'My Insurance', subtitle: insuranceSubtitle, icon: Shield, gradient: 'linear-gradient(135deg, #134E4A 0%, #0D9488 50%, #2DD4BF 100%)', textColor: '#fff', accentColor: '#99F6E4', glowColor: 'rgba(13,148,136,0.35)' },
               { title: 'Saved Offers', subtitle: `${savedOffers.length} saved`, icon: Tag, gradient: 'linear-gradient(135deg, #78350F 0%, #D97706 50%, #FBBF24 100%)', textColor: '#fff', accentColor: '#FDE68A', glowColor: 'rgba(217,119,6,0.35)' },
               { title: 'My Listings', subtitle: `${myListings.length} active`, icon: ShoppingBag, gradient: 'linear-gradient(135deg, #7C2D12 0%, #EA580C 50%, #FB923C 100%)', textColor: '#fff', accentColor: '#FDBA74', glowColor: 'rgba(234,88,12,0.35)' },
             ].map((card, idx) => {
@@ -942,7 +1014,7 @@ export default function ProfilePage() {
                       {/* Benefits */}
                       {idx === 1 && <BenefitsSection />}
                       {/* Insurance */}
-                      {idx === 2 && <MyAssetsSection />}
+                      {idx === 2 && <MyAssetsSection highlightType={highlightInsurance} />}
                       {/* Saved Offers */}
                       {idx === 3 && (
                         <div className="bg-white rounded-[16px] border border-[#DFE1E6] overflow-hidden">
@@ -1053,5 +1125,13 @@ export default function ProfilePage() {
         </div>
       )}
     </AppShell>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <Suspense fallback={null}>
+      <ProfilePageContent />
+    </Suspense>
   );
 }

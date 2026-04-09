@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useListings } from '@/context/ListingsContext';
 import { useWallet } from '@/context/WalletContext';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { useInsurance } from '@/context/InsuranceContext';
 import { SERVICES, OFFERS, COLLEAGUES, COMPANIES, CORPORATE_NEWS, IHC_ANNOUNCEMENTS, COMPANY_ANNOUNCEMENTS, MARKETPLACE_LISTINGS } from '@/lib/mockData';
 import Avatar from '@/components/ui/Avatar';
 import AppShell from '@/components/layout/AppShell';
@@ -56,6 +57,8 @@ interface ActionCard {
    ═══════════════════════════════════════════ */
 
 function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' | 'health' }) {
+  const { addPolicy } = useInsurance();
+  const router = useRouter();
   const [insuranceType, setInsuranceType] = useState<'choose' | 'car' | 'home' | 'pet' | 'health'>(initialType || 'choose');
   const [phase, setPhase] = useState<'plate' | 'fetching' | 'vehicle' | 'plans' | 'payment' | 'processing' | 'complete' | 'form' | 'reviewing' | 'confirmed'>(initialType === 'car' ? 'plate' : initialType ? 'form' : 'plate');
   const [emirate, setEmirate] = useState('Abu Dhabi');
@@ -64,6 +67,7 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
   const [cardNum, setCardNum] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
+  const [showWalletSuccess, setShowWalletSuccess] = useState(false);
   // Home insurance selections
   const [propertyType, setPropertyType] = useState('');
   const [propertyLocation, setPropertyLocation] = useState('');
@@ -123,19 +127,43 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
   const chosen = PLANS.find(p => p.id === selectedPlan);
   const accentColor = getColor();
 
+  const getDetailString = () => {
+    if (insuranceType === 'car') return `Toyota Land Cruiser 2023`;
+    if (insuranceType === 'home') return `${propertyType || 'Property'}${propertyLocation ? ', ' + propertyLocation : ''}`;
+    if (insuranceType === 'pet') return `${petType || 'Pet'}${petBreed ? ' - ' + petBreed : ''}${petAge ? ' (' + petAge + ')' : ''}`;
+    if (insuranceType === 'health') return `${coverageFor || 'Individual'}${yourAge ? ', Age ' + yourAge : ''}`;
+    return '';
+  };
+
   useEffect(() => {
     if (phase === 'fetching') {
       const t = setTimeout(() => setPhase('vehicle'), 2000);
       return () => clearTimeout(t);
     }
     if (phase === 'processing') {
-      const t = setTimeout(() => setPhase('complete'), 2500);
+      const t = setTimeout(() => {
+        // Save policy to context
+        const plan = getPlans().find(p => p.id === selectedPlan);
+        if (plan && insuranceType !== 'choose') {
+          addPolicy({
+            type: insuranceType,
+            planName: plan.name,
+            premium: plan.discounted,
+            details: {
+              description: getDetailString(),
+              features: plan.features.join(', '),
+            },
+          });
+        }
+        setPhase('complete');
+      }, 2500);
       return () => clearTimeout(t);
     }
     if (phase === 'reviewing') {
       const t = setTimeout(() => setPhase('confirmed'), 2000);
       return () => clearTimeout(t);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   return (
@@ -464,7 +492,7 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
               <div className="flex gap-4 mt-3 text-[10px] text-white/50">
                 <div>
                   <p>{insuranceType === 'car' ? 'Vehicle' : insuranceType === 'home' ? 'Property' : insuranceType === 'pet' ? 'Pet' : 'Coverage'}</p>
-                  <p className="text-white font-semibold">{insuranceType === 'car' ? 'Toyota Land Cruiser 2023' : insuranceType === 'home' ? 'Villa, Abu Dhabi' : insuranceType === 'pet' ? 'Golden Retriever' : 'Family Plan'}</p>
+                  <p className="text-white font-semibold">{getDetailString()}</p>
                 </div>
                 <div><p>Valid Until</p><p className="text-white font-semibold">Apr 2027</p></div>
               </div>
@@ -473,10 +501,29 @@ function InsuranceFlow({ initialType }: { initialType?: 'car' | 'home' | 'pet' |
               <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold bg-[#F5F0FF] border active:scale-95 transition-all" style={{ color: accentColor, borderColor: accentColor + '30' }}>
                 <Download size={13} className="inline mr-1" />PDF
               </button>
-              <button className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
+              <button onClick={() => setShowWalletSuccess(true)} className="flex-1 py-2.5 rounded-[12px] text-[12px] font-bold text-[#15161E] bg-[#F8F9FB] border border-[#DFE1E6] active:scale-95 transition-all">
                 <Wallet size={13} className="inline mr-1" />Add to Wallet
               </button>
             </div>
+
+            {/* Wallet Success Modal */}
+            {showWalletSuccess && (
+              <div className="fixed inset-0 z-[200] flex items-center justify-center px-6" style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}>
+                <div className="bg-white rounded-[24px] p-6 w-full max-w-sm text-center shadow-2xl" style={{ animation: 'splash-logo-in 0.3s ease-out both' }}>
+                  <div className="w-16 h-16 rounded-full bg-[#F0FDF4] flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle2 size={32} className="text-[#059669]" />
+                  </div>
+                  <h3 className="text-[18px] font-bold text-[#15161E] mb-1">Added to Wallet!</h3>
+                  <p className="text-[13px] text-[#666D80] mb-5">Your {getLabel()} policy has been successfully added to your profile.</p>
+                  <button
+                    onClick={() => { setShowWalletSuccess(false); router.push('/profile?openInsurance=' + insuranceType); }}
+                    className="w-full py-3 rounded-[14px] text-[14px] font-bold text-white active:scale-[0.97] transition-all"
+                    style={{ background: getGradient(), boxShadow: `0 4px 16px ${accentColor}40` }}>
+                    View in Profile
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
