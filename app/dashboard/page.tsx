@@ -315,7 +315,12 @@ export default function DashboardPage() {
   const { unreadCount, togglePanel } = useNotifications();
   const [mounted, setMounted] = useState(false);
 
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !window.sessionStorage.getItem('splash_shown');
+    }
+    return true;
+  });
   const [splashFading, setSplashFading] = useState(false);
 
   const [showStockAction, setShowStockAction] = useState<'buy' | 'sell' | null>(null);
@@ -337,10 +342,14 @@ export default function DashboardPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  /* Splash screen — show for 5 seconds then fade out */
+  /* Splash screen — show once per session, 5 seconds then fade out */
   useEffect(() => {
+    if (!showSplash) return;
     const fadeTimer = setTimeout(() => setSplashFading(true), 4500);
-    const hideTimer = setTimeout(() => setShowSplash(false), 5200);
+    const hideTimer = setTimeout(() => {
+      setShowSplash(false);
+      window.sessionStorage.setItem('splash_shown', '1');
+    }, 5200);
     return () => { clearTimeout(fadeTimer); clearTimeout(hideTimer); };
   }, []);
 
