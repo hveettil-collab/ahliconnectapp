@@ -568,7 +568,7 @@ export default function DashboardPage() {
             transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
             alignSelf: 'flex-start',
           }}>
-            <DotLottieReact src="/lottie-hero-flag.lottie" loop autoplay speed={0.5} style={{ width: '100%', height: '100%' }} />
+            <DotLottieReact src="/lottie-hero-flag2.lottie" loop autoplay speed={0.5} style={{ width: '100%', height: '100%' }} />
           </div>
         </div>
 
