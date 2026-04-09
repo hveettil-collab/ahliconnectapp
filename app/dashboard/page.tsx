@@ -526,27 +526,38 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Hero tagline */}
-        <div className="relative z-20 px-5 mt-6">
-          <h1 className="text-white leading-[1.1] tracking-tight"
-            style={{
-              fontSize: 'clamp(26px, 6.5vw, 34px)',
-              fontWeight: 800,
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
-            }}>
-            Your work life,{'\n'}
-            <span style={{ color: '#000000' }}>supercharged.</span>
-          </h1>
-          <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[260px]"
-            style={{
-              opacity: mounted ? 1 : 0,
-              transform: mounted ? 'translateY(0)' : 'translateY(16px)',
-              transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
-            }}>
-            AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
-          </p>
+        {/* Hero tagline + Lottie */}
+        <div className="relative z-20 px-5 mt-6 flex items-center">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-white leading-[1.1] tracking-tight"
+              style={{
+                fontSize: 'clamp(26px, 6.5vw, 34px)',
+                fontWeight: 800,
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(20px)',
+                transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s',
+              }}>
+              Your work life,{'\n'}
+              <span style={{ color: '#000000' }}>supercharged.</span>
+            </h1>
+            <p className="text-[rgba(0,0,0,0.6)] text-[13px] mt-2 leading-relaxed max-w-[220px]"
+              style={{
+                opacity: mounted ? 1 : 0,
+                transform: mounted ? 'translateY(0)' : 'translateY(16px)',
+                transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s',
+              }}>
+              AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
+            </p>
+          </div>
+          <div className="shrink-0 -mr-1 -mt-8" style={{
+            width: 70, height: 70,
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'scale(1)' : 'scale(0.8)',
+            transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
+            alignSelf: 'flex-start',
+          }}>
+            <DotLottieReact src="/lottie-hero-flag.lottie" loop autoplay speed={0.5} style={{ width: '100%', height: '100%' }} />
+          </div>
         </div>
 
         {/* USP Stats Strip */}
