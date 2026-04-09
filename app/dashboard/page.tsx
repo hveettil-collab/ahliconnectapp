@@ -315,6 +315,9 @@ export default function DashboardPage() {
   const { unreadCount, togglePanel } = useNotifications();
   const [mounted, setMounted] = useState(false);
 
+  const [showSplash, setShowSplash] = useState(true);
+  const [splashFading, setSplashFading] = useState(false);
+
   const [showStockAction, setShowStockAction] = useState<'buy' | 'sell' | null>(null);
   const [stockShares, setStockShares] = useState('');
   const [stockConfirmed, setStockConfirmed] = useState(false);
@@ -334,6 +337,13 @@ export default function DashboardPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  /* Splash screen — show for 3 seconds then fade out */
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => setSplashFading(true), 2500);
+    const hideTimer = setTimeout(() => setShowSplash(false), 3200);
+    return () => { clearTimeout(fadeTimer); clearTimeout(hideTimer); };
+  }, []);
+
   /* Show "use mobile" modal only on desktop screens — cannot be dismissed */
   useEffect(() => {
     const isDesktop = window.innerWidth >= 768;
@@ -352,6 +362,80 @@ export default function DashboardPage() {
   const onlineColleagues = COLLEAGUES.filter(c => c.online);
   const topNews = CORPORATE_NEWS[0];
   const topOffers = relevantOffers.slice(0, 3);
+
+  /* ═══ SPLASH SCREEN ═══ */
+  if (showSplash) {
+    return (
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center overflow-hidden"
+        style={{
+          background: '#0A0A0A',
+          opacity: splashFading ? 0 : 1,
+          transition: 'opacity 0.7s ease-out',
+        }}>
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div style={{
+            position: 'absolute',
+            inset: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'conic-gradient(from 0deg at 50% 50%, #6B2FA0 0deg, #9D63F6 60deg, #40C4AA 120deg, #FFBD4C 180deg, #DC2626 240deg, #9D63F6 300deg, #6B2FA0 360deg)',
+            filter: 'blur(80px)',
+            opacity: 0.3,
+            animation: 'splash-gradient-spin 4s linear infinite',
+          }} />
+        </div>
+
+        {/* Logo + Text centered */}
+        <div className="relative z-10 flex flex-col items-center gap-5"
+          style={{
+            opacity: splashFading ? 0 : 1,
+            transform: splashFading ? 'scale(0.95)' : 'scale(1)',
+            transition: 'all 0.5s ease-out',
+          }}>
+          {/* Globe logo */}
+          <div style={{
+            animation: 'splash-logo-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both',
+          }}>
+            <img src="/logo-login.svg" alt="Ahli Connect" className="h-[52px]" />
+          </div>
+
+          {/* Divider line */}
+          <div className="w-[60px] h-[1px] bg-white/10" style={{
+            animation: 'splash-fade-in 0.6s ease-out 0.5s both',
+          }} />
+
+          {/* Arabic + English tagline */}
+          <div className="flex flex-col items-center gap-2" style={{
+            animation: 'splash-fade-in 0.6s ease-out 0.7s both',
+          }}>
+            <p className="text-white/90 text-[22px] font-bold leading-tight tracking-wide" style={{ fontFamily: 'system-ui, sans-serif' }}>
+              إماراتنا، فخرنا
+            </p>
+            <p className="text-white/40 text-[11px] font-bold tracking-[0.3em] uppercase">
+              Our Pride. Our UAE
+            </p>
+          </div>
+        </div>
+
+        {/* Splash animations */}
+        <style>{`
+          @keyframes splash-gradient-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes splash-logo-in {
+            from { opacity: 0; transform: scale(0.7) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+          }
+          @keyframes splash-fade-in {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
+      </div>
+    );
+  }
 
   return (
     <AppShell title="Home" subtitle={time} hideTopBar>
