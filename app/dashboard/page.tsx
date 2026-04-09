@@ -377,10 +377,10 @@ export default function DashboardPage() {
         <img
           src="/splash-screen.png"
           alt="Ahli Connect"
-          className="w-full h-full object-contain"
+          className="w-full object-contain"
           style={{
-            maxWidth: '85%',
-            maxHeight: '70%',
+            maxWidth: '75%',
+            maxHeight: '55%',
             opacity: splashFading ? 0 : 1,
             transform: splashFading ? 'scale(0.97)' : 'scale(1)',
             transition: 'all 0.5s ease-out',
@@ -388,11 +388,25 @@ export default function DashboardPage() {
           }}
         />
 
+        {/* Loading lottie animation */}
+        <div className="mt-6" style={{
+          width: 64, height: 64,
+          opacity: splashFading ? 0 : 1,
+          transition: 'opacity 0.5s ease-out',
+          animation: 'splash-fade-in 0.6s ease-out 0.5s both',
+        }}>
+          <DotLottieReact src="/lottie-splash.lottie" loop autoplay speed={0.7} style={{ width: '100%', height: '100%' }} />
+        </div>
+
         {/* Splash animations */}
         <style>{`
           @keyframes splash-logo-in {
             from { opacity: 0; transform: scale(0.7) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
+          }
+          @keyframes splash-fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
           }
         `}</style>
       </div>
