@@ -2542,6 +2542,17 @@ function ServicesPageContent() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const onScroll = () => setScrollY(el.scrollTop);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [messages.length]);
+
   const userName = user?.name?.split(' ')[0] || 'there';
   const companyId = user?.companyId || 'ihc';
   const walletInfo: WalletInfo = { balance, rewardPoints, rewardTier, rewardTierNext, rewardProgress };
@@ -2831,30 +2842,59 @@ function ServicesPageContent() {
       </div>
 
       {/* ═══ SCROLLABLE MAIN CONTENT ═══ */}
-      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden">
-        <div className="flex flex-col items-center max-w-lg mx-auto px-5 pb-4">
+      <div ref={scrollContainerRef} className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden">
 
-          {/* ═══ GREETING ═══ */}
-          <div className="text-center pt-4 pb-2 ahli-fade">
-            <p className="text-[14px] text-[#9D63F6] font-medium mb-1">Hello, {userName}!</p>
-            <h1 className="text-[24px] md:text-[28px] font-bold text-[#1E1E3A] leading-tight">
-              How can I help you<br />today?
-            </h1>
-          </div>
+        {/* ═══ STICKY AI ANIMATION — shrinks on scroll ═══ */}
+        {(() => {
+          const maxScroll = 200;
+          const progress = Math.min(scrollY / maxScroll, 1);
+          const size = 280 - progress * 220; // 280 → 60
+          const lottieSize = 260 - progress * 210; // 260 → 50
+          const glowSize = 320 - progress * 260; // 320 → 60
+          const greetOpacity = 1 - Math.min(scrollY / 80, 1);
+          const greetHeight = Math.max(1 - scrollY / 100, 0);
+          return (
+            <div className="sticky top-0 z-20 flex flex-col items-center" style={{
+              paddingTop: progress > 0.9 ? 8 : 0,
+              paddingBottom: progress > 0.9 ? 4 : 0,
+              background: progress > 0.5 ? `rgba(240,236,255,${Math.min((progress - 0.5) * 2, 0.95)})` : 'transparent',
+              backdropFilter: progress > 0.5 ? 'blur(16px)' : 'none',
+              WebkitBackdropFilter: progress > 0.5 ? 'blur(16px)' : 'none',
+              transition: 'background 0.15s ease, padding 0.15s ease',
+            }}>
+              {/* Greeting — fades out on scroll */}
+              <div className="text-center pt-4 pb-2 ahli-fade overflow-hidden" style={{
+                opacity: greetOpacity,
+                maxHeight: `${greetHeight * 80}px`,
+                transition: 'max-height 0.1s ease',
+              }}>
+                <p className="text-[14px] text-[#9D63F6] font-medium mb-1">Hello, {userName}!</p>
+                <h1 className="text-[24px] md:text-[28px] font-bold text-[#1E1E3A] leading-tight">
+                  How can I help you<br />today?
+                </h1>
+              </div>
 
-          {/* ═══ ANIMATED CHATBOT ═══ */}
-          <div className="relative flex items-center justify-center my-4 ahli-fade-d1" style={{ width: 280, height: 280 }}>
-            {/* Ambient glow behind the chatbot */}
-            <div className="absolute ahli-orb-glow" style={{
-              width: 320, height: 320, borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 65%)',
-              left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
-            }} />
-            {/* Lottie chatbot animation */}
-            <div className="ahli-orb-float" style={{ width: 260, height: 260 }}>
-              <DotLottieReact src="/lottie-ai-bot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
+              {/* AI animation — shrinks on scroll */}
+              <div className="relative flex items-center justify-center ahli-fade-d1" style={{
+                width: size, height: size,
+                marginTop: progress > 0.9 ? 0 : 16,
+                marginBottom: progress > 0.9 ? 0 : 16,
+                transition: 'margin 0.15s ease',
+              }}>
+                <div className="absolute ahli-orb-glow" style={{
+                  width: glowSize, height: glowSize, borderRadius: '50%',
+                  background: 'radial-gradient(circle, rgba(157,99,246,0.12) 0%, rgba(157,99,246,0.03) 50%, transparent 65%)',
+                  left: '50%', top: '50%', transform: 'translate(-50%, -50%)',
+                }} />
+                <div className="ahli-orb-float" style={{ width: lottieSize, height: lottieSize }}>
+                  <DotLottieReact src="/lottie-ai-bot.lottie" loop autoplay style={{ width: '100%', height: '100%' }} />
+                </div>
+              </div>
             </div>
-          </div>
+          );
+        })()}
+
+        <div className="flex flex-col items-center max-w-lg mx-auto px-5 pb-4">
 
           {/* ═══ 2-COLUMN QUICK ACTION BENTO GRID ═══ */}
           <div className="w-full ahli-fade-d2">
