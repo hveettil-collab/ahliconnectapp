@@ -549,11 +549,12 @@ export default function DashboardPage() {
               AI-powered benefits, automations & perks for {company?.name || 'IHC Group'}
             </p>
           </div>
-          <div className="shrink-0 -mr-2" style={{
-            width: 130, height: 130,
+          <div className="shrink-0 -mr-1 -mt-10" style={{
+            width: 80, height: 80,
             opacity: mounted ? 1 : 0,
             transform: mounted ? 'scale(1)' : 'scale(0.8)',
             transition: 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s',
+            alignSelf: 'flex-start',
           }}>
             <DotLottieReact src="/lottie-hero-new.lottie" loop autoplay speed={0.5} style={{ width: '100%', height: '100%' }} />
           </div>
