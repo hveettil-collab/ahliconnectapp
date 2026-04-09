@@ -317,14 +317,12 @@ export default function DashboardPage() {
 
   const [showSplash, setShowSplash] = useState(() => {
     if (typeof window !== 'undefined') {
-      const shown = window.sessionStorage.getItem('splash_shown_nav');
-      if (shown) {
-        window.sessionStorage.removeItem('splash_shown_nav');
-        return false;
-      }
-      return true;
+      const splashDone = window.sessionStorage.getItem('splash_done');
+      if (splashDone) return false;
+      const showIt = window.sessionStorage.getItem('show_splash');
+      return !!showIt;
     }
-    return true;
+    return false;
   });
   const [splashFading, setSplashFading] = useState(false);
 
@@ -353,7 +351,7 @@ export default function DashboardPage() {
     const fadeTimer = setTimeout(() => setSplashFading(true), 4500);
     const hideTimer = setTimeout(() => {
       setShowSplash(false);
-      window.sessionStorage.setItem('splash_shown_nav', '1');
+      window.sessionStorage.setItem('splash_done', '1');
     }, 5200);
     return () => { clearTimeout(fadeTimer); clearTimeout(hideTimer); };
   }, []);

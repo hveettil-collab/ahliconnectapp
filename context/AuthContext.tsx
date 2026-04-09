@@ -38,12 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const found = MOCK_USERS[email] || Object.values(MOCK_USERS)[0];
     setUser(found);
     localStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(found));
+    sessionStorage.setItem('show_splash', '1');
     return true;
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
+    sessionStorage.removeItem('show_splash');
+    sessionStorage.removeItem('splash_done');
     router.push('/');
   };
 
