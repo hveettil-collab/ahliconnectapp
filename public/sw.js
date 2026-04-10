@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ahli-connect-v3';
+const CACHE_NAME = 'ahli-connect-v4';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [
