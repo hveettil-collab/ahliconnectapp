@@ -14,6 +14,7 @@ interface AuthContextType {
   login: (email: string) => boolean;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -21,12 +22,16 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<User>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [pendingEmail, setPendingEmail] = useState('');
   const [pendingCompany, setPendingCompany] = useState('');
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEYS.AUTH_USER);
-    if (stored) setUser(JSON.parse(stored));
+    try {
+      const stored = localStorage.getItem(STORAGE_KEYS.AUTH_USER);
+      if (stored) setUser(JSON.parse(stored));
+    } catch {}
+    setIsLoading(false);
   }, []);
 
   const setAuth = (email: string, company: string) => {
@@ -51,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, pendingEmail, pendingCompany, setAuth, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, pendingEmail, pendingCompany, setAuth, login, logout, isAuthenticated: !!user, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

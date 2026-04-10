@@ -2,7 +2,7 @@
   "name": "Ahli Connect",
   "short_name": "Ahli Connect",
   "description": "Your employee ecosystem across IHC Group",
-  "start_url": "/dashboard",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F8F9FB",
@@ -12,7 +12,7 @@
   "lang": "en",
   "dir": "ltr",
   "prefer_related_applications": false,
-  "id": "/dashboard",
+  "id": "/",
   "icons": [
     {
       "src": "/icon-192.png",

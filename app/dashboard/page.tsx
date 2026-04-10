@@ -306,7 +306,7 @@ function LatestCarousel({ offers, onSlideClick }: { offers: OfferItem[]; onSlide
 /* ════════════════ DASHBOARD ════════════════ */
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const wallet = useWallet();
   const router = useRouter();
   const greeting = useGreeting();
@@ -367,7 +367,11 @@ export default function DashboardPage() {
     prevClose: MARKET_DATA.price - MARKET_DATA.change,
   };
 
-  if (!user) return null;
+  if (isLoading || !user) return (
+    <div className="fixed inset-0 flex items-center justify-center" style={{ background: '#F6F6F6' }}>
+      <img src="/splash-screen.png" alt="Ahli Connect" style={{ maxWidth: '60%', maxHeight: '40%', objectFit: 'contain' }} />
+    </div>
+  );
 
   const company = COMPANIES.find(c => c.id === user.companyId);
   const relevantOffers = OFFERS.filter(o => o.relevantFor.includes(user.companyId)).slice(0, 6);
