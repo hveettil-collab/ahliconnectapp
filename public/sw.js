@@ -1,8 +1,7 @@
-const CACHE_NAME = 'ahli-connect-v4';
+const CACHE_NAME = 'ahli-connect-v5';
 const OFFLINE_URL = '/offline';
 
 const PRECACHE_ASSETS = [
-  '/',
   '/dashboard',
   '/offline',
   '/manifest.json',
@@ -16,13 +15,9 @@ const PRECACHE_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      // Use addAll for critical assets, but don't fail if some aren't available yet
-      return cache.addAll(PRECACHE_ASSETS).catch(() => {
-        // Fallback: try adding each individually
-        return Promise.allSettled(
-          PRECACHE_ASSETS.map((url) => cache.add(url).catch(() => {}))
-        );
-      });
+      return Promise.allSettled(
+        PRECACHE_ASSETS.map((url) => cache.add(url).catch(() => {}))
+      );
     })
   );
   self.skipWaiting();
@@ -39,6 +34,11 @@ self.addEventListener('activate', (event) => {
   );
   self.clients.claim();
 });
+
+// Helper: check if a response is safe to cache (not a redirect, not an error)
+function isCacheable(response) {
+  return response && response.status === 200 && !response.redirected && response.type !== 'opaqueredirect';
+}
 
 // Fetch handler with smart caching strategies
 self.addEventListener('fetch', (event) => {
@@ -60,7 +60,7 @@ self.addEventListener('fetch', (event) => {
       caches.match(event.request).then((cached) => {
         if (cached) return cached;
         return fetch(event.request).then((response) => {
-          if (response.status === 200) {
+          if (isCacheable(response)) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
@@ -77,7 +77,7 @@ self.addEventListener('fetch', (event) => {
       caches.match(event.request).then((cached) => {
         const fetchPromise = fetch(event.request)
           .then((response) => {
-            if (response.status === 200) {
+            if (isCacheable(response)) {
               const clone = response.clone();
               caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
             }
@@ -91,30 +91,32 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // ── Strategy 3: Navigation requests — Stale While Revalidate with offline fallback
+  // ── Strategy 3: Navigation requests — Network First (NEVER serve cached redirects)
+  // This is critical for PWA relaunch — cached redirects cause fatal errors
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      caches.match(event.request).then((cached) => {
-        const fetchPromise = fetch(event.request)
-          .then((response) => {
-            if (response.status === 200) {
-              const clone = response.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-            }
-            return response;
-          })
-          .catch(() => {
-            // Offline: serve cached version, or cached root, or offline page
-            if (cached) return cached;
-            return caches.match('/').then((root) => {
-              if (root) return root;
-              return caches.match(OFFLINE_URL);
+      fetch(event.request)
+        .then((response) => {
+          // Only cache non-redirect, successful responses
+          if (isCacheable(response)) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => {
+          // Offline: serve cached version of THIS page, or /dashboard, or offline page
+          return caches.match(event.request).then((cached) => {
+            if (cached && !cached.redirected) return cached;
+            return caches.match('/dashboard').then((dashboard) => {
+              if (dashboard && !dashboard.redirected) return dashboard;
+              return caches.match(OFFLINE_URL) || new Response('Offline', {
+                status: 503,
+                headers: { 'Content-Type': 'text/plain' },
+              });
             });
           });
-
-        // Return cached immediately if available, update in background
-        return cached || fetchPromise;
-      })
+        })
     );
     return;
   }
@@ -124,7 +126,7 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((cached) => {
       const fetchPromise = fetch(event.request)
         .then((response) => {
-          if (response.status === 200) {
+          if (isCacheable(response)) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
