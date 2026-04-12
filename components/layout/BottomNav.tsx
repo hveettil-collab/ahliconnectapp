@@ -4,19 +4,22 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutGrid, Compass, Sparkles, Users, Store } from 'lucide-react';
 
-const TABS = [
+const LEFT_TABS = [
   { label: 'Home', href: '/dashboard', icon: LayoutGrid },
   { label: 'Explore', href: '/explore', icon: Compass },
-  { label: 'AI', href: '/services', icon: Sparkles, isAI: true },
+];
+
+const RIGHT_TABS = [
   { label: 'Community', href: '/community', icon: Users },
   { label: 'Market', href: '/marketplace', icon: Store },
 ];
+
+const AI_TAB = { label: 'AI', href: '/services', icon: Sparkles };
 
 export default function BottomNav() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
 
-  // Hide nav when any modal/overlay (fixed inset-0 z-30+/z-50+) is open
   useEffect(() => {
     const check = () => {
       const overlays = document.querySelectorAll('.fixed.inset-0, [data-modal-overlay]');
@@ -28,74 +31,125 @@ export default function BottomNav() {
     return () => observer.disconnect();
   }, []);
 
-  // Hide bottom nav on AI page
   if (pathname === '/services') return null;
   if (hidden) return null;
 
+  const isActive = (href: string) =>
+    pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+
   return (
     <div
-      className="md:hidden fixed bottom-4 left-4 right-4 flex justify-center hide-on-keyboard"
-      style={{ zIndex: 100, pointerEvents: 'auto' }}
+      className="md:hidden fixed bottom-0 left-0 right-0 flex justify-center hide-on-keyboard"
+      style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      <nav
-        className="flex items-center gap-1 rounded-full px-1.5 py-1.5"
+      {/* Floating AI center button — sits above the bar */}
+      <Link
+        href={AI_TAB.href}
+        className="absolute flex items-center justify-center"
         style={{
-          background: '#FFFFFF',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+          top: '-22px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 10,
+          pointerEvents: 'auto',
+          WebkitTapHighlightColor: 'transparent',
+          touchAction: 'manipulation',
         }}
       >
-        {TABS.map(({ label, href, icon: Icon, isAI }) => {
-          const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
+        {/* Outer dark ring */}
+        <div
+          className="w-[62px] h-[62px] rounded-full flex items-center justify-center"
+          style={{
+            background: '#1A1A2E',
+            boxShadow: '0 -2px 16px rgba(157,99,246,0.25)',
+          }}
+        >
+          {/* Inner gradient orb */}
+          <div
+            className="w-[44px] h-[44px] rounded-full flex items-center justify-center ai-orb-glow"
+            style={{
+              background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
+            }}
+          >
+            <Sparkles size={20} className="text-white ai-icon-rock" strokeWidth={2.2} />
+          </div>
+        </div>
+      </Link>
 
-          /* ── AI tab — center orb ── */
-          if (isAI) {
+      {/* Main dark nav bar */}
+      <nav
+        className="relative w-full mx-3 mb-2 flex items-center justify-between rounded-[22px] px-2"
+        style={{
+          background: '#1A1A2E',
+          height: '68px',
+          pointerEvents: 'auto',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)',
+        }}
+      >
+        {/* Left tabs */}
+        <div className="flex items-center gap-1 flex-1 justify-around pr-8">
+          {LEFT_TABS.map(({ label, href, icon: Icon }) => {
+            const active = isActive(href);
             return (
               <Link
                 key={href}
                 href={href}
-                className="relative shrink-0 flex items-center justify-center"
-                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
+                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200"
+                style={{
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  background: active ? 'rgba(157,99,246,0.15)' : 'transparent',
+                }}
               >
-                <div
-                  className="ai-orb-glow w-[52px] h-[52px] rounded-full flex items-center justify-center"
-                  style={{
-                    background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
-                  }}
+                <Icon
+                  size={22}
+                  strokeWidth={active ? 2.2 : 1.5}
+                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.5)' }}
+                />
+                <span
+                  className="text-[9px] font-semibold mt-1 leading-none"
+                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.5)' }}
                 >
-                  <Sparkles size={22} className="text-white ai-icon-rock" strokeWidth={2} />
-                </div>
+                  {label}
+                </span>
               </Link>
             );
-          }
+          })}
+        </div>
 
-          /* ── Regular tabs ── */
-          return (
-            <Link
-              key={href}
-              href={href}
-              className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200 relative"
-              style={{
-                background: active ? 'rgba(157,99,246,0.08)' : 'transparent',
-                WebkitTapHighlightColor: 'transparent',
-                touchAction: 'manipulation',
-              }}
-            >
-              <Icon
-                size={20}
-                strokeWidth={active ? 2.2 : 1.5}
+        {/* Center spacer for the floating button */}
+        <div className="w-[62px] shrink-0" />
+
+        {/* Right tabs */}
+        <div className="flex items-center gap-1 flex-1 justify-around pl-8">
+          {RIGHT_TABS.map(({ label, href, icon: Icon }) => {
+            const active = isActive(href);
+            return (
+              <Link
+                key={href}
+                href={href}
+                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200"
                 style={{
-                  color: active ? '#9D63F6' : '#A4ABB8',
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
+                  background: active ? 'rgba(157,99,246,0.15)' : 'transparent',
                 }}
-              />
-              <span
-                className="text-[8px] font-semibold mt-0.5 leading-none"
-                style={{ color: active ? '#9D63F6' : '#A4ABB8' }}
               >
-                {label}
-              </span>
-            </Link>
-          );
-        })}
+                <Icon
+                  size={22}
+                  strokeWidth={active ? 2.2 : 1.5}
+                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.5)' }}
+                />
+                <span
+                  className="text-[9px] font-semibold mt-1 leading-none"
+                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.5)' }}
+                >
+                  {label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       </nav>
     </div>
   );
