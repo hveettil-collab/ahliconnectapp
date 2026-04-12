@@ -40,14 +40,14 @@ export default function BottomNav() {
   return (
     <div
       className="md:hidden fixed bottom-0 left-0 right-0 flex justify-center hide-on-keyboard"
-      style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}
     >
       {/* Floating AI center button — sits above the bar */}
       <Link
         href={AI_TAB.href}
         className="absolute flex items-center justify-center"
         style={{
-          top: '-22px',
+          top: '-26px',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 10,
@@ -58,7 +58,7 @@ export default function BottomNav() {
       >
         {/* Outer dark ring */}
         <div
-          className="w-[62px] h-[62px] rounded-full flex items-center justify-center"
+          className="w-[58px] h-[58px] rounded-full flex items-center justify-center"
           style={{
             background: '#1A1A2E',
             boxShadow: '0 -2px 16px rgba(157,99,246,0.25)',
@@ -66,22 +66,24 @@ export default function BottomNav() {
         >
           {/* Inner gradient orb */}
           <div
-            className="w-[44px] h-[44px] rounded-full flex items-center justify-center ai-orb-glow"
+            className="w-[40px] h-[40px] rounded-full flex items-center justify-center ai-orb-glow"
             style={{
               background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
             }}
           >
-            <Sparkles size={20} className="text-white ai-icon-rock" strokeWidth={2.2} />
+            <Sparkles size={18} className="text-white ai-icon-rock" strokeWidth={2.2} />
           </div>
         </div>
       </Link>
 
       {/* Main dark nav bar */}
       <nav
-        className="relative w-full mx-3 mb-2 flex items-center justify-between rounded-[22px] px-2"
+        className="relative flex items-center justify-between rounded-full px-3"
         style={{
           background: '#1A1A2E',
-          height: '68px',
+          height: '60px',
+          width: 'calc(100% - 48px)',
+          maxWidth: '380px',
           pointerEvents: 'auto',
           boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)',
         }}
@@ -118,7 +120,7 @@ export default function BottomNav() {
         </div>
 
         {/* Center spacer for the floating button */}
-        <div className="w-[62px] shrink-0" />
+        <div className="w-[50px] shrink-0" />
 
         {/* Right tabs */}
         <div className="flex items-center gap-1 flex-1 justify-around pl-8">
