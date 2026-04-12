@@ -69,8 +69,8 @@ export default function BottomNav() {
       <nav
         className="flex items-center gap-1 rounded-full px-1.5 py-1.5"
         style={{
-          background: '#FFFFFF',
-          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
+          background: '#1A1A2E',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.35), 0 2px 12px rgba(0,0,0,0.2)',
         }}
       >
         {TABS.map(({ label, href, icon: Icon, isAI }) => {
@@ -106,7 +106,7 @@ export default function BottomNav() {
               onClick={handleTap}
               className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200 relative active:scale-90"
               style={{
-                background: active ? 'rgba(157,99,246,0.08)' : 'transparent',
+                background: active ? 'rgba(157,99,246,0.15)' : 'transparent',
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
               }}
@@ -115,12 +115,12 @@ export default function BottomNav() {
                 size={20}
                 strokeWidth={active ? 2.2 : 1.5}
                 style={{
-                  color: active ? '#9D63F6' : '#A4ABB8',
+                  color: active ? '#9D63F6' : 'rgba(255,255,255,0.45)',
                 }}
               />
               <span
                 className="text-[8px] font-semibold mt-0.5 leading-none"
-                style={{ color: active ? '#9D63F6' : '#A4ABB8' }}
+                style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.45)' }}
               >
                 {label}
               </span>
