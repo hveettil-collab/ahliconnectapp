@@ -367,7 +367,21 @@ export default function DashboardPage() {
     prevClose: MARKET_DATA.price - MARKET_DATA.change,
   };
 
-  if (isLoading || !user) return (
+  // While auth is hydrating from localStorage, show splash briefly
+  // Once loaded, if no user found, redirect to login
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.replace('/landing');
+    }
+  }, [isLoading, user, router]);
+
+  if (isLoading) return (
+    <div className="fixed inset-0 flex items-center justify-center" style={{ background: '#F6F6F6' }}>
+      <img src="/splash-screen.png" alt="Ahli Connect" style={{ maxWidth: '60%', maxHeight: '40%', objectFit: 'contain' }} />
+    </div>
+  );
+
+  if (!user) return (
     <div className="fixed inset-0 flex items-center justify-center" style={{ background: '#F6F6F6' }}>
       <img src="/splash-screen.png" alt="Ahli Connect" style={{ maxWidth: '60%', maxHeight: '40%', objectFit: 'contain' }} />
     </div>
