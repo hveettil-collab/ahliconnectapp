@@ -83,7 +83,7 @@ export default function BottomNav() {
         onClick={handleTap}
         className="absolute flex items-center justify-center"
         style={{
-          top: '-26px',
+          top: '-34px',
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 10,
@@ -93,26 +93,26 @@ export default function BottomNav() {
         }}
       >
         <div
-          className="w-[58px] h-[58px] rounded-full flex items-center justify-center"
+          className="w-[75px] h-[75px] rounded-full flex items-center justify-center"
           style={{
             background: '#1A1A2E',
             boxShadow: '0 -2px 16px rgba(157,99,246,0.25)',
           }}
         >
           <div
-            className="w-[40px] h-[40px] rounded-full flex items-center justify-center ai-orb-glow"
+            className="w-[52px] h-[52px] rounded-full flex items-center justify-center ai-orb-glow"
             style={{
               background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
             }}
           >
-            <Sparkles size={18} className="text-white ai-icon-rock" strokeWidth={2.2} />
+            <Sparkles size={23} className="text-white ai-icon-rock" strokeWidth={2.2} />
           </div>
         </div>
       </Link>
 
       {/* Main dark nav bar */}
       <nav
-        className="relative flex items-center justify-between rounded-full px-3"
+        className="relative flex items-center justify-between rounded-full px-6"
         style={{
           background: '#1A1A2E',
           height: '60px',
