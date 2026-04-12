@@ -57,103 +57,73 @@ export default function BottomNav() {
   if (pathname === '/services') return null;
   if (hidden) return null;
 
-  const isActive = (href: string) =>
-    pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
-
   const handleTap = useCallback(() => {
     triggerHaptic();
   }, []);
 
   return (
     <div
-      className="md:hidden fixed bottom-0 left-0 right-0 flex justify-center hide-on-keyboard"
-      style={{ zIndex: 100, paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
+      className="md:hidden fixed bottom-4 left-4 right-4 flex justify-center hide-on-keyboard"
+      style={{ zIndex: 100, pointerEvents: 'auto' }}
     >
       <nav
-        className="relative flex items-stretch rounded-[28px]"
+        className="flex items-center gap-1 rounded-full px-1.5 py-1.5"
         style={{
-          background: '#1A1A2E',
-          height: '64px',
-          width: 'calc(100% - 40px)',
-          maxWidth: '400px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.2)',
+          background: '#FFFFFF',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.18), 0 2px 12px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
         }}
       >
         {TABS.map(({ label, href, icon: Icon, isAI }) => {
-          const active = isActive(href);
+          const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
 
-          /* ── AI center orb ── */
+          /* ── AI tab — center orb ── */
           if (isAI) {
             return (
               <Link
                 key={href}
                 href={href}
                 onClick={handleTap}
-                className="relative flex items-center justify-center active:scale-90 transition-transform duration-150"
-                style={{
-                  flex: '1 1 0',
-                  WebkitTapHighlightColor: 'transparent',
-                  touchAction: 'manipulation',
-                }}
+                className="relative shrink-0 flex items-center justify-center active:scale-90 transition-transform duration-150"
+                style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation' }}
               >
-                {/* Raised orb */}
                 <div
-                  className="absolute flex items-center justify-center"
-                  style={{ top: '-24px' }}
+                  className="ai-orb-glow w-[52px] h-[52px] rounded-full flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
+                  }}
                 >
-                  <div
-                    className="w-[68px] h-[68px] rounded-full flex items-center justify-center"
-                    style={{
-                      background: '#1A1A2E',
-                      boxShadow: '0 -4px 20px rgba(157,99,246,0.2)',
-                    }}
-                  >
-                    <div
-                      className="w-[48px] h-[48px] rounded-full flex items-center justify-center ai-orb-glow"
-                      style={{
-                        background: 'linear-gradient(135deg, #9D63F6 0%, #B182F8 50%, #FFBD4C 100%)',
-                      }}
-                    >
-                      <Sparkles size={22} className="text-white ai-icon-rock" strokeWidth={2.2} />
-                    </div>
-                  </div>
+                  <Sparkles size={22} className="text-white ai-icon-rock" strokeWidth={2} />
                 </div>
               </Link>
             );
           }
 
-          /* ── Regular tab ── */
+          /* ── Regular tabs ── */
           return (
             <Link
               key={href}
               href={href}
               onClick={handleTap}
-              className="flex flex-col items-center justify-center active:scale-90 transition-all duration-150"
+              className="shrink-0 flex flex-col items-center justify-center w-[52px] h-[52px] rounded-full transition-all duration-200 relative active:scale-90"
               style={{
-                flex: '1 1 0',
+                background: active ? 'rgba(157,99,246,0.08)' : 'transparent',
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
               }}
             >
-              <div
-                className="flex flex-col items-center justify-center rounded-xl transition-all duration-200"
+              <Icon
+                size={20}
+                strokeWidth={active ? 2.2 : 1.5}
                 style={{
-                  padding: '6px 12px',
-                  background: active ? 'rgba(157,99,246,0.12)' : 'transparent',
+                  color: active ? '#9D63F6' : '#A4ABB8',
                 }}
+              />
+              <span
+                className="text-[8px] font-semibold mt-0.5 leading-none"
+                style={{ color: active ? '#9D63F6' : '#A4ABB8' }}
               >
-                <Icon
-                  size={20}
-                  strokeWidth={active ? 2.2 : 1.5}
-                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.45)' }}
-                />
-                <span
-                  className="text-[9px] font-semibold mt-0.5 leading-none"
-                  style={{ color: active ? '#9D63F6' : 'rgba(255,255,255,0.45)' }}
-                >
-                  {label}
-                </span>
-              </div>
+                {label}
+              </span>
             </Link>
           );
         })}
