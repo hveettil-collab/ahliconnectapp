@@ -44,7 +44,7 @@ function LoginForm() {
   const user = COMPANIES.find(() => true); // just for display mock
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F8F9FB' }}>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-8" style={{ backgroundColor: '#F8F9FB', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
       <div className="w-full max-w-md">
         <Link href="/landing" className="inline-flex items-center gap-1.5 text-sm text-[#A4ABB8] hover:text-[#15161E] transition-colors mb-6">
           <ArrowLeft size={15} /> Back

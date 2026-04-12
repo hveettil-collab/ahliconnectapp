@@ -246,6 +246,7 @@ export default function LandingPage() {
         style={{
           backgroundColor: 'var(--bg-header)',
           borderColor: 'var(--border)',
+          paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-6 py-3.5">

@@ -15,6 +15,11 @@ html, body {
   -webkit-overflow-scrolling: touch;
 }
 
+/* ── Status bar background for iOS PWA (black-translucent) ── */
+html {
+  background-color: #9D63F6;
+}
+
 /* Lock all main containers to vertical-only scroll */
 .h-screen-safe {
   overflow-x: hidden;
