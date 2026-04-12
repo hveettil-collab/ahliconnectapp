@@ -75,7 +75,7 @@ export default function BottomNav() {
   return (
     <div
       className="md:hidden fixed bottom-0 left-0 right-0 flex justify-center hide-on-keyboard"
-      style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}
+      style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}
     >
       {/* Floating AI center button */}
       <Link
