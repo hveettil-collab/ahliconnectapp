@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutGrid, Compass, Sparkles, Users, Store } from 'lucide-react';
@@ -16,6 +16,25 @@ const RIGHT_TABS = [
 
 const AI_TAB = { label: 'AI', href: '/services', icon: Sparkles };
 
+/* ── Light haptic feedback ── */
+function triggerHaptic() {
+  // Android — very short vibration (10ms = light tap)
+  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+    navigator.vibrate(10);
+  }
+  // iOS — trigger selection change on a hidden input to fire UISelectionFeedbackGenerator
+  // This gives a subtle "tick" haptic on iOS Safari & PWA
+  try {
+    const el = document.getElementById('haptic-trigger') as HTMLInputElement | null;
+    if (el) {
+      el.style.display = 'block';
+      el.focus();
+      el.style.display = 'none';
+      el.blur();
+    }
+  } catch {}
+}
+
 export default function BottomNav() {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
@@ -31,20 +50,37 @@ export default function BottomNav() {
     return () => observer.disconnect();
   }, []);
 
+  // Create hidden input for iOS haptic on mount
+  useEffect(() => {
+    if (!document.getElementById('haptic-trigger')) {
+      const input = document.createElement('input');
+      input.id = 'haptic-trigger';
+      input.type = 'text';
+      input.readOnly = true;
+      input.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0;width:0;height:0;pointer-events:none;';
+      document.body.appendChild(input);
+    }
+  }, []);
+
   if (pathname === '/services') return null;
   if (hidden) return null;
 
   const isActive = (href: string) =>
     pathname === href || (href !== '/dashboard' && pathname.startsWith(href));
 
+  const handleTap = useCallback(() => {
+    triggerHaptic();
+  }, []);
+
   return (
     <div
       className="md:hidden fixed bottom-0 left-0 right-0 flex justify-center hide-on-keyboard"
       style={{ zIndex: 100, pointerEvents: 'none', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}
     >
-      {/* Floating AI center button — sits above the bar */}
+      {/* Floating AI center button */}
       <Link
         href={AI_TAB.href}
+        onClick={handleTap}
         className="absolute flex items-center justify-center"
         style={{
           top: '-26px',
@@ -56,7 +92,6 @@ export default function BottomNav() {
           touchAction: 'manipulation',
         }}
       >
-        {/* Outer dark ring */}
         <div
           className="w-[58px] h-[58px] rounded-full flex items-center justify-center"
           style={{
@@ -64,7 +99,6 @@ export default function BottomNav() {
             boxShadow: '0 -2px 16px rgba(157,99,246,0.25)',
           }}
         >
-          {/* Inner gradient orb */}
           <div
             className="w-[40px] h-[40px] rounded-full flex items-center justify-center ai-orb-glow"
             style={{
@@ -96,7 +130,8 @@ export default function BottomNav() {
               <Link
                 key={href}
                 href={href}
-                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200"
+                onClick={handleTap}
+                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200 active:scale-90"
                 style={{
                   WebkitTapHighlightColor: 'transparent',
                   touchAction: 'manipulation',
@@ -119,7 +154,7 @@ export default function BottomNav() {
           })}
         </div>
 
-        {/* Center spacer for the floating button */}
+        {/* Center spacer */}
         <div className="w-[50px] shrink-0" />
 
         {/* Right tabs */}
@@ -130,7 +165,8 @@ export default function BottomNav() {
               <Link
                 key={href}
                 href={href}
-                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200"
+                onClick={handleTap}
+                className="flex flex-col items-center justify-center py-2 px-3 rounded-2xl transition-all duration-200 active:scale-90"
                 style={{
                   WebkitTapHighlightColor: 'transparent',
                   touchAction: 'manipulation',
