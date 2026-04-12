@@ -28,7 +28,7 @@ export default function TopBar({ title, subtitle, onMenuToggle }: TopBarProps) {
 
   return (
     <>
-      <header className="h-14 md:h-16 bg-white border-b border-[#DFE1E6] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20">
+      <header className="bg-white border-b border-[#DFE1E6] flex items-center px-4 md:px-6 gap-3 md:gap-4 sticky top-0 z-20" style={{ minHeight: '56px', paddingTop: 'env(safe-area-inset-top, 0px)' }}>
         {/* Back button on sub-pages, Hamburger on main pages - mobile only */}
         {isSubPage ? (
           <button
