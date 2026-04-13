@@ -54,12 +54,12 @@ export default function BottomNav() {
     }
   }, []);
 
-  if (pathname === '/services') return null;
-  if (hidden) return null;
-
   const handleTap = useCallback(() => {
     triggerHaptic();
   }, []);
+
+  if (pathname === '/services') return null;
+  if (hidden) return null;
 
   return (
     <div
