@@ -48,7 +48,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
         <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
       </head>
-      <body className="overflow-x-hidden w-full max-w-full">
+      <body className="overflow-x-hidden w-full max-w-full" style={{ backgroundColor: '#9D63F6' }}>
+        {/* Fixed purple bar behind iOS status bar — always visible, sits below all content */}
+        <div
+          aria-hidden
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 'env(safe-area-inset-top, 0px)',
+            background: '#9D63F6',
+            zIndex: 9999,
+            pointerEvents: 'none',
+          }}
+        />
         <ThemeProvider>
           <AuthProvider>
             <NotificationProvider>

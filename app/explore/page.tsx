@@ -887,12 +887,9 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
   const [filter, setFilter] = useState('all');
   const filtered = filter === 'all' ? locations : locations.filter(l => l.type === filter);
 
-  /* Compute bounding box center & zoom for Google Maps embed */
-  const centerLat = 24.46;
-  const centerLng = 54.45;
-
-  /* Google Maps embed URL — UAE centered, no API key needed for embed mode */
-  const mapEmbedUrl = `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&center=${centerLat},${centerLng}&zoom=11&maptype=roadmap`;
+  /* OpenStreetMap embed URL — Abu Dhabi area bounding box, no API key needed */
+  /* bbox = min_lng, min_lat, max_lng, max_lat */
+  const mapEmbedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=54.28,24.40,54.68,24.52&layer=mapnik`;
 
   /* Project lat/lng to pixel positions on the map */
   const projectToMap = useCallback((lat: number, lng: number) => {
@@ -906,19 +903,24 @@ function MapView({ locations, onSelectItem }: { locations: MapLocation[]; onSele
 
   return (
     <div className="relative overflow-hidden w-full h-full">
-      {/* Google Maps iframe — visual background only, no touch interaction */}
+      {/* OpenStreetMap iframe — visual background only, no touch interaction */}
       <iframe
         src={mapEmbedUrl}
         className="absolute inset-0 w-full h-full pointer-events-none"
         style={{ border: 0, filter: 'saturate(0.75) brightness(1.06)' }}
-        allowFullScreen
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
         title="Abu Dhabi Map"
       />
 
-      {/* Cover Google Maps top-left branding */}
-      <div className="absolute top-0 left-0 right-0 z-15 h-[40px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 60%, transparent 100%)' }} />
+      {/* Cover OSM top-left zoom controls */}
+      <div className="absolute top-0 left-0 z-15 w-[60px] h-[100px] pointer-events-none" style={{ background: 'linear-gradient(to bottom right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.7) 70%, transparent 100%)' }} />
+
+      {/* Cover OSM bottom attribution */}
+      <div className="absolute bottom-0 left-0 right-0 z-15 h-[24px] pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 60%, transparent 100%)' }} />
+
+      {/* Top fade for filter bar */}
+      <div className="absolute top-0 left-0 right-0 z-15 h-[40px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.4) 60%, transparent 100%)' }} />
 
       {/* Top controls bar */}
       <div className="absolute top-0 left-0 right-0 z-20 px-3 pt-2 pb-1">
